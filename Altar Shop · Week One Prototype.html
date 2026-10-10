@@ -350,8 +350,8 @@ function renderAltar(){
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients on the shelves to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
   $('#tarotSlot').innerHTML=S.tarot?`${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
-  $('#testBtn').disabled=S.tests<=0;$('#testBtn').textContent=`Test craft (${S.tests} left)`;
-  $('#giveBtn').disabled=!orderR;
+  $('#testBtn').disabled=S.tests<=0||!S.altar.length;$('#testBtn').textContent=`Test craft (${S.tests} left)`;
+  $('#giveBtn').disabled=!orderR||!S.altar.length;
   const res=$('#result');
   if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map(l=>`<p style="margin:2px 0">${esc(l)}</p>`).join('')}`}else res.hidden=true;
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
@@ -403,7 +403,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'closeBooks':$('#books').classList.remove('open');render();break;
   }});
 $('#target').addEventListener('change',e=>{S.target=e.target.value;save()});
-function doCraft(test){const r=D.recipes[S.target];if(!r)return;
+function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
   if(!test){const lacking=S.altar.filter(n=>X.stock[n]!==undefined&&S.stock[n]<=0);
     if(lacking.length){toast(`No ${lacking[0]} left. Fill a bottle first.`);return}
     S.altar.forEach(n=>{if(X.stock[n]!==undefined)S.stock[n]--})}
