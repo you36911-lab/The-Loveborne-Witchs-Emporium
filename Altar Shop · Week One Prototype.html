@@ -145,7 +145,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Bookshelf</h2><button id="closeBooks">Close</button></div>
     <div class="booktabs" id="booktabs"></div>
     <div class="bookgrid"><div><input id="search" placeholder="Search this book" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
-      <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Pick a word, then tap a blank.</p><div class="chips" id="bank"></div></aside></div>
+      <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Pick a word, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
   </div>
 </div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
@@ -464,17 +464,27 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 
 /* ---------- books ---------- */
-const BOOKS=['Letters','Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','Sky & Weather Almanac','Grimoire of Days','Recipe Book'];
+const BOOKS=['Letters','Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','Almanac of Sky & Seasons','Grimoire of Craft','Recipe Book'];
+const az=a=>[...a].sort((x,y)=>x.localeCompare(y));
+/* Almanac categories (alphabetical); entries keep their natural order where there is one. */
+const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
+ ['Moon Phases',['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent','Dark Moon']],
+ ['Named Moons',['Wolf Moon','Snow Moon','Worm Moon','Pink Moon','Flower Moon','Strawberry Moon','Buck Moon','Sturgeon Moon','Harvest Moon',"Hunter's Moon",'Beaver Moon','Cold Moon']],
+ ['Sky Events',az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars'])],
+ ['Weather',az(['Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow'])],
+ ['Weekdays',D.days.map(d=>d[0])]];
 let curBook='Letters',selWord=null;
 function entryList(book){const L=[];const add=(k,props,note,always)=>L.push({k,props,note,always});
   const cats={Herbiary:['Base waters','Oils, butters & waxes','Herbs & flowers','Fruits','Spices','Pantry: salts, sugars & baking','Resins & incense'],'Crystal Almanac':['Crystals'],'Gentle Bestiary':['Animal gifts']};
   if(cats[book])D.items.filter(i=>cats[book].includes(i.c)).sort((a,b)=>a.c.localeCompare(b.c)||a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,i.base.length?'Base for '+i.base.join(', '):'',false);L[L.length-1].cat=cats[book].length>1?i.c:''});
   if(book==='Tarot Companion')Object.entries(D.tarot).forEach(([k,p])=>add(k,p,'',false));
-  if(book==='Sky & Weather Almanac')['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent','Dark Moon','Wolf Moon','Snow Moon','Worm Moon','Pink Moon','Flower Moon','Strawberry Moon','Buck Moon','Sturgeon Moon','Harvest Moon',"Hunter's Moon",'Beaver Moon','Cold Moon','Blue Moon','Lunar Eclipse','Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow','Clear starry night','Rainbow','Shooting stars'].forEach(k=>add(k,D.cond[k]||[],'',!D.condUsed.includes(k)));
-  if(book==='Grimoire of Days'){D.sabbats.forEach(([n,dd])=>add(n,D.cond[n],dd,false));D.days.forEach(([d,pl])=>add(d,D.cond[d],pl,false));HOURS.forEach(h=>add(h,D.cond[h],'Magic Hour',false));
-    Object.entries(D.colours).forEach(([c,p])=>add(c,p,'Colour of candles, threads and inks',false));
-    D.items.filter(i=>['Buttons','Wood & branches','Findings & tools','Threads & ribbons'].includes(i.c)&&!/ thread$/.test(i.n)&&i.props.length&&!(/ ink$| paint$/.test(i.n))).forEach(i=>add(i.n,i.props,'Symbol & charm',false));
-    Object.entries(D.methods).forEach(([t,m])=>L.push({k:t,props:[],note:`${m.where}. ${m.how}`,method:true}))}
+  if(book==='Almanac of Sky & Seasons')ALMANAC.forEach(([cat,names])=>names.forEach(k=>{
+    const sb=D.sabbats.find(x=>x[0]===k),dy=D.days.find(x=>x[0]===k);
+    add(k,D.cond[k]||[],sb?sb[1]:dy?`${dy[1]}; colours ${dy[2].toLowerCase()}`:'',!D.condUsed.includes(k));L[L.length-1].cat=cat}));
+  if(book==='Grimoire of Craft'){
+    az(Object.keys(D.colours)).forEach(c=>{add(c,D.colours[c],'Candles, threads and inks',false);L[L.length-1].cat='Colours'});
+    az(Object.keys(D.methods)).forEach(t=>{const m=D.methods[t];L.push({k:t,props:[],note:`${m.where}. ${m.how}`,method:true,cat:'Making Methods'})});
+    D.items.filter(i=>['Buttons','Wood & branches','Findings & tools','Threads & ribbons'].includes(i.c)&&!/ thread$/.test(i.n)&&i.props.length&&!(/ ink$| paint$/.test(i.n))).sort((a,b)=>a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,'',false);L[L.length-1].cat='Symbols & Charms'})}
   return L}
 function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];return e.props.length===1?[e.props[0]]:e.props.slice(1)}
 function shownOf(e){if(e.always)return e.props;if(e.props.length<=1)return[];return[e.props[0]]}
@@ -491,12 +501,15 @@ function renderBooks(){
     const head=e.cat&&e.cat!==lastCat?`<h3 class="cat">${esc(lastCat=e.cat)}</h3>`:'';return head+(()=>{
     if(e.method)return `<div class="entry"><b>${esc(e.k)}</b><span class="muted">${esc(e.note)}</span></div>`;
     const h=hiddenOf(e),f=S.fills[e.k]||[];
-    const blanks=h.map((_,i)=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.k)}" data-i="${i}" aria-label="Blank">${f[i]?esc(f[i]):'\u00A0'}</button>`).join(' ');
+    const lk=entryLocked(e);const blanks=h.map((_,i)=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.k)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):'\u00A0'}</button>`).join(' ');
     return `<div class="entry ${entryLocked(e)?'locked':''}"><b>${esc(e.k)}</b>${shownOf(e).map(esc).join(' \u00B7 ')}${shownOf(e).length&&h.length?' \u00B7 ':''}${blanks}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}</div>`})()}).join('')||'<p class="muted">Nothing matches.</p>'}
-const CONDOPTS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday','New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent','Waxing Moon','Waning Moon','Dark Moon','Sunrise','Noon','Twilight','Nightfall','Clear & sunny','Rain','after Rain','Thunderstorm','Fog / Mist','Windy','Snow','Clear starry night','Samhain','Yule','Imbolc','Ostara','Beltane','Litha','Lughnasadh','Mabon'];
+const CONDKIND={day:'Weekday',phase:'Moon Phase',pg:'Moon Phase',dark:'Moon Phase',time:'Magic Hour',weather:'Weather',afterrain:'Weather',starry:'Sky Event',sabbat:'Festival',named:'Named Moon'};
+const KINDOPTS={'Weekday':D.days.map(d=>d[0]),'Moon Phase':['New Moon','Waxing Crescent','First Quarter','Waxing Gibbous','Full Moon','Waning Gibbous','Last Quarter','Waning Crescent','Waxing Moon','Waning Moon','Dark Moon'],
+ 'Magic Hour':HOURS,'Weather':['after Rain','Clear & sunny','Fog / Mist','Rain','Snow','Thunderstorm','Windy'],'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
+ 'Festival':D.sabbats.map(s=>s[0]),'Named Moon':ALMANAC[3][1]};
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
 function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
-  return same(n.ing,r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when,r.conds.map(condName))}
+  return same(n.ing,r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
 function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
   const chips=(arr,attr)=>arr.map(x=>lk?`<span class="chip on">${esc(x)}</span>`:`<button class="chip" data-${attr}="${r.id}|${esc(x)}">${esc(x)} ×</button>`).join(' ');
   const pick=(attr,label,opts)=>`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">add…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
@@ -505,7 +518,9 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div><b>Ingredients (${n.ing.length}/${N}):</b> ${chips(n.ing,'rm-ing')} ${!lk&&n.ing.length<N?pick('add-ing','Add ingredient',D.items.map(i=>i.n)):''}</div>
   <div class="row"><b>Candle:</b>${one('set-candle',r.candle,n.candle,Object.keys(D.colours),'Candle')}
   <b>Card:</b>${one('set-tarot',r.tarot,n.tarot,Object.keys(D.tarot),'Card')}</div>
-  <div><b>When${M?` (${n.when.length}/${M})`:''}:</b> ${M?`${chips(n.when,'rm-when')} ${!lk&&n.when.length<M?pick('add-when','Add condition',CONDOPTS):''}`:'<span class="muted">any time</span>'}</div></div>`}
+  <div><b>When${M?` (${n.when.filter(Boolean).length}/${M})`:''}:</b> ${M?r.conds.map((c,i)=>{const kind=CONDKIND[c.t],v=n.when[i];
+    return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-when="${r.id}|${i}">${esc(v)} \u00D7</button>`)
+      :`<select data-add-when="${r.id}|${i}" aria-label="${kind}"><option value="">${kind}\u2026</option>${KINDOPTS[kind].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' '):'<span class="muted">any time</span>'}</div></div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.book){curBook=b.dataset.book;$('#search').value='';renderBooks();return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
@@ -517,14 +532,14 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
     if(selWord){f[i]=selWord;const e=entryList(curBook).find(x=>x.k===k);if(e&&entryLocked(e)){toast(`${k} is complete \u2726`)}}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
     save();renderBooks();return}
   if(b.dataset.rmIng){const[id,x]=b.dataset.rmIng.split('|');const n=noteOf(id);n.ing=n.ing.filter(y=>y!==x);save();renderBooks();return}
-  if(b.dataset.rmWhen){const[id,x]=b.dataset.rmWhen.split('|');const n=noteOf(id);n.when=n.when.filter(y=>y!==x);save();renderBooks();return}
+  if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
 });
 $('#books').addEventListener('change',e=>{const t=e.target;
   if(t.dataset.addIng&&t.value){const n=noteOf(t.dataset.addIng);if(!n.ing.includes(t.value))n.ing.push(t.value)}
-  if(t.dataset.addWhen&&t.value){const n=noteOf(t.dataset.addWhen);if(!n.when.includes(t.value))n.when.push(t.value)}
+  if(t.dataset.addWhen&&t.value){const[wid,wi]=t.dataset.addWhen.split('|');noteOf(wid).when[+wi]=t.value}
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
   if(t.dataset.setTarot!==undefined)noteOf(t.dataset.setTarot).tarot=t.value;
-  const id=t.dataset.addIng||t.dataset.addWhen||t.dataset.setCandle||t.dataset.setTarot;
+  const id=t.dataset.addIng||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
   if(id&&recipeLocked(id))toast('Recipe solved \u2726');
   save();renderBooks()});
 $('#search').addEventListener('input',renderBooks);
