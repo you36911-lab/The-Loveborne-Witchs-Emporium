@@ -416,7 +416,8 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(ev.grade==='Perfect'){lines.push(v.hint.text);addWords(v.hint.words)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops);lines.push('They thank you and take it home.')}
     S.result={grade:ev.grade,first:'',lines,test:false};log(`Gave ${r.name} to ${v.who}.`);S.queue=null}
-  S.altar=[];S.candle='';S.tarot='';render()}
+  if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
+  render()}
 function nextHour(){
   if(S.queue){const q=S.queue;
     if(q.type==='new'){const v=visitByKey(q.key);S.seen[q.key]=true;
