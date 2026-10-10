@@ -96,6 +96,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe{border:2px solid var(--line);border-radius:6px;padding:10px;margin-bottom:10px;background:var(--paper)}
 .recipe.locked{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
 .muted{color:var(--ink-soft)}
+.tale{background:var(--pink-soft);border-radius:4px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--butter);color:#3B2160;border:2px solid #3B2160;border-radius:4px;padding:6px 12px;z-index:30;display:none}
 @media (prefers-reduced-motion: no-preference){.sparkle{animation:spk .9s ease-out}@keyframes spk{0%{box-shadow:0 0 0 0 var(--butter)}100%{box-shadow:0 0 0 14px transparent}}}
@@ -167,7 +168,7 @@ const X = {
 }
 ;
 const HOURS=['Sunrise','Noon','Twilight','Nightfall'];
-const KEY='altar-shop-proto-v2';
+const KEY='altar-shop-proto-v3';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
@@ -191,9 +192,9 @@ const WALKIN={
  strong:'“It worked. A bit too well. We’re still recovering.”',weak:'“I think it worked? For about ten minutes.”'};
 
 /* ---------- state ---------- */
-function fresh(){return{day:1,h:0,hist:[],tests:3,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
+function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:3,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
   orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],log:[],result:null,queue:null,
-  stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0},consequences:[]}}
+  stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
@@ -279,7 +280,7 @@ function missKind(ev){if(ev.grade!=='Good')return null;const s=ev.swaps&&ev.swap
 function reactionFor(v,r,kind){const tKind=kind.includes('>');
   if(v.react){if(!tKind&&v.react[kind])return v.react[kind];
     if(tKind&&(v.usual==='any'||v.usual===kind.split('>')[0]))return v.react.target}
-  return `${v.who}: ${WALKIN[kind]}`}
+  return WALKIN[kind]}
 function pickLine(g){const a=D.grades[g];return a[Math.floor(Math.random()*a.length)]}
 
 /* ---------- visitors ---------- */
@@ -290,13 +291,18 @@ function slotVisitors(){const d=S.day,h=HOURS[S.h];
 function currentVisitor(){
   const sv=slotVisitors();
   if(S.queue){return S.queue}
-  if(sv.back.length){const o=sv.back[0];S.queue={type:'return',oid:o.id};return S.queue}
-  if(sv.new.length){const v=sv.new[0];S.queue={type:'new',key:v.day+'-'+v.hour+'-'+v.who};return S.queue}
+  if(sv.back.length){const o=sv.back[0];S.queue={type:'return',oid:o.id};S.queue.tales=pullTales(visitByKey(o.key));return S.queue}
+  if(sv.new.length){const v=sv.new[0];S.queue={type:'new',key:v.day+'-'+v.hour+'-'+v.who};S.queue.tales=pullTales(v);return S.queue}
   return null}
 function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */
 const SCORE={Perfect:5,Good:4,Clumsy:2,Failed:1,Missed:1};
-function record(g){S.hist.push(SCORE[g]);S.hist=S.hist.slice(-20)}
+function record(g,who){S.pend.push({g,who})}  /* counted at closing time */
+/* Results are told later: regulars tell their own on their next visit; a walk-in's story is passed on by the next customer. */
+function tell(v,text){S.tales.push({who:v.who,text,regular:!!v.usual})}
+function pullTales(v){const own=S.tales.filter(t=>t.who===v.who),gossip=S.tales.find(t=>!t.regular&&t.who!==v.who);
+  const out=[...own.map(t=>({own:true,...t})),...(gossip?[{own:false,...gossip}]:[])];S.tales=S.tales.filter(t=>!out.some(o=>o.who===t.who&&o.text===t.text));return out}
+function talesHTML(q){return (q.tales||[]).map(t=>`<p class="tale">${t.own?'<b>About last time:</b> ':`<b>Word from ${esc(t.who.replace(/^(A|An|Two) /,m=>m.toLowerCase()))}:</b> `}${esc(t.text)}</p>`).join('')}
 function rating(){return S.hist.length?S.hist.reduce((a,b)=>a+b,0)/S.hist.length:3}
 
 /* ---------- rendering ---------- */
@@ -349,15 +355,15 @@ function renderCounter(){
   const q=currentVisitor();const el=$('#counter');
   if(!q){el.innerHTML=`<h2>The counter</h2><p class="muted">No one is here right now. Use the time for test crafts, the books, or filling bottles, then go to the next hour.</p>${dayTip()}`;return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);const r=D.recipes[o.rid];
-    el.innerHTML=`${whoHTML(v)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose\u2026</option>'+D.items.filter(i=>i.c===v.ask.cat).map(i=>`<option>${esc(i.n)}</option>`).join('');
-    el.innerHTML=`${whoHTML(v)}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
-  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}<div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div><p class="muted">They\u2019re waiting while you make it. Lay it out on the altar and press Make and give.</p>`;return}
+  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div><p class="muted">They\u2019re waiting while you make it. Lay it out on the altar and press Make and give.</p>`;return}
   const dayOpts=[];for(let d=S.day;d<=Math.min(S.day+10,7+5);d++)HOURS.forEach((h,i)=>{if(d===S.day&&i<=S.h)return;dayOpts.push(`<option value="${d}|${h}">Day ${d}, ${h}${d<=D.cal.length?' ('+D.cal[d-1].weekday+')':''}</option>`)});
-  el.innerHTML=`${whoHTML(v)}<p class="say">\u201C${esc(v.line)}\u201D</p><div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div>
+  el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201C${esc(v.line)}\u201D</p><div class="req"><b>${esc(r.name)}</b> (${esc(r.type)}): ${esc(r.intent)}</div>
   <div class="row"><button class="main" id="nowBtn">Make it now</button><span class="muted">or</span><select id="backSel" aria-label="Return time">${dayOpts.join('')}</select><button id="backBtn">Ask them to come back</button></div>`}
 function whoHTML(v){const a=X.auras[v.aura]||['#ccc',''];return `<div class="who"><span class="aura" style="background:${a[0]};--aura:${a[0]}" title="${esc(a[1])}"></span><div><b>${esc(v.who)}</b><br><small class="muted">${esc(a[1])}</small></div></div>`}
 function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Open <b>Books</b> to read them.</p>';return ''}
@@ -381,12 +387,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
-      record(grade);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;log(`${v.who} took your advice: ${a}. ${grade}.`);
+      record(grade,v.who);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;log(`${v.who} took your advice: ${a}. ${grade}.`);
       if(grade==='Perfect'){S.result={grade,first:'Good advice.',lines:[v.hint.text],test:false};addWords(v.hint.words)}
-      else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');S.consequences.push(reactionFor(v,null,kind));S.result={grade,first:'They nod, not quite sure.',lines:['They seem pleased enough.'],test:false}}
-      else{S.consequences.push(v.oops);S.result={grade,first:'They thank you, unsure.',lines:[],test:false}}
+      else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind));S.result={grade,first:'They nod, not quite sure.',lines:['They seem pleased enough.'],test:false}}
+      else{tell(v,v.oops);S.result={grade,first:'They thank you, unsure.',lines:[],test:false}}
       render();break}
-    case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed');log('A customer left without their order.');S.queue=null;render();break}
+    case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who);log('A customer left without their order.');S.queue=null;render();break}
     case 'nextBtn':nextHour();break;
     case 'booksBtn':openBooks();break;
     case 'closeBooks':$('#books').classList.remove('open');render();break;
@@ -400,28 +406,30 @@ function doCraft(test){const r=D.recipes[S.target];if(!r)return;
   if(test){S.tests--;addWords(ev.gained);S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}: ${ev.grade}.`)}
   else{const q=S.queue;let v;
     if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
-    S.stats[ev.grade.toLowerCase()]++;record(ev.grade);
+    S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who);
     const lines=[];
     if(ev.grade==='Perfect'){lines.push(v.hint.text);addWords(v.hint.words)}
-    else if(ev.grade!=='Good'){S.consequences.push(v.oops);lines.push('They leave a little doubtful. You may hear about this.')}
-    else{S.consequences.push(reactionFor(v,r,missKind(ev)));lines.push('They seem pleased enough.')}
+    else if(ev.grade!=='Good'){tell(v,v.oops);lines.push('They leave a little doubtful. You may hear about this.')}
+    else{tell(v,reactionFor(v,r,missKind(ev)));lines.push('They seem pleased enough.')}
     S.result={grade:ev.grade,first:pickLine(ev.grade),lines,test:false};log(`Gave ${r.name} to ${v.who}: ${ev.grade}.`);S.queue=null}
   S.altar=[];S.candle='';S.tarot='';render()}
 function nextHour(){
   if(S.queue){const q=S.queue;
     if(q.type==='new'){const v=visitByKey(q.key);S.seen[q.key]=true;
-      if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed');log(`${v.who} left without anything.`)}S.activeNow=null}
-    else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed');log('A customer left without their order.')}
+      if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who);log(`${v.who} left without anything.`)}S.activeNow=null}
+    else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who);log('A customer left without their order.')}
     S.queue=null}
   S.result=null;
   if(S.h<3){S.h++;render();return}
   endDay()}
-function endDay(){const c=S.consequences.splice(0);
+function endDay(){const before=rating(),reviews=S.pend.splice(0);
+  reviews.forEach(x=>S.hist.push(SCORE[x.g]));S.hist=S.hist.slice(-20);const after=rating();
   const body=$('#dayEndBody');
   const last=S.day>=7;
   body.innerHTML=`<h2>${last?'End of the first week':'The shop closes for the night'}</h2>
-  ${c.length?`<h3>What you heard</h3>${c.map(x=>`<p>${esc(x)}</p>`).join('')}`:'<p class="muted">A quiet night. No complaints.</p>'}
-  <p>Rating: ${rating().toFixed(1)} of 5 (${S.hist.length?`average of the last ${S.hist.length} review${S.hist.length===1?'':'s'}`:'no reviews yet'}; Good work tops out at 4)</p>
+  <h3>Today's reviews</h3>${reviews.length?`<ul>${reviews.map(x=>`<li>${esc(x.who||'A customer')}: ${x.g==='Missed'?'1 star (left empty-handed)':`${SCORE[x.g]} stars (${x.g})`}</li>`).join('')}</ul>`:'<p class="muted">No reviews today.</p>'}
+  <p>Rating: ${before.toFixed(1)} \u2192 <b>${after.toFixed(1)}</b> of 5 (${S.hist.length?`average of the last ${S.hist.length} review${S.hist.length===1?'':'s'}`:'no reviews yet'}; Good work tops out at 4)</p>
+  <p class="muted">How things turned out, customers will tell you when they next come in.</p>
   ${last?summaryHTML():''}
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');
@@ -432,7 +440,8 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   const pend=S.orders.filter(o=>o.status==='waiting').map(o=>D.recipes[o.rid].name);
   return `<h3>Your week</h3><p>Perfect ${s.perfect}, good ${s.good}, clumsy ${s.clumsy}, failed ${s.failed}. Advice given ${s.advice}. Customers who left empty-handed ${s.missed}.</p>
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
-  ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}`}
+  ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}
+  ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 
 /* ---------- books ---------- */
 const BOOKS=['Letters','Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','Sky & Weather Almanac','Grimoire of Days','Recipe Book'];
