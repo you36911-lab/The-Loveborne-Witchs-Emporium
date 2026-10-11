@@ -492,6 +492,8 @@ const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
  ['Weather',az(['Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow'])],
  ['Weekdays',D.days.map(d=>d[0])]];
 let curBook='Letters',selWord=null;
+/* Each book remembers its own search, across closing the shelf and switching books. */
+const searchOf=()=>((S.search||(S.search={}))[curBook]||'');
 function entryList(book){const L=[];const add=(k,props,note,always)=>L.push({k,props,note,always});
   const cats={Herbiary:['Base waters','Oils, butters & waxes','Herbs & flowers','Fruits','Spices','Pantry: salts, sugars & baking','Resins & incense'],'Crystal Almanac':['Crystals'],'Gentle Bestiary':['Animal gifts']};
   if(cats[book])D.items.filter(i=>cats[book].includes(i.c)).sort((a,b)=>a.c.localeCompare(b.c)||a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,i.base.length?'Base for '+i.base.join(', '):'',false);L[L.length-1].cat=cats[book].length>1?i.c:''});
@@ -507,7 +509,7 @@ function entryList(book){const L=[];const add=(k,props,note,always)=>L.push({k,p
 function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];return e.props.length===1?[e.props[0]]:e.props.slice(1)}
 function shownOf(e){if(e.always)return e.props;if(e.props.length<=1)return[];return[e.props[0]]}
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.k]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
-function openBooks(){$('#books').classList.add('open');renderBooks();autoTick()}
+function openBooks(){$('#books').classList.add('open');$('#search').value=searchOf();renderBooks();autoTick()}
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
   $('#bank').innerHTML=S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>';
@@ -540,7 +542,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
     return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-when="${r.id}|${i}">${esc(v)} \u00D7</button>`)
       :`<select data-add-when="${r.id}|${i}" aria-label="${kind}"><option value="">${kind}\u2026</option>${KINDOPTS[kind].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' '):'<span class="muted">any time</span>'}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:13px">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
-  if(b.dataset.book){curBook=b.dataset.book;$('#search').value='';renderBooks();return}
+  if(b.dataset.book){curBook=b.dataset.book;$('#search').value=searchOf();renderBooks();return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.letter!==undefined){const i=+b.dataset.letter;S.letters[i]=true;addWords(X.letterWords[i]||[]);
     if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
@@ -553,6 +555,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
 });
 $('#books').addEventListener('change',e=>{const t=e.target;
+  if(t.id==='search')return;  /* the search box's change-on-blur would redraw the tabs mid-click */
   if(t.dataset.addIng&&t.value){const n=noteOf(t.dataset.addIng);if(!n.ing.includes(t.value))n.ing.push(t.value)}
   if(t.dataset.addWhen&&t.value){const[wid,wi]=t.dataset.addWhen.split('|');noteOf(wid).when[+wi]=t.value}
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
@@ -560,7 +563,7 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   const id=t.dataset.addIng||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
   if(id&&recipeLocked(id))toast('Recipe solved \u2726');
   save();renderBooks()});
-$('#search').addEventListener('input',renderBooks);
+$('#search').addEventListener('input',e=>{(S.search||(S.search={}))[curBook]=e.target.value;save();renderBooks()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}});
 render();
 </script>
