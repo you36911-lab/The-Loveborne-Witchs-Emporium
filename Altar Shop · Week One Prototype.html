@@ -115,7 +115,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
     <div><h1>Altar Shop</h1><small class="muted">Week one prototype</small></div>
     <div class="sky" id="sky"></div>
     <div class="row"><span class="stars" id="stars" aria-label="Shop rating"></span>
-      <button id="booksBtn">Books</button><button id="nextBtn" class="main">Next hour</button></div>
+      <button id="restartBtn" title="Start the week again from Day 1">Restart</button><button id="booksBtn">Books</button><button id="nextBtn" class="main">Next hour</button></div>
   </header>
   <nav class="tabs" aria-label="Shop areas">
     <button data-p="left">Kitchen</button><button data-p="mid" aria-pressed="true">Altar</button><button data-p="right">Cabinet</button>
@@ -177,7 +177,7 @@ const X = {
 }
 ;
 const HOURS=['Sunrise','Noon','Twilight','Nightfall'];
-const KEY='altar-shop-proto-v3';
+const KEY='altar-shop-proto-v4';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
@@ -206,6 +206,13 @@ function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:3,altar:[],cand
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
+/* Drop anything a save points at that this build no longer has (customers, orders, recipes). */
+function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
+  S.orders=(S.orders||[]).filter(o=>keys.has(o.key)&&D.recipes[o.rid]);
+  if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):!S.orders.some(o=>o.id===S.queue.oid)))S.queue=null;
+  if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
+  if(S.target&&!D.recipes[S.target])S.target=''}
+sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
 function log(t){S.log.unshift(`Day ${S.day}, ${HOURS[S.h]}: ${t}`);S.log=S.log.slice(0,40)}
@@ -414,6 +421,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
       render();break}
     case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');log('A customer left without their order.');S.queue=null;render();break}
     case 'nextBtn':nextHour();break;
+    case 'restartBtn':if(b.dataset.sure){S=fresh();delete b.dataset.sure;b.textContent='Restart';render()}else{b.dataset.sure='1';b.textContent='Tap again to restart';setTimeout(()=>{delete b.dataset.sure;b.textContent='Restart'},3000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
     case 'booksBtn':openBooks();break;
     case 'closeBooks':$('#books').classList.remove('open');render();break;
