@@ -121,7 +121,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
 .kw:hover{background:var(--pink-soft)}
 .kw:active{transform:none;box-shadow:none}
-.kw.got{text-decoration-style:solid;opacity:.85}
 .tale{background:var(--pink-soft);border-radius:4px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--butter);color:#3B2160;border:2px solid #3B2160;border-radius:4px;padding:6px 12px;z-index:30;display:none}
@@ -239,9 +238,9 @@ sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
 function log(t){S.log.unshift(`Day ${S.day}, ${HOURS[S.h]}: ${t}`);S.log=S.log.slice(0,40)}
-/* Keywords in text are collectible: shown with a dotted underline; tapping one adds it to the word bank and picks it. */
+/* Keywords not yet collected show a dotted underline; tapping one adds it to the word bank and picks it. Collected ones read as plain text. */
 const KWRE=new RegExp('\\b('+[...D.vocab].sort((a,b)=>b.length-a.length).map(w=>w.replace('-','\\-')).join('|')+')\\b','gi');
-function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)=>{out+=esc(s.slice(last,i))+`<button class="kw ${S.bank.includes(w.toLowerCase())?'got':''}" data-collect="${esc(w.toLowerCase())}">${esc(m0)}</button>`;last=i+m0.length;return m0});return out+esc(s.slice(last))}
+function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)=>{out+=esc(s.slice(last,i))+(S.bank.includes(w.toLowerCase())?esc(m0):`<button class="kw" data-collect="${esc(w.toLowerCase())}">${esc(m0)}</button>`);  /* already collected: plain text */last=i+m0.length;return m0});return out+esc(s.slice(last))}
 function collect(w){if(!S.bank.includes(w)){S.bank.push(w);toast(`Collected \u201C${w}\u201D`)}selWord=w;save()}
 function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.bank.push(w);n.push(w)}});if(n.length)toast('New words: '+n.join(', '));return n}
 const today=()=>D.cal[S.day-1];
