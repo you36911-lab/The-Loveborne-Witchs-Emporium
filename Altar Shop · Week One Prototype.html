@@ -226,19 +226,7 @@ const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
 const WAX=['Waxing Crescent','First Quarter','Waxing Gibbous'], WAN=['Waning Gibbous','Last Quarter','Waning Crescent'];
 const COLOURHEX={White:'#FFFFFF',Black:'#2A2233',Red:'#E2483D',Pink:'#FF9FCB',Orange:'#F59A3B',Yellow:'#FFE15A',Gold:'#D9A82E',Green:'#5DBB6A','Light blue':'#A9D6F5',Blue:'#4C7BD9',Purple:'#9B5FD0',Lavender:'#C8B2F0',Silver:'#C9CDD6',Brown:'#9A6B45',Grey:'#9A97A8'};
 /* Swap clue lines, keyed by kind of miss: 'Needed>Got' target, too strong, too weak, or same feel. */
-const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through',done:'Done'};
-const SWAPLINES={
- 'Body>Mind':['The {k} is there, but it drifts up into the heart instead of settling in the body.','It would lift a mood, but not an ache.'],
- 'Body>Space':['The {k} is there, but it spreads out into the room instead of into the body.','It would do wonders for a house. Less so for a person.'],
- 'Mind>Body':['The {k} is there, but it sinks into the body and never reaches the heart.','It would mend a scrape, not a worry.'],
- 'Mind>Space':['The {k} is there, but it wanders off to the doorway instead of coming in to the heart.','It looks after the house and forgets the person in it.'],
- 'Space>Body':['The {k} is there, but it stays close to the skin instead of going out into the world.','It looks after the person, but not what’s around them.'],
- 'Space>Mind':['The {k} is there, but it turns inward and stays a feeling.','It changes how you feel about the room, not the room itself.'],
- strong:['The {k} is there, but it comes on far too hard.','Too much. It would knock the wind out of anyone small.'],
- weak:['The {k} is there, but only as a whisper.','Gentle to a fault. It barely stirs.'],
- lacks:['The {k} is there, but it’s missing {m}.','Close, but there’s no {m} in it.'],
- notes:['The {k} is there, but one ingredient brings a note of {o} where it wants {w}.','One ingredient carries the {k}, but it tastes of {o}. That spot wants {w}.'],
- same:['It has the right idea, but one ingredient isn’t the one it wants. In its place it wants something like this: {l}.','One ingredient is the wrong one. Picture the right one: {l}.']};
+const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through',done:'Done',sum:'Overall'};
 const WALKIN={
  'Body>Mind':'“Still aching, but honestly? I don’t mind any more.”','Body>Space':'“Still feel rotten, but the house has never been so peaceful.”',
  'Mind>Body':'“Slept like a log and woke up glowing. Still worried sick, though.”','Mind>Space':'“The flat feels wonderful. I, however, do not.”',
@@ -332,7 +320,15 @@ function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
     if(kind==='same'&&lacks.length)kind='lacks';else if(kind==='same'&&off&&wantP)kind='notes';
     out.push({want:best,got:w,kw,kind,lacks,off,wantP})});
   return out}
-function swapLine(sw){const a=SWAPLINES[sw.kind];return a[Math.floor(Math.random()*a.length)].replace('{k}',sw.kw).replace('{m}',(sw.lacks||[])[0]||'').replace('{o}',sw.off||'').replace('{w}',sw.wantP||'').replace('{l}',ITEM[sw.want]?.look||'something else')}
+const CARDLOOK={'The Fool':'a traveller at the edge of a cliff','The Magician':'a figure with one hand raised to the sky','The High Priestess':'a veiled woman seated between two pillars','The Empress':'a woman resting in a field of wheat','The Emperor':'a stern figure on a stone throne','The Hierophant':'a teacher raising a blessing over two listeners','The Lovers':'two figures beneath an angel','The Chariot':'a rider drawn by two beasts','Strength':'a woman gently closing a lion\u2019s jaws','The Hermit':'a lone figure holding a lantern','Wheel of Fortune':'a great turning wheel','Justice':'a figure holding scales and a sword','The Hanged Man':'a man hanging calmly upside down','Death':'a rider on a pale horse','Temperance':'an angel pouring water between two cups','The Devil':'two figures chained beneath a horned shape','The Tower':'a tower struck by lightning','The Star':'a woman pouring water under a bright star','The Moon':'a moon above a path between two towers','The Sun':'a child on a horse under a blazing sun','Judgement':'an angel sounding a trumpet over rising figures','The World':'a dancer inside a wreath'};
+const AIM={Body:'the body',Mind:'the heart',Space:'the home'};
+function ingLine(sw){const g=sw.got,k=sw.kw;
+  if(sw.kind.includes('>')){const[want,got]=sw.kind.split('>');return `${g}: the ${k} is right, but it works on ${AIM[got]}. This needs one that works on ${AIM[want]}.`}
+  if(sw.kind==='strong')return `${g}: the ${k} is right, but it is too strong. This needs a gentler one.`;
+  if(sw.kind==='weak')return `${g}: the ${k} is right, but it is too gentle. This needs a stronger one.`;
+  if(sw.kind==='lacks')return `${g}: it brings ${k}, but nothing in the mix brings ${sw.lacks[0]}. The right one would.`;
+  if(sw.kind==='notes')return `${g}: it brings ${k}, but also ${sw.off}. The right one brings ${sw.wantP} instead.`;
+  return `${g} isn\u2019t the one. Picture the right one: ${ITEM[sw.want]?.look||'something else'}.`}
 function evaluate(r,test){
   const used=[...new Set(S.altar)],need=r.ing;
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
@@ -341,21 +337,25 @@ function evaluate(r,test){
   let probs=swaps.length+loneMissing.length+loneWrong.length;const lines=[];const gained=[];
   /* Each clue line is tagged with what it is about, so a wrong card isn't read as an ingredient problem. */
   const L=(k,t)=>lines.push({k,t});let il='';
-  if(swaps.length){il=swapLine(swaps[0]);const s0=swaps[0];if(s0.kind==='notes')gained.push(s0.off,s0.wantP)}
-  else if(loneMissing.length===1)il=ITEM[loneMissing[0]]?.look?`Something small is missing. Picture it: ${ITEM[loneMissing[0]].look}.`:'Something small is missing.';else if(loneMissing.length>1)il='Several things are missing. It feels half-made.';
-  else if(loneWrong.length){const w=loneWrong[0],props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
-    if(props.length){il=`A stray note of ${props[0]} runs through it. It doesn\u2019t belong here.`;gained.push(props[0])}
-    else il='It has the right idea, but one ingredient isn\u2019t the one it wants.'}
+  /* Ingredients: say how many are off, then one plain clue per problem, naming the ingredient that is wrong. */
   const ingProbs=swaps.length+loneMissing.length+loneWrong.length;
-  if(il)L('ing',il+(ingProbs>1&&!/Several/.test(il)?' And that isn\u2019t the only thing off in the mix.':''));
+  if(ingProbs){const nw=swaps.length+loneWrong.length,nm=loneMissing.length,parts=[];
+    if(nw)parts.push(`${nw} wrong`);if(nm)parts.push(`${nm} missing`);
+    L('ing',nw&&nm?`${ingProbs} ingredients are off: ${parts.join(', ')}.`:`${ingProbs} ingredient${ingProbs>1?'s are':' is'} ${nw?'wrong':'missing'}.`);
+    swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
+    loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
+      if(props.length){L('ing',`${w} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
+      else L('ing',`${w} doesn\u2019t belong here.`)});
+    loneMissing.forEach(m=>L('ing',ITEM[m]?.look?`One more is needed. Picture it: ${ITEM[m].look}.`:'One more ingredient is needed.'))}
   if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
   else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
-  if(r.tarot&&!S.tarot){probs++;L('card','It feels unguided, as if waiting for a card.')}
-  else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card.`)}
+  if(r.tarot&&!S.tarot){probs++;L('card',`It feels unguided, as if waiting for a card. Perhaps one showing ${CARDLOOK[r.tarot]||'something'}.`)}
+  else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card. The one it wants shows ${CARDLOOK[r.tarot]||'something else'}.`)}
   else if(!r.tarot&&S.tarot){probs++;L('card','The card stayed silent.')}
   const unmet=r.conds.filter(c=>!met(c));probs+=unmet.length;
   if(unmet.length){const[t,g]=condClue(unmet[0],r.themes);L('when',t);if(test)gained.push(...g)}
+  if(probs)lines.unshift({k:'sum',t:probs===1?'One thing is off.':`${probs} things are off in all.`});
   const grade=probs===0?'Perfect':probs===1?'Good':probs<=3?'Clumsy':'Failed';
   if(test){const came=new Set();
     need.filter(x=>used.includes(x)&&!isBaseFor(x,r.type)).forEach(x=>(ITEM[x]?.props||[]).forEach(p=>r.themes.includes(p)&&came.add(p)));
@@ -446,7 +446,7 @@ function renderAltar(){
   $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');
-  if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map(l=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0"><span class="tag">${CLUETAG[l.k]}</span> ${kw(l.t)}</p>`).join('')}`}else res.hidden=true;
+  if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}else res.hidden=true;
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
 function renderCounter(){
@@ -622,7 +622,7 @@ function entryHTML(e){
   const h=hiddenOf(e),f=S.fills[e.sk]||[];
   const lk=entryLocked(e),sh=shownOf(e),blank=i=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):' '}</button>`;
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?kw(p):blank(h.indexOf(p))).join(' · ');
-  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.look?`<span class="look" title="Stands in for the picture">\u{1F5BC} ${esc(ITEM[e.k].look)}</span>`:''}</div>`}
+  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{const lk=e.sk.startsWith('item:')?ITEM[e.k]?.look:e.sk.startsWith('tarot:')?CARDLOOK[e.k]:'';return lk?`<span class="look" title="Stands in for the picture">\u{1F5BC} ${esc(lk)}</span>`:''})()}</div>`}
 /* Every page of a book, in reading order: key, title, category, status and how to draw it. */
 function bookPages(book){
   if(book==='Recipe Book')return Object.values(D.recipes).sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name)).map(r=>{const n=noteOf(r.id);
