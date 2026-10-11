@@ -632,11 +632,16 @@ function bookPages(book){
     find:[e.k,...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)],html:()=>entryHTML(e)}))}
 const pageOf=()=>((S.page||(S.page={}))[curBook]||'');
 let letterView='in';
+/* A word leaves the word bank once every blank in every book that needs it holds it. */
+let NEEDS=null;
+function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Letters','Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>hiddenOf(e).forEach(p=>(NEEDS[p]=NEEDS[p]||[]).push(e.sk))))}return NEEDS[w]||[]}
+const usedUp=w=>needsOf(w).every(sk=>(S.fills[sk]||[]).includes(w));
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}${b==='Letters'&&unreadLetters()?`<span class="badge">${unreadLetters()}</span>`:''}</button>`).join('');
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
-  $('#bank').innerHTML=(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Tap a dotted word in a letter, a result or a book to collect it.</span>');
+  const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
+  $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):(S.bank.length?'<span class="muted">Every word you have collected is used up. Tap dotted words to collect more.</span>':'<span class="muted">No words yet. Tap a dotted word in a letter, a result or a book to collect it.</span>'));
   const el=$('#entries'),sb=$('#search');
   if(curBook==='Letters'){sb.hidden=true;const arc=S.archive||(S.archive=[]);
     /* Every letter, newest post first. Opened letters can be put in the archive and taken out again. */
@@ -706,7 +711,8 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
       if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}
     save();renderBooks();renderBadge();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
-    if(selWord){f[i]=selWord;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
+    if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}
+      if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),e&&entryLocked(e)?2300:0)}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
     save();renderBooks();return}
   if(b.dataset.rmIng){const[id,i]=b.dataset.rmIng.split('|');noteOf(id).ing[+i]='';save();renderBooks();return}
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
