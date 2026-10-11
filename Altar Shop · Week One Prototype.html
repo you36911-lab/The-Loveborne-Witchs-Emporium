@@ -247,7 +247,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],log:[],result:null,queue:null,
+  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],log:[],result:null,queue:null,
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
@@ -270,6 +270,9 @@ function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.ban
 const today=()=>D.cal[S.day-1];
 /* Post: a letter turns up at a set hour, some time before the order it helps with. It goes into the Letters book. */
 const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S.day&&HOURS.indexOf(m.hour)<=S.h));
+/* Hints customers let slip are copied, in order, into one page in the letter archive. */
+function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.text===v.hint.text))return;
+  S.hints.push({day:S.day,hour:HOURS[S.h],who:v.who,text:v.hint.text});setTimeout(()=>toast('Noted in your archive: what they told you'),2400)}
 function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A letter came in the post: ${m.title}.`);toast('A letter came in the post')}})}
 const prev=()=>S.day>1?D.cal[S.day-2]:null;
 
@@ -503,7 +506,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
       record(grade,v.who,'Advice (no charge)');S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;log(`${v.who} took your advice: ${a}.`);
-      if(grade==='Perfect'){S.result={grade,first:'',lines:[v.hint.text],test:false}}
+      if(grade==='Perfect'){S.result={grade,first:'',lines:[v.hint.text],test:false};noteHint(v)}
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind));S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       else{tell(v,v.oops);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
@@ -535,7 +538,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`);
     const lines=[];
-    if(ev.grade==='Perfect'){lines.push(v.hint.text)}
+    if(ev.grade==='Perfect'){lines.push(v.hint.text);noteHint(v)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops);lines.push('They thank you and take it home.')}
     S.result={grade:ev.grade,first:'',lines,test:false};log(`Gave ${r.name} to ${v.who}.`);S.queue=null}
   if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
@@ -641,9 +644,10 @@ function renderBooks(){
     const all=[...mailIn().reverse().map(m=>({key:'mail:'+m.i,title:m.title,sub:`Came in the post, Day ${m.day}`,lines:m.lines,open:S.mail[m.i],btn:`data-mail="${m.i}"`})),
       ...D.letters.map((l,i)=>({key:'start:'+i,title:l.title,sub:'Found in the drawer',lines:l.lines,open:S.letters[i],btn:`data-letter="${i}"`}))];
     const shown=all.filter(x=>arc.includes(x.key)===(letterView==='archive'));
-    el.innerHTML=`<div class="row" style="margin-bottom:10px"><button aria-pressed="${letterView!=='archive'}" data-lview="in">Letters (${all.length-arc.length})</button><button aria-pressed="${letterView==='archive'}" data-lview="archive">Archive (${arc.length})</button></div>`
-      +(shown.length?shown.map(x=>`<div class="letter"><h3>${esc(x.title)}</h3><p class="muted" style="font-size:13px">${esc(x.sub)}</p>${x.open?x.lines.map(t=>`<p>${kw(t)}</p>`).join('')+`<button class="small" data-arc="${x.key}">${letterView==='archive'?'Take out of the archive':'Move to archive'}</button>`:`<button ${x.btn}>Open the letter</button>`}</div>`).join('')
-        :`<p class="muted">${letterView==='archive'?'The archive is empty. Letters you no longer need can be moved here.':'No letters here. Archived letters are under Archive.'}</p>`);return}
+    const hints=S.hints||[],hintDoc=hints.length?`<div class="letter"><h3>What customers told me</h3><p class="muted" style="font-size:13px">Written down as they said it. Kept here on its own.</p>${hints.map(h=>`<p><span class="muted" style="font-size:13px">Day ${h.day}, ${esc(h.hour)} \u00B7 ${esc(h.who)}</span><br>${kw(h.text)}</p>`).join('')}</div>`:'';
+    el.innerHTML=`<div class="row" style="margin-bottom:10px"><button aria-pressed="${letterView!=='archive'}" data-lview="in">Letters (${all.length-arc.length})</button><button aria-pressed="${letterView==='archive'}" data-lview="archive">Archive (${arc.length+(hints.length?1:0)})</button></div>`
+      +(letterView==='archive'?hintDoc:'')+(shown.length?shown.map(x=>`<div class="letter"><h3>${esc(x.title)}</h3><p class="muted" style="font-size:13px">${esc(x.sub)}</p>${x.open?x.lines.map(t=>`<p>${kw(t)}</p>`).join('')+`<button class="small" data-arc="${x.key}">${letterView==='archive'?'Take out of the archive':'Move to archive'}</button>`:`<button ${x.btn}>Open the letter</button>`}</div>`).join('')
+        :(letterView==='archive'&&hintDoc)?'':`<p class="muted">${letterView==='archive'?'The archive is empty. Letters you no longer need can be moved here.':'No letters here. Archived letters are under Archive.'}</p>`);return}
   const pages=bookPages(curBook),key=pageOf(),at=pages.findIndex(p=>p.key===key);
   if(at<0){ /* the index */
     sb.hidden=false;const q=(sb.value||'').toLowerCase();let lc=null;
