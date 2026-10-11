@@ -235,6 +235,7 @@ const SWAPLINES={
  strong:['The {k} is there, but it comes on far too hard.','Too much. It would knock the wind out of anyone small.'],
  weak:['The {k} is there, but only as a whisper.','Gentle to a fault. It barely stirs.'],
  lacks:['The {k} is there, but it’s missing {m}.','Close, but there’s no {m} in it.'],
+ notes:['The {k} is there, but one ingredient brings a note of {o} where it wants {w}.','One ingredient carries the {k}, but it tastes of {o}. That spot wants {w}.'],
  same:['It has the right idea, but one ingredient isn’t the one it wants.']};
 const WALKIN={
  'Body>Mind':'“Still aching, but honestly? I don’t mind any more.”','Body>Space':'“Still feel rotten, but the house has never been so peaceful.”',
@@ -309,7 +310,9 @@ function condClue(c,themes){const hr=S.h;
 /* ---------- crafting ---------- */
 function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes(type))}
 /* A swap is a wrong ingredient that shares a property with a missing one. It counts as one problem. */
-function findSwaps(r,missing,wrong){const left=[...missing],out=[];
+function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
+  /* What the rest of the mix already brings, so a clue never calls a theme missing when another ingredient supplies it. */
+  const mix=new Set([...(used||[]).flatMap(u=>ITEM[u]?.props||[]),...(S.candle===r.candle?D.colours[r.candle]||[]:[]),...(S.tarot===r.tarot?D.tarot[r.tarot]||[]:[])]);
   wrong.forEach(w=>{const wp=ITEM[w]?.props||[];let best=null,bn=0;
     left.forEach(m=>{const n=(ITEM[m]?.props||[]).filter(p=>wp.includes(p)).length;if(n>bn){bn=n;best=m}});
     if(!best)return;left.splice(left.indexOf(best),1);
@@ -317,20 +320,23 @@ function findSwaps(r,missing,wrong){const left=[...missing],out=[];
     const kw=r.themes.find(t=>shared.includes(t))||shared[0];
     const a=ITEM[best],b=ITEM[w];let kind='same';
     if(a.t&&b.t&&a.t!==b.t)kind=a.t+'>'+b.t;else if(a.s&&b.s&&a.s!==b.s)kind=a.s==='Gentle'?'strong':'weak';
-    const lacks=r.themes.filter(t=>mp.includes(t)&&!wp.includes(t));
-    if(kind==='same'&&lacks.length)kind='lacks';
-    out.push({want:best,got:w,kw,kind,lacks})});
+    const lacks=r.themes.filter(t=>mp.includes(t)&&!mix.has(t));
+    /* Otherwise point at the one wrong spot: an off note the wrong ingredient brings, and what the right one would bring instead. */
+    const sh=shownOf({props:mp,sk:'item:'+best}),pick=a=>a.find(p=>sh.includes(p))||a[0];
+    const off=wp.filter(p=>!r.themes.includes(p)&&!mp.includes(p))[0],wantP=pick(mp.filter(p=>!wp.includes(p)&&!mix.has(p)));
+    if(kind==='same'&&lacks.length)kind='lacks';else if(kind==='same'&&off&&wantP)kind='notes';
+    out.push({want:best,got:w,kw,kind,lacks,off,wantP})});
   return out}
-function swapLine(sw){const a=SWAPLINES[sw.kind];return a[Math.floor(Math.random()*a.length)].replace('{k}',sw.kw).replace('{m}',(sw.lacks||[])[0]||'')}
+function swapLine(sw){const a=SWAPLINES[sw.kind];return a[Math.floor(Math.random()*a.length)].replace('{k}',sw.kw).replace('{m}',(sw.lacks||[])[0]||'').replace('{o}',sw.off||'').replace('{w}',sw.wantP||'')}
 function evaluate(r,test){
   const used=[...new Set(S.altar)],need=r.ing;
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
-  const swaps=findSwaps(r,missing,wrong);
+  const swaps=findSwaps(r,missing,wrong,used);
   const loneMissing=missing.filter(m=>!swaps.some(s=>s.want===m)),loneWrong=wrong.filter(w=>!swaps.some(s=>s.got===w));
   let probs=swaps.length+loneMissing.length+loneWrong.length;const lines=[];const gained=[];
   /* Each clue line is tagged with what it is about, so a wrong card isn't read as an ingredient problem. */
   const L=(k,t)=>lines.push({k,t});let il='';
-  if(swaps.length)il=swapLine(swaps[0]);
+  if(swaps.length){il=swapLine(swaps[0]);const s0=swaps[0];if(s0.kind==='notes')gained.push(s0.off,s0.wantP)}
   else if(loneMissing.length===1)il='Something small is missing.';else if(loneMissing.length>1)il='Several things are missing. It feels half-made.';
   else if(loneWrong.length){const w=loneWrong[0],props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
     if(props.length){il=`A stray note of ${props[0]} runs through it. It doesn\u2019t belong here.`;gained.push(props[0])}
