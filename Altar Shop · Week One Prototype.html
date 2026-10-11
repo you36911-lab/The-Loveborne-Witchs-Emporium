@@ -414,11 +414,11 @@ function renderCounter(){
     const opts='<option value="">Choose\u2026</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
     el.innerHTML=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
-  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn">Sorry, I can\u2019t make this</button></div>`;return}
+  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
   const say=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
   /* The customer decides: they either wait while you make it, or say when they will be back. */
   if(v.back){el.innerHTML=`${say}<p class="say">\u201C${esc(backLine(v))}\u201D</p><div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
-  el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button><button id="cantBtn">Sorry, I can\u2019t make this</button></div>`}
+  el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');log(`${v.who} left without anything.`);S.activeNow=null;S.queue=null}
 function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
   if(b.day===S.day)return 'I\u2019ll come back later today.';
