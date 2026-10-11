@@ -418,7 +418,7 @@ function renderCounter(){
   const say=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
   /* The customer decides: they either wait while you make it, or say when they will be back. */
   if(v.back){el.innerHTML=`${say}<p class="say">\u201C${esc(backLine(v))}\u201D</p><div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
-  el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`}
+  el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button></div>`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');log(`${v.who} left without anything.`);S.activeNow=null;S.queue=null}
 function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
   if(b.day===S.day)return 'I\u2019ll come back later today.';
