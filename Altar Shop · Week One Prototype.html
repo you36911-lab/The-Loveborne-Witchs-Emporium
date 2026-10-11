@@ -226,7 +226,7 @@ const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
 const WAX=['Waxing Crescent','First Quarter','Waxing Gibbous'], WAN=['Waning Gibbous','Last Quarter','Waning Crescent'];
 const COLOURHEX={White:'#FFFFFF',Black:'#2A2233',Red:'#E2483D',Pink:'#FF9FCB',Orange:'#F59A3B',Yellow:'#FFE15A',Gold:'#D9A82E',Green:'#5DBB6A','Light blue':'#A9D6F5',Blue:'#4C7BD9',Purple:'#9B5FD0',Lavender:'#C8B2F0',Silver:'#C9CDD6',Brown:'#9A6B45',Grey:'#9A97A8'};
 /* Swap clue lines, keyed by kind of miss: 'Needed>Got' target, too strong, too weak, or same feel. */
-const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through'};
+const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through',done:'Done'};
 const SWAPLINES={
  'Body>Mind':['The {k} is there, but it drifts up into the heart instead of settling in the body.','It would lift a mood, but not an ache.'],
  'Body>Space':['The {k} is there, but it spreads out into the room instead of into the body.','It would do wonders for a house. Less so for a person.'],
@@ -524,6 +524,10 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
   const ev=evaluate(r,test);
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost you a star tonight.')}}
+    /* A perfect test says so plainly and writes the recipe into the book, so the player is never left guessing. */
+    if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
+      const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
+      if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
     S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}.`)}
   else{const q=S.queue;let v;
     if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
