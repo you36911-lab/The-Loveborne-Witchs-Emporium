@@ -453,13 +453,13 @@ function renderCounter(){
   const q=currentVisitor();const el=$('#counter');
   if(!q){el.innerHTML=`<h2>The counter</h2><p class="muted">No one is here right now. Use the time for test crafts, the books, or filling bottles, then go to the next hour.</p>${dayTip()}`;return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);const r=D.recipes[o.rid];
-    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose\u2026</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
     el.innerHTML=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
-  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
+  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
   const say=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
   /* The customer decides: they either wait while you make it, or say when they will be back. */
   if(v.back){el.innerHTML=`${say}<p class="say">\u201C${esc(backLine(v))}\u201D</p><div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
@@ -474,7 +474,6 @@ function whoHTML(v){const a=X.auras[v.aura]||['#ccc',''];return `<div class="who
 function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Open <b>Books</b> to read them.</p>';
   if(Object.values(S.mail||{}).includes(false))return '<p>A letter came in the post. It is in <b>Books</b>, under Letters.</p>';return ''}
 function render(){checkMail();renderTop();renderShelves();renderCounter();renderAltar();save();autoTick()}
-/* When nothing is left to do this hour, the clock moves on by itself (Stay cancels). Closing for the night is always a button. */
 let autoT=null;
 function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tarot&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n])}
 /* Time never moves by itself. While a customer is at the counter, time waits. Once nobody is waiting, the bar says
