@@ -505,7 +505,9 @@ function entryList(book){const L=[];const add=(k,props,note,always)=>L.push({k,p
     const sb=D.sabbats.find(x=>x[0]===k),dy=D.days.find(x=>x[0]===k);
     add(k,D.cond[k]||[],sb?sb[1]:dy?`${dy[1]}; colours ${dy[2].toLowerCase()}`:'',!D.condUsed.includes(k));L[L.length-1].cat=cat}));
   if(book==='Grimoire of Craft'){
-    az(Object.keys(D.colours)).forEach(c=>{add(c,D.colours[c],'Candles, threads and inks',false);L[L.length-1].cat='Colours'});
+    az(Object.keys(D.colours)).forEach(c=>{  /* name only the forms this colour really comes in */
+      const forms=['candle',...[['thread',c+' thread'],['ink',(c==='Purple'?'Violet':c)+' ink'],['paint',c+' paint']].filter(([,n])=>ITEM[n]).map(([f])=>f)];
+      add(c,D.colours[c],forms.length===1?'Candles only':'Comes as '+forms.join(', ').replace(/, ([^,]*)$/,' and $1'),false);L[L.length-1].cat='Colours'});
     D.items.filter(i=>['Buttons','Wood & branches','Findings & tools','Threads & ribbons'].includes(i.c)&&!/ thread$/.test(i.n)&&i.props.length&&!(/ ink$| paint$/.test(i.n))).sort((a,b)=>a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,'',false);L[L.length-1].cat='Symbols & Charms'})}
   if(book==='Book of Making')az(Object.keys(D.methods)).forEach(t=>{const m=D.methods[t];
     const bases=az(D.items.filter(i=>i.base.includes(t)).map(i=>i.n));
