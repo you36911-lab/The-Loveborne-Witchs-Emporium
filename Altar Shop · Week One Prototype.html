@@ -174,7 +174,7 @@ const X = {
 ],
 "auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FF9FCB","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
 "stock":{"Moonwater":3,"Sunwater":2,"Rainwater":2,"Dawn dew":1,"New Moon Water":1,"Sea Water":1,"Snow Water":0,"Storm Water":0,"Web Dew":0},
-"letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],[]]
+"letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home"]]
 }
 ;
 const HOURS=['Sunrise','Noon','Twilight','Nightfall'];
@@ -203,7 +203,7 @@ const WALKIN={
  strong:'“It worked. A bit too well. We’re still recovering.”',weak:'“I think it worked? For about ten minutes.”'};
 
 /* ---------- state ---------- */
-function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:5,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
+function fresh(){return{seed:Math.floor(Math.random()*1e9),day:1,h:0,hist:[],pend:[],tales:[],tests:5,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
   orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],log:[],result:null,queue:null,
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
@@ -213,7 +213,8 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   S.orders=(S.orders||[]).filter(o=>keys.has(o.key)&&D.recipes[o.rid]);
   if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):!S.orders.some(o=>o.id===S.queue.oid)))S.queue=null;
   if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
-  if(S.target&&!D.recipes[S.target])S.target=''}
+  if(S.target&&!D.recipes[S.target])S.target='';
+  if(!S.seed)S.seed=Math.floor(Math.random()*1e9)}
 sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
@@ -513,10 +514,17 @@ function entryList(book){const L=[];const add=(k,props,note,always)=>L.push({k,p
     const bases=az(D.items.filter(i=>i.base.includes(t)).map(i=>i.n));
     L.push({k:t,props:[],method:true,where:m.where,how:m.how,bases})});
   return L}
-/* An entry shows its first keyword (or more, when the item says so) and hides the rest. */
-const showN=e=>ITEM[e.k]?.show||1;
-function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];return e.props.length===1?[e.props[0]]:e.props.slice(showN(e))}
-function shownOf(e){if(e.always)return e.props;if(e.props.length<=1)return[];return e.props.slice(0,showN(e))}
+/* Each entry shows keywords picked at random per playthrough: one, or two if it has five or more.
+   The week-one puzzles pin the keyword they need, so the first orders always read the same. */
+const PIN={Chamomile:['calm','comfort'],'Blue thread':['calm'],Blue:['calm'],'Small key':['opportunity']};
+(()=>{const pin=(k,props,themes)=>{if(PIN[k]||!props||props.length<2)return;const t=props.find(p=>themes.includes(p));if(t)PIN[k]=[t]};
+  Object.values(D.recipes).forEach(r=>{r.ing.forEach(n=>pin(n,ITEM[n]?.props,r.themes));if(r.candle)pin(r.candle,D.colours[r.candle],r.themes);if(r.tarot)pin(r.tarot,D.tarot[r.tarot],r.themes);
+    r.conds.forEach(c=>{const k=condName(c);pin(k==='after Rain'?'After Rain':k,D.cond[k==='after Rain'?'After Rain':k],r.themes)})})})();
+function rng(str){let h=2166136261;for(const ch of str){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h^=h<<13;h^=h>>>17;h^=h<<5;return((h>>>0)%1e6)/1e6}}
+function shownOf(e){if(e.always)return e.props;if(e.method||e.props.length<=1)return[];
+  const out=(PIN[e.k]||[]).filter(p=>e.props.includes(p)),n=Math.max(out.length,e.props.length>=5?2:1),r=rng(S.seed+'|'+e.k),pool=e.props.filter(p=>!out.includes(p));
+  while(out.length<n)out.push(pool.splice(Math.floor(r()*pool.length),1)[0]);return e.props.filter(p=>out.includes(p))}
+function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.length===1)return[e.props[0]];const s=shownOf(e);return e.props.filter(p=>!s.includes(p))}
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.k]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
 function openBooks(){$('#books').classList.add('open');$('#search').value=searchOf();renderBooks();autoTick()}
 function renderBooks(){
