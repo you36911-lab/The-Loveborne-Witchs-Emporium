@@ -190,6 +190,9 @@ const X = {
  {"day":7,"hour":"Sunrise","who":"A worried allotment keeper","kind":"order","rid":25,"aura":"blue","line":"Someone keeps taking things from my allotment shed. Tools, seed tins, even my flask. I want what's mine to stay mine. It has to be today, my nan always said November's full moon is the one that guards what's yours.","hint":{"text":"\"Sailors' wives used to sew a snail shell into the coat lining. For travel, to bring them home slow and safe.\"","words":["travel"]},"oops":"The shed stays shut. So shut that nobody, including its owner, can get in.","cue":"soil under the fingernails, a padlock key on a string round the neck"},
  {"day":7,"hour":"Nightfall","who":"Morwenna Hale","kind":"order","rid":21,"aura":"blue","line":"Full moon, so here I am. Something for safe travel, for the boats. Tobias can fetch it if it takes time.","hint":{"text":"\"Sailors carve their safe-passage charms on Wednesdays. Mercury watches travellers.\"","words":["travel"]},"oops":"The talisman keeps the gulls, and only the gulls, away.","usual":"Space","react":{"target":"Morwenna felt perfectly safe all month. The boat still sprang a leak.","strong":"Nothing could get near the lighthouse, including the supply boat.","weak":"Morwenna's talisman kept the fog off for one evening."},"cue":"sets down a bottle of sea water; she smells of salt and rope","back":{"day":12,"hour":"Nightfall","line":"It'll want time, I expect. Tobias will cycle over for it before the next full moon."}}
 ],
+"mail":[
+ {"day":1,"hour":"Noon","title":"From the apothecary on Mill Lane","for":194,"lines":["To whoever keeps the Emporium now,","Our shelves are bare of the one herb we can't do without. You'll know the one: it stings your fingers when you pick it, and then it builds a worn-out body back up. Nothing does more for healing after a long sickness.","Could you spare us a bundle or two? We'll pay in honey, as we always did.","Agnes, Mill Lane Apothecary"]}
+],
 "auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FF9FCB","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
 "stock":{"Moonwater":3,"Sunwater":2,"Rainwater":2,"Dawn dew":1,"New Moon Water":1,"Sea Water":1,"Snow Water":0,"Storm Water":0,"Web Dew":0},
 "letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home","intuition","transformation","truth"]]
@@ -223,7 +226,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],log:[],result:null,queue:null,
+  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},log:[],result:null,queue:null,
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY))||fresh()}catch(e){S=fresh()}
@@ -244,6 +247,9 @@ function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)
 function collect(w){if(!S.bank.includes(w)){S.bank.push(w);toast(`Collected \u201C${w}\u201D`)}selWord=w;save()}
 function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.bank.push(w);n.push(w)}});if(n.length)toast('New words: '+n.join(', '));return n}
 const today=()=>D.cal[S.day-1];
+/* Post: a letter turns up at a set hour, some time before the order it helps with. It goes into the Letters book. */
+const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S.day&&HOURS.indexOf(m.hour)<=S.h));
+function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A letter came in the post: ${m.title}.`);toast('A letter came in the post')}})}
 const prev=()=>S.day>1?D.cal[S.day-2]:null;
 
 /* ---------- conditions ---------- */
@@ -433,8 +439,9 @@ function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; t
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
 function whoHTML(v){const a=X.auras[v.aura]||['#ccc',''];return `<div class="who"><span class="aura" style="background:${a[0]};--aura:${a[0]}" title="${esc(a[1])}"></span><div><b>${esc(v.who)}</b><br><small class="muted">${esc(a[1])}</small></div></div>`}
-function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Open <b>Books</b> to read them.</p>';return ''}
-function render(){renderTop();renderShelves();renderCounter();renderAltar();save();autoTick()}
+function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Open <b>Books</b> to read them.</p>';
+  if(Object.values(S.mail||{}).includes(false))return '<p>A letter came in the post. It is in <b>Books</b>, under Letters.</p>';return ''}
+function render(){checkMail();renderTop();renderShelves();renderCounter();renderAltar();save();autoTick()}
 /* When nothing is left to do this hour, the clock moves on by itself (Stay cancels). Closing for the night is always a button. */
 let autoT=null;
 function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tarot&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n])}
@@ -597,7 +604,8 @@ function renderBooks(){
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
   $('#bank').innerHTML=(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Tap a dotted word in a letter, a result or a book to collect it.</span>');
   const el=$('#entries'),sb=$('#search');
-  if(curBook==='Letters'){sb.hidden=true;el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${kw(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
+  if(curBook==='Letters'){sb.hidden=true;el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${kw(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('')
+    +mailIn().reverse().map(m=>`<div class="letter"><h3>${esc(m.title)}</h3><p class="muted" style="font-size:13px">Came in the post, Day ${m.day}</p>${S.mail[m.i]?m.lines.map(x=>`<p>${kw(x)}</p>`).join(''):`<button data-mail="${m.i}">Open the letter</button>`}</div>`).join('');return}
   const pages=bookPages(curBook),key=pageOf(),at=pages.findIndex(p=>p.key===key);
   if(at<0){ /* the index */
     sb.hidden=false;const q=(sb.value||'').toLowerCase();let lc=null;
@@ -649,6 +657,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
     save();renderBooks();return}
   if(b.dataset.book){curBook=b.dataset.book;$('#search').value=searchOf();renderBooks();return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
+  if(b.dataset.mail!==undefined){S.mail[+b.dataset.mail]=true;save();renderBooks();return}
   if(b.dataset.letter!==undefined){const i=+b.dataset.letter;S.letters[i]=true;
     if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
       if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}
