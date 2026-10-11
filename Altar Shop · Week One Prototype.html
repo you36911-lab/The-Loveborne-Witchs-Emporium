@@ -377,7 +377,7 @@ function renderCounter(){
     el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
-    const opts='<option value="">Choose\u2026</option>'+D.items.filter(i=>i.c===v.ask.cat).map(i=>`<option>${esc(i.n)}</option>`).join('');
+    const opts='<option value="">Choose\u2026</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
     el.innerHTML=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
   if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req"><span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p>`;return}
@@ -538,7 +538,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   const pick=(attr,label,opts)=>`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">add…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
   const one=(attr,want,val,opts,label)=>!want?'<span class="muted">none needed</span>':lk?esc(val):`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">?</option>${opts.map(c=>`<option ${val===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`;
   return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">#${r.id} ${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(esc).join(', ')}</div>
-  <div><b>Ingredients (${n.ing.length}/${N}):</b> ${chips(n.ing,'rm-ing')} ${!lk&&n.ing.length<N?pick('add-ing','Add ingredient',D.items.map(i=>i.n)):''}</div>
+  <div><b>Ingredients (${n.ing.length}/${N}):</b> ${chips(n.ing,'rm-ing')} ${!lk&&n.ing.length<N?pick('add-ing','Add ingredient',az(D.items.map(i=>i.n))):''}</div>
   <div class="row"><b>Candle:</b>${one('set-candle',r.candle,n.candle,Object.keys(D.colours),'Candle')}
   <b>Card:</b>${one('set-tarot',r.tarot,n.tarot,Object.keys(D.tarot),'Card')}</div>
   <div><b>When${M?` (${n.when.filter(Boolean).length}/${M})`:''}:</b> ${M?r.conds.map((c,i)=>{const kind=CONDKIND[c.t],v=n.when[i];
