@@ -104,6 +104,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .autobar[hidden]{display:none}
 .entries h3.cat{margin:14px 0 4px;padding-bottom:2px;border-bottom:2px solid var(--line)}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
+.tag{display:inline-block;font-family:'Pixelify Sans',monospace;font-size:12px;padding:0 6px;margin-right:4px;border:1.5px solid var(--line);border-radius:3px;background:var(--paper2)}
 .tale{background:var(--pink-soft);border-radius:4px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--butter);color:#3B2160;border:2px solid #3B2160;border-radius:4px;padding:6px 12px;z-index:30;display:none}
@@ -185,6 +186,7 @@ const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
 const WAX=['Waxing Crescent','First Quarter','Waxing Gibbous'], WAN=['Waning Gibbous','Last Quarter','Waning Crescent'];
 const COLOURHEX={White:'#FFFFFF',Black:'#2A2233',Red:'#E2483D',Pink:'#FF9FCB',Orange:'#F59A3B',Yellow:'#FFE15A',Gold:'#D9A82E',Green:'#5DBB6A','Light blue':'#A9D6F5',Blue:'#4C7BD9',Purple:'#9B5FD0',Lavender:'#C8B2F0',Silver:'#C9CDD6',Brown:'#9A6B45',Grey:'#9A97A8'};
 /* Swap clue lines, keyed by kind of miss: 'Needed>Got' target, too strong, too weak, or same feel. */
+const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through'};
 const SWAPLINES={
  'Body>Mind':['The {k} is there, but it drifts up into the heart instead of settling in the body.','It would lift a mood, but not an ache.'],
  'Body>Space':['The {k} is there, but it spreads out into the room instead of into the body.','It would do wonders for a house. Less so for a person.'],
@@ -272,30 +274,31 @@ function evaluate(r,test){
   const swaps=findSwaps(r,missing,wrong);
   const loneMissing=missing.filter(m=>!swaps.some(s=>s.want===m)),loneWrong=wrong.filter(w=>!swaps.some(s=>s.got===w));
   let probs=swaps.length+loneMissing.length+loneWrong.length;const lines=[];const gained=[];
-  if(swaps.length)lines.push(swapLine(swaps[0]));
-  else if(loneMissing.length===1)lines.push('Something small is missing.');else if(loneMissing.length>1)lines.push('Several things are missing. It feels half-made.');
+  /* Each clue line is tagged with what it is about, so a wrong card isn't read as an ingredient problem. */
+  const L=(k,t)=>lines.push({k,t});let il='';
+  if(swaps.length)il=swapLine(swaps[0]);
+  else if(loneMissing.length===1)il='Something small is missing.';else if(loneMissing.length>1)il='Several things are missing. It feels half-made.';
   else if(loneWrong.length){const w=loneWrong[0],props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
-    if(props.length){lines.push(`A stray note of ${props[0]} runs through it. It doesn\u2019t belong here.`);gained.push(props[0])}
-    else lines.push('It has the right idea, but one ingredient isn\u2019t the one it wants.')}
-  let cl='';
-  if(r.candle&&!S.candle){probs++;cl='It feels as if it was made in the dark.'}
-  else if(r.candle&&S.candle!==r.candle){probs++;cl=`The ${S.candle.toLowerCase()} flame flickers uneasily.`}
-  else if(!r.candle&&S.candle){probs++;cl='The candle burned on, ignored.'}
-  let tl='';
-  if(r.tarot&&!S.tarot){probs++;tl='It feels unguided, as if waiting for a card.'}
-  else if(r.tarot&&S.tarot!==r.tarot){probs++;tl=`${S.tarot} turned its face away.`}
-  else if(!r.tarot&&S.tarot){probs++;tl='The card stayed silent.'}
-  if(cl||tl)lines.push([cl,tl].filter(Boolean).join(' '));
+    if(props.length){il=`A stray note of ${props[0]} runs through it. It doesn\u2019t belong here.`;gained.push(props[0])}
+    else il='It has the right idea, but one ingredient isn\u2019t the one it wants.'}
+  const ingProbs=swaps.length+loneMissing.length+loneWrong.length;
+  if(il)L('ing',il+(ingProbs>1&&!/Several/.test(il)?' And that isn\u2019t the only thing off in the mix.':''));
+  if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
+  else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
+  else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
+  if(r.tarot&&!S.tarot){probs++;L('card','It feels unguided, as if waiting for a card.')}
+  else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card.`)}
+  else if(!r.tarot&&S.tarot){probs++;L('card','The card stayed silent.')}
   const unmet=r.conds.filter(c=>!met(c));probs+=unmet.length;
-  if(unmet.length){const[t,g]=condClue(unmet[0],r.themes);lines.push(t);if(test)gained.push(...g)}
+  if(unmet.length){const[t,g]=condClue(unmet[0],r.themes);L('when',t);if(test)gained.push(...g)}
   const grade=probs===0?'Perfect':probs===1?'Good':probs<=3?'Clumsy':'Failed';
   if(test){const came=new Set();
     need.filter(x=>used.includes(x)&&!isBaseFor(x,r.type)).forEach(x=>(ITEM[x]?.props||[]).forEach(p=>r.themes.includes(p)&&came.add(p)));
     if(r.candle&&S.candle===r.candle)(D.colours[r.candle]||[]).forEach(p=>r.themes.includes(p)&&came.add(p));
     if(r.tarot&&S.tarot===r.tarot)(D.tarot[r.tarot]||[]).forEach(p=>r.themes.includes(p)&&came.add(p));
     swaps.forEach(s=>r.themes.includes(s.kw)&&came.add(s.kw));
-    const c=[...came].slice(0,3);if(c.length){lines.push(`You can feel ${c.join(', ').replace(/, ([^,]*)$/,' and $1')} in it.`);gained.push(...c)}}
-  return{grade,lines:lines.slice(0,test?4:3),gained,probs,swaps}}
+    const c=[...came].slice(0,3);if(c.length){L('came',`You can feel ${c.join(', ').replace(/, ([^,]*)$/,' and $1')} in it.`);gained.push(...c)}}
+  return{grade,lines,gained,probs,swaps}}
 /* Which reaction a customer reports: by grade, and for Good by the kind of miss. */
 function missKind(ev){if(ev.grade!=='Good')return null;const s=ev.swaps&&ev.swaps[0];
   if(s&&s.kind!=='same'&&s.kind!=='lacks')return s.kind;return 'weak'}
@@ -370,7 +373,7 @@ function renderAltar(){
   $('#testBtn').disabled=S.tests<=0||!S.altar.length||!S.target;$('#testBtn').textContent=`Test craft (${S.tests} left)`;
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');
-  if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map(l=>`<p style="margin:2px 0">${esc(l)}</p>`).join('')}`}else res.hidden=true;
+  if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map(l=>typeof l==='string'?`<p style="margin:2px 0">${esc(l)}</p>`:`<p style="margin:2px 0"><span class="tag">${CLUETAG[l.k]}</span> ${esc(l.t)}</p>`).join('')}`}else res.hidden=true;
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
 function renderCounter(){
@@ -563,7 +566,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div><b>When${M?` (${n.when.filter(Boolean).length}/${M})`:''}:</b> ${M?r.conds.map((c,i)=>{const kind=CONDKIND[c.t],v=n.when[i];
     return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-when="${r.id}|${i}">${esc(v)} \u00D7</button>`)
       :`<select data-add-when="${r.id}|${i}" aria-label="${kind}"><option value="">${kind}\u2026</option>${KINDOPTS[kind].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' '):'<span class="muted">any time</span>'}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:13px">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}
-  <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button><button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)&&S.tests>0?'':'disabled'}>Test craft this (${S.tests} left)</button></div></div>`}
+  <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button>${lk?'':`<button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)&&S.tests>0?'':'disabled'}>Test craft this (${S.tests} left)</button>`}</div></div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
