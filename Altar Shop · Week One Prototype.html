@@ -479,16 +479,19 @@ function renderAltar(){
 }
 function renderCounter(){
   const q=currentVisitor();const el=$('#counter');
+  /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
+  if(q&&(q.tales||[]).length&&!q.newsDone){const v=q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key);
+    el.innerHTML=`${whoHTML(v)}<p class="muted">Before anything else, they pass on some news:</p>${talesHTML(q)}<div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
   if(!q){el.innerHTML=`<h2>The counter</h2><p class="muted">No one is here right now. Use the time for test crafts, the books, or filling bottles, then go to the next hour.</p>${dayTip()}`;return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);const r=D.recipes[o.rid];
-    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}<p class="say">\u201CI\u2019m back for my order.\u201D</p><div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><div class="row"><button id="letGo">They can\u2019t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose\u2026</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
-    el.innerHTML=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
-  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}${talesHTML(q)}<div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
-  const say=`${whoHTML(v)}${talesHTML(q)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
+  if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}<div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
+  const say=`${whoHTML(v)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
   /* The customer decides: they either wait while you make it, or say when they will be back. */
   if(v.back){el.innerHTML=`${say}<p class="say">\u201C${esc(backLine(v))}\u201D</p><div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
   el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button></div>`}
@@ -538,6 +541,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
     case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');log('A customer left without their order.');S.queue=null;render();break}
+    case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'mailRead':$('#mailFx').hidden=true;openBooks();curBook='Letters';letterView='in';renderBooks();break;
     case 'mailLater':$('#mailFx').hidden=true;break;
     case 'moveBtn':clearTimeout(autoT);nextHour();break;
