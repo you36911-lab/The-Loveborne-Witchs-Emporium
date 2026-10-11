@@ -108,6 +108,16 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .rhead{background:none;border:0;box-shadow:none;padding:0;font-family:'Pixelify Sans',monospace;font-weight:600;font-size:16px;text-align:left}
 .rhead:hover{background:none;text-decoration:underline}
 .recipe.folded{padding:8px 10px}
+.marks{display:flex;flex-wrap:wrap;gap:6px;margin:-2px 0 10px;min-height:24px;align-items:center}
+.mark{--mc:#999;border-left:8px solid var(--mc);padding:3px 8px;font-size:13px;box-shadow:2px 2px 0 var(--line);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.idx{margin:0 0 4px}
+.idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
+.idxrow:hover{background:var(--pink-soft)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
+.pagenav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.pagenav .bm{margin-left:auto;border-left:8px solid var(--mc,transparent)}
+.page{border:2px solid var(--line);border-radius:6px;padding:12px;background:var(--paper);min-height:200px}
+.page .entry{border-bottom:0;font-size:16px}
 .tale{background:var(--pink-soft);border-radius:4px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--butter);color:#3B2160;border:2px solid #3B2160;border-radius:4px;padding:6px 12px;z-index:30;display:none}
@@ -131,7 +141,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
       <div class="counter" id="counter"></div>
       <div class="altar">
         <div class="row" style="justify-content:space-between"><h2 style="margin:0">Altar</h2>
-          <label class="row" style="gap:6px"><span class="muted">Making</span><select id="target"></select></label></div>
+          <label class="row" style="gap:6px"><span class="muted">Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label></div>
         <div class="plates" id="plates"><span class="muted">Tap ingredients on the shelves to lay them here.</span></div>
         <div class="slots"><div class="slot" id="candleSlot"></div><div class="slot" id="tarotSlot"></div></div>
         <div class="row" style="justify-content:center">
@@ -149,6 +159,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   <div class="sheet">
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Bookshelf</h2><button id="closeBooks">Close</button></div>
     <div class="booktabs" id="booktabs"></div>
+    <div class="marks" id="marks"></div>
     <div class="bookgrid"><div><input id="search" placeholder="Search by name or keyword" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
       <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Hidden keywords you have found. Pick one (or a theme in the Recipe Book), then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
   </div>
@@ -182,7 +193,7 @@ const X = {
 }
 ;
 const HOURS=['Sunrise','Noon','Twilight','Nightfall'];
-const KEY='altar-shop-proto-v7';
+const KEY='altar-shop-proto-v8';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
@@ -377,7 +388,12 @@ function renderAltar(){
   if(q){if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);orderR=o&&D.recipes[o.rid]}
     else if(q.type==='new'&&S.activeNow===q.key){const v=visitByKey(q.key);orderR=D.recipes[v.rid]}}
   const sel=$('#target');const rs=knownRecipes();
-  sel.innerHTML='<option value="">Choose a recipe\u2026</option>'+[...new Set(rs.map(r=>r.type))].sort().map(t=>`<optgroup label="${esc(t)}">${rs.filter(r=>r.type===t).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>#${r.id} ${esc(r.name)}</option>`).join('')}</optgroup>`).join('');
+  /* choose the spell type first, then a recipe of that type (names only, no numbers) */
+  if(S.target&&D.recipes[S.target])S.ttype=D.recipes[S.target].type;
+  const types=[...new Set(rs.map(r=>r.type))].sort();
+  $('#ttype').innerHTML='<option value="">Spell type\u2026</option>'+types.map(t=>`<option ${t===S.ttype?'selected':''}>${esc(t)}</option>`).join('');
+  sel.innerHTML=S.ttype?'<option value="">Recipe\u2026</option>'+rs.filter(r=>r.type===S.ttype).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>${esc(r.name)}</option>`).join(''):'<option value="">Recipe\u2026</option>';
+  sel.disabled=!S.ttype;
   sel.value=S.target||'';
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients on the shelves to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
@@ -449,6 +465,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'closeBooks':$('#books').classList.remove('open');render();break;
   }});
 $('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
+$('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
   if(!test){const lacking=S.altar.filter(n=>X.stock[n]!==undefined&&S.stock[n]<=0);
     if(lacking.length){toast(`No ${lacking[0]} left. Fill a bottle first.`);return}
@@ -461,7 +478,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
-    S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`#${r.id} ${r.name} (${r.type})`);
+    S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`);
     const lines=[];
     if(ev.grade==='Perfect'){lines.push(v.hint.text);addWords(v.hint.words)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops);lines.push('They thank you and take it home.')}
@@ -541,25 +558,39 @@ function dispOrder(e){let x=2166136261;for(const ch of 'order|'+e.sk){x^=ch.char
 function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.length===1)return[e.props[0]];const s=shownOf(e);return e.props.filter(p=>!s.includes(p))}
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.sk]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
 function openBooks(){$('#books').classList.add('open');$('#search').value=searchOf();renderBooks();autoTick()}
+/* ---------- books as pages: an index, one entry per page, up to five bookmarks ---------- */
+const MARKCOL=['#E2483D','#F59A3B','#5DBB6A','#4C7BD9','#9B5FD0'];
+function entryHTML(e){
+  if(e.method)return `<div class="entry method"><b>${esc(e.k)}</b><span class="muted">${esc(e.where)}</span><span class="bookline" style="font-style:normal;color:var(--ink)">${esc(e.how)}</span>${e.bases.length?`<span class="bookline">Base: ${e.bases.map(esc).join(', ')}.</span>`:''}</div>`;
+  const h=hiddenOf(e),f=S.fills[e.sk]||[];
+  const lk=entryLocked(e),sh=shownOf(e),blank=i=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):' '}</button>`;
+  const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?`<span>${esc(p)}</span>`:blank(h.indexOf(p))).join(' · ');
+  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}</div>`}
+/* Every page of a book, in reading order: key, title, category, status and how to draw it. */
+function bookPages(book){
+  if(book==='Recipe Book')return Object.values(D.recipes).sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name)).map(r=>{const n=noteOf(r.id);
+    return {key:'recipe:'+r.id,title:r.name,cat:r.type,done:recipeLocked(r.id),started:n.ing.some(Boolean)||!!n.candle||!!n.tarot||n.when.some(Boolean),
+      find:[r.name,r.type,r.intent,...r.themes,...n.ing,n.candle,n.tarot,...n.when],html:()=>recipeHTML(r)}});
+  return entryList(book).map(e=>({key:e.sk||('method:'+e.k),title:e.k,cat:e.cat||'',done:entryLocked(e),started:(S.fills[e.sk]||[]).some(Boolean),
+    find:[e.k,...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)],html:()=>entryHTML(e)}))}
+const pageOf=()=>((S.page||(S.page={}))[curBook]||'');
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
+  const marks=S.marks||(S.marks=[]);
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
   $('#bank').innerHTML=(selWord&&!S.bank.includes(selWord)?`<div style="margin-bottom:6px">Picked from a recipe: <button class="word sel" data-word="${esc(selWord)}">${esc(selWord)}</button></div>`:'')+(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>');
-  const q=($('#search').value||'').toLowerCase();const el=$('#entries');
-  if(curBook==='Letters'){el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${esc(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
-  if(curBook==='Recipe Book'){/* grouped by spell type, types alphabetical, recipes by name inside */
-    const rs=Object.values(D.recipes).filter(r=>{if(!q)return true;const n=noteOf(r.id);
-    return [r.name,r.type,r.intent,...r.themes,...n.ing,n.candle,n.tarot,...n.when].some(x=>x&&x.toLowerCase().includes(q))}).sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name));let lt='';
-    el.innerHTML=rs.map(r=>(r.type!==lt?`<h3 class="cat">${esc(lt=r.type)}</h3>`:'')+recipeHTML(r)).join('')||'<p class="muted">Nothing matches.</p>';return}
-  let lastCat='';const intro=curBook==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
-  /* Search matches the name and only the keywords the player can already see: shown ones and blanks they have filled. */
-  const known=e=>[e.k,...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)];
-  el.innerHTML=entryList(curBook).filter(e=>!q||known(e).some(x=>x.toLowerCase().includes(q))).map(e=>{
-    const head=e.cat&&e.cat!==lastCat?`<h3 class="cat">${esc(lastCat=e.cat)}</h3>`:'';return head+(()=>{
-    if(e.method)return `<div class="entry method"><b>${esc(e.k)}</b><span class="muted">${esc(e.where)}</span><span class="bookline" style="font-style:normal;color:var(--ink)">${esc(e.how)}</span>${e.bases.length?`<span class="bookline">Base: ${e.bases.map(esc).join(', ')}.</span>`:''}</div>`;
-    const h=hiddenOf(e),f=S.fills[e.sk]||[];
-    const lk=entryLocked(e),sh=shownOf(e),blank=i=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):'\u00A0'}</button>`;
-    const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?`<span>${esc(p)}</span>`:blank(h.indexOf(p))).join(' \u00B7 ');
-    return `<div class="entry ${entryLocked(e)?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}</div>`})()}).join('').replace(/^/,intro)||'<p class="muted">Nothing matches.</p>'}
+  const el=$('#entries'),sb=$('#search');
+  if(curBook==='Letters'){sb.hidden=true;el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${esc(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
+  const pages=bookPages(curBook),key=pageOf(),at=pages.findIndex(p=>p.key===key);
+  if(at<0){ /* the index */
+    sb.hidden=false;const q=(sb.value||'').toLowerCase();let lc=null;
+    const list=pages.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
+    const intro=curBook==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
+    el.innerHTML=`<h2 class="idx">Index</h2>${intro}`+(list.map(p=>{const m=marks.find(x=>x.book===curBook&&x.key===p.key);
+      return (p.cat!==lc?`<h3 class="cat">${esc(lc=p.cat)||'&nbsp;'}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join('')||'<p class="muted">Nothing matches.</p>');return}
+  sb.hidden=true;const p=pages[at],m=marks.find(x=>x.book===curBook&&x.key===p.key);
+  el.innerHTML=`<div class="pagenav"><button data-nav="index">← Index</button><button data-nav="prev" ${at>0?'':'disabled'}>‹ Prev</button><span class="muted">${esc(p.cat)} · page ${at+1} of ${pages.length}</span><button data-nav="next" ${at<pages.length-1?'':'disabled'}>Next ›</button>
+    <button data-bm="${esc(p.key)}" class="bm" style="${m?`--mc:${m.color}`:''}">${m?'★ Bookmarked':'☆ Bookmark'}</button></div><div class="page">${p.html()}</div>`}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
 const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
 const CONDKIND={day:'Weekday',phase:'Moon Phase',pg:'Moon Phase',dark:'Moon Phase',time:'Magic Hour',weather:'Weather',afterrain:'Weather',starry:'Sky Event',sabbat:'Festival',named:'Named Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
@@ -570,15 +601,11 @@ const KINDOPTS={'Weekday':D.days.map(d=>d[0]),'Moon Phase':['New Moon','Waxing C
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
 function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>[...a].sort().join('|')===[...b].sort().join('|');
   return same(n.ing.filter(Boolean),r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
-/* With 240 recipes the book shows each one folded (name, intention, themes); tap the name to open its slots. */
-const openR=new Set();
-function recipeHTML(r){if(openR.has(String(r.id)))return recipeFull(r);const lk=recipeLocked(r.id);
-  return `<div class="recipe folded ${lk?'locked':''}"><button class="rhead" data-open="${r.id}" aria-expanded="false">\u25B8 #${r.id} ${esc(r.name)}${lk?' \u2726':''}</button><div class="muted">${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(t=>`<button class="word ${selWord===t?'sel':''}" data-word="${esc(t)}">${esc(t)}</button>`).join(' ')}</div></div>`}
-function recipeFull(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
+function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
   const chips=(arr,attr)=>arr.map(x=>lk?`<span class="chip on">${esc(x)}</span>`:`<button class="chip" data-${attr}="${r.id}|${esc(x)}">${esc(x)} ×</button>`).join(' ');
   const pick=(attr,label,opts)=>`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">add…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
   const one=(attr,want,val,opts,label)=>!want?'<span class="muted">none needed</span>':lk?esc(val):`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">?</option>${opts.map(c=>`<option ${val===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`;
-  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0"><button class="rhead" data-open="${r.id}" aria-expanded="true">\u25BE #${r.id} ${esc(r.name)}${lk?' ✦':''}</button></h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(t=>`<button class="word ${selWord===t?'sel':''}" data-word="${esc(t)}" title="Pick this word, then tap a blank in any book">${esc(t)}</button>`).join(' ')}</div>
+  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(t=>`<button class="word ${selWord===t?'sel':''}" data-word="${esc(t)}" title="Pick this word, then tap a blank in any book">${esc(t)}</button>`).join(' ')}</div>
   <div><b>Ingredients (${n.ing.filter(Boolean).length}/${N}):</b> ${r.ing.map((want,i)=>{const cat=ITEM[want].c,lab=CATLABEL[cat]||cat,v=n.ing[i];
     return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-ing="${r.id}|${i}">${esc(v)} \u00D7</button>`)
       :`<select data-add-ing="${r.id}|${i}" aria-label="${esc(lab)}"><option value="">${esc(lab)}\u2026</option>${az(D.items.filter(x=>x.c===cat).map(x=>x.n)).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' ')}</div>
@@ -593,13 +620,20 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
     S.target=String(id);S.altar=[...new Set(n.ing.filter(Boolean))];S.candle=n.candle||'';S.tarot=n.tarot||'';S.result=null;
     $('#books').classList.remove('open');
-    if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out #${id} on the altar.`)}
+    if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
     return}
-  if(b.dataset.open){const k=b.dataset.open;openR.has(k)?openR.delete(k):openR.add(k);renderBooks();return}
+  if(b.dataset.go){S.page[curBook]=b.dataset.go;save();renderBooks();$('#entries').scrollTop=0;return}
+  if(b.dataset.nav){const pages=bookPages(curBook),at=pages.findIndex(p=>p.key===pageOf());
+    S.page[curBook]=b.dataset.nav==='index'?'':(pages[at+(b.dataset.nav==='next'?1:-1)]||pages[at]).key;save();renderBooks();return}
+  if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];curBook=m.book;S.page[curBook]=m.key;$('#search').value=searchOf();save();renderBooks();return}
+  if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
+    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=5){toast('You can keep five bookmarks. Remove one first.');return}
+    else{const used=S.marks.map(x=>x.color),p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL.find(c=>!used.includes(c))})}
+    save();renderBooks();return}
   if(b.dataset.book){curBook=b.dataset.book;$('#search').value=searchOf();renderBooks();return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.letter!==undefined){const i=+b.dataset.letter;S.letters[i]=true;addWords(X.letterWords[i]||[]);
-    if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{openR.add(String(id));const r=D.recipes[id],n=noteOf(id);
+    if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
       if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}
     save();renderBooks();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
