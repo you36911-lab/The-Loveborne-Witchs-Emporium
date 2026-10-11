@@ -583,7 +583,8 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
   if(t.dataset.setTarot!==undefined)noteOf(t.dataset.setTarot).tarot=t.value;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
-  if(id&&recipeLocked(id))toast('Recipe solved \u2726');
+  /* Solving a recipe adds its themes to the word bank. */
+  if(id&&recipeLocked(id)){const nw=D.recipes[id].themes.filter(w=>!S.bank.includes(w));S.bank.push(...nw);toast('Recipe solved \u2726'+(nw.length?' New words: '+nw.join(', '):''))}
   save();renderBooks()});
 $('#search').addEventListener('input',e=>{(S.search||(S.search={}))[curBook]=e.target.value;save();renderBooks()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}});
