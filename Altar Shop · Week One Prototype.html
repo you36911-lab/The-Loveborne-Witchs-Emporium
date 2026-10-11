@@ -93,6 +93,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .bank{border:2px solid var(--line);border-radius:6px;padding:8px;background:var(--paper)}
 .letter{background:var(--paper);border:2px solid var(--line);border-radius:4px;padding:12px 14px;margin-bottom:10px;max-width:68ch}
 .entry .look{flex-basis:100%;font-size:13px;color:var(--ink-soft);border:1px dashed var(--line);border-radius:4px;padding:2px 8px;width:max-content;max-width:100%}
+.badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
 .letter button.small{font-size:13px;padding:4px 10px;margin-top:4px}
 [data-lview][aria-pressed="true"]{background:var(--butter);color:#3B2160}
 .recipe{border:2px solid var(--line);border-radius:6px;padding:10px;margin-bottom:10px;background:var(--paper)}
@@ -136,7 +137,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
     <div><h1>Altar Shop</h1><small class="muted">Week one prototype</small></div>
     <div class="sky" id="sky"></div>
     <div class="row"><span class="stars" id="stars" aria-label="Shop rating"></span>
-      <button id="restartBtn" title="Start the week again from Day 1">Restart</button><button id="booksBtn">Books</button></div>
+      <button id="restartBtn" title="Start the week again from Day 1">Restart</button><button id="booksBtn">Books<span class="badge" id="booksBadge" hidden></span></button></div>
   </header>
   <nav class="tabs" aria-label="Shop areas">
     <button data-p="left">Kitchen</button><button data-p="mid" aria-pressed="true">Altar</button><button data-p="right">Cabinet</button>
@@ -393,7 +394,10 @@ function talesHTML(q){return (q.tales||[]).map(t=>`<p class="tale">${t.own?'<b>A
 function rating(){return S.hist.length?S.hist.reduce((a,b)=>a+b,0)/S.hist.length:3}
 
 /* ---------- rendering ---------- */
-function renderTop(){const T=today();
+/* Unopened letters (drawer or post) show a badge on the Books button and the Letters tab. */
+const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
+function renderBadge(){const n=unreadLetters(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#booksBtn').setAttribute('aria-label',n?`Books, ${n} unread letter${n>1?'s':''}`:'Books')}
+function renderTop(){renderBadge();const T=today();
   const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
   $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span><span>\u263E ${T.phase}</span><span>${T.weather}${HOURS[S.h]==='Nightfall'?` (night ${T.night})`:''}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
   <span class="hour">${HOURS.map((h,i)=>`<i class="${i===S.h?'on':''}">${h}</i>`).join('')}</span><span title="Every fifth test craft that isn't perfect costs a one-star review">Failed tests: ${S.failTests%5}/5</span>`;
@@ -623,7 +627,7 @@ function bookPages(book){
 const pageOf=()=>((S.page||(S.page={}))[curBook]||'');
 let letterView='in';
 function renderBooks(){
-  $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
+  $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}${b==='Letters'&&unreadLetters()?`<span class="badge">${unreadLetters()}</span>`:''}</button>`).join('');
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
   $('#bank').innerHTML=(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Tap a dotted word in a letter, a result or a book to collect it.</span>');
@@ -689,11 +693,11 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.lview){letterView=b.dataset.lview;renderBooks();return}
   if(b.dataset.arc){const k=b.dataset.arc,a=S.archive;a.includes(k)?a.splice(a.indexOf(k),1):a.push(k);toast(a.includes(k)?'Moved to the archive':'Taken out of the archive');save();renderBooks();return}
-  if(b.dataset.mail!==undefined){S.mail[+b.dataset.mail]=true;save();renderBooks();return}
+  if(b.dataset.mail!==undefined){S.mail[+b.dataset.mail]=true;save();renderBooks();renderBadge();return}
   if(b.dataset.letter!==undefined){const i=+b.dataset.letter;S.letters[i]=true;
     if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
       if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}
-    save();renderBooks();return}
+    save();renderBooks();renderBadge();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
     if(selWord){f[i]=selWord;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
     save();renderBooks();return}
