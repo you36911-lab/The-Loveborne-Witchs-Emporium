@@ -145,7 +145,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   <div class="sheet">
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Bookshelf</h2><button id="closeBooks">Close</button></div>
     <div class="booktabs" id="booktabs"></div>
-    <div class="bookgrid"><div><input id="search" placeholder="Search this book" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
+    <div class="bookgrid"><div><input id="search" placeholder="Search by name or keyword" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
       <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Pick a word, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
   </div>
 </div>
@@ -515,9 +515,12 @@ function renderBooks(){
   $('#bank').innerHTML=S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>';
   const q=($('#search').value||'').toLowerCase();const el=$('#entries');
   if(curBook==='Letters'){el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${esc(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
-  if(curBook==='Recipe Book'){el.innerHTML=Object.values(D.recipes).filter(r=>!q||r.name.toLowerCase().includes(q)).map(recipeHTML).join('');return}
+  if(curBook==='Recipe Book'){el.innerHTML=Object.values(D.recipes).filter(r=>{if(!q)return true;const n=noteOf(r.id);
+    return [r.name,r.type,r.intent,...r.themes,...n.ing,n.candle,n.tarot,...n.when].some(x=>x&&x.toLowerCase().includes(q))}).map(recipeHTML).join('')||'<p class="muted">Nothing matches.</p>';return}
   let lastCat='';
-  el.innerHTML=entryList(curBook).filter(e=>!q||e.k.toLowerCase().includes(q)).map(e=>{
+  /* Search matches the name and only the keywords the player can already see: shown ones and blanks they have filled. */
+  const known=e=>[e.k,...shownOf(e),...(S.fills[e.k]||[]).filter(Boolean)];
+  el.innerHTML=entryList(curBook).filter(e=>!q||known(e).some(x=>x.toLowerCase().includes(q))).map(e=>{
     const head=e.cat&&e.cat!==lastCat?`<h3 class="cat">${esc(lastCat=e.cat)}</h3>`:'';return head+(()=>{
     if(e.method)return `<div class="entry"><b>${esc(e.k)}</b><span class="muted">${esc(e.note)}</span></div>`;
     const h=hiddenOf(e),f=S.fills[e.k]||[];
