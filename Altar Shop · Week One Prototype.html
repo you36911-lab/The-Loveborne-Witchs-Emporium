@@ -147,7 +147,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
     <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Bookshelf</h2><button id="closeBooks">Close</button></div>
     <div class="booktabs" id="booktabs"></div>
     <div class="bookgrid"><div><input id="search" placeholder="Search by name or keyword" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
-      <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Pick a word, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
+      <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Hidden keywords you have found. Pick one (or a theme in the Recipe Book), then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
   </div>
 </div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
@@ -205,7 +205,7 @@ const WALKIN={
  strong:'“It worked. A bit too well. We’re still recovering.”',weak:'“I think it worked? For about ten minutes.”'};
 
 /* ---------- state ---------- */
-function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:5,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
+function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
   orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],log:[],result:null,queue:null,
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
@@ -216,8 +216,7 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):!S.orders.some(o=>o.id===S.queue.oid)))S.queue=null;
   if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
   if(S.target&&!D.recipes[S.target])S.target='';
-  /* Every theme of a recipe in the Recipe Book is in the word bank from the start. */
-  Object.values(D.recipes).forEach(r=>r.themes.forEach(w=>{if(!S.bank.includes(w))S.bank.push(w)}))}
+}
 sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
@@ -337,7 +336,7 @@ function rating(){return S.hist.length?S.hist.reduce((a,b)=>a+b,0)/S.hist.length
 function renderTop(){const T=today();
   const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
   $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span><span>\u263E ${T.phase}</span><span>${T.weather}${HOURS[S.h]==='Nightfall'?` (night ${T.night})`:''}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
-  <span class="hour">${HOURS.map((h,i)=>`<i class="${i===S.h?'on':''}">${h}</i>`).join('')}</span><span>Test crafts left: ${S.tests}</span>`;
+  <span class="hour">${HOURS.map((h,i)=>`<i class="${i===S.h?'on':''}">${h}</i>`).join('')}</span><span title="Every fifth test craft that isn't perfect costs a one-star review">Failed tests: ${S.failTests%5}/5</span>`;
   const rt=rating(),full=Math.round(rt);$('#stars').textContent='\u2605'.repeat(full)+'\u2606'.repeat(5-full)+' '+rt.toFixed(1);
   $('#nextBtn').textContent=S.h>=3?'Close for the night':'Next hour';$('#stars').title=S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}
 function shelfHTML(side){
@@ -372,7 +371,7 @@ function renderAltar(){
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients on the shelves to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
   $('#tarotSlot').innerHTML=S.tarot?`${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
-  $('#testBtn').disabled=S.tests<=0||!S.altar.length||!S.target;$('#testBtn').textContent=`Test craft (${S.tests} left)`;
+  $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');
   if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map(l=>typeof l==='string'?`<p style="margin:2px 0">${esc(l)}</p>`:`<p style="margin:2px 0"><span class="tag">${CLUETAG[l.k]}</span> ${esc(l.t)}</p>`).join('')}`}else res.hidden=true;
@@ -444,7 +443,9 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(lacking.length){toast(`No ${lacking[0]} left. Fill a bottle first.`);return}
     S.altar.forEach(n=>{if(X.stock[n]!==undefined)S.stock[n]--})}
   const ev=evaluate(r,test);
-  if(test){S.tests--;addWords(ev.gained);S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}.`)}
+  /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
+  if(test){if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost you a star tonight.')}}
+    addWords(ev.gained);S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}.`)}
   else{const q=S.queue;let v;
     if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
@@ -480,7 +481,7 @@ function endDay(){const before=rating(),reviews=S.pend.splice(0);
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');
   $('#dayGo').onclick=()=>{$('#dayEnd').classList.remove('open');
-    if(last){S=fresh();sanitize()}else{S.day++;S.h=0;S.tests=5;S.altar=[];S.candle='';S.tarot=''}
+    if(last){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
     render()}}
 function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   const pend=S.orders.filter(o=>o.status==='waiting').map(o=>D.recipes[o.rid].name);
@@ -531,7 +532,7 @@ function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S
 function openBooks(){$('#books').classList.add('open');$('#search').value=searchOf();renderBooks();autoTick()}
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
-  $('#bank').innerHTML=S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>';
+  $('#bank').innerHTML=(selWord&&!S.bank.includes(selWord)?`<div style="margin-bottom:6px">Picked from a recipe: <button class="word sel" data-word="${esc(selWord)}">${esc(selWord)}</button></div>`:'')+(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>');
   const q=($('#search').value||'').toLowerCase();const el=$('#entries');
   if(curBook==='Letters'){el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${esc(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
   if(curBook==='Recipe Book'){el.innerHTML=Object.values(D.recipes).filter(r=>{if(!q)return true;const n=noteOf(r.id);
@@ -559,7 +560,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   const chips=(arr,attr)=>arr.map(x=>lk?`<span class="chip on">${esc(x)}</span>`:`<button class="chip" data-${attr}="${r.id}|${esc(x)}">${esc(x)} ×</button>`).join(' ');
   const pick=(attr,label,opts)=>`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">add…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
   const one=(attr,want,val,opts,label)=>!want?'<span class="muted">none needed</span>':lk?esc(val):`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">?</option>${opts.map(c=>`<option ${val===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`;
-  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">#${r.id} ${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(esc).join(', ')}</div>
+  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">#${r.id} ${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(t=>`<button class="word ${selWord===t?'sel':''}" data-word="${esc(t)}" title="Pick this word, then tap a blank in any book">${esc(t)}</button>`).join(' ')}</div>
   <div><b>Ingredients (${n.ing.filter(Boolean).length}/${N}):</b> ${r.ing.map((want,i)=>{const cat=ITEM[want].c,lab=CATLABEL[cat]||cat,v=n.ing[i];
     return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-ing="${r.id}|${i}">${esc(v)} \u00D7</button>`)
       :`<select data-add-ing="${r.id}|${i}" aria-label="${esc(lab)}"><option value="">${esc(lab)}\u2026</option>${az(D.items.filter(x=>x.c===cat).map(x=>x.n)).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' ')}</div>
@@ -568,7 +569,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div><b>When${M?` (${n.when.filter(Boolean).length}/${M})`:''}:</b> ${M?r.conds.map((c,i)=>{const kind=CONDKIND[c.t],v=n.when[i];
     return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-when="${r.id}|${i}">${esc(v)} \u00D7</button>`)
       :`<select data-add-when="${r.id}|${i}" aria-label="${kind}"><option value="">${kind}\u2026</option>${KINDOPTS[kind].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' '):'<span class="muted">any time</span>'}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:13px">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}
-  <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button>${lk?'':`<button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)&&S.tests>0?'':'disabled'}>Test craft this (${S.tests} left)</button>`}</div></div>`}
+  <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button>${lk?'':`<button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Test craft this</button>`}</div></div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
