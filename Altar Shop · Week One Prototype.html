@@ -499,7 +499,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
     case 'giveBtn':doCraft(false);break;
-    case 'nowBtn':S.activeNow=S.queue.key;S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
+    case 'nowBtn':S.activeNow=S.queue.key;S.result=null;render();break;  /* whatever is laid out on the altar stays */
     case 'okBtn':takeOrder(visitByKey(S.queue.key));render();break;
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
