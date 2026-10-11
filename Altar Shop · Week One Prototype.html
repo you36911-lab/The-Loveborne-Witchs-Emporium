@@ -467,7 +467,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
       render();break}
     case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');log('A customer left without their order.');S.queue=null;render();break}
     case 'moveBtn':clearTimeout(autoT);nextHour();break;
-    case 'cantBtn':sendAway();render();break;
+    case 'cantBtn':if(b.dataset.sure){sendAway();render()}else{b.dataset.sure='1';b.textContent='They\u2019ll leave empty-handed. Tap again to let them go';b.classList.add('main');setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='I don\u2019t know how to make this';b.classList.remove('main')}},4000)}break;
     case 'restartBtn':if(b.dataset.sure){S=fresh();sanitize();delete b.dataset.sure;b.textContent='Restart';render()}else{b.dataset.sure='1';b.textContent='Tap again to restart';setTimeout(()=>{delete b.dataset.sure;b.textContent='Restart'},3000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
     case 'booksBtn':openBooks();break;
