@@ -203,7 +203,7 @@ const WALKIN={
  strong:'“It worked. A bit too well. We’re still recovering.”',weak:'“I think it worked? For about ten minutes.”'};
 
 /* ---------- state ---------- */
-function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:3,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
+function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],tests:5,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
   orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],log:[],result:null,queue:null,
   stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
@@ -475,7 +475,7 @@ function endDay(){const before=rating(),reviews=S.pend.splice(0);
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');
   $('#dayGo').onclick=()=>{$('#dayEnd').classList.remove('open');
-    if(last){S=fresh()}else{S.day++;S.h=0;S.tests=3;S.altar=[];S.candle='';S.tarot=''}
+    if(last){S=fresh()}else{S.day++;S.h=0;S.tests=5;S.altar=[];S.candle='';S.tarot=''}
     render()}}
 function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   const pend=S.orders.filter(o=>o.status==='waiting').map(o=>D.recipes[o.rid].name);
