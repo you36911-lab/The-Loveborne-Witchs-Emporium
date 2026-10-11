@@ -385,9 +385,9 @@ function renderCounter(){
   /* The customer decides: they either wait while you make it, or say when they will be back. */
   if(v.back){el.innerHTML=`${say}<p class="say">\u201C${esc(backLine(v))}\u201D</p><div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
   el.innerHTML=`${say}<p class="muted">They\u2019ll wait while you make it.</p><div class="row"><button class="main" id="nowBtn">Start making it</button></div>`}
-function backLine(v){const b=v.back;if(b.line)return b.line;const hr=b.hour.toLowerCase();
-  if(b.day===S.day)return `I\u2019ll come back at ${hr}.`;
-  return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}, around ${hr}.`:`I\u2019ll come back on Day ${b.day}, around ${hr}.`}
+function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
+  if(b.day===S.day)return 'I\u2019ll come back later today.';
+  return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}.`:`I\u2019ll come back on Day ${b.day}.`}
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
 function whoHTML(v){const a=X.auras[v.aura]||['#ccc',''];return `<div class="who"><span class="aura" style="background:${a[0]};--aura:${a[0]}" title="${esc(a[1])}"></span><div><b>${esc(v.who)}</b><br><small class="muted">${esc(a[1])}</small></div></div>`}
