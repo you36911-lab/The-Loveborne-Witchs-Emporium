@@ -366,7 +366,7 @@ function renderAltar(){
   if(q){if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);orderR=o&&D.recipes[o.rid]}
     else if(q.type==='new'&&S.activeNow===q.key){const v=visitByKey(q.key);orderR=D.recipes[v.rid]}}
   const sel=$('#target');const rs=knownRecipes();
-  sel.innerHTML='<option value="">Choose a recipe\u2026</option>'+rs.map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>#${r.id} ${esc(r.name)}</option>`).join('');
+  sel.innerHTML='<option value="">Choose a recipe\u2026</option>'+[...new Set(rs.map(r=>r.type))].sort().map(t=>`<optgroup label="${esc(t)}">${rs.filter(r=>r.type===t).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>#${r.id} ${esc(r.name)}</option>`).join('')}</optgroup>`).join('');
   sel.value=S.target||'';
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients on the shelves to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
@@ -535,8 +535,10 @@ function renderBooks(){
   $('#bank').innerHTML=(selWord&&!S.bank.includes(selWord)?`<div style="margin-bottom:6px">Picked from a recipe: <button class="word sel" data-word="${esc(selWord)}">${esc(selWord)}</button></div>`:'')+(S.bank.length?S.bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'<span class="muted">No words yet. Read the letters and try test crafts.</span>');
   const q=($('#search').value||'').toLowerCase();const el=$('#entries');
   if(curBook==='Letters'){el.innerHTML=D.letters.map((l,i)=>`<div class="letter"><h3>${esc(l.title)}</h3>${S.letters[i]?l.lines.map(x=>`<p>${esc(x)}</p>`).join(''):`<button data-letter="${i}">Open the letter</button>`}</div>`).join('');return}
-  if(curBook==='Recipe Book'){el.innerHTML=Object.values(D.recipes).filter(r=>{if(!q)return true;const n=noteOf(r.id);
-    return [r.name,r.type,r.intent,...r.themes,...n.ing,n.candle,n.tarot,...n.when].some(x=>x&&x.toLowerCase().includes(q))}).map(recipeHTML).join('')||'<p class="muted">Nothing matches.</p>';return}
+  if(curBook==='Recipe Book'){/* grouped by spell type, types alphabetical, recipes by name inside */
+    const rs=Object.values(D.recipes).filter(r=>{if(!q)return true;const n=noteOf(r.id);
+    return [r.name,r.type,r.intent,...r.themes,...n.ing,n.candle,n.tarot,...n.when].some(x=>x&&x.toLowerCase().includes(q))}).sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name));let lt='';
+    el.innerHTML=rs.map(r=>(r.type!==lt?`<h3 class="cat">${esc(lt=r.type)}</h3>`:'')+recipeHTML(r)).join('')||'<p class="muted">Nothing matches.</p>';return}
   let lastCat='';const intro=curBook==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
   /* Search matches the name and only the keywords the player can already see: shown ones and blanks they have filled. */
   const known=e=>[e.k,...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)];
