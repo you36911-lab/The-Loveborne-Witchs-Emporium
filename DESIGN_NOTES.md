@@ -23,8 +23,9 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - One day is one session, split into four Magic Hours: Sunrise, Noon, Twilight, Nightfall.
 - A moon cycle is **6 days** (New, Waxing Crescent, Waxing Gibbous, Full, Waning Gibbous, Waning Crescent; no quarter moons). A year is 72 days.
 - The game runs **Day 1 to Day 75**, Samhain to Samhain. Named full moons fall on Days 6, 12, … 72 (Beaver Moon first). Sabbats: Samhain 1–3 and 73–75, Yule 10–12, Imbolc 19–21, Ostara 27–29, Beltane 37–39, Litha 46–48, Lughnasadh 55–57, Mabon 64–66.
-- Time never moves by itself. While a customer is at the counter, time waits. Otherwise a bar shows a **Next hour** button (Close for the night at Nightfall).
-- Quiet hours show a mood line from the weather, moon and festival, and a Fill button when a bottle can be filled.
+- Time never moves by itself. The four hours still exist underneath (recipes and bottles use them) but are not labelled; the light in the shop shows the hour.
+- The **bell** brings the next customer: it moves time to the next hour with a customer, a letter or a bottle to fill, and closes the night at Nightfall. While someone is at the counter it only shakes.
+- Quiet hours show a mood line at the top of the scene, and a Fill button when a bottle can be filled.
 - Over the year: 19 quiet hours with no customer or letter, left as breathing room. Week one has none.
 
 ## Customers and orders
@@ -60,8 +61,18 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 
 - 3 starting letters from "H." (Hester), plus **17 post letters** from places around the map, one or two hints each.
 - Letters only point at **dead ends**: ingredients whose needed keyword is hidden, so a keyword search can't find them. They name the ingredient and the keyword, and carry a light thread to the order they help, but never say which order.
-- A letter arrives in a quiet hour with an envelope animation (Read it now / Later); unread letters show a badge on Books.
-- Letters can be archived and taken out again. Customer hints are copied automatically into one archive page, "What customers told me".
+- A letter arrives in a quiet hour with an envelope animation (Read it now / Later); unread letters show a badge on the computer.
+- Letters can be archived and taken out again. Customer hints are copied automatically into "What customers told me" (the notebook on the counter, also in the letter archive).
+
+## The counter screen
+
+The shop scene is the main screen. Every object glows on hover and does something:
+- each book in the stack opens that book
+- crystal ball: the current customer's aura and the colour key
+- till: today's receipts
+- notebook: what customers told me (hints)
+- bell: the next customer
+- computer: letters, with the unread badge
 
 ## Art direction (agreed so far)
 
