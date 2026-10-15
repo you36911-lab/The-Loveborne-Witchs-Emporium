@@ -40,17 +40,8 @@
   .crystal  { left: 16.5%; bottom: 13%; width: 10%;  z-index: 1; }
   .till     { left: 25%;   bottom: 10%; width: 17%;  z-index: 2; }
   .notebook { left: 40%;   bottom: 8%;  width: 16%;  z-index: 3; }
-  .bell     { left: 56.5%; bottom: 12%; width: 7%;   z-index: 2; }
-  .computer { left: 63%;   bottom: 7%;  width: 30%;  z-index: 1; }
-
-  /* Stand-ins until the bell and computer images are added. */
-  .slot {
-    border: 2px dashed rgba(255, 230, 240, .8); border-radius: 8px;
-    color: #fff3f8; font-size: clamp(10px, 1.2vw, 16px); display: flex; align-items: center; justify-content: center;
-    background: rgba(90, 40, 60, .25);
-  }
-  .bell.slot { aspect-ratio: 1 / 1.6; }
-  .computer.slot { aspect-ratio: 1.35 / 1; }
+  .bell     { left: 55.5%; bottom: 12%; width: 7%;   z-index: 2; }
+  .computer { left: 64%;   bottom: 7%;  width: 28%;  z-index: 1; }
 
   .label {
     position: absolute; left: 50%; bottom: 3%; transform: translateX(-50%);
@@ -66,8 +57,8 @@
   <button class="obj crystal"  data-label="Crystal ball (auras)"><img src="assets/scene/crystal-ball.png" alt="Crystal ball"></button>
   <button class="obj till"     data-label="Till (receipts)"><img src="assets/scene/till.png" alt="Till"></button>
   <button class="obj notebook" data-label="Notebook (letters and notes)"><img src="assets/scene/notebook.png" alt="Open notebook and pen"></button>
-  <div class="obj bell slot"     data-label="Bell">bell</div>
-  <div class="obj computer slot" data-label="Computer">computer</div>
+  <button class="obj bell"     data-label="Bell (call the next customer)"><img src="assets/scene/bell.png" alt="Silver hand bell"></button>
+  <button class="obj computer" data-label="Computer"><img src="assets/scene/computer.png" alt="Computer with keyboard and mouse"></button>
   <div class="label" id="label"></div>
 </div>
 <script>
