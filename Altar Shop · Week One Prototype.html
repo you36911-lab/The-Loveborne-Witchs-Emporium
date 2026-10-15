@@ -106,6 +106,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.mailfx.go .env,.mailfx.go .mailcard p,.mailfx.go .mailcard .row{animation:none}}
 .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
+.guide{background:var(--paper2,#f6eefc);border:2px dashed var(--line);border-radius:6px;padding:8px 10px;margin:8px 0;font-size:14px}
 .letter button.small{font-size:13px;padding:4px 10px;margin-top:4px}
 [data-lview][aria-pressed="true"]{background:var(--butter);color:#3B2160}
 .recipe{border:2px solid var(--line);border-radius:6px;padding:10px;margin-bottom:10px;background:var(--paper)}
@@ -485,6 +486,10 @@ function renderAltar(){
   if(S.result){res.hidden=false;res.innerHTML=`<div class="g">${S.result.test?'Test craft':'Given'}</div>${S.result.first?`<p style="margin:4px 0">${esc(S.result.first)}</p>`:''}${S.result.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}else res.hidden=true;
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
+/* Advice is a quick question, not an order: say so, and the first time explain what to listen for. */
+function adviceGuide(v){const first=!S.stats.advice,where=v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary';
+  return `<div class="guide"><b>Just a question.</b> They only want your advice, not a spell. Nothing to make: choose one ingredient from ${esc(v.ask.cat)} and press Answer.`+
+    (first?`<br><small>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be. Then look it up in ${where}.</small>`:'')+`</div>`}
 function renderCounter(){
   const q=currentVisitor();const el=$('#counter');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
@@ -498,7 +503,7 @@ function renderCounter(){
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose\u2026</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
-    el.innerHTML=`${whoHTML(v)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p><div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
+    el.innerHTML=`${whoHTML(v)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)} ${esc(v.question)}\u201D</p>${adviceGuide(v)}<div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   const r=D.recipes[v.rid];
   if(S.activeNow===q.key){el.innerHTML=`${whoHTML(v)}<div class="req">${v.cue?`<p class="cue" style="margin:0 0 4px">(${esc(v.cue)})</p>`:''}<span class="muted">They asked:</span> \u201C${esc(v.line)}\u201D</div><p class="muted">They\u2019re waiting while you make it. Choose the recipe that fits, lay it out on the altar and press Make and give.</p><div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don\u2019t know how to make this</button></div>`;return}
   const say=`${whoHTML(v)}${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}<p class="say">\u201C${esc(v.line)}\u201D</p>`;
