@@ -4,6 +4,8 @@
 - Push directly to `main`; don't make feature branches.
 
 ## The game
+See `DESIGN_NOTES.md` for a short summary of every decision so far and the open items.
+
 The Loveborne Witch's Emporium: a cozy witch-shop deduction game. Customers describe a need,
 the player finds the right recipe in the books and makes it at the altar.
 
