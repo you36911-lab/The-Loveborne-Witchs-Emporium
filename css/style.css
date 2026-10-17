@@ -146,6 +146,11 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal img{position:relative;z-index:1}
 .scene .crystal.glowing::before{opacity:1;animation:auraPulse 3.2s ease-in-out infinite}
 .scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 18px var(--aura-glow))}
+/* On hover the pink glow goes on the ball itself, not the whole button, so the aura keeps its colour. */
+.scene .crystal img{transition:filter .15s}
+.scene button.obj.crystal:hover,.scene button.obj.crystal:focus-visible{filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
+.scene .crystal:hover img,.scene .crystal:focus-visible img{filter:var(--light) drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0)}
+.scene .crystal.glowing:hover img,.scene .crystal.glowing:focus-visible img{filter:var(--light) drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 0 18px var(--aura-glow))}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
   /* The inside of the glass takes the aura colour; the bottom fades out so the stand keeps its own colour. */
   background:var(--aura-glow,transparent);mix-blend-mode:color;opacity:0;transition:opacity .8s ease,background .8s ease;
