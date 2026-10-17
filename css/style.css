@@ -151,6 +151,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   background:var(--aura-glow,transparent);mix-blend-mode:color;opacity:0;transition:opacity .8s ease,background .8s ease;
   -webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 88%);mask-image:linear-gradient(to bottom,#000 78%,transparent 88%)}
 .scene .crystal.glowing::after{opacity:.7}
+/* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
+.scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
 @keyframes auraPulse{0%,100%{scale:1;opacity:.85}50%{scale:1.08;opacity:1}}
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}

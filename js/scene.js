@@ -51,7 +51,7 @@ function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').i
 function currentVisit(){const v=currentVisitor();if(!v)return null;
   return v.type==='return'?visitByKey(S.orders.find(o=>o.id===v.oid).key):v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key)}
 function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('#crystalBtn');
-  ball.classList.toggle('glowing',!!a);if(a)ball.style.setProperty('--aura-glow',a[0])}
+  ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
 /* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn. */
 function renderCustomer(){const cur=currentVisit(),src=cur&&ASSETS.characters[cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
