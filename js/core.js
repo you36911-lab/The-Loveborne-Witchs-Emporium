@@ -38,7 +38,7 @@ function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)
 function collect(w){if(!S.bank.includes(w)){S.bank.push(w);toast(`Collected \u201C${w}\u201D`)}selWord=w;save()}
 function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.bank.push(w);n.push(w)}});if(n.length)toast('New words: '+n.join(', '));return n}
 const today=()=>D.cal[S.day-1];
-/* Post: a letter turns up at a set hour, some time before the order it helps with. It goes into the Letters book. */
+/* Post: a letter turns up at a set hour, some time before the order it helps with. It goes into the letters on the computer. */
 const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S.day&&HOURS.indexOf(m.hour)<=S.h));
 /* Hints customers let slip are copied, in order, into one page in the letter archive. */
 function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.text===v.hint.text))return;

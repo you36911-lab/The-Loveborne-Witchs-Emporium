@@ -31,6 +31,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/scene.js`: rendering, the shop scene, hour backgrounds and the dawn card.
 - `js/actions.js`: clicks, the bell, giving orders, the end of the day.
 - `js/books.js`: the bookshelf, entries, blanks, word bank.
+- `js/letters.js`: the letters window (opened from the computer), with its archive.
 - `js/prototype.js`: prototype-only jump bar (week, day, hour, customer); off with `PROTOTYPE_TOOLS`.
 - `js/main.js`: starts the game.
 

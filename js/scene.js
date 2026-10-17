@@ -1,6 +1,6 @@
 /* Rendering: the shop scene, the counter, shelves and altar. */
 /* ---------- rendering ---------- */
-/* Unopened letters (drawer or post) show a badge on the Books button and the Letters tab. */
+/* Unopened letters (drawer or post) show a badge on the computer. */
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
 function renderBadge(){const n=unreadLetters(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: letters, ${n} unread`:'Computer: letters')}
 /* ---------- the shop scene: every counter object is a button ---------- */

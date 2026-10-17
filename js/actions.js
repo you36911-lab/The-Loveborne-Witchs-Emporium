@@ -2,7 +2,7 @@
 /* ---------- actions ---------- */
 document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
-  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();render();return}
+  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#letters').classList.contains('open'))renderLetters();render();return}
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
@@ -26,12 +26,12 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'reportBtn':{const q=S.queue;S.reports=S.reports.filter(r=>!(r.at===q.at&&r.who===q.who));S.queue=null;render();break}
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
-    case 'pcBtn':openBooks();curBook='Letters';letterView='in';renderBooks();break;
+    case 'pcBtn':openLetters();break;
     case 'tillBtn':openInfo('Receipts',receiptsHTML());break;
     case 'crystalBtn':openInfo('Crystal ball',auraInfo());break;
     case 'notebookBtn':openInfo('What customers told me',hintsHTML());break;
     case 'closeInfo':$('#info').classList.remove('open');break;
-    case 'mailRead':$('#mailFx').hidden=true;openBooks();curBook='Letters';letterView='in';renderBooks();break;
+    case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
     case 'mailLater':$('#mailFx').hidden=true;break;
     case 'moveBtn':clearTimeout(autoT);nextHour();break;
     case 'cantBtn':if(b.dataset.sure){sendAway();render()}else{b.dataset.sure='1';b.textContent='They\u2019ll leave empty-handed. Tap again to let them go';b.classList.add('main');setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='I don\u2019t know how to make this';b.classList.remove('main')}},4000)}break;

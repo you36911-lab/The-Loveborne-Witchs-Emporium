@@ -1,6 +1,6 @@
 /* Books: the bookshelf, entries, blanks and the word bank. */
 /* ---------- books ---------- */
-const BOOKS=['Letters','Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','Almanac of Sky & Seasons','Grimoire of Craft','Book of Making','Recipe Book'];
+const BOOKS=['Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','Almanac of Sky & Seasons','Grimoire of Craft','Book of Making','Recipe Book'];
 const az=a=>[...a].sort((x,y)=>x.localeCompare(y));
 /* Almanac categories (alphabetical); entries keep their natural order where there is one. */
 const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
@@ -9,7 +9,7 @@ const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
  ['Sky Events',az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars'])],
  ['Weather',az(['Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow'])],
  ['Weekdays',D.days.map(d=>d[0])]];
-let curBook='Letters',selWord=null;
+let curBook='Herbiary',selWord=null;
 /* Each book remembers its own search, across closing the shelf and switching books. */
 const searchOf=()=>((S.search||(S.search={}))[curBook]||'');
 function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L.push({k,sk:ns+':'+k,props,note,always});
@@ -55,27 +55,17 @@ function bookPages(book){
   return entryList(book).map(e=>({key:e.sk||('method:'+e.k),title:e.k,cat:e.cat||'',done:entryLocked(e),started:(S.fills[e.sk]||[]).some(Boolean),
     find:[e.k,...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)],html:()=>entryHTML(e)}))}
 const pageOf=()=>((S.page||(S.page={}))[curBook]||'');
-let letterView='in';
 /* A word leaves the word bank once every blank in every book that needs it holds it. */
 let NEEDS=null;
-function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Letters','Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>hiddenOf(e).forEach(p=>(NEEDS[p]=NEEDS[p]||[]).push(e.sk))))}return NEEDS[w]||[]}
+function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>hiddenOf(e).forEach(p=>(NEEDS[p]=NEEDS[p]||[]).push(e.sk))))}return NEEDS[w]||[]}
 const usedUp=w=>needsOf(w).every(sk=>(S.fills[sk]||[]).includes(w));
 function renderBooks(){
-  $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}${b==='Letters'&&unreadLetters()?`<span class="badge">${unreadLetters()}</span>`:''}</button>`).join('');
+  $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):(S.bank.length?'<span class="muted">Every word you have collected is used up. Tap dotted words to collect more.</span>':'<span class="muted">No words yet. Tap a dotted word in a letter, a result or a book to collect it.</span>'));
   const el=$('#entries'),sb=$('#search');
-  if(curBook==='Letters'){sb.hidden=true;const arc=S.archive||(S.archive=[]);
-    /* Every letter, newest post first. Opened letters can be put in the archive and taken out again. */
-    const all=[...mailIn().reverse().map(m=>({key:'mail:'+m.i,title:m.title,sub:`Came in the post, Day ${m.day}`,lines:m.lines,open:S.mail[m.i],btn:`data-mail="${m.i}"`})),
-      ...D.letters.map((l,i)=>({key:'start:'+i,title:l.title,sub:'Found in the drawer',lines:l.lines,open:S.letters[i],btn:`data-letter="${i}"`}))];
-    const shown=all.filter(x=>arc.includes(x.key)===(letterView==='archive'));
-    const hints=S.hints||[],hintDoc=hints.length?`<div class="letter"><h3>What customers told me</h3><p class="muted" style="font-size:13px">Written down as they said it. Kept here on its own.</p>${hints.map(h=>`<p><span class="muted" style="font-size:13px">Day ${h.day}, ${esc(h.hour)} \u00B7 ${esc(h.who)}</span><br>${kw(h.text)}</p>`).join('')}</div>`:'';
-    el.innerHTML=`<div class="row" style="margin-bottom:10px"><button aria-pressed="${letterView!=='archive'}" data-lview="in">Letters (${all.length-arc.length})</button><button aria-pressed="${letterView==='archive'}" data-lview="archive">Archive (${arc.length+(hints.length?1:0)})</button></div>`
-      +(letterView==='archive'?hintDoc:'')+(shown.length?shown.map(x=>`<div class="letter"><h3>${esc(x.title)}</h3><p class="muted" style="font-size:13px">${esc(x.sub)}</p>${x.open?x.lines.map(t=>`<p>${kw(t)}</p>`).join('')+`<button class="small" data-arc="${x.key}">${letterView==='archive'?'Take out of the archive':'Move to archive'}</button>`:`<button ${x.btn}>Open the letter</button>`}</div>`).join('')
-        :(letterView==='archive'&&hintDoc)?'':`<p class="muted">${letterView==='archive'?'The archive is empty. Letters you no longer need can be moved here.':'No letters here. Archived letters are under Archive.'}</p>`);return}
   const pages=bookPages(curBook),key=pageOf(),at=pages.findIndex(p=>p.key===key);
   if(at<0){ /* the index */
     sb.hidden=false;const q=(sb.value||'').toLowerCase();let lc=null;
@@ -127,13 +117,6 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
     save();renderBooks();return}
   if(b.dataset.book){curBook=b.dataset.book;$('#search').value=searchOf();renderBooks();return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
-  if(b.dataset.lview){letterView=b.dataset.lview;renderBooks();return}
-  if(b.dataset.arc){const k=b.dataset.arc,a=S.archive;a.includes(k)?a.splice(a.indexOf(k),1):a.push(k);toast(a.includes(k)?'Moved to the archive':'Taken out of the archive');save();renderBooks();return}
-  if(b.dataset.mail!==undefined){S.mail[+b.dataset.mail]=true;save();renderBooks();renderBadge();return}
-  if(b.dataset.letter!==undefined){const i=+b.dataset.letter;S.letters[i]=true;
-    if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
-      if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}
-    save();renderBooks();renderBadge();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
     if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}
       if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),e&&entryLocked(e)?2300:0)}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
