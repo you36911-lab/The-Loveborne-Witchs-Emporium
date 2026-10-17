@@ -7,12 +7,15 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
   if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;log(`Filled a bottle of ${n}.`);toast(`+1 ${n}`);render();return}
-  if(b.dataset.p){document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('.stage>.panel').forEach(p=>p.classList.toggle('show',p.id===b.dataset.p));return}
+  if(b.dataset.p){document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('.workshop>.panel').forEach(p=>p.classList.toggle('show',p.id===b.dataset.p));return}
   switch(b.id){
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
     case 'giveBtn':doCraft(false);break;
-    case 'nowBtn':S.activeNow=S.queue.key;S.result=null;render();break;  /* whatever is laid out on the altar stays */
+    case 'nowBtn':S.activeNow=S.queue.key;S.result=null;setView('altar');break;
+    case 'toAltar':case 'toAltar2':setView('altar');break;
+    case 'toShop':setView('shop');break;
+    case 'dismissResult':S.result=null;render();break;  /* whatever is laid out on the altar stays */
     case 'okBtn':takeOrder(visitByKey(S.queue.key));render();break;
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);

@@ -17,53 +17,59 @@
   <filter id="light-Twilight" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".95 0 0 0 0  0 .85 0 0 0  0 0 .88 0 0  0 0 0 1 0"/></filter>
   <filter id="light-Nightfall" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values=".9 0 0 0 0  0 .8 0 0 0  0 0 .86 0 0  0 0 0 1 0"/></filter>
 </svg>
-<div class="wrap">
-  <header class="top">
-    <div><h1>The Loveborne Witch’s Emporium</h1></div>
-    <div class="sky" id="sky"></div>
-    <div class="row"><span class="stars" id="stars" aria-label="Shop rating"></span>
-      <button id="restartBtn" title="Start a new game from Day 1">Restart</button></div>
-  </header>
-  <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
-    <b>Prototype</b>
-    <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
-    <select id="protoWho" aria-label="Customer"></select>
-    <button id="protoGo" class="main">Go</button><button id="protoDawn" title="Start the chosen day from the dawn card">From dawn</button>
-  </div>
-  <div class="scene" id="scene" aria-label="The shop counter">
+<!-- Two full-screen views: the shop counter, and the altar with a cabinet either side. Make / Counter switch between them. -->
+<section class="view shopview" id="shopView" aria-label="The shop counter">
+  <div class="scene" id="scene">
     <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div>
     <div class="customer" id="customer"><img alt=""></div>
-    <div class="daycard" id="dayCard" aria-live="polite"></div>
     <div class="obj books" id="bookStack"></div>
     <button class="obj crystal" id="crystalBtn" aria-label="Crystal ball: what the colours mean"><img data-img="crystal-ball" alt=""></button>
     <button class="obj till" id="tillBtn" aria-label="Till: today's receipts"><img data-img="till" alt=""></button>
     <button class="obj notebook" id="notebookBtn" aria-label="Notebook: what customers told me"><img data-img="notebook" alt=""></button>
     <button class="obj bell" id="bellBtn" aria-label="Bell: the next customer"><img data-img="bell" alt=""></button>
     <button class="obj computer" id="pcBtn" aria-label="Computer: email"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
-    <div class="scenenote" id="sceneNote" hidden></div>
   </div>
-  <nav class="tabs" aria-label="Shop areas">
+  <div class="daycard" id="dayCard" aria-live="polite"></div>
+  <div class="hud">
+    <div class="hudinfo"><span class="sky" id="sky"></span><span class="stars" id="stars" aria-label="Shop rating"></span>
+      <button id="restartBtn" class="small" title="Start a new game from Day 1">Restart</button></div>
+    <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
+      <b>Prototype</b>
+      <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
+      <select id="protoWho" aria-label="Customer"></select>
+      <button id="protoGo" class="main">Go</button><button id="protoDawn" title="Start the chosen day from the dawn card">From dawn</button>
+    </div>
+    <p class="tip" id="tip" hidden></p>
+  </div>
+  <div class="dialogue" id="counter" hidden aria-live="polite"></div>
+  <div class="scenenote" id="sceneNote" hidden></div>
+  <button class="main gobtn" id="toAltar">Make ✦</button>
+</section>
+
+<section class="view altarview" id="altarView" hidden aria-label="The altar">
+  <div class="altarbg" id="altarBg"></div>
+  <header class="altartop"><button id="toShop">← Counter</button><div class="ordernote" id="orderNote"></div><button id="booksBtn">Books</button></header>
+  <nav class="tabs" aria-label="Workshop">
     <button data-p="left">Kitchen</button><button data-p="mid" aria-pressed="true">Altar</button><button data-p="right">Cabinet</button>
   </nav>
-  <main class="stage">
-    <section class="panel" id="left"><h2>Kitchen <small>herbs, waters, pantry</small></h2><div id="leftBody"></div></section>
-    <section class="panel show" id="mid">
-      <div class="counter" id="counter"></div>
+  <div class="workshop">
+    <section class="panel cabinet" id="left"><h2 class="cabtitle">Kitchen</h2><div class="cabinside" id="leftBody"></div></section>
+    <section class="panel altarcol show" id="mid">
       <div class="altar">
-        <div class="row" style="justify-content:space-between"><h2 style="margin:0">Altar</h2>
-          <label class="row" style="gap:6px"><span class="muted">Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label></div>
-        <div class="plates" id="plates"><span class="muted">Tap ingredients on the shelves to lay them here.</span></div>
+        <h2>Altar</h2>
+        <label class="row making"><span class="muted">Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label>
+        <div class="plates" id="plates"><span class="muted">Tap ingredients in the cabinets to lay them here.</span></div>
         <div class="slots"><div class="slot" id="candleSlot"></div><div class="slot" id="tarotSlot"></div></div>
         <div class="row" style="justify-content:center">
           <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make and give</button><button id="clearBtn">Clear altar</button>
         </div>
       </div>
       <div class="result" id="result" hidden></div>
-      <div class="log" id="log" aria-live="polite"></div>
+      <details class="logbox"><summary>Shop log</summary><div class="log" id="log" aria-live="polite"></div></details>
     </section>
-    <section class="panel" id="right"><h2>Cabinet <small>crystals, candles, cards</small></h2><div id="rightBody"></div></section>
-  </main>
-</div>
+    <section class="panel cabinet" id="right"><h2 class="cabtitle">Cabinet</h2><div class="cabinside" id="rightBody"></div></section>
+  </div>
+</section>
 
 <div class="modal" id="books" role="dialog" aria-modal="true" aria-label="Books">
   <div class="sheet">

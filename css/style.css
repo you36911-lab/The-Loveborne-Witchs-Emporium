@@ -50,29 +50,19 @@ button.main{background:var(--pink);color:#2A1520;border-color:transparent;border
 button.main:hover{background:#040303;color:var(--pink);box-shadow:0 0 16px #A3738A}
 button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 select,input{font:inherit;color:var(--ink);background:color-mix(in srgb,var(--pink) 22%,var(--card));border:1px solid var(--line);border-radius:6px;padding:5px 8px;box-shadow:0 0 3px var(--pink)}
-.wrap{max-width:1280px;margin:0 auto;padding:12px}
-header.top{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:10px 14px;box-shadow:var(--glow),var(--glow-soft);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
 .sky{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .sky span{white-space:nowrap}
 .hour{display:flex;gap:4px}
 .hour i{font-style:normal;padding:2px 7px;border:1px solid var(--line);border-radius:3px;font-family:var(--font-deco);font-size:13px;opacity:.45}
 .hour i.on{background:var(--butter);opacity:1;color:#3B2160}
 .stars{color:var(--pink);font-size:18px;letter-spacing:1px}
-.tabs{display:none;gap:6px;margin:12px 0}
-.tabs button{flex:1}
 .tabs button[aria-pressed="true"]{background:var(--pink);color:#2A1520;box-shadow:0 0 10px var(--pink)}
-.stage{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:14px;margin-top:14px;align-items:start}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:12px;box-shadow:var(--glow),var(--glow-soft);min-width:0}
-.panel>h2{display:flex;justify-content:space-between;align-items:baseline}
-.panel small{color:var(--ink-soft)}
-@media (max-width:1000px){.tabs{display:flex}.stage{grid-template-columns:1fr}.stage>.panel{display:none}.stage>.panel.show{display:block}}
 details{border-top:1px dashed var(--line);padding:4px 0}
 summary{cursor:pointer;font-weight:600;padding:3px 0}
 .chips{display:flex;flex-wrap:wrap;gap:5px;padding:4px 0 6px}
 .chip{font-size:13px;padding:3px 8px;box-shadow:0 0 3px var(--pink);border-width:2px}
 .chip.on{background:var(--mint);color:#173B30}
 .chip .n{font-family:var(--font-deco);margin-left:4px;opacity:.8}
-.counter{border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--paper);margin-bottom:12px;min-height:120px}
 .who{display:flex;align-items:center;gap:10px}
 .aura{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--aura) 35%, transparent)}
 .say{margin:8px 0;font-style:italic}
@@ -116,7 +106,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
 @keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.mailfx.go .env,.mailfx.go .mailcard p,.mailfx.go .mailcard .row{animation:none}}
-.scene{position:relative;width:min(100%,calc(58vh * 1376 / 768));aspect-ratio:1376/768;margin:0 auto 12px;border:1px solid var(--line);box-shadow:var(--glow),0 0 26px 6px color-mix(in srgb,var(--pink) 45%,transparent);border-radius:10px;overflow:hidden;background-size:cover;background-position:center}
 .scene .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 .scene .bg.on{opacity:1}
 /* Lighting: the objects and the customer take on the light inside the shop at each hour (not the sky outside).
@@ -129,21 +118,19 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene[data-light="Twilight"]{--light:url(#light-Twilight)}
 .scene[data-light="Nightfall"]{--light:url(#light-Nightfall)}
 .scene .obj img,.scene .customer img{filter:var(--light)}
-.scene .daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
+.daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
   font-family:var(--font-title);font-size:clamp(40px,6.5vw,88px);line-height:1;text-shadow:0 0 6px #F4ADCF,0 2px 14px rgba(40,10,50,.8);pointer-events:none;
   opacity:0;transition:opacity .6s ease}
-.scene .daycard small{display:block;font-family:var(--font-text);font-size:.45em;opacity:.9}
-.scene .daycard.on{opacity:1}
+.daycard small{display:block;font-family:var(--font-text);font-size:.45em;opacity:.9}
+.daycard.on{opacity:1}
 /* The customer stands behind the counter: the box ends at the counter's top edge, so everything
    below the waist is hidden. The picture is 95% of the scene's height, head at 22% from the top. */
 .scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .6s ease}
 .scene .customer img{position:absolute;left:50%;top:28.4%;height:122.6%;width:auto;translate:-50% 0}
 .scene .customer.on{opacity:1}
-@media (prefers-reduced-motion: reduce){.scene .bg,.scene .daycard,.scene .customer{transition:none}}
+@media (prefers-reduced-motion: reduce){.scene .bg,.daycard,.scene .customer{transition:none}}
 /* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
-.proto{flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:6px 10px;border:1px dashed var(--line);border-radius:6px;font-size:14px}
 .proto[hidden]{display:none}
-.proto select,.proto button{font-size:14px;padding:3px 6px}
 .scene .obj{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;box-shadow:none;transform-origin:50% 100%;transition:transform .15s,filter .15s;filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
 .scene .obj img{display:block;width:100%;height:auto}
 .scene button.obj:hover,.scene button.obj:focus-visible{transform:translateY(-1.5%) scale(1.03);filter:drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 6px 4px rgba(60,20,30,.35));outline:none}
@@ -180,7 +167,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @media (prefers-reduced-motion: reduce){.scene .bell.ring{animation:none}}
 @keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-4%)}75%{transform:translateX(4%)}}
 /* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. */
-.scenenote{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);max-width:82%;width:max-content;text-align:center;z-index:6;pointer-events:none;
+.scenenote{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
   color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
 .scenenote[hidden]{display:none}
@@ -271,3 +258,69 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;box-shadow:0 0 12px var(--pink);font-family:var(--font-deco);padding:6px 12px;z-index:30;display:none}
 @media (prefers-reduced-motion: no-preference){.sparkle{animation:spk .9s ease-out}@keyframes spk{0%{box-shadow:0 0 0 0 var(--butter)}100%{box-shadow:0 0 0 14px transparent}}}
+
+/* ---------- the two full-screen views ---------- */
+body{overflow:hidden}
+.view{position:fixed;inset:0;overflow:hidden}
+.view[hidden]{display:none}
+/* The shop picture covers the whole window and keeps its shape, so the objects stay on the counter.
+   On a window shaped differently from the picture, the edges are cropped. */
+.shopview .scene{position:absolute;left:50%;top:50%;translate:-50% -50%;overflow:hidden;
+  width:max(100vw,calc(100vh * 1376 / 768));height:max(100vh,calc(100vw * 768 / 1376));background:#2a1d2a}
+.hud{position:absolute;top:12px;left:12px;z-index:7;display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:min(640px,58vw)}
+.hudinfo,.tip,.proto{background:color-mix(in srgb,var(--card) 90%,transparent);border:1px solid var(--line);box-shadow:var(--glow);backdrop-filter:blur(3px)}
+.hudinfo{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;border-radius:20px;padding:5px 8px 5px 16px;font-size:14px}
+.sky{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center}
+.sky span{white-space:nowrap}
+.stars{color:var(--pink);font-size:16px;letter-spacing:1px;white-space:nowrap}
+button.small{font-size:12px;padding:2px 10px}
+.tip{margin:0;border-radius:14px;padding:5px 14px;font-size:14px}
+.proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px;border-style:dashed}
+.proto[hidden],.tip[hidden]{display:none}
+.proto select,.proto button{font-size:13px;padding:2px 6px}
+/* What the customer says: a box over the right-hand window, clear of the counter objects. */
+.dialogue{position:absolute;top:clamp(12px,4vh,40px);right:clamp(12px,3vw,48px);z-index:7;width:min(440px,38vw);max-height:58vh;overflow:auto;
+  background:color-mix(in srgb,var(--card) 95%,transparent);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);padding:14px 18px}
+.dialogue[hidden]{display:none}
+.dialogue .who b{font-family:var(--font-title);font-weight:400;font-size:30px;line-height:1.1;color:var(--kw);text-shadow:0 0 4px var(--pink)}
+.dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}
+.gobtn{position:absolute;right:clamp(12px,3vw,40px);bottom:clamp(12px,3vh,32px);z-index:7;font-size:22px;padding:10px 30px}
+.daycard{position:absolute}
+
+/* The altar view: the shop, blurred, behind a cabinet either side and the altar in the middle. */
+.altarbg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(8px) brightness(.62) saturate(1.1)}
+.altartop{position:relative;z-index:2;display:flex;gap:12px;align-items:center;padding:12px 16px}
+.ordernote{flex:1;min-width:0;text-align:center;font-size:14px;color:#fff;text-shadow:0 1px 3px #000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.workshop{position:relative;z-index:1;display:grid;grid-template-columns:minmax(240px,1fr) minmax(360px,1.3fr) minmax(240px,1fr);gap:clamp(12px,2.5vw,40px);
+  align-items:stretch;height:calc(100vh - 64px);padding:0 clamp(12px,2.5vw,40px) clamp(12px,2.5vh,28px)}
+.panel{min-width:0;min-height:0}
+.tabs{display:none;gap:6px;padding:0 12px 8px;position:relative;z-index:2}
+.tabs button{flex:1}
+@media (max-width:1000px){.tabs{display:flex}.workshop{grid-template-columns:1fr;height:calc(100vh - 110px)}.workshop>.panel{display:none}.workshop>.panel.show{display:flex}}
+/* A wooden cabinet: arched top, brass name plate, and a drawer for each kind of thing. A simple stand-in until the cabinet pictures exist. */
+.cabinet{display:flex;flex-direction:column;align-items:stretch;color:#FBEFD9;border:3px solid #3A2219;border-radius:46% 46% 12px 12px / 70px 70px 12px 12px;
+  background:linear-gradient(90deg,#4B2E22 0%,#7A4E3A 8%,#6A4232 50%,#7A4E3A 92%,#4B2E22 100%);
+  box-shadow:inset 0 0 0 7px #8C5E46,inset 0 0 0 9px #3A2219,0 14px 30px rgba(0,0,0,.45);padding:22px 18px 18px}
+.cabtitle{align-self:center;margin:0 0 12px;padding:2px 22px 4px;font-size:30px;color:#4A2A1C;text-shadow:0 1px 0 #FFF1C9;
+  background:linear-gradient(#F6DFA6,#C99A4B);border:2px solid #7A5326;border-radius:10px;box-shadow:0 2px 4px rgba(0,0,0,.35)}
+.cabinside{flex:1;min-height:0;overflow:auto;background:#2B1A13;border:2px solid #3A2219;border-radius:6px;padding:8px;box-shadow:inset 0 6px 14px rgba(0,0,0,.6)}
+.cabinside details{border:2px solid #3A2219;border-radius:5px;margin:0 0 8px;padding:0;background:linear-gradient(#93654C,#74493A);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.cabinside summary{list-style:none;position:relative;padding:8px 40px;text-align:center;font-family:var(--font-deco);font-weight:400;color:#FBEFD9;text-shadow:0 1px 1px #000}
+.cabinside summary::-webkit-details-marker{display:none}
+.cabinside summary .muted{color:#E9C9A8}
+/* the brass knob */
+.cabinside summary::after{content:"";position:absolute;right:14px;top:50%;width:14px;height:14px;translate:0 -50%;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#FFF0BE,#C08A2E 60%,#7A5420);box-shadow:0 1px 2px rgba(0,0,0,.6)}
+.cabinside details[open]>summary{border-bottom:2px solid #3A2219}
+.cabinside .chips{background:#3B261C;padding:10px 8px;border-radius:0 0 4px 4px;box-shadow:inset 0 4px 8px rgba(0,0,0,.5)}
+/* each ingredient is a little glass jar */
+.cabinside .chip{background:linear-gradient(#FFFBF2,#F3E6D6);color:#3A2530;border:1px solid #C9A98C;border-radius:6px 6px 10px 10px;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.cabinside .chip:hover{background:#FFF;box-shadow:0 0 8px #F4ADCF}
+.cabinside .chip.on{background:linear-gradient(#FBD9EA,#F4ADCF);box-shadow:0 0 10px #F4ADCF}
+.cabinside .chip:disabled{opacity:.35}
+.altarcol{display:flex;flex-direction:column;gap:12px;overflow:auto}
+.altar{border:1px solid var(--line);border-radius:50% 50% 18px 18px / 120px 120px 18px 18px;padding:28px 22px 22px;text-align:center;
+  background:radial-gradient(ellipse at 50% 30%,var(--card) 0%,var(--paper) 60%,var(--paper2) 100%);box-shadow:var(--glow),0 0 40px 8px color-mix(in srgb,var(--pink) 35%,transparent)}
+.altar h2{margin-bottom:4px}
+.altar .making{justify-content:center;gap:6px;margin-bottom:6px}
+.logbox{background:color-mix(in srgb,var(--card) 85%,transparent);border:1px solid var(--line);border-radius:10px;padding:4px 12px}
