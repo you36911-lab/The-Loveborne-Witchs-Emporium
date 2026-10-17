@@ -15,8 +15,10 @@ const PROTOTYPE_TOOLS = true;
 const DAWN_MS = 1800;
 
 /* Image files. Paths are relative to index.html. */
-/* How many screen pixels one cm of a bottle or jar takes on the cabinet shelf. */
-const SHELF_PX_PER_CM = 7.5;
+/* Bottles and jars (waters, oils, butters and waxes) stand on cabinet shelves, all drawn this wide in pixels,
+   so a tall bottle stands taller than a squat jar. */
+const SHELF_BOTTLE_WIDTH = 84;
+const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
   backgrounds: {
     Dawn:      'assets/scene/bg-dawn.jpg',       /* before the shop opens */
@@ -134,13 +136,6 @@ const ASSETS = {
     "White lily":           "assets/items/white-lily.png",
     "Willow bark":          "assets/items/willow-bark.png",
     "Wormwood":             "assets/items/wormwood.png"
-  },
-  /* Bottles and jars stand on a shelf at a natural size: their real height in cm.
-     A small vial stays small next to a tall bottle. Anything not listed fills a square tile. */
-  vesselCm: {
-    "Moonwater": 16, "Sunwater": 14, "Rainwater": 17, "Dawn dew": 13, "Sea Water": 16, "Spring water": 16,
-    "Rosewater": 15, "New Moon Water": 11, "Web Dew": 15, "Snow Water": 17, "Storm Water": 15,
-    "Almond oil": 13, "Jojoba oil": 13, "Olive oil": 14, "Sunflower oil": 13,
-    "Butter": 9, "Shea butter": 6, "Beeswax": 10
   }
+
 };
