@@ -23,9 +23,9 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
-/* Three fonts: --font-text (Nunito) for anything you read at length; --font-title (Ms Madi, a fine script) for big
+/* Three fonts: --font-text (Nunito) for anything you read at length; --font-title (Great Vibes, a flowing script) for big
    titles only; --font-deco (Xanh Mono, an old typewriter face) for buttons, tabs and labels. */
-:root{--font-text:'Nunito','Trebuchet MS',sans-serif;--font-title:'Ms Madi',cursive;--font-deco:'Xanh Mono','Courier New',monospace}
+:root{--font-text:'Nunito','Trebuchet MS',sans-serif;--font-title:'Great Vibes',cursive;--font-deco:'Xanh Mono','Courier New',monospace}
 body{margin:0;min-height:100%;color:var(--ink);font-family:var(--font-text);font-size:15px;line-height:1.55;background-color:#9C97CF;
   /* tiny stars over the twilight sky */
   background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 68% 9%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 32%,#fff8,transparent),
@@ -179,7 +179,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes ring{0%{translate:0 0;rotate:0deg}30%{translate:0 -10%;rotate:-15deg}60%{translate:0 -10%;rotate:-12deg}100%{translate:0 0;rotate:0deg}}
 @media (prefers-reduced-motion: reduce){.scene .bell.ring{animation:none}}
 @keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-4%)}75%{transform:translateX(4%)}}
-.scenenote{position:absolute;left:50%;top:4%;transform:translateX(-50%);max-width:70%;background:rgba(255,248,252,.92);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:clamp(12px,1.2vw,15px);text-align:center;z-index:6}
+/* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. */
+.scenenote{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);max-width:82%;width:max-content;text-align:center;z-index:6;pointer-events:none;
+  color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
+  text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
+.scenenote[hidden]{display:none}
+.scenenote.in{animation:subIn .6s ease both}
+@keyframes subIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){.scenenote.in{animation:none}}
 .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
 .guide{background:var(--paper2,#f6eefc);border:1px dashed var(--line);border-radius:6px;padding:8px 10px;margin:8px 0;font-size:14px}
 /* Email (Moonpost): a webmail page. Folders, message list, reading pane. On a phone the list and the open email take turns. */

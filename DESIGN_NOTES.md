@@ -80,7 +80,7 @@ The shop scene is the main screen. Every object glows on hover and does somethin
 - Shop background as a clean plate (shelves, windows, door, table). Interactive objects (till, computer, bell, crystal ball, open book, door) are separate transparent PNG layers with hover glow.
 - Window view as its own layer so it can change with hour, season and weather.
 - Remove brand logos (the computer's Apple logo). Aim for 1920×1080 or larger.
-- Interface look follows The Loveborne Girls' Coven (loosely): twilight-sky page with small stars, cream paper panels with a soft glow, thin rose-pink lines, hearts around window titles, pink pill buttons. Fonts: Ms Madi (script) for big titles, Xanh Mono (typewriter) for buttons and labels, Nunito for reading text. Dark mode is the same look at night.
+- Interface look follows The Loveborne Girls' Coven (loosely): twilight-sky page with small stars, cream paper panels with a soft glow, thin rose-pink lines, hearts around window titles, pink pill buttons. Fonts: Great Vibes (script) for big titles, Xanh Mono (typewriter) for buttons and labels, Nunito for reading text. Dark mode is the same look at night.
 
 ## Open items
 
@@ -89,4 +89,6 @@ The shop scene is the main screen. Every object glows on hover and does somethin
 - Angelica root (first needed Day 47) is the one confusing dead end no letter covers; optional second hint on the Pippin Green letter (Day 44).
 - The first customer's hint (the High Priestess) has no dotted keyword to collect; decide whether to add "intuition" to the line.
 - #202 The Unconditional Pillow and #105 Permission to Be are easy to confuse; consider clearer naming or a "this isn't what they asked for" message.
+- Gathering bottles (Dawn dew, Moonwater and so on): the scene no longer points them out. Plan: the tutorial teaches when each can be gathered, and bottle pictures in the scene become clickable to collect them. Until then the Kitchen's "Bottles to fill" buttons still work.
+- Quiet hours show a mood line as a film-style subtitle at the bottom of the scene. The background follows the hour only, not the weather, so a "grey" line can sit over a sunny window.
 - Later: split the prototype into a real web project.

@@ -24,14 +24,13 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
-/* The hour is not shown as a label; the background shows it. */
+/* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
+   of the scene like a film subtitle. Bottles that can be filled are not pointed out here: the tutorial will
+   teach that, and later the bottles themselves will be clickable in the scene. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote');
   if(v||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
-  const fill=GATHER.find(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]);
-  note.hidden=false;
-  note.innerHTML=fill?`${esc(moodLine())} <button class="chip" data-gather="${esc(fill[0])}">Fill ${esc(fill[0])}</button>`:
-    esc(moodLine())+(S.h>=3?' Ring the bell to close for the night.':' Ring the bell for the next customer.')}
+  const line=moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer: time moves on to the next hour with someone (or something) in it. */
 function ringBell(){const bell=$('#bellBtn');
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Someone is already at the counter.');return}
