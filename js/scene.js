@@ -11,7 +11,7 @@ const STACK=[['Recipe Book','book-recipe-book',104,0,480],['Book of Making','boo
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   $('#bookStack').innerHTML=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
-  Object.values(ASSETS.backgrounds).forEach(src=>{const im=new Image();im.src=src});  /* preload so the fades are smooth */
+  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters)].forEach(src=>{const im=new Image();im.src=src});  /* preload so the fades are smooth */
 }
 /* Backgrounds: one picture per hour, plus dawn before the shop opens. Two layers cross-fade. */
 let bgNow='',bgTop='bgA',dawnUntil=0;
@@ -23,7 +23,7 @@ function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. */
-function renderScene(){setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
+function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote');
   if(v||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   const fill=GATHER.find(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]);
@@ -39,11 +39,19 @@ function ringBell(){const bell=$('#bellBtn');
   do{nextHour(true)}while(S.h<3&&!currentVisitor()&&Object.keys(S.mail||{}).length===mail0&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]));
   S.result=null;render()}
 function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').innerHTML=html;$('#info').classList.add('open')}
-function auraInfo(){const v=currentVisitor(),cur=v&&(v.type==='return'?visitByKey(S.orders.find(o=>o.id===v.oid).key):v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key));
+/* The aura is read from the colour glowing around the crystal ball, never as words.
+   Clicking the ball only explains what the colours mean. */
+function currentVisit(){const v=currentVisitor();if(!v)return null;
+  return v.type==='return'?visitByKey(S.orders.find(o=>o.id===v.oid).key):v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key)}
+function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('#crystalBtn');
+  ball.classList.toggle('glowing',!!a);if(a)ball.style.setProperty('--aura-glow',a[0])}
+/* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn. */
+function renderCustomer(){const cur=currentVisit(),src=cur&&ASSETS.characters[cur.who],box=$('#customer'),img=box.querySelector('img');
+  if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
+function auraInfo(){
   const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:4px 0"><span class="aura" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c};vertical-align:middle"></span> ${esc(t)}</li>`).join('');
-  const a=cur&&X.auras[cur.aura];
-  return (a?`<p style="font-size:18px"><span class="aura" style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${a[0]};vertical-align:middle;box-shadow:0 0 12px ${a[0]}"></span> <b>${esc(cur.who)}</b>: ${esc(a[1])}</p>`:'<p class="muted">No one is at the counter. The ball is quiet.</p>')+
-    `<p class="muted" style="margin-bottom:2px">What the colours mean:</p><ul style="list-style:none;padding:0;margin:0">${list}</ul>`}
+  return `<p>When someone stands at the counter, the crystal ball glows with what they are feeling. Feelings bend what people say, so the colour tells you how far to trust their words.</p>
+    <p class="muted" style="margin-bottom:2px">What the colours mean:</p><ul style="list-style:none;padding:0;margin:0">${list}</ul>`}
 function hintsHTML(){const h=S.hints||[];return h.length?h.map(x=>`<p><span class="muted" style="font-size:13px">Day ${x.day}, ${esc(x.hour)} \u00B7 ${esc(x.who)}</span><br>${kw(x.text)}</p>`).join(''):'<p class="muted">Nothing yet. When a customer is happy with what you made, they sometimes let something slip. It is written down here.</p>'}
 function receiptsHTML(){return S.pend.length?`<p class="muted">Today so far. The stars count towards your rating at closing.</p><div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`:'<p class="muted">No receipts yet today.</p>'}
 function renderTop(){renderBadge();const T=today();
@@ -125,7 +133,7 @@ function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; t
   return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}.`:`I\u2019ll come back on Day ${b.day}.`}
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
-function whoHTML(v){const a=X.auras[v.aura]||['#ccc',''];return `<div class="who"><span class="aura" style="background:${a[0]};--aura:${a[0]}" title="${esc(a[1])}"></span><div><b>${esc(v.who)}</b><br><small class="muted">${esc(a[1])}</small></div></div>`}
+function whoHTML(v){return `<div class="who"><div><b>${esc(v.who)}</b></div></div>`}
 function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Click the <b>computer</b> on the counter to read them.</p>';
   if(Object.values(S.mail||{}).includes(false))return '<p>A letter came in the post. Click the <b>computer</b> to read it.</p>';return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */

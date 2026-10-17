@@ -34,5 +34,17 @@ const ASSETS = {
     'book-gentle-bestiary':        'assets/scene/book-gentle-bestiary.png',
     'book-crystal-almanac':        'assets/scene/book-crystal-almanac.png',
     'book-herbiary':               'assets/scene/book-herbiary.png'
+  },
+  /* Customers who stand behind the counter, by the name used in story.js.
+     Anyone not listed here (walk-ins, Sam Okafor for now) is not drawn. */
+  characters: {
+    'Dottie Plum':               'assets/characters/dottie-plum.png',
+    'Edmund Thorne':             'assets/characters/edmund-thorne.png',
+    'Felix Marlow':              'assets/characters/felix-marlow.png',
+    'Ivy Delacroix':             'assets/characters/ivy-delacroix.png',
+    'Marigold "Goldie" Ashby':   'assets/characters/marigold-ashby.png',
+    'Morwenna Hale':             'assets/characters/morwenna-hale.png',
+    'Noor Haddad':               'assets/characters/noor-haddad.png',
+    'Rosalind Larkin':           'assets/characters/rosalind-larkin.png'
   }
 };
