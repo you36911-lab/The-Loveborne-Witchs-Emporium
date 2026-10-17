@@ -146,9 +146,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes auraPulse{0%,100%{scale:1;opacity:.85}50%{scale:1.08;opacity:1}}
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:16.5%;width:15%;z-index:2}
-.scene .notebook{left:49%;bottom:11%;width:13.5%;z-index:3}
+.scene .notebook{left:54%;bottom:11%;width:13.5%;z-index:3}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
-.scene .bell{left:68.4%;bottom:16.5%;width:4.8%;z-index:0}
+.scene .bell{left:68.4%;bottom:18.5%;width:4.8%;z-index:0}
 .scene .computer{left:72%;bottom:11.5%;width:27%;z-index:1}
 .scene .pcbadge{position:absolute;right:3%;top:2%;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;border-radius:1em}
 .scene .bell.ring{animation:ring .7s ease-out}
