@@ -68,8 +68,8 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 ## The counter screen
 
 The game has two full-screen views:
-- **The counter** (main): the shop picture fills the window. Day info top left, what the customer says in a box over the right-hand window, the mood line as a subtitle, and a **Make** button bottom right that goes to the altar.
-- **The altar**: the shop blurred behind, the Kitchen cabinet on the left, the Cabinet on the right (one drawer per kind of thing), the altar in the middle with a reminder of the order, **Counter** to go back and **Books**. "Start making it" goes straight here. The cabinets are drawn in CSS for now; cabinet and object pictures may replace them.
+- **The counter** (main): the shop picture fills the window. Day info top left, what the customer says in a box over the right-hand window, the mood line as a subtitle, and a **down arrow** at the bottom: the counter and the altar are like two floors, and the arrow slides the view down to the altar (an up arrow slides back).
+- **The altar**: the shop blurred behind, the Kitchen cabinet on the left, the Cabinet on the right (one drawer per kind of thing), the altar in the middle with a reminder of the order, and **Books**. "Start making it" goes straight here. The cabinets are drawn in CSS for now; a cabinet picture may replace them. Ingredients that have a picture (waters, oils, butters and waxes, herbs and flowers, some fruits: 79 so far, in assets/items) stand on the shelves with a name tag; the rest are plain tags.
 
 On the counter, every object glows on hover and does something:
 - each book in the stack opens that book

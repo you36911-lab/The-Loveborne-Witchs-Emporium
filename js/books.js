@@ -104,7 +104,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
     S.target=String(id);S.altar=[...new Set(n.ing.filter(Boolean))];S.candle=n.candle||'';S.tarot=n.tarot||'';S.result=null;
-    $('#books').classList.remove('open');view='altar';$('#shopView').hidden=true;$('#altarView').hidden=false;
+    $('#books').classList.remove('open');goTo('altar');
     if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
     return}
   if(b.dataset.go){S.page[curBook]=b.dataset.go;save();renderBooks();$('#entries').scrollTop=0;return}

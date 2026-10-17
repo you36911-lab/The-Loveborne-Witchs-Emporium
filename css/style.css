@@ -167,7 +167,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @media (prefers-reduced-motion: reduce){.scene .bell.ring{animation:none}}
 @keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-4%)}75%{transform:translateX(4%)}}
 /* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. */
-.scenenote{position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
+.scenenote{position:absolute;left:50%;bottom:calc(clamp(8px,2vh,22px) + 66px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
   color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
 .scenenote[hidden]{display:none}
@@ -261,8 +261,19 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 
 /* ---------- the two full-screen views ---------- */
 body{overflow:hidden}
-.view{position:fixed;inset:0;overflow:hidden}
-.view[hidden]{display:none}
+.world{position:fixed;inset:0;transition:transform .9s cubic-bezier(.65,0,.35,1)}
+.world.down{transform:translateY(-100%)}
+.view{position:absolute;left:0;right:0;top:0;height:100%;overflow:hidden}
+.altarview{top:100%}
+@media (prefers-reduced-motion: reduce){.world{transition:none}}
+/* The arrows between the counter and the altar: a round glowing button that bobs gently. */
+.arrow{position:absolute;left:50%;translate:-50% 0;z-index:8;width:54px;height:54px;padding:0;border-radius:50%;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--card) 85%,transparent);color:var(--kw);box-shadow:0 0 14px var(--pink)}
+.arrow svg{width:30px;height:30px}
+.arrowdown{bottom:clamp(8px,2vh,22px)}
+.arrowup{top:10px}
+@media (prefers-reduced-motion: no-preference){.arrowdown svg{animation:bob 1.8s ease-in-out infinite}.arrowup svg{animation:bob 1.8s ease-in-out infinite reverse}}
+@keyframes bob{0%,100%{translate:0 -2px}50%{translate:0 3px}}
 /* The shop picture covers the whole window and keeps its shape, so the objects stay on the counter.
    On a window shaped differently from the picture, the edges are cropped. */
 .shopview .scene{position:absolute;left:50%;top:50%;translate:-50% -50%;overflow:hidden;
@@ -284,15 +295,16 @@ button.small{font-size:12px;padding:2px 10px}
 .dialogue[hidden]{display:none}
 .dialogue .who b{font-family:var(--font-title);font-weight:400;font-size:30px;line-height:1.1;color:var(--kw);text-shadow:0 0 4px var(--pink)}
 .dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}
-.gobtn{position:absolute;right:clamp(12px,3vw,40px);bottom:clamp(12px,3vh,32px);z-index:7;font-size:22px;padding:10px 30px}
 .daycard{position:absolute}
 
 /* The altar view: the shop, blurred, behind a cabinet either side and the altar in the middle. */
 .altarbg{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(8px) brightness(.62) saturate(1.1)}
-.altartop{position:relative;z-index:2;display:flex;gap:12px;align-items:center;padding:12px 16px}
+.altartop{position:relative;z-index:2;display:flex;gap:12px;align-items:center;padding:70px 16px 10px}
+.altartop>span{width:70px}
+#booksBtn{position:absolute;top:14px;right:16px}
 .ordernote{flex:1;min-width:0;text-align:center;font-size:14px;color:#fff;text-shadow:0 1px 3px #000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .workshop{position:relative;z-index:1;display:grid;grid-template-columns:minmax(240px,1fr) minmax(360px,1.3fr) minmax(240px,1fr);gap:clamp(12px,2.5vw,40px);
-  align-items:stretch;height:calc(100vh - 64px);padding:0 clamp(12px,2.5vw,40px) clamp(12px,2.5vh,28px)}
+  align-items:stretch;height:calc(100vh - 112px);padding:0 clamp(12px,2.5vw,40px) clamp(12px,2.5vh,28px)}
 .panel{min-width:0;min-height:0}
 .tabs{display:none;gap:6px;padding:0 12px 8px;position:relative;z-index:2}
 .tabs button{flex:1}
@@ -324,3 +336,12 @@ button.small{font-size:12px;padding:2px 10px}
 .altar h2{margin-bottom:4px}
 .altar .making{justify-content:center;gap:6px;margin-bottom:6px}
 .logbox{background:color-mix(in srgb,var(--card) 85%,transparent);border:1px solid var(--line);border-radius:10px;padding:4px 12px}
+/* Ingredients with a picture stand on the shelf with a little name tag; the stock count sits on the tag. */
+.cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;gap:2px;width:86px;padding:4px 2px 3px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:11px;line-height:1.15;text-align:center}
+.cabinside .chip.jar img{width:62px;height:62px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));transition:transform .15s}
+.cabinside .chip.jar:hover{background:rgba(255,240,220,.08);box-shadow:none}
+.cabinside .chip.jar:hover img{transform:translateY(-3px) scale(1.06)}
+.cabinside .chip.jar .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 5px;max-width:100%}
+.cabinside .chip.jar .n{margin-left:0;color:#E9C9A8}
+.cabinside .chip.jar.on{background:rgba(244,173,207,.22);border-color:#F4ADCF;box-shadow:0 0 12px #F4ADCF}
+.plates .chip img{width:26px;height:26px;object-fit:contain;vertical-align:middle;margin-right:4px}

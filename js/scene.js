@@ -13,9 +13,11 @@ function buildScene(){
   $('#bookStack').innerHTML=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
   [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters)].forEach(src=>{const im=new Image();im.src=src});  /* preload so the fades are smooth */
 }
-/* Two full-screen views: the shop counter and the altar. Make goes to the altar, Counter comes back. */
+/* Two full-screen views, one above the other: the shop counter, and the altar below it.
+   The down arrow slides the world up to show the altar; the up arrow slides it back. */
 let view='shop';
-function setView(v){view=v;$('#shopView').hidden=v!=='shop';$('#altarView').hidden=v!=='altar';render()}
+function goTo(v){view=v;$('#world').classList.toggle('down',v==='altar');$('#shopView').inert=v!=='shop';$('#altarView').inert=v!=='altar'}
+function setView(v){goTo(v);render()}
 /* Backgrounds: one picture per hour, plus dawn before the shop opens. Two layers cross-fade.
    The altar view shows the same picture, blurred, behind the cabinets. */
 let bgNow='',bgTop='bgA',dawnUntil=0;
@@ -72,7 +74,8 @@ function shelfHTML(side){
   cats.forEach((c,ix)=>{const its=D.items.filter(i=>i.c===c);
     h+=`<details${ix<1?' open':''}><summary>${esc(c)} <span class="muted">(${its.length})</span></summary><div class="chips">${its.map(i=>{
       const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
-      return `<button class="chip ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${esc(i.n)}${st}</button>`}).join('')}</div></details>`});
+      const pic=ASSETS.items[i.n];
+      return `<button class="chip ${pic?'jar':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${pic?`<img src="${pic}" alt="" loading="lazy">`:''}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}</div></details>`});
   if(side==='right'){
     h=`<details open><summary>Candles</summary><div class="chips">${Object.keys(D.colours).map(c=>`<button class="swatch ${S.candle===c?'on':''}" style="background:${COLOURHEX[c]}" data-candle="${esc(c)}" title="${esc(c)} candle" aria-label="${esc(c)} candle" aria-pressed="${S.candle===c}"></button>`).join('')}</div></details>
     <details open><summary>Tarot (Major Arcana)</summary><div class="chips">${Object.keys(D.tarot).map(t=>`<button class="chip ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}">${esc(t)}</button>`).join('')}</div></details>`+h}
@@ -100,7 +103,7 @@ function renderAltar(){
   sel.innerHTML=S.ttype?'<option value="">Recipe\u2026</option>'+rs.filter(r=>r.type===S.ttype).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>${esc(r.name)}</option>`).join(''):'<option value="">Recipe\u2026</option>';
   sel.disabled=!S.ttype;
   sel.value=S.target||'';
-  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients on the shelves to lay them here.</span>';
+  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="">`:''}${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients in the cabinets to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
   $('#tarotSlot').innerHTML=S.tarot?`${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
   $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
