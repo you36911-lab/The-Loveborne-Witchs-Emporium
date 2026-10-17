@@ -17,6 +17,12 @@
     <div class="row"><span class="stars" id="stars" aria-label="Shop rating"></span>
       <button id="restartBtn" title="Start a new game from Day 1">Restart</button></div>
   </header>
+  <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
+    <b>Prototype</b>
+    <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
+    <select id="protoWho" aria-label="Customer"></select>
+    <button id="protoGo" class="main">Go</button><button id="protoDawn" title="Start the chosen day from the dawn card">From dawn</button>
+  </div>
   <div class="scene" id="scene" aria-label="The shop counter">
     <div class="bg" id="bgA"></div><div class="bg" id="bgB"></div>
     <div class="customer" id="customer"><img alt=""></div>
@@ -75,6 +81,7 @@
 <script src="js/scene.js"></script>
 <script src="js/actions.js"></script>
 <script src="js/books.js"></script>
+<script src="js/prototype.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

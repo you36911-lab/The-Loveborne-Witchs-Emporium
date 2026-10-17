@@ -98,6 +98,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene{position:relative;width:min(100%,calc(58vh * 1376 / 768));aspect-ratio:1376/768;margin:0 auto 12px;border:3px solid var(--line);border-radius:10px;overflow:hidden;background-size:cover;background-position:center}
 .scene .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 .scene .bg.on{opacity:1}
+/* Lighting: the objects and the customer take on the light of the hour's background.
+   The filter sits on the pictures only, so the hover glow on the buttons stays bright. */
+.scene{--light:brightness(1)}
+.scene[data-hour="Dawn"]{--light:brightness(.8) saturate(.85) sepia(.22) hue-rotate(230deg)}
+.scene[data-hour="Sunrise"]{--light:brightness(1.02) sepia(.2) saturate(1.1) hue-rotate(-8deg)}
+.scene[data-hour="Twilight"]{--light:brightness(.84) sepia(.25) hue-rotate(-30deg) saturate(1.05)}
+.scene[data-hour="Nightfall"]{--light:brightness(.72) saturate(.9) sepia(.15) hue-rotate(235deg)}
+.scene .obj img,.scene .customer img{filter:var(--light);transition:filter 1.2s ease}
 .scene .daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
   font-family:'Pixelify Sans',monospace;font-size:clamp(22px,3.4vw,44px);text-shadow:0 2px 12px rgba(40,10,50,.7);pointer-events:none;
   opacity:0;transition:opacity .6s ease}
@@ -108,7 +116,11 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .6s ease}
 .scene .customer img{position:absolute;left:50%;top:28.4%;height:122.6%;width:auto;translate:-50% 0}
 .scene .customer.on{opacity:1}
-@media (prefers-reduced-motion: reduce){.scene .bg,.scene .daycard,.scene .customer{transition:none}}
+@media (prefers-reduced-motion: reduce){.scene .bg,.scene .daycard,.scene .customer,.scene .obj img,.scene .customer img{transition:none}}
+/* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
+.proto{flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:6px 10px;border:2px dashed var(--line);border-radius:6px;font-size:14px}
+.proto[hidden]{display:none}
+.proto select,.proto button{font-size:14px;padding:3px 6px}
 .scene .obj{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;box-shadow:none;transform-origin:50% 100%;transition:transform .15s,filter .15s;filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
 .scene .obj img{display:block;width:100%;height:auto}
 .scene button.obj:hover,.scene button.obj:focus-visible{transform:translateY(-1.5%) scale(1.03);filter:drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 6px 4px rgba(60,20,30,.35));outline:none}
@@ -123,7 +135,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   opacity:0;transition:opacity .8s ease,background .8s ease;pointer-events:none;z-index:0}
 .scene .crystal img{position:relative;z-index:1}
 .scene .crystal.glowing::before{opacity:1;animation:auraPulse 3.2s ease-in-out infinite}
-.scene .crystal.glowing img{filter:drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 18px var(--aura-glow))}
+.scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 18px var(--aura-glow))}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
   /* The inside of the glass takes the aura colour; the bottom fades out so the stand keeps its own colour. */
   background:var(--aura-glow,transparent);mix-blend-mode:color;opacity:0;transition:opacity .8s ease,background .8s ease;

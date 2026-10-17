@@ -15,7 +15,7 @@ function buildScene(){
 }
 /* Backgrounds: one picture per hour, plus dawn before the shop opens. Two layers cross-fade. */
 let bgNow='',bgTop='bgA',dawnUntil=0;
-function setBackground(key){if(key===bgNow)return;bgNow=key;
+function setBackground(key){if(key===bgNow)return;bgNow=key;$('#scene').dataset.hour=key;  /* lighting, see style.css */
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
