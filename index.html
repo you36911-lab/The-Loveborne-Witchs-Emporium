@@ -39,7 +39,7 @@
     <button class="obj till" id="tillBtn" aria-label="Till: today's receipts"><img data-img="till" alt=""></button>
     <button class="obj notebook" id="notebookBtn" aria-label="Notebook: what customers told me"><img data-img="notebook" alt=""></button>
     <button class="obj bell" id="bellBtn" aria-label="Bell: the next customer"><img data-img="bell" alt=""></button>
-    <button class="obj computer" id="pcBtn" aria-label="Computer: letters"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
+    <button class="obj computer" id="pcBtn" aria-label="Computer: email"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
     <div class="scenenote" id="sceneNote" hidden></div>
   </div>
   <nav class="tabs" aria-label="Shop areas">
@@ -74,16 +74,19 @@
       <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Words you have collected. Tap any <span class="kw" style="cursor:default">dotted word</span> to collect it, pick one here, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
   </div>
 </div>
-<div class="modal" id="letters" role="dialog" aria-modal="true" aria-label="Letters">
-  <div class="sheet mailsheet">
-    <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Letters</h2><button id="closeLetters">Close</button></div>
-    <div class="mailbox"><nav class="letterlist" id="letterList" aria-label="Letters"></nav><div class="letterread" id="letterRead"></div></div>
+<div class="modal" id="letters" role="dialog" aria-modal="true" aria-label="Email">
+  <div class="webmail" id="webmail">
+    <header class="wm-top"><div class="wm-logo"><span aria-hidden="true">☾</span>Moonpost</div>
+      <input id="wmSearch" type="search" placeholder="Search mail" aria-label="Search mail">
+      <span class="wm-me" title="Your address"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span>
+      <button id="closeLetters" class="wm-close" aria-label="Close email">×</button></header>
+    <div class="wm-body"><nav class="wm-side" id="wmSide" aria-label="Folders"></nav><div class="wm-list" id="letterList"></div><article class="wm-read" id="letterRead"></article></div>
   </div>
 </div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2><button id="closeInfo">Close</button></div><div id="infoBody"></div></div></div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
 <div class="toast" id="toast"></div>
-<div class="mailfx" id="mailFx" hidden role="dialog" aria-label="A letter came in the post"><div class="mailcard"><div class="env" aria-hidden="true"><div class="flap"></div><div class="seal">♥</div></div><p><b>A letter came in the post</b><br><small class="muted" id="mailFrom"></small></p><div class="row" style="justify-content:center"><button class="main" id="mailRead">Read it now</button><button id="mailLater">Later</button></div></div></div>
+<div class="mailfx" id="mailFx" hidden role="dialog" aria-label="New email"><div class="mailcard"><div class="env" aria-hidden="true"><div class="flap"></div><div class="seal">♥</div></div><p><b>New email</b><br><small class="muted" id="mailFrom"></small></p><div class="row" style="justify-content:center"><button class="main" id="mailRead">Read it now</button><button id="mailLater">Later</button></div></div></div>
 
 <script src="js/config.js"></script>
 <script src="js/data/game-data.js"></script>
@@ -94,7 +97,7 @@
 <script src="js/scene.js"></script>
 <script src="js/actions.js"></script>
 <script src="js/books.js"></script>
-<script src="js/letters.js"></script>
+<script src="js/email.js"></script>
 <script src="js/prototype.js"></script>
 <script src="js/main.js"></script>
 </body>

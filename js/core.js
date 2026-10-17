@@ -38,14 +38,14 @@ function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)
 function collect(w){if(!S.bank.includes(w)){S.bank.push(w);toast(`Collected \u201C${w}\u201D`)}selWord=w;save()}
 function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.bank.push(w);n.push(w)}});if(n.length)toast('New words: '+n.join(', '));return n}
 const today=()=>D.cal[S.day-1];
-/* Post: a letter turns up at a set hour, some time before the order it helps with. It goes into the letters on the computer. */
+/* Post: a letter turns up at a set hour, some time before the order it helps with. It arrives as an email on the computer. */
 const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S.day&&HOURS.indexOf(m.hour)<=S.h));
-/* Hints customers let slip are copied, in order, into one page in the letter archive. */
+/* Hints customers let slip are copied, in order, into one page in the Notes folder of the email. */
 function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.text===v.hint.text))return;
   S.hints.push({day:S.day,hour:HOURS[S.h],who:v.who,text:v.hint.text});setTimeout(()=>toast('Noted in your archive: what they told you'),2400)}
-/* A post letter drops in with a little animation; the badge on Books stays until it is opened. */
+/* A new email drops in with a little animation; the badge on the computer stays until it is opened. */
 function showMailFx(m){const fx=$('#mailFx');$('#mailFrom').textContent=m.from;fx.hidden=false;fx.classList.remove('go');void fx.offsetWidth;fx.classList.add('go')}
-function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A letter came in the post: ${m.title}.`);showMailFx(m)}})}
+function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A new email came in: ${m.title}.`);showMailFx(m)}})}
 const prev=()=>S.day>1?D.cal[S.day-2]:null;
 
 /* ---------- conditions ---------- */

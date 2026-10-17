@@ -1,8 +1,8 @@
 /* Rendering: the shop scene, the counter, shelves and altar. */
 /* ---------- rendering ---------- */
-/* Unopened letters (drawer or post) show a badge on the computer. */
+/* Unread emails show a badge on the computer. */
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
-function renderBadge(){const n=unreadLetters(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: letters, ${n} unread`:'Computer: letters')}
+function renderBadge(){const n=unreadLetters(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: email, ${n} unread`:'Computer: email')}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
 const STACK=[['Recipe Book','book-recipe-book',104,0,480],['Book of Making','book-book-of-making',65,85,543],['Grimoire of Craft','book-grimoire-of-craft',19,160,640],
@@ -136,8 +136,8 @@ function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; t
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
 function whoHTML(v){return `<div class="who"><div><b>${esc(v.who)}</b></div></div>`}
-function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three letters in the drawer. Click the <b>computer</b> on the counter to read them.</p>';
-  if(Object.values(S.mail||{}).includes(false))return '<p>A letter came in the post. Click the <b>computer</b> to read it.</p>';return ''}
+function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return '<p>There are three emails waiting. Click the <b>computer</b> on the counter to read them.</p>';
+  if(Object.values(S.mail||{}).includes(false))return '<p>A new email came in. Click the <b>computer</b> to read it.</p>';return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
 let autoT=null;
