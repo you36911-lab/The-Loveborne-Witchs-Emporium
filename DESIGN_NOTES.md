@@ -61,8 +61,9 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 
 - 3 starting letters from "H." (Hester), plus **17 post letters** from places around the map, one or two hints each.
 - Letters only point at **dead ends**: ingredients whose needed keyword is hidden, so a keyword search can't find them. They name the ingredient and the keyword, and carry a light thread to the order they help, but never say which order.
-- A letter arrives in a quiet hour with an envelope animation (Read it now / Later); unread letters show a badge on the computer.
-- Letters can be archived and taken out again. Customer hints are copied automatically into "What customers told me" (the notebook on the counter, also in the letter archive).
+- In the game the letters arrive as **email**, read on the computer in **Moonpost**, a made-up webmail (Inbox, Archive, Notes; sender, subject, preview, date). The design document still calls them letters.
+- An email arrives in a quiet hour with an envelope animation (Read it now / Later); unread emails show a badge on the computer.
+- Emails can be archived and moved back to the inbox. Customer hints are copied automatically into "What customers told me" (the notebook on the counter, also the Notes folder).
 
 ## The counter screen
 
@@ -72,7 +73,7 @@ The shop scene is the main screen. Every object glows on hover and does somethin
 - till: today's receipts
 - notebook: what customers told me (hints)
 - bell: the next customer
-- computer: letters, with the unread badge
+- computer: email (Moonpost), with the unread badge
 
 ## Art direction (agreed so far)
 
