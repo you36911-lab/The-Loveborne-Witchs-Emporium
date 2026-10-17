@@ -98,14 +98,16 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene{position:relative;width:min(100%,calc(58vh * 1376 / 768));aspect-ratio:1376/768;margin:0 auto 12px;border:3px solid var(--line);border-radius:10px;overflow:hidden;background-size:cover;background-position:center}
 .scene .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 .scene .bg.on{opacity:1}
-/* Lighting: the objects and the customer take on the light of the hour's background.
-   The filter sits on the pictures only, so the hover glow on the buttons stays bright. */
+/* Lighting: the objects and the customer take on the light inside the shop at each hour (not the sky outside).
+   The filters are in index.html: each scales red, green and blue by what the tablecloth and shelves
+   measure in that hour's background compared with Noon. The filter sits on the pictures only,
+   so the hover glow on the buttons stays bright. */
 .scene{--light:brightness(1)}
-.scene[data-hour="Dawn"]{--light:brightness(.8) saturate(.85) sepia(.22) hue-rotate(230deg)}
-.scene[data-hour="Sunrise"]{--light:brightness(1.02) sepia(.2) saturate(1.1) hue-rotate(-8deg)}
-.scene[data-hour="Twilight"]{--light:brightness(.84) sepia(.25) hue-rotate(-30deg) saturate(1.05)}
-.scene[data-hour="Nightfall"]{--light:brightness(.72) saturate(.9) sepia(.15) hue-rotate(235deg)}
-.scene .obj img,.scene .customer img{filter:var(--light);transition:filter 1.2s ease}
+.scene[data-light="Dawn"]{--light:url(#light-Dawn)}
+.scene[data-light="Sunrise"]{--light:url(#light-Sunrise)}
+.scene[data-light="Twilight"]{--light:url(#light-Twilight)}
+.scene[data-light="Nightfall"]{--light:url(#light-Nightfall)}
+.scene .obj img,.scene .customer img{filter:var(--light)}
 .scene .daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
   font-family:'Pixelify Sans',monospace;font-size:clamp(22px,3.4vw,44px);text-shadow:0 2px 12px rgba(40,10,50,.7);pointer-events:none;
   opacity:0;transition:opacity .6s ease}
@@ -116,7 +118,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .6s ease}
 .scene .customer img{position:absolute;left:50%;top:28.4%;height:122.6%;width:auto;translate:-50% 0}
 .scene .customer.on{opacity:1}
-@media (prefers-reduced-motion: reduce){.scene .bg,.scene .daycard,.scene .customer,.scene .obj img,.scene .customer img{transition:none}}
+@media (prefers-reduced-motion: reduce){.scene .bg,.scene .daycard,.scene .customer{transition:none}}
 /* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
 .proto{flex-wrap:wrap;gap:6px;margin:0 0 10px;padding:6px 10px;border:2px dashed var(--line);border-radius:6px;font-size:14px}
 .proto[hidden]{display:none}
@@ -144,9 +146,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes auraPulse{0%,100%{scale:1;opacity:.85}50%{scale:1.08;opacity:1}}
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:16.5%;width:15%;z-index:2}
-.scene .notebook{left:40.5%;bottom:11%;width:13.5%;z-index:3}
-.scene .bell{left:56%;bottom:12.5%;width:4.8%;z-index:2}
-.scene .computer{left:65%;bottom:11.5%;width:27%;z-index:1}
+.scene .notebook{left:43.5%;bottom:11%;width:13.5%;z-index:3}
+.scene .bell{left:59.5%;bottom:12.5%;width:4.8%;z-index:2}
+.scene .computer{left:68.5%;bottom:11.5%;width:27%;z-index:1}
 .scene .pcbadge{position:absolute;right:3%;top:2%;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;border-radius:1em}
 .scene .bell.ring{animation:ring .7s ease-out}
 .scene .bell.nope{animation:nope .4s}
