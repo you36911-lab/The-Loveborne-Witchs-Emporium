@@ -72,10 +72,12 @@ function shelfHTML(side){
   let h='';
   if(side==='left'){h+=`<details open><summary>Bottles to fill</summary><div class="chips">${gatherButtons()}</div></details>`}
   cats.forEach((c,ix)=>{const its=D.items.filter(i=>i.c===c);
-    h+=`<details${ix<1?' open':''}><summary>${esc(c)} <span class="muted">(${its.length})</span></summary><div class="chips">${its.map(i=>{
+    const shelf=its.every(i=>ASSETS.vesselCm[i.n]);  /* bottles and jars stand on a plank */
+    h+=`<details${ix<1?' open':''}><summary>${esc(c)} <span class="muted">(${its.length})</span></summary><div class="chips${shelf?' shelf':''}">${its.map(i=>{
       const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
-      const pic=ASSETS.items[i.n];
-      return `<button class="chip ${pic?'jar':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${pic?`<img src="${pic}" alt="" loading="lazy">`:''}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}</div></details>`});
+      const pic=ASSETS.items[i.n],cm=ASSETS.vesselCm[i.n];
+      const img=!pic?'':cm?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="height:${Math.round(cm*SHELF_PX_PER_CM)}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
+      return `<button class="chip ${pic?'jar':''} ${cm?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}</div></details>`});
   if(side==='right'){
     h=`<details open><summary>Candles</summary><div class="chips">${Object.keys(D.colours).map(c=>`<button class="swatch ${S.candle===c?'on':''}" style="background:${COLOURHEX[c]}" data-candle="${esc(c)}" title="${esc(c)} candle" aria-label="${esc(c)} candle" aria-pressed="${S.candle===c}"></button>`).join('')}</div></details>
     <details open><summary>Tarot (Major Arcana)</summary><div class="chips">${Object.keys(D.tarot).map(t=>`<button class="chip ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}">${esc(t)}</button>`).join('')}</div></details>`+h}
