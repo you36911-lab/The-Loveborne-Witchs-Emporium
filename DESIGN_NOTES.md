@@ -95,4 +95,5 @@ On the counter, every object glows on hover and does something:
 - #202 The Unconditional Pillow and #105 Permission to Be are easy to confuse; consider clearer naming or a "this isn't what they asked for" message.
 - Gathering bottles (Dawn dew, Moonwater and so on): the scene no longer points them out. Plan: the tutorial teaches when each can be gathered, and bottle pictures in the scene become clickable to collect them. Until then the Kitchen's "Bottles to fill" buttons still work.
 - Quiet hours show a mood line as a film-style subtitle at the bottom of the scene. The background follows the hour only, not the weather, so a "grey" line can sit over a sunny window.
+- Ingredient pictures: the current cut-outs were made automatically and some keep a faint outline. The designer will supply background-removed PNGs to replace them (same names in assets/items). Festival backgrounds (Beltane, Imbolc, Ostara, Yule) are still being edited; not in the game yet.
 - Later: split the prototype into a real web project.
