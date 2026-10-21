@@ -81,7 +81,7 @@ function shelfHTML(side){
       return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}</div></details>`});
   if(side==='right'){
     h=`<details open><summary>Candles</summary><div class="chips">${Object.keys(D.colours).map(c=>`<button class="swatch ${S.candle===c?'on':''}" style="background:${COLOURHEX[c]}" data-candle="${esc(c)}" title="${esc(c)} candle" aria-label="${esc(c)} candle" aria-pressed="${S.candle===c}"></button>`).join('')}</div></details>
-    <details open><summary>Tarot (Major Arcana)</summary><div class="chips">${Object.keys(D.tarot).map(t=>`<button class="chip ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}">${esc(t)}</button>`).join('')}</div></details>`+h}
+    <details open><summary>Tarot (Major Arcana)</summary><div class="chips">${Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:''}<span class="nm">${esc(t)}</span></button>`).join('')}</div></details>`+h}
   return h}
 const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightfall','Full Moon, Nightfall'],
  ['New Moon Water',()=>today().phase==='New Moon'&&HOURS[S.h]==='Nightfall','New Moon, Nightfall'],
@@ -108,7 +108,7 @@ function renderAltar(){
   sel.value=S.target||'';
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="">`:''}${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients in the cabinets to lay them here.</span>';
   $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
-  $('#tarotSlot').innerHTML=S.tarot?`${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
+  $('#tarotSlot').innerHTML=S.tarot?`${ASSETS.tarot[S.tarot]?`<img class="slotcard" src="${ASSETS.tarot[S.tarot]}" alt="">`:''}${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
   $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');

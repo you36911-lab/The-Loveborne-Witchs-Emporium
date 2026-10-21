@@ -58,7 +58,7 @@ const ASSETS = {
     'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'assets/books/gentle-bestiary-open.png',        paper:'#F5F7E9', page:[1.5,3.8,3]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
-     Anyone not listed here (walk-ins, Sam Okafor for now) is not drawn. */
+     Walk-ins are listed by how story.js names them. Anyone not listed here (Hester, Sam Okafor for now) is not drawn. */
   characters: {
     'Dottie Plum':               'assets/characters/dottie-plum.png',
     'Edmund Thorne':             'assets/characters/edmund-thorne.png',
@@ -67,7 +67,51 @@ const ASSETS = {
     'Marigold "Goldie" Ashby':   'assets/characters/marigold-ashby.png',
     'Morwenna Hale':             'assets/characters/morwenna-hale.png',
     'Noor Haddad':               'assets/characters/noor-haddad.png',
-    'Rosalind Larkin':           'assets/characters/rosalind-larkin.png'
+    'Rosalind Larkin':           'assets/characters/rosalind-larkin.png',
+    /* walk-ins (week one) */
+    'A first-year student':                     'assets/characters/first-year-student.png',
+    'A night-shift nurse':                      'assets/characters/night-shift-nurse.png',
+    'An exhausted bookshop owner':              'assets/characters/exhausted-bookshop-owner.png',
+    'A young poet':                             'assets/characters/young-poet.png',
+    'A father with a pushchair':                'assets/characters/father-with-pushchair.png',
+    'A woman who keeps dating the same man':    'assets/characters/woman-dating-same-man.png',
+    'A learner driver':                         'assets/characters/learner-driver.png',
+    'A woman with smudged mascara':             'assets/characters/woman-smudged-mascara.png',
+    'An aspiring influencer':                   'assets/characters/aspiring-influencer.png',
+    'A nervous witness':                        'assets/characters/nervous-witness.png',
+    'A novelist with a blank page':             'assets/characters/novelist-blank-page.png',
+    'A drowsy night-bus driver':                'assets/characters/night-bus-driver.png',
+    'A worried allotment keeper':               'assets/characters/allotment-keeper.png',
+    'A first-time homeowner':                   'assets/characters/first-time-homeowner.png',
+    'A bored teenager':                         'assets/characters/bored-teenager.png',
+    'A mother with a school bag':               'assets/characters/mother-school-bag.png',
+    'A shy young man':                          'assets/characters/shy-young-man.png',
+    'A couple holding hands':                   'assets/characters/couple-holding-hands.png'
+  },
+  /* Tarot cards (Major Arcana), by name: shown in the Tarot Companion, the Cabinet and the altar's card slot. */
+  tarot: {
+    "The Fool":           "assets/tarot/the-fool.png",
+    "The Magician":       "assets/tarot/the-magician.png",
+    "The High Priestess": "assets/tarot/the-high-priestess.png",
+    "The Empress":        "assets/tarot/the-empress.png",
+    "The Emperor":        "assets/tarot/the-emperor.png",
+    "The Hierophant":     "assets/tarot/the-hierophant.png",
+    "The Lovers":         "assets/tarot/the-lovers.png",
+    "The Chariot":        "assets/tarot/the-chariot.png",
+    "Strength":           "assets/tarot/strength.png",
+    "The Hermit":         "assets/tarot/the-hermit.png",
+    "Wheel of Fortune":   "assets/tarot/wheel-of-fortune.png",
+    "Justice":            "assets/tarot/justice.png",
+    "The Hanged Man":     "assets/tarot/the-hanged-man.png",
+    "Death":              "assets/tarot/death.png",
+    "Temperance":         "assets/tarot/temperance.png",
+    "The Devil":          "assets/tarot/the-devil.png",
+    "The Tower":          "assets/tarot/the-tower.png",
+    "The Star":           "assets/tarot/the-star.png",
+    "The Moon":           "assets/tarot/the-moon.png",
+    "The Sun":            "assets/tarot/the-sun.png",
+    "Judgement":          "assets/tarot/judgement.png",
+    "The World":          "assets/tarot/the-world.png"
   },
   /* Ingredient pictures, by item name, shown on the cabinet shelves and on the altar.
      Items without a picture show as a plain name tag. */
