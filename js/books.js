@@ -60,7 +60,7 @@ function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Book of Making','Reci
 const usedUp=w=>needsOf(w).every(sk=>(S.fills[sk]||[]).includes(w));
 /* ---------- the book on screen: the cover swings open onto a spread, two pages at a time, and pages turn ---------- */
 const INDEX_LINES=22;            /* index lines on one page; a category heading takes three */
-const OPEN_MS=1100,TURN_MS=700;  /* the cover opening and a page turning, in ms (match style.css) */
+const OPEN_MS=1100,TURN_MS=850;  /* the cover opening (match style.css) and a page turning, in ms */
 const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 let turning=false,openTimer=0;
 /* Every page of the book in order: the index (split over as many pages as it needs, filtered by the search), then one entry per page. */
@@ -99,17 +99,37 @@ function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))
   if(calm()){tome.className='tome open opened';return}
   tome.className='tome open';setTimeout(()=>{if(tome.classList.contains('open'))tome.classList.add('opened')},OPEN_MS)}
 function openBooks(){$('#books').classList.add('open');showBook(curBook);autoTick()}
-/* Turn to page i: one leaf turns over, whichever way and however far. */
+/* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
+   hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
+const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */
+function leafHTML(fwd,frontHTML,backHTML){
+  /* front: the page being lifted; back: the page that lands on the other side. Each strip shows its own slice of both. */
+  const fs=fwd?'right':'left',bs=fwd?'left':'right';let h='';
+  for(let k=STRIPS-1;k>=0;k--){
+    const fo=fwd?k:STRIPS-1-k,bo=fwd?STRIPS-1-k:k;
+    h=`<div class="strip${k?'':' root'}"><div class="sface front"><div class="pcopy ${fs}" style="left:${-fo*100}%;width:${STRIPS*100}%">${frontHTML}</div><i class="shade"></i></div>`+
+      `<div class="sface back"><div class="pcopy ${bs}" style="left:${-bo*100}%;width:${STRIPS*100}%">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
+  return h}
 function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(pages)>>1;i=Math.max(0,Math.min(i,pages.length-1));
   S.page[curBook]=pages[i].key;save();const to=i>>1;
   if(to===from||calm()||!$('#tome').classList.contains('opened')){renderBooks();return}
-  const leaf=$('#leaf'),[front,back]=leaf.children,fwd=to>from;
+  const leaf=$('#leaf'),fwd=to>from,dir=fwd?-1:1;
   leaf.className='leaf '+(fwd?'fwd':'bwd');
-  front.innerHTML=pageHTML(pages,fwd?2*from+1:2*from);back.innerHTML=pageHTML(pages,fwd?2*to:2*to+1);
+  leaf.innerHTML=leafHTML(fwd,pageHTML(pages,fwd?2*from+1:2*from),pageHTML(pages,fwd?2*to:2*to+1));
   if(fwd)$('#pgR').innerHTML=pageHTML(pages,2*to+1);else $('#pgL').innerHTML=pageHTML(pages,2*to);
+  const strips=[...leaf.querySelectorAll('.strip')],shades=strips.map(s=>[...s.children].filter(c=>c.classList.contains('sface')).map(f=>f.lastElementChild));
   leaf.hidden=false;turning=true;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>leaf.classList.add('go')));
-  setTimeout(()=>{leaf.hidden=true;leaf.className='leaf';turning=false;renderBooks()},TURN_MS)}
+  const t0=performance.now(),ease=t=>t<.5?2*t*t:1-2*(1-t)*(1-t);
+  const frame=now=>{const t=Math.min(1,(now-t0)/TURN_MS),e=ease(t),A=180*e,b=BEND*Math.sin(Math.PI*e)*(1-.35*e);
+    let total=0,prev=null;
+    strips.forEach((s,k)=>{const a=k?-b:A;total+=a;s.style.transform=`rotateY(${dir*a}deg)`;
+      /* paper turned away from the light darkens; each strip shades smoothly from its neighbour's tone to its own, so the curve reads as one sheet */
+      const dark=Math.abs(Math.sin(total*Math.PI/180)),from=prev===null?dark:prev;prev=dark;
+      const g=(side,m)=>`linear-gradient(to ${side},rgba(58,37,48,${(from*m).toFixed(3)}),rgba(58,37,48,${(dark*m).toFixed(3)}))`;
+      shades[k][0].style.background=g(fwd?'right':'left',.4);shades[k][1].style.background=g(fwd?'left':'right',.3)});
+    if(t<1)requestAnimationFrame(frame);else done()};
+  let ended=false;const done=()=>{if(ended)return;ended=true;leaf.hidden=true;leaf.innerHTML='';leaf.className='leaf';turning=false;renderBooks()};
+  requestAnimationFrame(frame);setTimeout(done,TURN_MS+400)}  /* finishes even if the window stops drawing frames */
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');

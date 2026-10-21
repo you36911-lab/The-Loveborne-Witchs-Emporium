@@ -27,6 +27,8 @@ const ASSETS = {
     Twilight:  'assets/scene/bg-twilight.jpg',   /* evening */
     Nightfall: 'assets/scene/bg-nightfall.jpg'   /* night, no moon */
   },
+  /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
+  altarRoom: 'assets/scene/altar-room.jpg',
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
     'till':         'assets/scene/till.png',

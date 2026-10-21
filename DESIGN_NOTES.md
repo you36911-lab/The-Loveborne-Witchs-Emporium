@@ -56,7 +56,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - Each entry shows a fixed "slightly hard" choice of keywords; the rest are blanks. Recipe numbers are hidden.
 - Nothing goes into the word bank automatically: dotted words in any text are tapped to collect. A word leaves the bank once every blank that needs it is filled.
 - Every ingredient and tarot card has a short **look** shown where its picture will go (also the art brief).
-- A book opens as a book: its closed cover first, which swings open by itself (or at a click) onto the open spread; then two pages at a time, one entry per page, the index first (over as many pages as it needs). Pages turn with an animation (arrows beside the book, or the arrow keys). A ribbon at the top of each entry page bookmarks it. The word bank sits beside the book.
+- A book opens as a book: its closed cover first, which swings open by itself (or at a click) onto the open spread; then two pages at a time, one entry per page, the index first (over as many pages as it needs). Pages turn with an animation (arrows beside the book, or the arrow keys); the turning sheet bends like paper, its free edge lagging behind. A ribbon at the top of each entry page bookmarks it. The word bank sits beside the book.
 
 ## Letters
 
@@ -70,7 +70,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 
 The game has two full-screen views:
 - **The counter** (main): the shop picture fills the window. Day info top left, what the customer says in a box over the right-hand window, the mood line as a subtitle, and a **down arrow** at the bottom: the counter and the altar are like two floors, and the arrow slides the view down to the altar (an up arrow slides back).
-- **The altar**: the shop blurred behind, the Kitchen cabinet on the left, the Cabinet on the right (one drawer per kind of thing), the altar in the middle with a reminder of the order, and **Books**. "Start making it" goes straight here. The cabinets are drawn in CSS for now; a cabinet picture may replace them. Ingredients that have a picture (waters, oils, butters and waxes, herbs and flowers, some fruits: 79 so far, in assets/items) stand on the shelves with a name tag; the rest are plain tags.
+- **The altar**: a workroom picture (assets/scene/altar-room.jpg: shelves either side, a pink-draped table in front, the winged heart between). On wide windows the Kitchen sits over the left shelves and the Cabinet over the right, as dark glass panels; the altar (recipe, candle, card, what is laid out, the buttons) sits on the table; a test result appears between the shelves. Narrow windows keep the tabs. Earlier: the shop blurred behind, the Kitchen cabinet on the left, the Cabinet on the right (one drawer per kind of thing), the altar in the middle with a reminder of the order, and **Books**. "Start making it" goes straight here. The cabinets are drawn in CSS for now; a cabinet picture may replace them. Ingredients that have a picture (waters, oils, butters and waxes, herbs and flowers, some fruits: 79 so far, in assets/items) stand on the shelves with a name tag; the rest are plain tags.
 
 On the counter, every object glows on hover and does something:
 - each book in the stack opens that book

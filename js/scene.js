@@ -24,7 +24,8 @@ let bgNow='',bgTop='bgA',dawnUntil=0;
 function setBackground(key){if(key===bgNow)return;bgNow=key;
   /* The lighting can't fade, so it changes halfway through the background's fade. See style.css. */
   clearTimeout(setBackground.t);setBackground.t=setTimeout(()=>{$('#scene').dataset.light=key},600);
-  const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=$('#altarBg').style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
+  const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
+  $('#altarBg').style.backgroundImage=$('#workshop').style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
