@@ -86,6 +86,14 @@ On the counter, every object glows on hover and does something:
 - Remove brand logos (the computer's Apple logo). Aim for 1920×1080 or larger.
 - Interface look follows The Loveborne Girls' Coven (loosely): twilight-sky page with small stars, cream paper panels with a soft glow, thin rose-pink lines, hearts around window titles, pink pill buttons. Fonts: Great Vibes (script) for big titles, Xanh Mono (typewriter) for buttons and labels, Nunito for reading text. Dark mode is the same look at night.
 
+## Glamour forms
+
+The design document says a Glamour becomes "a cosmetic, mist or perfume". Each one is now fixed by its ingredients (for the art and the wording):
+- **Pressed powder in a compact** (clay, pearl or shell powder, pressed with a liquid): #6 Venus in Bloom (peach-pink pearly blush), Starlit Siren (seashell shimmer highlighter), The Camera Loves You (pearl and gold highlighter).
+- **Face mist in a spray bottle** (water base): The Artist's Entrance (gold-flecked mist), The Thousandth Version (iridescent setting mist, moth wing dust), The Ritual of Ordinary Things (morning pearl mist), The Glittering Entrance (gold body shimmer mist).
+- **Oil in a dropper bottle** (sunflower oil base): Solstice Honey (golden body glow oil).
+- **Perfume**: The Midas Muse (gold-shimmer perfume oil; oak moss and saffron), The Unpinned Mask (white lily floral water), The Casual Enchantment (mint and bergamot cologne splash).
+
 ## Open items
 
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
