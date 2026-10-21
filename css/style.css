@@ -253,6 +253,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .kw:active{transform:none;box-shadow:none}
 .tale{background:var(--pink-soft);border-radius:8px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
+/* the birthstone page: each month and its stone */
+.bookline.months{display:grid;grid-template-columns:auto 1fr;gap:0 1.2em;margin-top:.6em;font-style:normal;font-size:.9em;line-height:1.45;color:var(--ink)}
+.bookline.months b{font-weight:600;color:var(--kw)}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;box-shadow:var(--glow);font-weight:600;padding:7px 16px;z-index:30;display:none}
 @media (prefers-reduced-motion: no-preference){.sparkle{animation:spk .9s ease-out}@keyframes spk{0%{box-shadow:0 0 0 0 var(--butter)}100%{box-shadow:0 0 0 14px transparent}}}
 

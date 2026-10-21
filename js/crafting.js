@@ -1,5 +1,14 @@
 /* Crafting: comparing what is on the altar with a recipe, and the clue lines. */
 /* ---------- crafting ---------- */
+/* "The customer's birthstone" is not one stone: it is the crystal for the month the customer was born in, picked from
+   the Crystals cupboard. A visit gives its customer's month as born:'March'; without one, any birthstone will do. */
+const BIRTHSTONE="Birthstone (customer's)";
+const BIRTHSTONES={January:'Garnet',February:'Amethyst',March:'Aquamarine',April:'Clear quartz',May:'Jade',June:'Pearl',
+  July:'Carnelian',August:'Peridot',September:'Lapis lazuli',October:'Moonstone',November:'Citrine',December:'Amazonite'};
+/* What a recipe needs, with the birthstone turned into this customer's stone. */
+function recipeNeeds(r,used,born){if(!r.ing.includes(BIRTHSTONE))return r.ing;
+  const stones=Object.values(BIRTHSTONES),stone=BIRTHSTONES[born]||used.find(x=>stones.includes(x))||BIRTHSTONE;
+  return r.ing.map(x=>x===BIRTHSTONE?stone:x)}
 function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes(type))}
 /* A swap is a wrong ingredient that shares a property with a missing one. It counts as one problem. */
 function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
@@ -32,15 +41,20 @@ function ingLine(sw){const g=`The one from ${shelfOf(sw.got)}`,k=sw.kw;
   if(sw.kind==='notes')return `${g}: it brings ${k}, but also ${sw.off}. The right one brings ${sw.wantP} instead.`;
   return `${g} isn\u2019t right. Picture the right one: ${ITEM[sw.want]?.look||'something else'}.`}
 function evaluate(r,test){
-  const used=[...new Set(S.altar)],need=r.ing;
+  const used=[...new Set(S.altar)],need=recipeNeeds(r,used,currentVisit()?.born);
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
+  /* someone else's birthstone in place of theirs: one problem, said plainly */
+  const stones=Object.values(BIRTHSTONES),theirs=missing.find(x=>x!==BIRTHSTONE&&stones.includes(x)&&r.ing.includes(BIRTHSTONE)),
+    other=theirs&&wrong.find(x=>stones.includes(x));
+  if(other){missing.splice(missing.indexOf(theirs),1);wrong.splice(wrong.indexOf(other),1)}
   const swaps=findSwaps(r,missing,wrong,used);
   const loneMissing=missing.filter(m=>!swaps.some(s=>s.want===m)),loneWrong=wrong.filter(w=>!swaps.some(s=>s.got===w));
-  let probs=swaps.length+loneMissing.length+loneWrong.length;const lines=[];const gained=[];
+  let probs=swaps.length+loneMissing.length+loneWrong.length+(other?1:0);const lines=[];const gained=[];
   /* Each clue line is tagged with what it is about, so a wrong card isn't read as an ingredient problem. */
   const L=(k,t)=>lines.push({k,t});let il='';
   /* Ingredients: say how many are off, then one plain clue per problem, naming the ingredient that is wrong. */
   const ingProbs=swaps.length+loneMissing.length+loneWrong.length;
+  if(other)L('ing',`The ${other.toLowerCase()} is a birthstone, but not theirs. Theirs is the stone of the month they were born in.`);
   if(ingProbs){const nw=swaps.length+loneWrong.length,nm=loneMissing.length,parts=[];
     if(nw)parts.push(`${nw} wrong`);if(nm)parts.push(`${nm} missing`);
     L('ing',nw&&nm?`${ingProbs} ingredients are off: ${parts.join(', ')}.`:`${ingProbs} ingredient${ingProbs>1?'s are':' is'} ${nw?'wrong':'missing'}.`);
@@ -48,7 +62,7 @@ function evaluate(r,test){
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
-    loneMissing.forEach(m=>L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
+    loneMissing.forEach(m=>(m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m))?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
   if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
   else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}

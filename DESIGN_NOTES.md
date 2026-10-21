@@ -110,3 +110,9 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 - Pictures in: the exhausted bookshop owner stands behind the counter (the other 17 walk-in pictures are unnamed files, left out until confirmed); the 22 tarot cards (assets/tarot) show in the Tarot Companion, the Cabinet and the altar's card slot; ingredient pictures now also show on their book pages. Not yet: Hester (three versions in the art folder), Sam Okafor. The Moon card's label reads "THE FOON" and needs fixing in the art. Two versions exist of The Devil and The World; the 768×1376 ones are used.
 - Keeping it smooth as more art comes in: no blur effects (backdrop-filter) anywhere, since they are redrawn every frame; export pictures near the size they are shown (characters 1100px tall, items ~250px, cards ~420px wide); big pictures are decoded ahead of time.
 - Later: split the prototype into a real web project.
+
+## Birthstones
+
+- "The customer's birthstone" (The Starbound Self, #131) is not a stone of its own: it is the crystal for the month the customer was born in, picked from the Crystals cupboard. January Garnet, February Amethyst, March Aquamarine, April Clear quartz (for diamond), May Jade (for emerald), June Pearl, July Carnelian (for ruby), August Peridot, September Lapis lazuli (for sapphire), October Moonstone (for opal), November Citrine, December Amazonite (for turquoise). The Crystal Almanac's birthstone page lists them.
+- A visit that orders #131 gives its customer's month as `born: 'March'` and the dialogue should let the month slip (a birthday, a star sign). Without a month, any birthstone counts.
+- Clues: someone else's birthstone gets "a birthstone, but not theirs"; a missing one gets "it needs their birthstone".

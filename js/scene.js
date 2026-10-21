@@ -131,7 +131,7 @@ function shelfItemsHTML(c){
   /* the waters cupboard also keeps the empty bottles: the ones that can be filled right now show first */
   const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
-  return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c).map(i=>{
+  return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
     const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="width:${SHELF_BOTTLE_WIDTH}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
