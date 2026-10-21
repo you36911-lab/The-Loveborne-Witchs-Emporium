@@ -20,13 +20,15 @@ let view='shop';
 function goTo(v){view=v;$('#world').classList.toggle('down',v==='altar');$('#shopView').inert=v!=='shop';$('#altarView').inert=v!=='altar'}
 function setView(v){goTo(v);render()}
 /* Backgrounds: one picture per hour, plus dawn before the shop opens. Two layers cross-fade.
-   The altar view shows the same picture, blurred, behind the cabinets. */
+   The workroom below has its own picture (ASSETS.altarRoom). */
 let bgNow='',bgTop='bgA',dawnUntil=0;
 function setBackground(key){if(key===bgNow)return;bgNow=key;
   /* The lighting can't fade, so it changes halfway through the background's fade. See style.css. */
   clearTimeout(setBackground.t);setBackground.t=setTimeout(()=>{$('#scene').dataset.light=key},600);
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
-  $('#room').style.backgroundImage=`url("${ASSETS.altarRoom}")`;
+  const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
+  /* full address: a url() in a variable is read from the stylesheet's folder */
+  room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
@@ -75,39 +77,50 @@ const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightf
  ['Rainwater',()=>today().weather==='Rain','Rain'],['Storm Water',()=>today().weather==='Thunderstorm','Thunderstorm'],
  ['Snow Water',()=>today().weather==='Snow','Snow'],['Dawn dew',()=>HOURS[S.h]==='Sunrise'&&!['Rain','Snow','Thunderstorm'].includes(today().weather),'Sunrise, dry'],
  ['Web Dew',()=>HOURS[S.h]==='Sunrise'&&today().weather==='Fog / Mist','Sunrise, mist']];
-function gatherButtons(){return GATHER.map(([n,ok,when])=>{const done=S.gathered[S.day+'-'+n];
-  return `<button class="chip" data-gather="${esc(n)}" ${ok()&&!done?'':'disabled'} title="${esc(when)}">Fill ${esc(n)}</button>`}).join('')}
-/* The workroom shelves. Each painted shelf row holds one kind of thing, top to bottom: a few of its pictures stand on the
-   board with its name on a tag. Clicking a row opens it (#shelfOpen) with everything on it; tapping a thing lays it on the
-   table or takes it off again. */
-const SHELVES={caseL:['Bottles to fill','Base waters','Oils, butters & waxes','Herbs & flowers','Fruits','Spices','Pantry: salts, sugars & baking','Resins & incense'],
-  caseR:['Candles','Tarot','Crystals','Animal gifts','Buttons','Threads & ribbons','Wood & branches','Findings & tools','Inks & paints']};
-const SHELF_ROWS=9;  /* rows painted in each case */
-const SHELFNAME={'Pantry: salts, sugars & baking':'Pantry','Oils, butters & waxes':'Oils & waxes','Tarot':'Tarot cards'};
-let openShelf='';
-/* how many things from this row are on the table now */
-function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')return S.tarot?1:0;if(c==='Bottles to fill')return 0;
+/* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
+   swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
+   off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg, 1266×712). The bottom row
+   of doors is hidden behind the table, so it stays shut. */
+const ROOM_W=1266,ROOM_H=712;
+const DOOR_COLS=[[160,125,'l'],[305,126,'r'],[835,126,'l'],[981,125,'r']];  /* left, width, hinge side */
+const DOOR_ROWS=[[110,109],[226,102],[334,96],[433,94]];                    /* top, height */
+/* row by row, door by door: the left cabinet holds the kitchen things, the right one the rest */
+const SHELVES=[['Herbs & flowers','Spices','Candles','Tarot'],
+  ['Fruits','Pantry: salts, sugars & baking','Crystals','Animal gifts'],
+  ['Base waters','Oils, butters & waxes','Buttons','Threads & ribbons'],
+  ['Resins & incense','Inks & paints','Wood & branches','Findings & tools']];
+/* the word on each door's label; the open cupboard shows the full name */
+const PLATE={'Herbs & flowers':'Herbs','Spices':'Spices','Fruits':'Fruits','Pantry: salts, sugars & baking':'Pantry','Base waters':'Waters',
+  'Oils, butters & waxes':'Oils & Waxes','Resins & incense':'Resins','Inks & paints':'Inks & Paints','Candles':'Candles','Tarot':'Tarot',
+  'Crystals':'Crystals','Animal gifts':'Animal Gifts','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
+const SHELFNAME={'Base waters':'Waters & bottles','Tarot':'Tarot cards'};
+let openShelf='',shownShelf='';
+/* how many things from this cupboard are on the table now */
+function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')return S.tarot?1:0;
   return D.items.filter(i=>i.c===c&&S.altar.includes(i.n)).length}
-/* the few things that stand on the board as a preview */
-function shelfPreview(c){const MAX=7;
-  if(c==='Candles')return Object.keys(D.colours).slice(0,MAX).map(k=>`<i class="minicandle" style="--cc:${COLOURHEX[k]}"></i>`).join('');
-  if(c==='Tarot')return Object.keys(D.tarot).filter(t=>ASSETS.tarot[t]).slice(0,5).map(t=>`<img class="minicard" src="${ASSETS.tarot[t]}" alt="" loading="lazy">`).join('');
-  const names=c==='Bottles to fill'?GATHER.map(g=>g[0]):D.items.filter(i=>i.c===c).map(i=>i.n);
-  const pics=names.filter(n=>ASSETS.items[n]).slice(0,MAX);
-  return pics.length?pics.map(n=>`<img src="${ASSETS.items[n]}" alt="" loading="lazy">`).join(''):'<i class="minijar"></i><i class="minijar"></i><i class="minijar"></i><i class="minijar"></i>'}
+/* The doors are made once (so they can swing); after that only their open state and counts change. */
+function buildDoors(){const pc=(v,of)=>(v/of*100).toFixed(3);
+  $('#cubbies').innerHTML=SHELVES.map((row,r)=>row.map((c,k)=>{const [x,w,hinge]=DOOR_COLS[k],[y,h]=DOOR_ROWS[r];
+    return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" `+
+      `style="left:${pc(x,ROOM_W)}%;top:${pc(y,ROOM_H)}%;width:${pc(w,ROOM_W)}%;height:${pc(h,ROOM_H)}%;--x:${pc(x,ROOM_W)};--y:${pc(y,ROOM_H)}">`+
+      `<span class="door"><span class="plate">${esc(PLATE[c])}<b hidden></b></span></span></button>`}).join('')).join('')}
 function renderShelves(){
-  Object.entries(SHELVES).forEach(([id,cats])=>{$('#'+id).innerHTML=cats.map((c,k)=>{const n=shelfOnTable(c);
-    return `<button class="shelfrow ${openShelf===c?'open':''}" data-shelf="${esc(c)}" style="top:${k*100/SHELF_ROWS}%;height:${100/SHELF_ROWS}%" aria-expanded="${openShelf===c}">`+
-      `<span class="things">${shelfPreview(c)}</span><span class="tag">${esc(SHELFNAME[c]||c)}${n?` <b>${n}</b>`:''}</span></button>`}).join('')});
-  const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';return}
-  box.hidden=false;box.className='shelfopen '+(SHELVES.caseL.includes(openShelf)?'fromL':'fromR');
-  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the shelf">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
+  if(!$('#cubbies').childElementCount)buildDoors();
+  let side='L';
+  document.querySelectorAll('#cubbies .cubby').forEach(d=>{const c=d.dataset.shelf,n=shelfOnTable(c),on=openShelf===c,b=d.querySelector('b');
+    d.classList.toggle('open',on);d.setAttribute('aria-expanded',on);b.textContent=n||'';b.hidden=!n;if(on)side=d.dataset.side});
+  const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';shownShelf='';return}
+  box.hidden=false;box.className='shelfopen from'+side;
+  /* a newly opened cupboard plays its coming-out again */
+  if(shownShelf!==openShelf){box.style.animation='none';void box.offsetWidth;box.style.animation='';shownShelf=openShelf}
+  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the cupboard">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
 function shelfItemsHTML(c){
-  if(c==='Bottles to fill')return gatherButtons();
   if(c==='Candles')return Object.keys(D.colours).map(k=>`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
   if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:''}<span class="nm">${esc(t)}</span></button>`).join('');
+  /* the waters cupboard also keeps the empty bottles: the ones that can be filled right now show first */
+  const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
-  return D.items.filter(i=>i.c===c).map(i=>{
+  return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c).map(i=>{
     const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="width:${SHELF_BOTTLE_WIDTH}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;

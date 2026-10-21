@@ -48,12 +48,11 @@
   <button class="arrow arrowdown" id="toAltar" aria-label="Down to the altar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </section>
 
-<!-- The workroom below the counter: one picture (shelves either side, the table in front). Every shelf row holds one kind of
-     ingredient; clicking a row opens it. What is laid out stands on the table, which is the altar. -->
+<!-- The workroom below the counter: one picture (cabinets either side, the table in front). Behind every cabinet door is one
+     kind of ingredient; clicking a door swings it open. What is laid out stands on the table, which is the altar. -->
 <section class="view altarview" id="altarView" aria-label="The workroom" inert>
   <div class="room" id="room">
-    <div class="shelfcase" id="caseL" aria-label="Shelves: kitchen things"></div>
-    <div class="shelfcase" id="caseR" aria-label="Shelves: the cabinet"></div>
+    <div class="cubbies" id="cubbies" aria-label="Cabinets"></div>
     <div class="tabletop" aria-label="The altar">
       <div class="slot candleslot" id="candleSlot"></div>
       <div class="plates" id="plates"></div>
@@ -64,10 +63,10 @@
       <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make and give</button><button id="clearBtn">Clear the table</button>
     </div>
     <div class="result" id="result" hidden></div>
-    <details class="logbox"><summary>Shop log</summary><div class="log" id="log" aria-live="polite"></div></details>
     <div class="shelfopen" id="shelfOpen" hidden></div>
   </div>
   <button class="arrow arrowup" id="toShop" aria-label="Up to the counter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <details class="logbox"><summary>Shop log</summary><div class="log" id="log" aria-live="polite"></div></details>
   <header class="altartop"><div class="ordernote" id="orderNote"></div><button id="booksBtn">Books</button></header>
 </section>
 </div>

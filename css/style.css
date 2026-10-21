@@ -443,13 +443,13 @@ button.small{font-size:12px;padding:2px 10px}
 .tome[data-drawn]::before,.tome[data-drawn]::after{z-index:0}
 .tome .pg,.tome .cover{z-index:1}
 
-/* ---------- the workroom: one picture (assets/scene/altar-room.jpg, 1376×768) that covers the window like the shop does.
-   Everything sits on it in % of the picture: the shelf rows on the painted shelves, the altar on the table.
+/* ---------- the workroom: one picture (assets/scene/altar-room.jpg, 1266×712) that covers the window like the shop does.
+   Everything sits on it in % of the picture: the cabinet doors on the painted doors, the altar on the table.
    Sizes inside use cqw/cqh (the room is a size container), so things keep their place at any window size.
    No blur effects here: they are redrawn every frame and made the game stutter. */
-.room{position:absolute;left:50%;top:50%;translate:-50% -50%;width:max(100vw,calc(100vh * 1376 / 768));height:max(100vh,calc(100vw * 768 / 1376));
+.room{position:absolute;left:50%;top:50%;translate:-50% -50%;width:max(100vw,calc(100vh * 1266 / 712));height:max(100vh,calc(100vw * 712 / 1266));
   background-size:100% 100%;background-color:#2a1d2a;container-type:size}
-@media (max-aspect-ratio:3/2){.room{width:100vw;height:calc(100vw * 768 / 1376)}}  /* narrow windows: the whole room, letterboxed */
+@media (max-aspect-ratio:3/2){.room{width:100vw;height:calc(100vw * 712 / 1266)}}  /* narrow windows: the whole room, letterboxed */
 .altarview{background:#1E1219}
 .altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}
 .altartop>*{pointer-events:auto}
@@ -459,37 +459,63 @@ button.small{font-size:12px;padding:2px 10px}
 .ordernote:empty{display:none}
 .hint{color:#FFEAF4;text-shadow:0 1px 2px rgba(40,5,30,.9);font-size:clamp(12px,.8cqw,16px)}
 
-/* the two painted cases: nine shelf rows each */
-.shelfcase{position:absolute;top:18.4%;height:52%;width:20.5%}
-#caseL{left:15%}
-#caseR{left:64.5%}
-.shelfrow{position:absolute;left:0;right:0;padding:0 2% 0;border:0;border-radius:4px;background:none;box-shadow:none;color:#3A2530;
-  display:flex;align-items:flex-end;justify-content:center;cursor:pointer}
-.shelfrow:hover,.shelfrow:focus-visible,.shelfrow.open{background:rgba(255,190,225,.10);box-shadow:0 0 0 1px rgba(244,173,207,.55),0 0 14px rgba(244,173,207,.35)}
-.shelfrow .things{display:flex;align-items:flex-end;justify-content:center;gap:4%;height:78%;width:100%;padding-bottom:6%;box-sizing:border-box;overflow:hidden}
-.shelfrow .things img{height:100%;width:auto;max-width:13%;object-fit:contain;object-position:bottom}
-.shelfrow .things img.minicard{max-width:9%;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.5)}
-.shelfrow .tag{position:absolute;left:50%;bottom:-2px;translate:-50% 0;padding:0 .6em;border-radius:3px;white-space:nowrap;
-  font-family:var(--font-deco);font-size:clamp(10px,.62cqw,14px);line-height:1.5;color:#4A2A1C;background:linear-gradient(#F6E7C9,#E3C99A);box-shadow:0 1px 2px rgba(0,0,0,.5)}
-.shelfrow .tag b{display:inline-block;min-width:1.3em;margin-left:.2em;border-radius:999px;background:var(--pink);color:#2A1520;font-weight:700;text-align:center}
+/* The cabinet doors. Each .cubby is the dark inside of a cupboard; its .door is a slice of the room picture laid exactly
+   over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack with light behind
+   it; the open cupboard's door swings wide on its hinge. */
+.cubbies{display:contents}
+/* inside a cupboard: a shelf board in pink light */
+.cubby{--inside:linear-gradient(transparent 64%,#5A3328 64%,#3A1E1A 69%,rgba(0,0,0,.35) 69%,transparent 76%),radial-gradient(ellipse 80% 70% at 50% 45%,rgba(255,170,215,.55),rgba(120,40,90,.25) 55%,transparent 80%),linear-gradient(#170B12,#2A1520)}
+.cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
+  background:var(--inside);
+  transition:box-shadow .2s}
+.cubby:hover,.cubby:focus-visible{background:var(--inside);
+  box-shadow:0 0 0 1px rgba(255,200,230,.55),0 0 1.4cqw rgba(244,150,200,.55);outline:none}
+.door{position:absolute;inset:0;background-image:var(--room-img);background-size:100cqw 100cqh;
+  background-position:calc(var(--x) * -1cqw) calc(var(--y) * -1cqh);
+  transition:transform .55s cubic-bezier(.3,.8,.3,1),filter .25s;will-change:transform}
+.hinge-l .door{transform-origin:0 50%}
+.hinge-r .door{transform-origin:100% 50%}
+.cubby:hover .door,.cubby:focus-visible .door{filter:brightness(1.18)}
+.hinge-l:hover .door,.hinge-l:focus-visible .door{transform:rotateY(-14deg)}
+.hinge-r:hover .door,.hinge-r:focus-visible .door{transform:rotateY(14deg)}
+.cubby.open{z-index:2}
+.hinge-l.open .door{transform:rotateY(-68deg);filter:brightness(.8)}
+.hinge-r.open .door{transform:rotateY(68deg);filter:brightness(.8)}
+@media (prefers-reduced-motion:reduce){.door{transition:filter .2s}}
+/* the brass label on the door, with the cupboard's name; the pink count is how many of its things are on the table */
+.plate{position:absolute;left:49.5%;top:48.5%;translate:-50% -50%;width:5.4cqw;height:1.75cqw;display:flex;align-items:center;justify-content:center;
+  box-sizing:border-box;border:.16cqw solid #8C6A3E;border-radius:.2cqw;background:linear-gradient(#F6ECD6,#E2CDA3);
+  box-shadow:inset 0 0 0 .07cqw #E8CF96,0 .12cqw .25cqw rgba(0,0,0,.55);
+  font-family:var(--font-deco);font-size:max(9px,.66cqw);line-height:1;color:#3B2416;white-space:nowrap;letter-spacing:.01em}
+.plate::before,.plate::after{content:"";position:absolute;top:50%;width:.55cqw;height:.55cqw;translate:0 -50%;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#E8CF96,#8C6A3E 70%)}
+.plate::before{left:-.5cqw}
+.plate::after{right:-.5cqw}
+.cubby:hover .plate,.cubby:focus-visible .plate{color:#5A1E3E;box-shadow:inset 0 0 0 .07cqw #E8CF96,0 0 .8cqw rgba(255,190,225,.7)}
+.plate b{position:absolute;top:-.75cqw;right:-.9cqw;min-width:1.15cqw;height:1.15cqw;padding:0 .2cqw;box-sizing:border-box;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;background:var(--pink);color:#2A1520;font:700 max(9px,.62cqw)/1 var(--font-text);box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.plate b[hidden]{display:none}
 .minijar{display:inline-block;width:1.3cqw;height:2cqw;border-radius:30% 30% 22% 22%;background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(200,220,235,.25) 40%,rgba(255,255,255,.12));
   border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 .45cqw 0 -.15cqw #9C6B4E}
-.minicandle{display:inline-block;width:.75cqw;height:2.1cqw;border-radius:2px 2px 1px 1px;background:var(--cc);box-shadow:inset -2px 0 0 rgba(0,0,0,.18),0 1px 2px rgba(0,0,0,.4)}
 
-/* the open shelf: everything on that row, beside its case */
-.shelfopen{position:absolute;top:10%;max-height:62%;width:27.6%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
-  background:#2B1A13;border:2px solid #6B4A35;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(244,173,207,.3)}
+/* the open cupboard: everything inside it, between the cabinets; it comes out of the door that opened */
+.shelfopen{position:absolute;top:13%;max-height:56%;left:35%;width:30%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
+  background:#2B1A13;border:2px solid #6B4A35;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(244,173,207,.3);
+  animation:cupboardOut .32s .12s cubic-bezier(.2,.8,.3,1.1) backwards}
 .shelfopen[hidden]{display:none}
-.shelfopen.fromL{left:36.2%}
-.shelfopen.fromR{right:36.2%}
+.shelfopen.fromL{transform-origin:0 30%;--from:-14%}
+.shelfopen.fromR{transform-origin:100% 30%;--from:14%}
+@keyframes cupboardOut{from{opacity:0;transform:translateX(var(--from)) scale(.8)}}
+@media (prefers-reduced-motion:reduce){.shelfopen{animation-duration:.01s}}
 .shelfhead{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px}
 .shelfhead h3{margin:0;color:#F6E7C9;font-size:18px}
 .shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:0}
 .shelfopen .chips{border-radius:6px}
 .shelfopen .swatch{width:34px;height:34px}
+.fillnow{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px}
 
 /* the table is the altar: the candle at the left end, the card at the right, what is laid out in between */
-.tabletop{position:absolute;left:16%;right:16%;top:70.5%;height:16.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
+.tabletop{position:absolute;left:14%;right:14%;top:70%;height:18.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
 .plates{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1.2%}
 .ontable{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;cursor:pointer}
@@ -503,13 +529,13 @@ button.small{font-size:12px;padding:2px 10px}
   background:radial-gradient(circle at 50% 70%,#FFF8D6,#FFC24A 55%,rgba(255,140,40,0) 72%);transform-origin:50% 100%}
 @media (prefers-reduced-motion:no-preference){.candle::before{animation:flicker 1.6s ease-in-out infinite alternate}}
 @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.88,1.08)}}
-.tablebar{position:absolute;left:50%;top:89%;translate:-50% 0;z-index:2;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;white-space:nowrap;
+.tablebar{position:absolute;left:50%;top:91.5%;translate:-50% 0;z-index:2;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;white-space:nowrap;
   background:rgba(40,12,32,.78);border:1px solid rgba(255,214,240,.45);box-shadow:0 6px 18px rgba(0,0,0,.35)}
 .tablebar .making{display:flex;align-items:center;gap:6px;color:#FFE6F2;font-family:var(--font-deco);font-size:14px}
 .tablebar button,.tablebar select{font-size:14px}
 
-/* a test result, and the shop log, between the cases */
-.result{position:absolute;left:37%;right:37%;top:10%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;
+/* a test result between the cabinets; the shop log in the corner of the window */
+.result{position:absolute;left:36%;right:36%;top:13%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;
   border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--glow),0 12px 30px rgba(0,0,0,.45)}
-.logbox{position:absolute;left:37%;right:37%;top:67%;z-index:3;max-height:24%;overflow:auto;box-sizing:border-box;
+.logbox{position:absolute;left:16px;bottom:16px;width:min(340px,26vw);z-index:3;max-height:40vh;overflow:auto;box-sizing:border-box;
   background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);border-radius:10px;padding:4px 12px}
