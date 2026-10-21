@@ -56,6 +56,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - Each entry shows a fixed "slightly hard" choice of keywords; the rest are blanks. Recipe numbers are hidden.
 - Nothing goes into the word bank automatically: dotted words in any text are tapped to collect. A word leaves the bank once every blank that needs it is filled.
 - Every ingredient and tarot card has a short **look** shown where its picture will go (also the art brief).
+- A book opens as a book: its closed cover first, which swings open by itself (or at a click) onto the open spread; then two pages at a time, one entry per page, the index first (over as many pages as it needs). Pages turn with an animation (arrows beside the book, or the arrow keys). A ribbon at the top of each entry page bookmarks it. The word bank sits beside the book.
 
 ## Letters
 
@@ -104,4 +105,5 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 - Gathering bottles (Dawn dew, Moonwater and so on): the scene no longer points them out. Plan: the tutorial teaches when each can be gathered, and bottle pictures in the scene become clickable to collect them. Until then the Kitchen's "Bottles to fill" buttons still work.
 - Quiet hours show a mood line as a film-style subtitle at the bottom of the scene. The background follows the hour only, not the weather, so a "grey" line can sit over a sunny window.
 - Ingredient pictures: the current cut-outs were made automatically and some keep a faint outline. The designer will supply background-removed PNGs to replace them (same names in assets/items). Festival backgrounds (Beltane, Imbolc, Ostara, Yule) are still being edited; not in the game yet.
+- Book art (assets/books): covers exist for Recipe Book, Book of Making, Grimoire of Craft, Almanac of Sky & Seasons and Tarot Companion. Herbiary, Crystal Almanac and Gentle Bestiary use a plain coloured cover for now. Their open spreads are the earlier drafts (Herbiary: the parchment one; Crystal Almanac: the pearly one; Gentle Bestiary: the plain mint one, a stand-in).
 - Later: split the prototype into a real web project.

@@ -75,13 +75,28 @@
 </section>
 </div>
 
-<div class="modal" id="books" role="dialog" aria-modal="true" aria-label="Books">
-  <div class="sheet">
-    <div class="row" style="justify-content:space-between;margin-bottom:8px"><h2 style="margin:0">Bookshelf</h2><button id="closeBooks">Close</button></div>
+<!-- A book: the closed cover first, which swings open onto the spread; one entry per page, and pages turn. -->
+<div class="modal bookview" id="books" role="dialog" aria-modal="true" aria-label="Books">
+  <div class="bookbar">
     <div class="booktabs" id="booktabs"></div>
-    <div class="marks" id="marks"></div>
-    <div class="bookgrid"><div><input id="search" placeholder="Search by name or keyword" style="width:100%;margin-bottom:8px"><div class="entries" id="entries"></div></div>
-      <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Words you have collected. Tap any <span class="kw" style="cursor:default">dotted word</span> to collect it, pick one here, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside></div>
+    <button data-nav="index">Index</button>
+    <input id="search" type="search" placeholder="Search the index" aria-label="Search the index">
+    <button id="closeBooks">Close</button>
+  </div>
+  <div class="marks" id="marks"></div>
+  <div class="bookmain">
+    <div class="tomewrap" id="tomeWrap">
+      <button class="turn prev" id="turnPrev" aria-label="Previous page">‹</button>
+      <div class="tome closed" id="tome">
+        <img class="spread" id="spreadImg" alt="">
+        <div class="pg left" id="pgL"></div>
+        <div class="pg right" id="pgR"></div>
+        <div class="leaf" id="leaf" hidden><div class="face front"></div><div class="face back"></div></div>
+        <button class="cover" id="cover" aria-label="Open the book"><span class="face front"></span><span class="face back"></span></button>
+      </div>
+      <button class="turn next" id="turnNext" aria-label="Next page">›</button>
+    </div>
+    <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Words you have collected. Tap any <span class="kw" style="cursor:default">dotted word</span> to collect it, pick one here, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside>
   </div>
 </div>
 <div class="modal" id="letters" role="dialog" aria-modal="true" aria-label="Email">

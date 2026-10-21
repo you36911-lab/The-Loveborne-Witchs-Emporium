@@ -42,6 +42,19 @@ const ASSETS = {
     'book-crystal-almanac':        'assets/scene/book-crystal-almanac.png',
     'book-herbiary':               'assets/scene/book-herbiary.png'
   },
+  /* Each book: its closed cover, the open spread, and the colour of its paper (for the page that turns).
+     `page` is where the paper sits inside the spread, in % of its size: top, outer edge, bottom.
+     A book with no cover picture yet gets a plain cover in `color` with its title in `ink`. */
+  books: {
+    'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F3F6E5', page:[4.4,6,5.3]},
+    'Book of Making':           {cover:'assets/books/book-of-making-cover.png',         open:'assets/books/book-of-making-open.png',         paper:'#F9F7E6', page:[1.5,3.8,3]},
+    'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F3E5CA', page:[1.5,3.9,3]},
+    'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F3F5E7', page:[1.5,3.8,3]},
+    'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F4F5E5', page:[1.5,3.8,3]},
+    'Herbiary':                 {cover:'', color:'#5B3A26', ink:'#E9C77B',               open:'assets/books/herbiary-open.png',               paper:'#EFE8CD', page:[1.5,4,3]},
+    'Crystal Almanac':          {cover:'', color:'linear-gradient(135deg,#F4F1FA,#DCE9F5 40%,#F6DDEB 75%,#E6F3EC)', ink:'#6B5A86', open:'assets/books/crystal-almanac-open.png', paper:'#F0F4E1', page:[1.5,3.8,3]},
+    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'assets/books/gentle-bestiary-open.png',        paper:'#F5F7E9', page:[1.5,3.8,3]}
+  },
   /* Customers who stand behind the counter, by the name used in story.js.
      Anyone not listed here (walk-ins, Sam Okafor for now) is not drawn. */
   characters: {

@@ -38,7 +38,6 @@ function dispOrder(e){let x=2166136261;for(const ch of 'order|'+e.sk){x^=ch.char
   const a=[...e.props];for(let i=a.length-1;i>0;i--){x^=x<<13;x^=x>>>17;x^=x<<5;const j=(x>>>0)%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.length===1)return[e.props[0]];const s=shownOf(e);return e.props.filter(p=>!s.includes(p))}
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.sk]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
-function openBooks(){$('#books').classList.add('open');$('#search').value=searchOf();renderBooks();autoTick()}
 /* ---------- books as pages: an index, one entry per page, up to five bookmarks ---------- */
 const MARKCOL=['#E2483D','#F59A3B','#5DBB6A','#4C7BD9','#9B5FD0'];
 function entryHTML(e){
@@ -59,23 +58,68 @@ const pageOf=()=>((S.page||(S.page={}))[curBook]||'');
 let NEEDS=null;
 function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>hiddenOf(e).forEach(p=>(NEEDS[p]=NEEDS[p]||[]).push(e.sk))))}return NEEDS[w]||[]}
 const usedUp=w=>needsOf(w).every(sk=>(S.fills[sk]||[]).includes(w));
+/* ---------- the book on screen: the cover swings open onto a spread, two pages at a time, and pages turn ---------- */
+const INDEX_LINES=22;            /* index lines on one page; a category heading takes three */
+const OPEN_MS=1100,TURN_MS=700;  /* the cover opening and a page turning, in ms (match style.css) */
+const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+let turning=false,openTimer=0;
+/* Every page of the book in order: the index (split over as many pages as it needs, filtered by the search), then one entry per page. */
+function allPages(book){
+  const entries=bookPages(book),q=searchOf().toLowerCase(),marks=S.marks||[];
+  const list=entries.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
+  const intro=book==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
+  const chunks=[];let cur=[],lines=intro?7:4,lc=null;  /* the first page starts under the title */
+  list.forEach(p=>{if(lines+(p.cat&&p.cat!==lc?3:1)>INDEX_LINES&&cur.length){chunks.push(cur);cur=[];lines=0;lc=null}
+    const head=!!p.cat&&p.cat!==lc;lines+=head?3:1;lc=p.cat;cur.push({p,head})});
+  chunks.push(cur);
+  const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
+    (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
+    (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
+      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
+  return [...idx,...entries]}
+/* The page the reader is on (S.page keeps its key per book), and the spread that holds it. */
+function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
+function pageHTML(pages,i){const p=pages[i];if(!p)return '';
+  const m=!p.index&&(S.marks||[]).find(x=>x.book===curBook&&x.key===p.key);
+  return (p.index?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" style="${m?`--mc:${m.color}`:''}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
+    `<div class="pbody">${p.html()}</div><div class="pnum">${i+1}</div>`}
+/* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
+function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
+  img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open;
+  [['--pt',0],['--po',1],['--pb',2]].forEach(([v,i])=>tome.style.setProperty(v,a.page[i]+'%'));tome.style.setProperty('--paper-c',a.paper);
+  const [front,back]=$('#cover').children;back.style.backgroundImage=`url("${a.open}")`;
+  if(a.cover){front.style.background='';front.style.backgroundImage=`url("${a.cover}")`;front.innerHTML='';front.className='face front'}
+  else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
+  $('#cover').setAttribute('aria-label','Open the '+curBook)}
+/* Show a book closed, then let the cover swing open by itself (or at a click). */
+function showBook(b){curBook=b;$('#search').value=searchOf();setArt();clearTimeout(openTimer);
+  const tome=$('#tome');tome.className='tome closed';renderBooks();
+  openTimer=setTimeout(openTome,calm()?0:650)}
+function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))return;clearTimeout(openTimer);
+  if(calm()){tome.className='tome open opened';return}
+  tome.className='tome open';setTimeout(()=>{if(tome.classList.contains('open'))tome.classList.add('opened')},OPEN_MS)}
+function openBooks(){$('#books').classList.add('open');showBook(curBook);autoTick()}
+/* Turn to page i: one leaf turns over, whichever way and however far. */
+function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(pages)>>1;i=Math.max(0,Math.min(i,pages.length-1));
+  S.page[curBook]=pages[i].key;save();const to=i>>1;
+  if(to===from||calm()||!$('#tome').classList.contains('opened')){renderBooks();return}
+  const leaf=$('#leaf'),[front,back]=leaf.children,fwd=to>from;
+  leaf.className='leaf '+(fwd?'fwd':'bwd');
+  front.innerHTML=pageHTML(pages,fwd?2*from+1:2*from);back.innerHTML=pageHTML(pages,fwd?2*to:2*to+1);
+  if(fwd)$('#pgR').innerHTML=pageHTML(pages,2*to+1);else $('#pgL').innerHTML=pageHTML(pages,2*to);
+  leaf.hidden=false;turning=true;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>leaf.classList.add('go')));
+  setTimeout(()=>{leaf.hidden=true;leaf.className='leaf';turning=false;renderBooks()},TURN_MS)}
+function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
   $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Bookmark a page to come back to it.</span>';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):(S.bank.length?'<span class="muted">Every word you have collected is used up. Tap dotted words to collect more.</span>':'<span class="muted">No words yet. Tap a dotted word in an email, a result or a book to collect it.</span>'));
-  const el=$('#entries'),sb=$('#search');
-  const pages=bookPages(curBook),key=pageOf(),at=pages.findIndex(p=>p.key===key);
-  if(at<0){ /* the index */
-    sb.hidden=false;const q=(sb.value||'').toLowerCase();let lc=null;
-    const list=pages.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
-    const intro=curBook==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
-    el.innerHTML=`<h2 class="idx">Index</h2>${intro}`+(list.map(p=>{const m=marks.find(x=>x.book===curBook&&x.key===p.key);
-      return (p.cat!==lc?`<h3 class="cat">${esc(lc=p.cat)||'&nbsp;'}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join('')||'<p class="muted">Nothing matches.</p>');return}
-  sb.hidden=true;const p=pages[at],m=marks.find(x=>x.book===curBook&&x.key===p.key);
-  el.innerHTML=`<div class="pagenav"><button data-nav="index">← Index</button><button data-nav="prev" ${at>0?'':'disabled'}>‹ Prev</button><span class="muted">${esc(p.cat)} · page ${at+1} of ${pages.length}</span><button data-nav="next" ${at<pages.length-1?'':'disabled'}>Next ›</button>
-    <button data-bm="${esc(p.key)}" class="bm" style="${m?`--mc:${m.color}`:''}">${m?'★ Bookmarked':'☆ Bookmark'}</button></div><div class="page">${p.html()}</div>`}
+  const pages=allPages(curBook),s=pageAt(pages)>>1;
+  $('#pgL').innerHTML=pageHTML(pages,2*s);$('#pgR').innerHTML=pageHTML(pages,2*s+1);
+  $('#turnPrev').disabled=s===0;$('#turnNext').disabled=2*s+2>=pages.length}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
 const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
 const CONDKIND={day:'Weekday',phase:'Moon Phase',pg:'Moon Phase',dark:'Moon Phase',time:'Magic Hour',weather:'Weather',afterrain:'Weather',starry:'Sky Event',sabbat:'Festival',named:'Named Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
@@ -107,15 +151,17 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
     $('#books').classList.remove('open');goTo('altar');
     if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
     return}
-  if(b.dataset.go){S.page[curBook]=b.dataset.go;save();renderBooks();$('#entries').scrollTop=0;return}
-  if(b.dataset.nav){const pages=bookPages(curBook),at=pages.findIndex(p=>p.key===pageOf());
-    S.page[curBook]=b.dataset.nav==='index'?'':(pages[at+(b.dataset.nav==='next'?1:-1)]||pages[at]).key;save();renderBooks();return}
-  if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];curBook=m.book;S.page[curBook]=m.key;$('#search').value=searchOf();save();renderBooks();return}
+  if(b.id==='cover'){openTome();return}
+  if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
+  if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}
+  if(b.dataset.nav){turnTo(0);return}
+  if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
+    if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
     if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=5){toast('You can keep five bookmarks. Remove one first.');return}
     else{const used=S.marks.map(x=>x.color),p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL.find(c=>!used.includes(c))})}
     save();renderBooks();return}
-  if(b.dataset.book){curBook=b.dataset.book;$('#search').value=searchOf();renderBooks();return}
+  if(b.dataset.book){if(b.dataset.book!==curBook)showBook(b.dataset.book);return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
     if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}
@@ -133,5 +179,8 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
   if(id&&recipeLocked(id))toast('Recipe solved \u2726')
   save();renderBooks()});
-$('#search').addEventListener('input',e=>{(S.search||(S.search={}))[curBook]=e.target.value;save();renderBooks()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}});
+/* Searching shows the index from its first page. */
+$('#search').addEventListener('input',e=>{(S.search||(S.search={}))[curBook]=e.target.value;S.page[curBook]='';save();renderBooks()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}
+  /* the arrow keys turn the pages, unless a box or list has the keyboard */
+  if($('#books').classList.contains('open')&&/^Arrow(Left|Right)$/.test(e.key)&&!e.target.closest('input,select,textarea')){e.preventDefault();turnBy(e.key==='ArrowRight'?1:-1)}});

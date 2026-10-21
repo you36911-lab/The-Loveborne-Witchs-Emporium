@@ -82,9 +82,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);padding:14px}
 .booktabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
 .booktabs button[aria-pressed="true"]{background:var(--pink);color:#2A1520;box-shadow:0 0 10px var(--pink)}
-.bookgrid{display:grid;grid-template-columns:1fr 260px;gap:14px}
-@media (max-width:760px){.bookgrid{grid-template-columns:1fr}}
-.entries{max-height:62vh;overflow:auto;padding-right:6px}
 .entry{border-bottom:2px dotted var(--paper2);padding:6px 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .entry b{min-width:150px}
 .entry.locked b::after{content:" ✦";color:var(--pink)}
@@ -242,7 +239,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .receipt .rs{color:#C2456B;font-size:16px;letter-spacing:1px;margin-top:4px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 10px;z-index:25;box-shadow:0 0 3px var(--pink);white-space:nowrap}
 .autobar[hidden]{display:none}
-.entries h3.cat{margin:14px 0 4px;padding-bottom:2px;border-bottom:1px solid var(--line)}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
 .tag{display:inline-block;font-family:var(--font-deco);font-size:12px;padding:0 6px;margin-right:4px;border:1.5px solid var(--line);border-radius:3px;background:var(--paper2)}
 .rhead{background:none;border:0;box-shadow:none;padding:0;font-family:var(--font-deco);font-weight:600;font-size:16px;text-align:left}
@@ -254,10 +250,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
 .idxrow:hover{background:var(--pink-soft)}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
-.pagenav{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
-.pagenav .bm{margin-left:auto;border-left:8px solid var(--mc,transparent)}
-.page{border:1px solid var(--line);border-radius:6px;padding:12px;background:var(--paper);min-height:200px}
-.page .entry{border-bottom:0;font-size:16px}
 .kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
 .kw:hover{background:var(--pink-soft)}
 .kw:active{transform:none;box-shadow:none}
@@ -361,3 +353,84 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside .chip.jar.vessel img{height:auto;max-height:180px;object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
 .cabinside .chip.jar.vessel:hover img{transform:translateY(-4px)}
 .cabinside .chip.jar.vessel.on{border-radius:8px 8px 0 0}
+
+/* ---------- a book: the closed cover swings open onto the spread; one entry per page; pages turn ----------
+   The open spread is a picture (assets/books); the text sits on its paper. --pt, --po, --pb (top, outer edge, bottom)
+   and --paper-c come from ASSETS.books in config.js. Timings match OPEN_MS and TURN_MS in books.js. */
+.modal.bookview{background:color-mix(in srgb,#1A1430 78%,transparent);flex-direction:column;align-items:stretch;gap:8px;overflow:hidden;padding-left:16px;padding-right:16px}
+.bookbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bookbar .booktabs{margin:0;flex:1 1 auto}
+.bookbar #search{width:220px;border-radius:20px}
+.bookview .marks{margin:0}
+.bookmain{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;align-items:center}
+.bookview .bank{max-height:100%;overflow:auto}
+@media (max-width:860px){.bookmain{grid-template-columns:1fr;align-items:start}.bookview .bank{max-height:30vh}.modal.bookview{overflow:auto}}
+.tomewrap{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;height:100%}
+.tome{--ar:1.422;position:relative;flex:none;aspect-ratio:var(--ar);width:min(calc(100% - 90px),calc((100dvh - 200px) * var(--ar)));
+  container-type:inline-size;perspective:2600px;transition:transform 1.1s cubic-bezier(.45,.05,.3,1)}
+.tome.closed{transform:translateX(-25%)}
+.spread{position:absolute;inset:0;width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(30,10,40,.45));
+  clip-path:inset(0 0 0 50%);opacity:0;transition:opacity .3s}
+.tome.open .spread{opacity:1}
+.tome.opened .spread{clip-path:none}
+/* the cover: the right half of the spread, hinged at the spine */
+.cover{position:absolute;left:50%;top:0;width:50%;height:100%;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
+  transform-origin:left center;transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.45,.05,.3,1)}
+.cover:hover{background:none;box-shadow:none}
+.tome.closed .cover:hover .front{filter:drop-shadow(0 0 8px #ffd6f0) drop-shadow(0 0 18px #ffd6f0)}
+.tome.open .cover{transform:rotateY(-180deg)}
+.tome.opened .cover{visibility:hidden}
+.cover .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background-size:100% 100%;background-repeat:no-repeat}
+.cover .front{border-radius:4px;filter:drop-shadow(0 10px 18px rgba(30,10,40,.45))}
+.cover .back{transform:rotateY(180deg);background-size:200% 100%;background-position:left center}
+.cover .front.plain{display:grid;place-items:center;border-radius:6px 10px 10px 6px;box-shadow:inset 6px 0 10px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.18)}
+.cover .front.plain span{font-family:var(--font-title);font-size:10cqw;line-height:1.05;text-align:center;padding:0 8%;text-shadow:0 1px 0 rgba(255,255,255,.25)}
+/* the paper: each page's text, inside the picture's paper */
+.pg,.leaf{position:absolute;top:var(--pt,1.5%);bottom:var(--pb,3%)}
+.pg.left,.leaf.bwd{left:var(--po,3.8%);right:50%}
+.pg.right,.leaf.fwd{left:50%;right:var(--po,3.8%)}
+.pg,.leaf .face{--ink:#3A2530;--ink-soft:#7D5F70;--kw:#B4457E;--card:#FFFBF2;--paper:#FBF4E8;--paper2:#EBDCCB;--pink-soft:#F8D9E6;--line:#C98AAA;
+  color:var(--ink);font-size:1.45cqw;line-height:1.5;box-sizing:border-box;padding:2.2em 2em 2.6em;overflow:auto;scrollbar-width:none}
+.pg.left,.leaf .back{padding-right:2.6em}
+.pg.right,.leaf .front{padding-left:2.6em}
+.tome .pg{transition:opacity .35s}
+.tome.closed .pg,.tome.open:not(.opened) .pg.left{opacity:0}
+.tome:not(.opened) .pg{pointer-events:none}
+/* the leaf that turns: a page of paper hinged at the spine, the page before on its front and the page after on its back */
+.leaf{transform-style:preserve-3d;pointer-events:none;z-index:3;transition:transform .7s cubic-bezier(.4,.1,.3,1)}
+.leaf[hidden]{display:none}
+.leaf.fwd{transform-origin:left center}
+.leaf.bwd{transform-origin:right center}
+.leaf.fwd.go{transform:rotateY(-180deg)}
+.leaf.bwd.go{transform:rotateY(180deg)}
+.leaf .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper-c,#F6F3E6)}
+.leaf .back{transform:rotateY(180deg)}
+.leaf.fwd .front,.leaf.bwd .back{background:linear-gradient(90deg,rgba(0,0,0,.10),transparent 12%) var(--paper-c,#F6F3E6)}
+.leaf.fwd .back,.leaf.bwd .front{background:linear-gradient(270deg,rgba(0,0,0,.10),transparent 12%) var(--paper-c,#F6F3E6)}
+/* page furniture */
+.pg h2.idx,.leaf h2.idx{font-size:2.4em;margin:0}
+.idxsub{margin:0 0 .6em;font-family:var(--font-deco);font-size:.9em}
+.pg h3.cat,.leaf h3.cat{margin:.9em 0 .25em;padding-bottom:2px;border-bottom:1px solid var(--line);font-size:1em}
+.pg .idxrow,.leaf .idxrow{padding:.05em .3em;line-height:1.5}
+.pcat{font-family:var(--font-deco);font-size:.85em;color:var(--ink-soft);margin-bottom:.4em}
+.pnum{position:absolute;bottom:.9em;left:0;right:0;text-align:center;font-family:var(--font-deco);font-size:.8em;color:var(--ink-soft)}
+.pbody .entry{border-bottom:0;font-size:1.05em;align-items:baseline}
+.pbody .entry>b{flex-basis:100%;font-family:var(--font-title);font-weight:400;font-size:2.1em;color:var(--kw);line-height:1.1;margin-bottom:.3em}
+.pbody .entry .muted{margin-left:0!important;font-size:.9em!important;flex-basis:100%}
+.pbody .recipe{border:0;background:none;padding:0;margin:0;box-shadow:none;display:flex;flex-direction:column;gap:.45em}
+.pbody .recipe h3{font-family:var(--font-title);font-size:2.1em;color:var(--kw);line-height:1.1}
+.pbody .recipe.locked{box-shadow:none}
+.pg :is(button,select,input),.leaf :is(button,select,input){font-size:.88em;padding:.15em .55em}
+.pg .chip,.leaf .chip,.pg .entry .look,.leaf .entry .look{font-size:.85em}
+.pg .blank,.leaf .blank{min-width:5em;padding:0 .4em}
+.pg .kw,.leaf .kw{font-size:inherit;padding:0}
+/* a bookmark ribbon hangs from the top of every entry page; it is coloured once the page is bookmarked */
+.ribbon{position:absolute;top:0;right:1.6em;width:1.5em;height:3.2em;padding:0;border:0;border-radius:0;background:color-mix(in srgb,var(--line) 35%,transparent);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%);box-shadow:none;opacity:.55;transition:opacity .15s,height .15s}
+.ribbon:hover{opacity:1;height:3.6em;background:color-mix(in srgb,var(--line) 60%,transparent);box-shadow:none}
+.ribbon.on{background:var(--mc);opacity:1}
+.pg.left .ribbon,.leaf .back .ribbon{right:auto;left:1.6em}
+.turn{flex:none;width:38px;height:56px;padding:0;border-radius:20px;font-size:28px;line-height:1;display:grid;place-items:center}
+.turn:disabled{opacity:.3;cursor:default;box-shadow:none}
+.tomewrap:has(.tome:not(.opened)) .turn{visibility:hidden}
+@media (prefers-reduced-motion:reduce){.tome,.cover,.leaf,.spread,.tome .pg{transition:none}}
