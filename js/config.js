@@ -285,7 +285,9 @@ const ASSETS = {
     "Patchouli":            "assets/items/patchouli.png",
     "Sandalwood":           "assets/items/sandalwood.png",
     /* spices */
-    "Cinnamon":             "assets/items/cinnamon.png"
+    "Cinnamon":             "assets/items/cinnamon.png",
+    /* fruits */
+    "Beetroot powder":      "assets/items/beetroot-powder.png"
   }
 
 };
