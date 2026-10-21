@@ -313,7 +313,9 @@ const ASSETS = {
     "Pomegranate seeds":    "assets/items/pomegranate-seeds.png",
     "Rose hips":            "assets/items/rose-hips.png",
     "Strawberry":           "assets/items/strawberry.png",
-    "Raisins":              "assets/items/raisins.png"
+    "Raisins":              "assets/items/raisins.png",
+    /* waters */
+
   }
 
 };
