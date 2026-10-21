@@ -11,7 +11,8 @@ const STACK=[['Recipe Book','book-recipe-book',104,0,480],['Book of Making','boo
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   $('#bookStack').innerHTML=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
-  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters)].forEach(src=>{const im=new Image();im.src=src});  /* preload so the fades are smooth */
+  /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
+  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
 }
 /* Two full-screen views, one above the other: the shop counter, and the altar below it.
    The down arrow slides the world up to show the altar; the up arrow slides it back. */
@@ -25,7 +26,7 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
   /* The lighting can't fade, so it changes halfway through the background's fade. See style.css. */
   clearTimeout(setBackground.t);setBackground.t=setTimeout(()=>{$('#scene').dataset.light=key},600);
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
-  $('#altarBg').style.backgroundImage=$('#workshop').style.backgroundImage=`url("${ASSETS.altarRoom}")`;
+  $('#room').style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
@@ -68,21 +69,6 @@ function renderTop(){renderBadge();const T=today();
 <span title="Every fifth test craft that isn't perfect costs a one-star review">Failed tests: ${S.failTests%5}/5</span>`;
   const rt=rating(),full=Math.round(rt);$('#stars').textContent='\u2605'.repeat(full)+'\u2606'.repeat(5-full)+' '+rt.toFixed(1);
   $('#stars').title=S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}
-function shelfHTML(side){
-  const cats=[...new Set(D.items.filter(i=>i.p===side).map(i=>i.c))];
-  let h='';
-  if(side==='left'){h+=`<details open><summary>Bottles to fill</summary><div class="chips">${gatherButtons()}</div></details>`}
-  cats.forEach((c,ix)=>{const its=D.items.filter(i=>i.c===c);
-    const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
-    h+=`<details${ix<1?' open':''}><summary>${esc(c)} <span class="muted">(${its.length})</span></summary><div class="chips${shelf?' shelf':''}">${its.map(i=>{
-      const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
-      const pic=ASSETS.items[i.n],bottle=shelf&&pic;
-      const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="width:${SHELF_BOTTLE_WIDTH}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
-      return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}</div></details>`});
-  if(side==='right'){
-    h=`<details open><summary>Candles</summary><div class="chips">${Object.keys(D.colours).map(c=>`<button class="swatch ${S.candle===c?'on':''}" style="background:${COLOURHEX[c]}" data-candle="${esc(c)}" title="${esc(c)} candle" aria-label="${esc(c)} candle" aria-pressed="${S.candle===c}"></button>`).join('')}</div></details>
-    <details open><summary>Tarot (Major Arcana)</summary><div class="chips">${Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:''}<span class="nm">${esc(t)}</span></button>`).join('')}</div></details>`+h}
-  return h}
 const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightfall','Full Moon, Nightfall'],
  ['New Moon Water',()=>today().phase==='New Moon'&&HOURS[S.h]==='Nightfall','New Moon, Nightfall'],
  ['Sunwater',()=>today().weather==='Clear & sunny'&&HOURS[S.h]==='Noon','Clear day, Noon'],
@@ -91,7 +77,41 @@ const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightf
  ['Web Dew',()=>HOURS[S.h]==='Sunrise'&&today().weather==='Fog / Mist','Sunrise, mist']];
 function gatherButtons(){return GATHER.map(([n,ok,when])=>{const done=S.gathered[S.day+'-'+n];
   return `<button class="chip" data-gather="${esc(n)}" ${ok()&&!done?'':'disabled'} title="${esc(when)}">Fill ${esc(n)}</button>`}).join('')}
-function renderShelves(){$('#leftBody').innerHTML=shelfHTML('left');$('#rightBody').innerHTML=shelfHTML('right')}
+/* The workroom shelves. Each painted shelf row holds one kind of thing, top to bottom: a few of its pictures stand on the
+   board with its name on a tag. Clicking a row opens it (#shelfOpen) with everything on it; tapping a thing lays it on the
+   table or takes it off again. */
+const SHELVES={caseL:['Bottles to fill','Base waters','Oils, butters & waxes','Herbs & flowers','Fruits','Spices','Pantry: salts, sugars & baking','Resins & incense'],
+  caseR:['Candles','Tarot','Crystals','Animal gifts','Buttons','Threads & ribbons','Wood & branches','Findings & tools','Inks & paints']};
+const SHELF_ROWS=9;  /* rows painted in each case */
+const SHELFNAME={'Pantry: salts, sugars & baking':'Pantry','Oils, butters & waxes':'Oils & waxes','Tarot':'Tarot cards'};
+let openShelf='';
+/* how many things from this row are on the table now */
+function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')return S.tarot?1:0;if(c==='Bottles to fill')return 0;
+  return D.items.filter(i=>i.c===c&&S.altar.includes(i.n)).length}
+/* the few things that stand on the board as a preview */
+function shelfPreview(c){const MAX=7;
+  if(c==='Candles')return Object.keys(D.colours).slice(0,MAX).map(k=>`<i class="minicandle" style="--cc:${COLOURHEX[k]}"></i>`).join('');
+  if(c==='Tarot')return Object.keys(D.tarot).filter(t=>ASSETS.tarot[t]).slice(0,5).map(t=>`<img class="minicard" src="${ASSETS.tarot[t]}" alt="" loading="lazy">`).join('');
+  const names=c==='Bottles to fill'?GATHER.map(g=>g[0]):D.items.filter(i=>i.c===c).map(i=>i.n);
+  const pics=names.filter(n=>ASSETS.items[n]).slice(0,MAX);
+  return pics.length?pics.map(n=>`<img src="${ASSETS.items[n]}" alt="" loading="lazy">`).join(''):'<i class="minijar"></i><i class="minijar"></i><i class="minijar"></i><i class="minijar"></i>'}
+function renderShelves(){
+  Object.entries(SHELVES).forEach(([id,cats])=>{$('#'+id).innerHTML=cats.map((c,k)=>{const n=shelfOnTable(c);
+    return `<button class="shelfrow ${openShelf===c?'open':''}" data-shelf="${esc(c)}" style="top:${k*100/SHELF_ROWS}%;height:${100/SHELF_ROWS}%" aria-expanded="${openShelf===c}">`+
+      `<span class="things">${shelfPreview(c)}</span><span class="tag">${esc(SHELFNAME[c]||c)}${n?` <b>${n}</b>`:''}</span></button>`}).join('')});
+  const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';return}
+  box.hidden=false;box.className='shelfopen '+(SHELVES.caseL.includes(openShelf)?'fromL':'fromR');
+  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the shelf">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
+function shelfItemsHTML(c){
+  if(c==='Bottles to fill')return gatherButtons();
+  if(c==='Candles')return Object.keys(D.colours).map(k=>`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
+  if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:''}<span class="nm">${esc(t)}</span></button>`).join('');
+  const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
+  return D.items.filter(i=>i.c===c).map(i=>{
+    const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
+    const pic=ASSETS.items[i.n],bottle=shelf&&pic;
+    const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="width:${SHELF_BOTTLE_WIDTH}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
+    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
@@ -106,9 +126,10 @@ function renderAltar(){
   sel.innerHTML=S.ttype?'<option value="">Recipe\u2026</option>'+rs.filter(r=>r.type===S.ttype).sort((a,b)=>a.name.localeCompare(b.name)).map(r=>`<option value="${r.id}" ${String(r.id)===String(S.target)?'selected':''}>${esc(r.name)}</option>`).join(''):'<option value="">Recipe\u2026</option>';
   sel.disabled=!S.ttype;
   sel.value=S.target||'';
-  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="chip on" data-item="${esc(n)}">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="">`:''}${esc(n)} \u00D7</button>`).join(''):'<span class="muted">Tap ingredients in the cabinets to lay them here.</span>';
-  $('#candleSlot').innerHTML=S.candle?`<span class="swatch" style="display:inline-block;vertical-align:middle;background:${COLOURHEX[S.candle]}"></span> ${esc(S.candle)} candle <button class="chip" data-candle="${esc(S.candle)}">\u00D7</button>`:'<span class="muted">No candle</span>';
-  $('#tarotSlot').innerHTML=S.tarot?`${ASSETS.tarot[S.tarot]?`<img class="slotcard" src="${ASSETS.tarot[S.tarot]}" alt="">`:''}${esc(S.tarot)} <button class="chip" data-tarot="${esc(S.tarot)}">\u00D7</button>`:'<span class="muted">No card</span>';
+  /* what is laid out stands on the table; tap a thing to put it back */
+  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="">`:'<i class="minijar"></i>'}<span class="nm">${esc(n)}</span></button>`).join(''):'<span class="hint">Open a shelf and pick what to lay on the table.</span>';
+  $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="Put the candle back"><i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span></button>`:'<span class="hint">No candle</span>';
+  $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable" data-tarot="${esc(S.tarot)}" title="Put the card back">${ASSETS.tarot[S.tarot]?`<img class="slotcard" src="${ASSETS.tarot[S.tarot]}" alt="">`:''}<span class="nm">${esc(S.tarot)}</span></button>`:'<span class="hint">No card</span>';
   $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');

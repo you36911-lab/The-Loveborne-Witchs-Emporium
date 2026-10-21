@@ -7,7 +7,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
   if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;log(`Filled a bottle of ${n}.`);toast(`+1 ${n}`);render();return}
-  if(b.dataset.p){document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));document.querySelectorAll('.workshop>.panel').forEach(p=>p.classList.toggle('show',p.id===b.dataset.p));return}
+  /* a shelf row opens (or closes again); the open shelf has its own close button */
+  if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
+  if(b.dataset.closeshelf){openShelf='';renderShelves();return}
   switch(b.id){
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
@@ -101,3 +103,5 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
   ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
+/* Escape closes an open shelf in the workroom. */
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openShelf){openShelf='';renderShelves()}});
