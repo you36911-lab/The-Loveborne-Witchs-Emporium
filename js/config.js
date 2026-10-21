@@ -29,6 +29,7 @@ const ASSETS = {
   },
   /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
   altarRoom: 'assets/scene/altar-room.jpg',
+  logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon, the top bar, the day card at dawn */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
@@ -196,7 +197,24 @@ const ASSETS = {
     "Wheat":                "assets/items/wheat.png",
     "White lily":           "assets/items/white-lily.png",
     "Willow bark":          "assets/items/willow-bark.png",
-    "Wormwood":             "assets/items/wormwood.png"
+    "Wormwood":             "assets/items/wormwood.png",
+    /* animal gifts */
+    "Bee pollen":           "assets/items/bee-pollen.png",
+    "Dove feather":         "assets/items/dove-feather.png",
+    "Hedgehog quill":       "assets/items/hedgehog-quill.png",
+    "Honeycomb":            "assets/items/honeycomb.png",
+    "Magpie feather":       "assets/items/magpie-feather.png",
+    "Moth wing dust":       "assets/items/moth-wing-dust.png",
+    "Nest twig":            "assets/items/nest-twig.png",
+    "Owl feather":          "assets/items/owl-feather.png",
+    "Peacock feather":      "assets/items/peacock-feather.png",
+    "Raven feather":        "assets/items/raven-feather.png",
+    "Seashell":             "assets/items/seashell.png",
+    "Shed cat whisker":     "assets/items/shed-cat-whisker.png",
+    "Shed snake skin":      "assets/items/shed-snake-skin.png",
+    "Snail shell":          "assets/items/snail-shell.png",
+    "Swan down":            "assets/items/swan-down.png",
+    "White feather":        "assets/items/white-feather.png"
   }
 
 };

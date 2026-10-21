@@ -42,7 +42,7 @@ function fadeLight(key){const from=lightNow,to=LIGHT[key]||[1,1,1],t0=performanc
   fadeLight.raf=requestAnimationFrame(step)}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
-  $('#dayCard').innerHTML=`Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
+  $('#dayCard').innerHTML=`<img src="${ASSETS.logo}" alt="">Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. Bottles that can be filled are not pointed out here: the tutorial will
@@ -126,7 +126,7 @@ function renderShelves(){
   box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the cupboard">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
 function shelfItemsHTML(c){
   if(c==='Candles')return Object.keys(D.colours).map(k=>`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
-  if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:''}<span class="nm">${esc(t)}</span></button>`).join('');
+  if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
   /* the waters cupboard also keeps the empty bottles: the ones that can be filled right now show first */
   const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
@@ -152,7 +152,7 @@ function renderAltar(){
   /* what is laid out stands on the table; tap a thing to put it back */
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="">`:'<i class="minijar"></i>'}<span class="nm">${esc(n)}</span></button>`).join(''):'<span class="hint">Open a shelf and pick what to lay on the table.</span>';
   $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="Put the candle back"><i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span></button>`:'<span class="hint">No candle</span>';
-  $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable" data-tarot="${esc(S.tarot)}" title="Put the card back">${ASSETS.tarot[S.tarot]?`<img class="slotcard" src="${ASSETS.tarot[S.tarot]}" alt="">`:''}<span class="nm">${esc(S.tarot)}</span></button>`:'<span class="hint">No card</span>';
+  $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}">${ASSETS.tarot[S.tarot]?`<img class="slotcard" src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</button>`:'<span class="hint">No card</span>';
   $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');
