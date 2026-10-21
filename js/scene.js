@@ -121,7 +121,7 @@ function renderShelves(){
   document.querySelectorAll('#cubbies .cubby').forEach(d=>{const c=d.dataset.shelf,n=shelfOnTable(c),on=openShelf===c,b=d.querySelector('b');
     d.classList.toggle('open',on);d.setAttribute('aria-expanded',on);b.textContent=n||'';b.hidden=!n;if(on)side=d.dataset.side});
   const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';shownShelf='';return}
-  box.hidden=false;box.className='shelfopen from'+side;
+  box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
   if(shownShelf!==openShelf){box.style.animation='none';void box.offsetWidth;box.style.animation='';shownShelf=openShelf}
   box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the cupboard">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}

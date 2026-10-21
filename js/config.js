@@ -287,7 +287,22 @@ const ASSETS = {
     /* spices */
     "Cinnamon":             "assets/items/cinnamon.png",
     /* fruits */
-    "Beetroot powder":      "assets/items/beetroot-powder.png"
+    "Beetroot powder":      "assets/items/beetroot-powder.png",
+    /* spices */
+    "Allspice":             "assets/items/allspice.png",
+    "Bergamot":             "assets/items/bergamot.png",
+    "Black pepper":         "assets/items/black-pepper.png",
+    "Cardamom":             "assets/items/cardamom.png",
+    "Chili":                "assets/items/chili.png",
+    "Cinnamon stick":       "assets/items/cinnamon-stick.png",
+    "Clove":                "assets/items/clove.png",
+    "Fennel seed":          "assets/items/fennel-seed.png",
+    "Ginger":               "assets/items/ginger.png",
+    "Nutmeg":               "assets/items/nutmeg.png",
+    "Poppy seeds":          "assets/items/poppy-seeds.png",
+    "Saffron":              "assets/items/saffron.png",
+    "Star anise":           "assets/items/star-anise.png",
+    "Vanilla":              "assets/items/vanilla.png"
   }
 
 };
