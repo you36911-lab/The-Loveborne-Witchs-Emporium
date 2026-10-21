@@ -307,15 +307,16 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside summary::after{content:"";position:absolute;right:14px;top:50%;width:14px;height:14px;translate:0 -50%;border-radius:50%;
   background:radial-gradient(circle at 35% 35%,#FFF0BE,#C08A2E 60%,#7A5420);box-shadow:0 1px 2px rgba(0,0,0,.6)}
 .cabinside details[open]>summary{border-bottom:2px solid #3A2219}
-.cabinside .chips{background:#3B261C;padding:10px 8px;justify-content:center;border-radius:0 0 4px 4px;box-shadow:inset 0 4px 8px rgba(0,0,0,.5)}
+.cabinside .chips{align-items:flex-end;background:#3B261C;padding:10px 8px;justify-content:center;border-radius:0 0 4px 4px;box-shadow:inset 0 4px 8px rgba(0,0,0,.5)}
 /* each ingredient is a little glass jar */
 .cabinside .chip{background:linear-gradient(#FFFBF2,#F3E6D6);color:#3A2530;border:1px solid #C9A98C;border-radius:6px 6px 10px 10px;box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .cabinside .chip:hover{background:#FFF;box-shadow:0 0 8px #F4ADCF}
 .cabinside .chip.on{background:linear-gradient(#FBD9EA,#F4ADCF);box-shadow:0 0 10px #F4ADCF}
 .cabinside .chip:disabled{opacity:.35}
 /* Ingredients with a picture stand on the shelf with a little name tag; the stock count sits on the tag. */
-.cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:128px;padding:6px 3px 4px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:12px;line-height:1.15;text-align:center}
-.cabinside .chip.jar img{width:112px;height:112px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));transition:transform .15s}
+/* ingredients stand at their own sizes (--h, a share of a big bottle; see ITEM_SIZE in config.js), feet on one line */
+.cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;width:auto;min-width:96px;padding:6px 3px 4px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:12px;line-height:1.15;text-align:center}
+.cabinside .chip.jar img{width:auto;height:calc(var(--h,.7) * 160px);max-width:150px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));transition:transform .15s}
 .cabinside .chip.jar:hover{background:rgba(255,240,220,.08);box-shadow:none}
 .cabinside .chip.jar:hover img{transform:translateY(-3px) scale(1.06)}
 .cabinside .chip.jar .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 5px;max-width:100%}
@@ -327,7 +328,7 @@ button.small{font-size:12px;padding:2px 10px}
   background:repeating-linear-gradient(to bottom,transparent 0 191px,#8C5E46 191px 200px,rgba(0,0,0,.5) 200px 205px,transparent 205px 242px),#3B261C}
 .cabinside .chip.jar.vessel{width:118px;height:230px;justify-content:flex-start;padding:0 2px 4px;border-radius:0}
 .cabinside .chip.jar.vessel .pic{display:flex;align-items:flex-end;justify-content:center;width:100%;height:180px;flex:none;margin-bottom:22px}
-.cabinside .chip.jar.vessel img{width:auto;height:auto;object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
+.cabinside .chip.jar.vessel img{width:auto;height:calc(var(--h,.9) * 175px);max-width:116px;object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
 .cabinside .chip.jar.vessel:hover img{transform:translateY(-4px)}
 .cabinside .chip.jar.vessel.on{border-radius:8px 8px 0 0}
 
@@ -540,9 +541,18 @@ button.small{font-size:12px;padding:2px 10px}
 .plates{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1.2%}
 .ontable{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;cursor:pointer}
 .ontable:hover{background:rgba(255,190,225,.12);box-shadow:none}
-.ontable img{height:72%;width:auto;max-width:9cqw;object-fit:contain;object-position:bottom;filter:drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
+.ontable img{height:calc(var(--h,.7) * 92%);width:auto;max-width:9cqw;object-fit:contain;object-position:bottom;filter:drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .ontable .minijar{width:2.6cqw;height:4cqw}
 .ontable .nm{margin-top:.3cqw;padding:0 .5em;border-radius:3px;font-size:clamp(10px,.68cqw,14px);line-height:1.5;white-space:nowrap;color:#4A2A1C;background:#F6E7C9;box-shadow:0 1px 2px rgba(0,0,0,.4)}
+/* the tarot card lies flat on the table, tipped away from the viewer; an empty dashed outline marks its place */
+.ontable.laid{justify-content:flex-end}
+.cardbed{display:flex;align-items:center;justify-content:center;width:8.5cqw;aspect-ratio:420/722;margin-bottom:.4cqw;border-radius:.4cqw;
+  transform:perspective(30cqw) rotateX(55deg);transform-origin:50% 100%;transition:transform .25s;
+  box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
+.cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}
+.cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
+.ontable.laid:hover .cardbed{transform:perspective(30cqw) rotateX(47deg)}
+.ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.16)}
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}
 .candle::before{content:"";position:absolute;left:50%;top:-1.5cqw;width:.8cqw;height:1.4cqw;translate:-50% 0;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;

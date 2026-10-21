@@ -15,9 +15,28 @@ const PROTOTYPE_TOOLS = true;
 const DAWN_MS = 1800;
 
 /* Image files. Paths are relative to index.html. */
-/* Bottles and jars (waters, oils, butters and waxes) stand on cabinet shelves, each fitted inside this box in pixels:
-   a tall bottle stands its full height, a wide block of butter its full width. */
-const SHELF_BOTTLE_BOX = [112, 180];  /* width, height */
+/* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
+   as a water bottle. Nothing goes below 0.3, so the smallest things stay easy to see. An item not listed in ITEM_SIZE
+   takes its shelf's size. Used in the cupboards and on the table. */
+const ITEM_SIZE_BY_SHELF = {
+  "Base waters":0.95,"Oils, butters & waxes":0.85,"Herbs & flowers":0.6,"Fruits":0.7,"Spices":0.6,
+  "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.42,"Animal gifts":0.7
+};
+const ITEM_SIZE = {
+  "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.3,"Shea butter":0.45,
+  "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
+  "Epsom salt":0.85,"Flour":0.95,"Gold sprinkles":0.55,"Honey":0.6,"Milk":0.95,"Milk powder":0.7,"Oats":0.75,
+  "Pink salt":0.65,"Pink sprinkles":0.65,"Rainbow sprinkles":0.65,"Rice flour":0.9,"Rose clay":0.55,
+  "Sea salt":0.65,"Sugar":0.55,"Garden soil":1,"Hearth ash":0.6,"Eggshell":0.55,"Soap base":0.35,
+  "Soap base (charcoal)":0.35,"Gold mica":0.5,"Silver mica":0.5,"Silver glitter":0.55,"Pink glitter":0.55,
+  "Biodegradable glitter":0.55,"Black pepper":0.65,"Cinnamon":0.65,"Cinnamon stick":0.7,"Fennel seed":0.65,
+  "Saffron":0.5,"Vanilla":0.55,"Apple":0.65,"Raisins":0.6,"Beetroot powder":0.75,"Copal":0.65,"Frankincense":0.65,
+  "Patchouli":0.55,"Sandalwood":0.55,"Peacock feather":0.8,"Seashell":0.75,"Owl feather":0.75,
+  "White feather":0.75,"Nest twig":0.6,"Shed cat whisker":0.6,"Shed snake skin":0.65,"Moth wing dust":0.65,
+  "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.3,"River stone":0.35,"Selenite":0.5,"Clear quartz":0.48,
+  "Black tourmaline":0.48,"Smoky quartz":0.48,"Rose quartz":0.48,"Hematite":0.46,"Rhodonite":0.46,"Pyrite":0.46,
+  "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46
+};
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
   backgrounds: {
