@@ -77,7 +77,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .log{max-height:160px;overflow:auto;font-size:13px;color:var(--ink-soft);border-top:1px dashed var(--line);margin-top:10px;padding-top:6px}
 .swatch{width:26px;height:26px;border-radius:50% 50% 4px 4px;border:1px solid var(--line);padding:0;box-shadow:0 0 3px var(--pink)}
 .swatch.on{outline:3px solid var(--pink);outline-offset:2px}
-.modal{position:fixed;inset:0;background:color-mix(in srgb, #1A1430 50%, transparent);backdrop-filter:blur(2px);display:none;align-items:flex-start;justify-content:center;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 14px) 10px calc(env(safe-area-inset-bottom,0px) + 14px);overflow:auto}
+/* No backdrop blur: the shop keeps animating behind an open window, and re-blurring the whole screen every frame made books and pages stutter. */
+.modal{position:fixed;inset:0;background:color-mix(in srgb, #1A1430 62%, transparent);display:none;align-items:flex-start;justify-content:center;z-index:20;padding:calc(env(safe-area-inset-top,0px) + 14px) 10px calc(env(safe-area-inset-bottom,0px) + 14px);overflow:auto}
 .modal.open{display:flex}
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:8px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);padding:14px}
 .booktabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
