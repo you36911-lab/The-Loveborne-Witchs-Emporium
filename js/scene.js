@@ -12,7 +12,7 @@ function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   $('#bookStack').innerHTML=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
   /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
-  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
+  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom,ASSETS.cabinetInside].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
 }
 /* Two full-screen views, one above the other: the shop counter, and the altar below it.
    The down arrow slides the world up to show the altar; the up arrow slides it back. */
@@ -28,6 +28,7 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
+  room.style.setProperty('--inside-img',`url("${new URL(ASSETS.cabinetInside,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
    old hour's light to the new one over the same time the background takes to fade (1.2s in style.css). */

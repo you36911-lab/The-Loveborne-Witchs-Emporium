@@ -29,6 +29,7 @@ const ASSETS = {
   },
   /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
   altarRoom: 'assets/scene/altar-room.jpg',
+  cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon, the top bar, the day card at dawn */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   objects: {

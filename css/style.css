@@ -470,8 +470,8 @@ button.small{font-size:12px;padding:2px 10px}
    over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack onto the dark
    inside; the open cupboard's door swings wide on its hinge. */
 .cubbies{display:contents}
-/* inside a cupboard: dark */
-.cubby{--inside:radial-gradient(ellipse 90% 80% at 50% 40%,#160C10,#070405 85%)}
+/* inside a cupboard: the picture of an empty cupboard (ASSETS.cabinetInside), stretched to the door */
+.cubby{--inside:var(--inside-img,none) center/100% 100% no-repeat,#120A0D}
 .cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
   background:var(--inside);
   transition:box-shadow .2s}
