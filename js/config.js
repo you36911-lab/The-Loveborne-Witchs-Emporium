@@ -246,7 +246,46 @@ const ASSETS = {
     "Smoky quartz":         "assets/items/smoky-quartz.png",
     "Sunstone":             "assets/items/sunstone.png",
     "Tiger's eye":          "assets/items/tigers-eye.png",
-    "River stone":          "assets/items/river-stone.png"
+    "River stone":          "assets/items/river-stone.png",
+    /* pantry */
+    "Baking soda":          "assets/items/baking-soda.png",
+    "Black salt":           "assets/items/black-salt.png",
+    "Chocolate chips":      "assets/items/chocolate-chips.png",
+    "Cocoa":                "assets/items/cocoa.png",
+    "Coconut milk powder":  "assets/items/coconut-milk-powder.png",
+    "Epsom salt":           "assets/items/epsom-salt.png",
+    "Flour":                "assets/items/flour.png",
+    "Gold sprinkles":       "assets/items/gold-sprinkles.png",
+    "Honey":                "assets/items/honey.png",
+    "Milk":                 "assets/items/milk.png",
+    "Milk powder":          "assets/items/milk-powder.png",
+    "Oats":                 "assets/items/oats.png",
+    "Pink salt":            "assets/items/pink-salt.png",
+    "Pink sprinkles":       "assets/items/pink-sprinkles.png",
+    "Rainbow sprinkles":    "assets/items/rainbow-sprinkles.png",
+    "Rice flour":           "assets/items/rice-flour.png",
+    "Rose clay":            "assets/items/rose-clay.png",
+    "Sea salt":             "assets/items/sea-salt.png",
+    "Sugar":                "assets/items/sugar.png",
+    "Garden soil":          "assets/items/garden-soil.png",
+    "Hearth ash":           "assets/items/hearth-ash.png",
+    "Eggshell":             "assets/items/eggshell.png",
+    "Soap base":            "assets/items/soap-base.png",
+    "Soap base (charcoal)": "assets/items/soap-base-charcoal.png",
+    "Gold mica":            "assets/items/gold-mica.png",
+    "Silver mica":          "assets/items/silver-mica.png",
+    "Silver glitter":       "assets/items/silver-glitter.png",
+    "Pink glitter":         "assets/items/pink-glitter.png",
+    "Biodegradable glitter":"assets/items/biodegradable-glitter.png",
+    /* resins & incense */
+    "Amber resin":          "assets/items/amber-resin.png",
+    "Copal":                "assets/items/copal.png",
+    "Frankincense":         "assets/items/frankincense.png",
+    "Myrrh":                "assets/items/myrrh.png",
+    "Patchouli":            "assets/items/patchouli.png",
+    "Sandalwood":           "assets/items/sandalwood.png",
+    /* spices */
+    "Cinnamon":             "assets/items/cinnamon.png"
   }
 
 };
