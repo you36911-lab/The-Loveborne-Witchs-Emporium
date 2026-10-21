@@ -302,7 +302,18 @@ const ASSETS = {
     "Poppy seeds":          "assets/items/poppy-seeds.png",
     "Saffron":              "assets/items/saffron.png",
     "Star anise":           "assets/items/star-anise.png",
-    "Vanilla":              "assets/items/vanilla.png"
+    "Vanilla":              "assets/items/vanilla.png",
+    /* fruits */
+    "Lemon":                "assets/items/lemon.png",
+    "Lemon peel":           "assets/items/lemon-peel.png",
+    "Lime peel":            "assets/items/lime-peel.png",
+    "Orange":               "assets/items/orange.png",
+    "Orange peel":          "assets/items/orange-peel.png",
+    "Peach":                "assets/items/peach.png",
+    "Pomegranate seeds":    "assets/items/pomegranate-seeds.png",
+    "Rose hips":            "assets/items/rose-hips.png",
+    "Strawberry":           "assets/items/strawberry.png",
+    "Raisins":              "assets/items/raisins.png"
   }
 
 };
