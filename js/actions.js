@@ -82,7 +82,13 @@ function nextHour(auto){
   if(S.h<3){S.h++;render();return}
   endDay()}
 const stars=n=>'\u2605'.repeat(n)+'\u2606'.repeat(5-n);
-function receiptHTML(x){return `<div class="receipt"><div class="rh">The Loveborne Witch\u2019s Emporium</div><div>Day ${S.day} \u00B7 ${esc(x.hour)}</div><hr><div><b>${esc(x.who||'A customer')}</b></div><div>${esc(x.item||'')}</div><div class="rs" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</div></div>`}
+/* A receipt is written by hand on the shop's printed slip (ASSETS.receipt), one thing per ruled line (--r counts the lines):
+   what was sold, to whom, the stars, and when. */
+function receiptHTML(x){const who=(x.who||'a customer').replace(/^A(n?) /,'a$1 ');
+  return `<div class="receipt" style="background-image:url('${ASSETS.receipt}')">`+
+    `<span class="ln" style="--r:0">${esc(x.item||'')}</span><span class="ln who" style="--r:1">for ${esc(who)}</span>`+
+    `<span class="ln rs" style="--r:3" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
+    `<span class="ln when" style="--r:10">Day ${S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
   reviews.forEach(x=>S.hist.push(SCORE[x.g]));S.hist=S.hist.slice(-20);const after=rating();
   const body=$('#dayEndBody');

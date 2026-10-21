@@ -224,10 +224,13 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe.locked{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
 .muted{color:var(--ink-soft)}
 .receipts{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}
-.receipt{font-family:'Courier New',monospace;font-size:13px;background:#FFFDF7;color:#2B2233;border:1px dashed #8C7FA3;padding:8px 10px;width:220px;box-shadow:0 0 3px var(--pink)}
-.receipt hr{border:0;border-top:1px dashed #8C7FA3;margin:5px 0}
-.receipt .rh{font-weight:bold;text-align:center}
-.receipt .rs{color:#C2456B;font-size:16px;letter-spacing:1px;margin-top:4px}
+/* a receipt: the shop's printed slip, filled in by hand on its ruled lines (the first at 33.4% down, one every 3.9%) */
+.receipt{position:relative;width:280px;aspect-ratio:483/642;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
+  box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Caveat',cursive;color:#3D2A5C}
+.receipt .ln{position:absolute;left:9%;right:9%;bottom:calc(100% - 33.4% - var(--r) * 3.9%);font-size:18px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt .who{left:13%;font-size:16px}
+.receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:16px;letter-spacing:2px}
+.receipt .when{text-align:right;font-size:15px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:4px;padding:6px 10px;z-index:25;box-shadow:0 0 3px var(--pink);white-space:nowrap}
 .autobar[hidden]{display:none}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
@@ -459,11 +462,11 @@ button.small{font-size:12px;padding:2px 10px}
 .hint{color:#FFEAF4;text-shadow:0 1px 2px rgba(40,5,30,.9);font-size:clamp(12px,.8cqw,16px)}
 
 /* The cabinet doors. Each .cubby is the dark inside of a cupboard; its .door is a slice of the room picture laid exactly
-   over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack with light behind
-   it; the open cupboard's door swings wide on its hinge. */
+   over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack onto the dark
+   inside; the open cupboard's door swings wide on its hinge. */
 .cubbies{display:contents}
-/* inside a cupboard: a shelf board in pink light */
-.cubby{--inside:linear-gradient(transparent 64%,#5A3328 64%,#3A1E1A 69%,rgba(0,0,0,.35) 69%,transparent 76%),radial-gradient(ellipse 80% 70% at 50% 45%,rgba(255,170,215,.55),rgba(120,40,90,.25) 55%,transparent 80%),linear-gradient(#170B12,#2A1520)}
+/* inside a cupboard: dark */
+.cubby{--inside:radial-gradient(ellipse 90% 80% at 50% 40%,#160C10,#070405 85%)}
 .cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
   background:var(--inside);
   transition:box-shadow .2s}

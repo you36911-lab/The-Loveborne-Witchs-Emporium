@@ -29,6 +29,7 @@ const ASSETS = {
   },
   /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
   altarRoom: 'assets/scene/altar-room.jpg',
+  receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
     'till':         'assets/scene/till.png',
@@ -70,7 +71,24 @@ const ASSETS = {
     'Noor Haddad':               'assets/characters/noor-haddad.png',
     'Rosalind Larkin':           'assets/characters/rosalind-larkin.png',
     /* walk-ins, by how story.js names them (only pictures whose file was named for the person) */
-    'An exhausted bookshop owner':              'assets/characters/exhausted-bookshop-owner.png'
+    'An exhausted bookshop owner':            'assets/characters/exhausted-bookshop-owner.png',
+    'A couple holding hands':                 'assets/characters/couple-holding-hands.png',
+    'A night-shift nurse':                    'assets/characters/night-shift-nurse.png',
+    'A woman with smudged mascara':           'assets/characters/woman-with-smudged-mascara.png',
+    'A drowsy night-bus driver':              'assets/characters/drowsy-night-bus-driver.png',
+    'A novelist with a blank page':           'assets/characters/novelist-with-a-blank-page.png',
+    'A nervous witness':                      'assets/characters/nervous-witness.png',
+    'A first-time homeowner':                 'assets/characters/first-time-homeowner.png',
+    'A worried allotment keeper':             'assets/characters/worried-allotment-keeper.png',
+    'A bored teenager':                       'assets/characters/bored-teenager.png',
+    'A shy young man':                        'assets/characters/shy-young-man.png',
+    'A mother with a school bag':             'assets/characters/mother-with-a-school-bag.png',
+    'A father with a pushchair':              'assets/characters/father-with-a-pushchair.png',
+    'An aspiring influencer':                 'assets/characters/aspiring-influencer.png',
+    'A learner driver':                       'assets/characters/learner-driver.png',
+    'A woman who keeps dating the same man':  'assets/characters/woman-who-keeps-dating-the-same-man.png',
+    'A young poet':                           'assets/characters/young-poet.png',
+    'A first-year student':                   'assets/characters/first-year-student.png'
   },
   /* Tarot cards (Major Arcana), by name: shown in the Tarot Companion, the Cabinet and the altar's card slot. */
   tarot: {
