@@ -114,7 +114,7 @@ function buildDoors(){const pc=(v,of)=>(v/of*100).toFixed(3);
   $('#cubbies').innerHTML=SHELVES.map((row,r)=>row.map((c,k)=>{const [x,w,hinge,px]=DOOR_COLS[k],[y,h,py]=DOOR_ROWS[r];
     return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" title="${esc(SHELFNAME[c]||c)}" `+
       `style="left:${pc(x,ROOM_W)}%;top:${pc(y,ROOM_H)}%;width:${pc(w,ROOM_W)}%;height:${pc(h,ROOM_H)}%;--x:${pc(x,ROOM_W)};--y:${pc(y,ROOM_H)}">`+
-      `<span class="door"><span class="plate" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%">${esc(PLATE[c])}</span><b class="count" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%" hidden></b></span></button>`}).join('')).join('')}
+      `<span class="door"><span class="face"><span class="plate" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%">${esc(PLATE[c])}</span><b class="count" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%" hidden></b></span><span class="edge"></span></span></button>`}).join('')).join('')}
 function renderShelves(){
   if(!$('#cubbies').childElementCount)buildDoors();
   let side='L';
