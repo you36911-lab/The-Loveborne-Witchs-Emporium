@@ -46,19 +46,20 @@ const ASSETS = {
   },
   /* Each book: its closed cover, the open spread, and the colour of its paper (for the page that turns).
      `page` is where the paper sits inside the spread, in % of its size: top, outer edge, bottom.
-     A book with no cover picture yet gets a plain cover in `color` with its title in `ink`. */
+     A book with no cover picture yet gets a plain cover in `color` with its title in `ink`;
+     with no open picture (`open:''`), the spread is drawn: boards in `color`, pages in `paper`. */
   books: {
     'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F3F6E5', page:[4.4,6,5.3]},
     'Book of Making':           {cover:'assets/books/book-of-making-cover.png',         open:'assets/books/book-of-making-open.png',         paper:'#F9F7E6', page:[1.5,3.8,3]},
     'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F3E5CA', page:[1.5,3.9,3]},
     'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F3F5E7', page:[1.5,3.8,3]},
     'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F4F5E5', page:[1.5,3.8,3]},
-    'Herbiary':                 {cover:'', color:'#5B3A26', ink:'#E9C77B',               open:'assets/books/herbiary-open.png',               paper:'#EFE8CD', page:[1.5,4,3]},
-    'Crystal Almanac':          {cover:'', color:'linear-gradient(135deg,#F4F1FA,#DCE9F5 40%,#F6DDEB 75%,#E6F3EC)', ink:'#6B5A86', open:'assets/books/crystal-almanac-open.png', paper:'#F0F4E1', page:[1.5,3.8,3]},
-    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'assets/books/gentle-bestiary-open.png',        paper:'#F5F7E9', page:[1.5,3.8,3]}
+    'Herbiary':                 {cover:'', color:'#5B3A26', ink:'#E9C77B',               open:'', paper:'#EFE8CD', page:[1.5,4,3]},
+    'Crystal Almanac':          {cover:'', color:'linear-gradient(135deg,#F4F1FA,#DCE9F5 40%,#F6DDEB 75%,#E6F3EC)', ink:'#6B5A86', open:'', paper:'#F0F4E1', page:[1.5,3.8,3]},
+    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'', paper:'#F5F7E9', page:[1.5,3.8,3]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
-     Walk-ins are listed by how story.js names them. Anyone not listed here (Hester, Sam Okafor for now) is not drawn. */
+     Anyone not listed here (most walk-ins, Hester, Sam Okafor for now) is not drawn. */
   characters: {
     'Dottie Plum':               'assets/characters/dottie-plum.png',
     'Edmund Thorne':             'assets/characters/edmund-thorne.png',
@@ -68,25 +69,8 @@ const ASSETS = {
     'Morwenna Hale':             'assets/characters/morwenna-hale.png',
     'Noor Haddad':               'assets/characters/noor-haddad.png',
     'Rosalind Larkin':           'assets/characters/rosalind-larkin.png',
-    /* walk-ins (week one) */
-    'A first-year student':                     'assets/characters/first-year-student.png',
-    'A night-shift nurse':                      'assets/characters/night-shift-nurse.png',
-    'An exhausted bookshop owner':              'assets/characters/exhausted-bookshop-owner.png',
-    'A young poet':                             'assets/characters/young-poet.png',
-    'A father with a pushchair':                'assets/characters/father-with-pushchair.png',
-    'A woman who keeps dating the same man':    'assets/characters/woman-dating-same-man.png',
-    'A learner driver':                         'assets/characters/learner-driver.png',
-    'A woman with smudged mascara':             'assets/characters/woman-smudged-mascara.png',
-    'An aspiring influencer':                   'assets/characters/aspiring-influencer.png',
-    'A nervous witness':                        'assets/characters/nervous-witness.png',
-    'A novelist with a blank page':             'assets/characters/novelist-blank-page.png',
-    'A drowsy night-bus driver':                'assets/characters/night-bus-driver.png',
-    'A worried allotment keeper':               'assets/characters/allotment-keeper.png',
-    'A first-time homeowner':                   'assets/characters/first-time-homeowner.png',
-    'A bored teenager':                         'assets/characters/bored-teenager.png',
-    'A mother with a school bag':               'assets/characters/mother-school-bag.png',
-    'A shy young man':                          'assets/characters/shy-young-man.png',
-    'A couple holding hands':                   'assets/characters/couple-holding-hands.png'
+    /* walk-ins, by how story.js names them (only pictures whose file was named for the person) */
+    'An exhausted bookshop owner':              'assets/characters/exhausted-bookshop-owner.png'
   },
   /* Tarot cards (Major Arcana), by name: shown in the Tarot Companion, the Cabinet and the altar's card slot. */
   tarot: {

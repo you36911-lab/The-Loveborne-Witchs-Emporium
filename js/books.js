@@ -88,9 +88,11 @@ function pageHTML(pages,i){const p=pages[i];if(!p)return '';
     `<div class="pbody">${p.html()}</div><div class="pnum">${i+1}</div>`}
 /* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
 function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
-  img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open;
+  /* no open picture yet: the spread is drawn in CSS from the book's colour and paper */
+  if(a.open){tome.removeAttribute('data-drawn');img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open}
+  else{tome.dataset.drawn='';img.onload=null;img.removeAttribute('src');tome.style.setProperty('--ar',1.42);tome.style.setProperty('--book-bg',a.color)}
   [['--pt',0],['--po',1],['--pb',2]].forEach(([v,i])=>tome.style.setProperty(v,a.page[i]+'%'));tome.style.setProperty('--paper-c',a.paper);
-  const [front,back]=$('#cover').children;back.style.backgroundImage=`url("${a.open}")`;
+  const [front,back]=$('#cover').children;back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
   if(a.cover){front.style.background='';front.style.backgroundImage=`url("${a.cover}")`;front.innerHTML='';front.className='face front'}
   else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
   $('#cover').setAttribute('aria-label','Open the '+curBook)}

@@ -494,3 +494,21 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside .chip.card .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 4px;max-width:100%}
 .cabinside .chip.card.on{background:rgba(244,173,207,.22);border-color:#F4ADCF;box-shadow:0 0 12px #F4ADCF}
 .slotcard{height:2.2em;width:auto;border-radius:3px;vertical-align:middle;margin-right:6px;box-shadow:0 1px 3px rgba(0,0,0,.35)}
+
+/* A book with no open-spread picture yet: the spread is drawn. Boards in the book's colour (--book-bg), two pages of its
+   paper (--paper-c) with a shadow in the fold. It opens like the picture does: hidden while closed, the right half while
+   the cover swings, all of it once open. */
+.tome[data-drawn] .spread{display:none}
+.tome[data-drawn]::before{content:"";position:absolute;inset:0;border-radius:10px;background:var(--book-bg,#7A4E3A);
+  box-shadow:0 10px 18px rgba(30,10,40,.45),inset 0 0 0 2px rgba(0,0,0,.25);clip-path:inset(0 0 0 50%);opacity:0;transition:opacity .3s}
+.tome[data-drawn]::after{content:"";position:absolute;top:var(--pt,1.5%);bottom:var(--pb,3%);left:var(--po,3.8%);right:var(--po,3.8%);border-radius:3px;
+  background:linear-gradient(90deg,rgba(0,0,0,.06),transparent 6%,transparent 44%,rgba(60,30,30,.16) 50%,transparent 56%,transparent 94%,rgba(0,0,0,.06)) var(--paper-c,#F6F3E6);
+  box-shadow:0 0 0 1px rgba(0,0,0,.15);clip-path:inset(0 0 0 50%);opacity:0;transition:opacity .3s}
+.tome[data-drawn].open::before,.tome[data-drawn].open::after{opacity:1}
+.tome[data-drawn].opened::before,.tome[data-drawn].opened::after{clip-path:none}
+/* the inside of the cover, as it lands on the left: the board with the first page on it */
+.cover .back.drawn{background:var(--book-bg,#7A4E3A)}
+.cover .back.drawn::after{content:"";position:absolute;top:var(--pt,1.5%);bottom:var(--pb,3%);left:0;right:calc(var(--po,3.8%) * 2);background:var(--paper-c,#F6F3E6)}
+/* the drawn spread stays underneath the pages and the cover */
+.tome[data-drawn]::before,.tome[data-drawn]::after{z-index:0}
+.tome .pg,.tome .cover{z-index:1}
