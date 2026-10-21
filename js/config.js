@@ -15,9 +15,9 @@ const PROTOTYPE_TOOLS = true;
 const DAWN_MS = 1800;
 
 /* Image files. Paths are relative to index.html. */
-/* Bottles and jars (waters, oils, butters and waxes) stand on cabinet shelves, all drawn this wide in pixels,
-   so a tall bottle stands taller than a squat jar. */
-const SHELF_BOTTLE_WIDTH = 84;
+/* Bottles and jars (waters, oils, butters and waxes) stand on cabinet shelves, each fitted inside this box in pixels:
+   a tall bottle stands its full height, a wide block of butter its full width. */
+const SHELF_BOTTLE_BOX = [112, 180];  /* width, height */
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
   backgrounds: {

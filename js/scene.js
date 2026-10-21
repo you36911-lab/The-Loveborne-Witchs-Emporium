@@ -134,7 +134,7 @@ function shelfItemsHTML(c){
   return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
     const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
-    const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="width:${SHELF_BOTTLE_WIDTH}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
+    const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="max-width:${SHELF_BOTTLE_BOX[0]}px;max-height:${SHELF_BOTTLE_BOX[1]}px"></span>`:`<img src="${pic}" alt="" loading="lazy">`;
     return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
