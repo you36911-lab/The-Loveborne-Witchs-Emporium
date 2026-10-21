@@ -89,10 +89,10 @@ const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightf
  ['Web Dew',()=>HOURS[S.h]==='Sunrise'&&today().weather==='Fog / Mist','Sunrise, mist']];
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
    swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
-   off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg, 1266×712). The bottom row
+   off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg, 1376×768). The bottom row
    of doors is hidden behind the table, so it stays shut. */
-const ROOM_W=1266,ROOM_H=712;
-const DOOR_COLS=[[160,125,'l',221.5],[305,126,'r',368],[835,126,'l',898.5],[981,125,'r',1045.5]];  /* left, width, hinge side, label centre */
+const ROOM_W=1376,ROOM_H=768;
+const DOOR_COLS=[[214,125,'l',275.5],[359,126,'r',422],[889,126,'l',952.5],[1035,125,'r',1099.5]];  /* left, width, hinge side, label centre */
 const DOOR_ROWS=[[110,109,163],[226,102,276],[334,96,380],[433,94,478]];                          /* top, height, label centre */
 /* row by row, door by door: the left cabinet holds the kitchen things, the right one the rest */
 const SHELVES=[['Herbs & flowers','Spices','Candles','Tarot'],
