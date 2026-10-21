@@ -23,13 +23,23 @@ function setView(v){goTo(v);render()}
    The workroom below has its own picture (ASSETS.altarRoom). */
 let bgNow='',bgTop='bgA',dawnUntil=0;
 function setBackground(key){if(key===bgNow)return;bgNow=key;
-  /* The lighting can't fade, so it changes halfway through the background's fade. See style.css. */
-  clearTimeout(setBackground.t);setBackground.t=setTimeout(()=>{$('#scene').dataset.light=key},600);
+  fadeLight(key);
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
+/* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
+   old hour's light to the new one over the same time the background takes to fade (1.2s in style.css). */
+const LIGHT={Dawn:[.88,.88,1.02],Sunrise:[1,.93,.91],Twilight:[.95,.85,.88],Nightfall:[.9,.8,.86]},LIGHT_FADE_MS=1200;
+let lightNow=[1,1,1];
+function fadeLight(key){const from=lightNow,to=LIGHT[key]||[1,1,1],t0=performance.now();
+  cancelAnimationFrame(fadeLight.raf);
+  const step=t=>{const k=Math.min(1,(t-t0)/LIGHT_FADE_MS),e=k*k*(3-2*k);  /* eased like the background */
+    lightNow=from.map((v,i)=>+(v+(to[i]-v)*e).toFixed(3));
+    $('#lightMatrix').setAttribute('values',`${lightNow[0]} 0 0 0 0  0 ${lightNow[1]} 0 0 0  0 0 ${lightNow[2]} 0 0  0 0 0 1 0`);
+    if(k<1)fadeLight.raf=requestAnimationFrame(step)};
+  fadeLight.raf=requestAnimationFrame(step)}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
@@ -82,17 +92,17 @@ const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightf
    off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg, 1266×712). The bottom row
    of doors is hidden behind the table, so it stays shut. */
 const ROOM_W=1266,ROOM_H=712;
-const DOOR_COLS=[[160,125,'l'],[305,126,'r'],[835,126,'l'],[981,125,'r']];  /* left, width, hinge side */
-const DOOR_ROWS=[[110,109],[226,102],[334,96],[433,94]];                    /* top, height */
+const DOOR_COLS=[[160,125,'l',221.5],[305,126,'r',368],[835,126,'l',898.5],[981,125,'r',1045.5]];  /* left, width, hinge side, label centre */
+const DOOR_ROWS=[[110,109,163],[226,102,276],[334,96,380],[433,94,478]];                          /* top, height, label centre */
 /* row by row, door by door: the left cabinet holds the kitchen things, the right one the rest */
 const SHELVES=[['Herbs & flowers','Spices','Candles','Tarot'],
   ['Fruits','Pantry: salts, sugars & baking','Crystals','Animal gifts'],
   ['Base waters','Oils, butters & waxes','Buttons','Threads & ribbons'],
   ['Resins & incense','Inks & paints','Wood & branches','Findings & tools']];
-/* the word on each door's label; the open cupboard shows the full name */
+/* the word written on each door's painted label (short, the paper is small); the open cupboard shows the full name */
 const PLATE={'Herbs & flowers':'Herbs','Spices':'Spices','Fruits':'Fruits','Pantry: salts, sugars & baking':'Pantry','Base waters':'Waters',
-  'Oils, butters & waxes':'Oils & Waxes','Resins & incense':'Resins','Inks & paints':'Inks & Paints','Candles':'Candles','Tarot':'Tarot',
-  'Crystals':'Crystals','Animal gifts':'Animal Gifts','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
+  'Oils, butters & waxes':'Oils','Resins & incense':'Resins','Inks & paints':'Inks','Candles':'Candles','Tarot':'Tarot',
+  'Crystals':'Crystals','Animal gifts':'Critters','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
 const SHELFNAME={'Base waters':'Waters & bottles','Tarot':'Tarot cards'};
 let openShelf='',shownShelf='';
 /* how many things from this cupboard are on the table now */
@@ -100,10 +110,10 @@ function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')ret
   return D.items.filter(i=>i.c===c&&S.altar.includes(i.n)).length}
 /* The doors are made once (so they can swing); after that only their open state and counts change. */
 function buildDoors(){const pc=(v,of)=>(v/of*100).toFixed(3);
-  $('#cubbies').innerHTML=SHELVES.map((row,r)=>row.map((c,k)=>{const [x,w,hinge]=DOOR_COLS[k],[y,h]=DOOR_ROWS[r];
-    return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" `+
+  $('#cubbies').innerHTML=SHELVES.map((row,r)=>row.map((c,k)=>{const [x,w,hinge,px]=DOOR_COLS[k],[y,h,py]=DOOR_ROWS[r];
+    return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" title="${esc(SHELFNAME[c]||c)}" `+
       `style="left:${pc(x,ROOM_W)}%;top:${pc(y,ROOM_H)}%;width:${pc(w,ROOM_W)}%;height:${pc(h,ROOM_H)}%;--x:${pc(x,ROOM_W)};--y:${pc(y,ROOM_H)}">`+
-      `<span class="door"><span class="plate">${esc(PLATE[c])}<b hidden></b></span></span></button>`}).join('')).join('')}
+      `<span class="door"><span class="plate" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%">${esc(PLATE[c])}</span><b class="count" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%" hidden></b></span></button>`}).join('')).join('')}
 function renderShelves(){
   if(!$('#cubbies').childElementCount)buildDoors();
   let side='L';

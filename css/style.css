@@ -101,14 +101,10 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
 .scene .bg.on{opacity:1}
 /* Lighting: the objects and the customer take on the light inside the shop at each hour (not the sky outside).
-   The filters are in index.html: each scales red, green and blue by what the tablecloth and shelves
-   measure in that hour's background compared with Noon. The filter sits on the pictures only,
-   so the hover glow on the buttons stays bright. */
-.scene{--light:brightness(1)}
-.scene[data-light="Dawn"]{--light:url(#light-Dawn)}
-.scene[data-light="Sunrise"]{--light:url(#light-Sunrise)}
-.scene[data-light="Twilight"]{--light:url(#light-Twilight)}
-.scene[data-light="Nightfall"]{--light:url(#light-Nightfall)}
+   The filter (#light in index.html) scales red, green and blue by what the tablecloth and shelves measure in that
+   hour's background compared with Noon (LIGHT in scene.js); it fades along with the background. The filter sits on
+   the pictures only, so the hover glow on the buttons stays bright. */
+.scene{--light:url(#light)}
 .scene .obj img,.scene .customer img{filter:var(--light)}
 .daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
   font-family:var(--font-title);font-size:clamp(40px,6.5vw,88px);line-height:1;text-shadow:0 0 6px #F4ADCF,0 2px 14px rgba(40,10,50,.8);pointer-events:none;
@@ -482,19 +478,16 @@ button.small{font-size:12px;padding:2px 10px}
 .hinge-l.open .door{transform:rotateY(-68deg);filter:brightness(.8)}
 .hinge-r.open .door{transform:rotateY(68deg);filter:brightness(.8)}
 @media (prefers-reduced-motion:reduce){.door{transition:filter .2s}}
-/* the brass label on the door, with the cupboard's name; the pink count is how many of its things are on the table */
-.plate{position:absolute;left:49.5%;top:48.5%;translate:-50% -50%;width:5.4cqw;height:1.75cqw;display:flex;align-items:center;justify-content:center;
-  box-sizing:border-box;border:.16cqw solid #8C6A3E;border-radius:.2cqw;background:linear-gradient(#F6ECD6,#E2CDA3);
-  box-shadow:inset 0 0 0 .07cqw #E8CF96,0 .12cqw .25cqw rgba(0,0,0,.55);
-  font-family:var(--font-deco);font-size:max(9px,.66cqw);line-height:1;color:#3B2416;white-space:nowrap;letter-spacing:.01em}
-.plate::before,.plate::after{content:"";position:absolute;top:50%;width:.55cqw;height:.55cqw;translate:0 -50%;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,#E8CF96,#8C6A3E 70%)}
-.plate::before{left:-.5cqw}
-.plate::after{right:-.5cqw}
-.cubby:hover .plate,.cubby:focus-visible .plate{color:#5A1E3E;box-shadow:inset 0 0 0 .07cqw #E8CF96,0 0 .8cqw rgba(255,190,225,.7)}
-.plate b{position:absolute;top:-.75cqw;right:-.9cqw;min-width:1.15cqw;height:1.15cqw;padding:0 .2cqw;box-sizing:border-box;border-radius:999px;
-  display:flex;align-items:center;justify-content:center;background:var(--pink);color:#2A1520;font:700 max(9px,.62cqw)/1 var(--font-text);box-shadow:0 1px 2px rgba(0,0,0,.5)}
-.plate b[hidden]{display:none}
+/* The cupboard's name, written in ink on the paper of the door's painted label (the label itself is the picture's own).
+   Multiply lets the paper's shading show through the letters. The pink count is how many of its things are on the table. */
+.plate{position:absolute;translate:-50% -50%;width:2.5cqw;height:1.7cqh;display:flex;align-items:center;justify-content:center;
+  font-family:'IM Fell English',Georgia,serif;font-size:.62cqw;line-height:1;letter-spacing:-.01em;white-space:nowrap;
+  color:#2E1A10;opacity:.9;mix-blend-mode:multiply}
+.cubby:hover .plate,.cubby:focus-visible .plate{color:#4A1430}
+.door .count{position:absolute;translate:-50% -50%;margin:-1.1cqw 0 0 2.55cqw;min-width:1.1cqw;height:1.1cqw;padding:0 .2cqw;box-sizing:border-box;border-radius:999px;
+  display:flex;align-items:center;justify-content:center;background:var(--pink);color:#2A1520;font:700 max(9px,.6cqw)/1 var(--font-text);
+  box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.door .count[hidden]{display:none}
 .minijar{display:inline-block;width:1.3cqw;height:2cqw;border-radius:30% 30% 22% 22%;background:linear-gradient(90deg,rgba(255,255,255,.35),rgba(200,220,235,.25) 40%,rgba(255,255,255,.12));
   border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 .45cqw 0 -.15cqw #9C6B4E}
 
