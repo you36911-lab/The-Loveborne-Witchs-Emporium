@@ -85,7 +85,7 @@ On the counter, every object glows on hover and does something:
 - Shop background as a clean plate (shelves, windows, door, table). Interactive objects (till, computer, bell, crystal ball, open book, door) are separate transparent PNG layers with hover glow.
 - Window view as its own layer so it can change with hour, season and weather.
 - Remove brand logos (the computer's Apple logo). Aim for 1920×1080 or larger.
-- Interface look follows The Loveborne Girls' Coven (loosely): twilight-sky page with small stars, cream paper panels with a soft glow, thin rose-pink lines, hearts around window titles, pink pill buttons. Fonts: Great Vibes (script) for big titles, Xanh Mono (typewriter) for buttons and labels, Nunito for reading text. Dark mode is the same look at night.
+- Interface look: clean and cozy. Cream panels with soft shadows (no glows), thin solid lines, rounded corners, deep plum text and one berry accent (main buttons, selected tabs, keywords); twilight-sky page with small stars, hearts around window titles. Fonts: Cormorant Garamond (serif) for titles, names and book entries; Nunito for reading text and, bolder, for buttons and labels; Great Vibes (script) only for the day card at dawn; Caveat for handwriting on receipts; IM Fell English for the ink on the cabinet labels. Dark mode is the same look at night.
 
 ## Glamour forms
 
