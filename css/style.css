@@ -311,8 +311,8 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon .asked{font-size:14px;color:var(--ink-soft)}
 .balloon .tale{background:none;padding:0}
 /* the tail: two triangles (border colour, then fill) on the left edge */
-.balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:44px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
-.balloon::after{left:-25px;top:47px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
+.balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:auto;bottom:14px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
+.balloon::after{left:-25px;bottom:17px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
 .dialogue .row{margin-top:10px}
 /* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
 .coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}
@@ -347,7 +347,8 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside .chip.jar:hover{background:rgba(255,240,220,.08);box-shadow:none}
 .cabinside .chip.jar:hover img{transform:translateY(-3px) scale(1.06)}
 .cabinside .chip.jar .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 5px;max-width:100%}
-.cabinside .chip.jar .n{margin-left:0;color:#E9C9A8}
+.cabinside .bot{position:relative;display:inline-block;line-height:0}
+.cabinside .badge.stock{position:absolute;top:-4px;right:-10px;margin:0;line-height:22px;height:22px;min-width:22px;font-size:13px;box-shadow:0 1px 3px rgba(0,0,0,.5)}
 .cabinside .chip.jar.on{background:rgba(244,173,207,.22);border-color:#F4ADCF;box-shadow:0 0 12px #F4ADCF}
 /* Bottles and jars: all the same width, so tall bottles stand tall; bottom-aligned, each centred. Tiles are a fixed height so
    the rows line up. (In an open cupboard the planks drawn behind them are switched off.) */
@@ -570,7 +571,8 @@ button.small{font-size:12px;padding:2px 10px}
 /* the open cupboard: everything inside it, between the cabinets; it comes out of the door that opened */
 .shelfopen{position:absolute;top:max(13%,calc(100% - 100vh + 118px));max-height:63%;  /* below the order note, even when the ceiling is cropped */
   left:29%;width:42%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
-  background:#2B1A13;border:2px solid #6B4A35;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(244,173,207,.3);
+  /* framed in the cupboard's own wood: the edges of the cupboard picture (720×584; planks 56px top, 44px sides and bottom) */
+  background:#2B1A13;border:22px solid #3A2219;border-width:24px 19px 19px;border-image:var(--cabinet-frame) 56 44 44 / 24px 19px 19px stretch;box-shadow:0 18px 40px rgba(0,0,0,.6);
   animation:cupboardOut .32s .12s cubic-bezier(.2,.8,.3,1.1) backwards}
 .shelfopen[hidden]{display:none}
 /* the tarot cupboard opens wider, so its big cards fit five or six to a row */
@@ -588,8 +590,9 @@ button.small{font-size:12px;padding:2px 10px}
 .fillnow{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px}
 
 /* the table is the altar: things stand on its top (the picture's tabletop runs from 76% to 89% down); the candle at the
-   left end, the card at the right, what is laid out in between. The bar sits on the cloth hanging in front. */
-.tabletop{position:absolute;left:13%;right:13%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
+   left end, what is laid out in between, and the card on the smooth part of the cloth just right of the middle (about 62%
+   across; further right the cloth folds and drapes). The bar sits on the cloth hanging in front. */
+.tabletop{position:absolute;left:13%;right:33%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
 .plates{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1.2%}
 .ontable{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;cursor:pointer}
@@ -599,12 +602,12 @@ button.small{font-size:12px;padding:2px 10px}
 .ontable .nm{margin-top:.3cqw;padding:0 .5em;border-radius:3px;font-size:clamp(10px,.68cqw,14px);line-height:1.5;white-space:nowrap;color:#4A2A1C;background:#F6E7C9;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 /* the tarot card lies flat on the table, tipped away from the viewer; an empty dashed outline marks its place */
 .ontable.laid{justify-content:flex-end}
-.cardbed{display:flex;align-items:center;justify-content:center;width:8.5cqw;aspect-ratio:420/722;margin-bottom:.4cqw;border-radius:.4cqw;
-  transform:perspective(30cqw) rotateX(55deg);transform-origin:50% 100%;transition:transform .25s;
+.cardbed{display:flex;align-items:center;justify-content:center;width:8.5cqw;aspect-ratio:420/722;margin-bottom:-1.8cqw;border-radius:.4cqw;
+  transform:perspective(90cqw) rotateX(60deg);transform-origin:50% 100%;transition:transform .25s;
   box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
 .cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
-.ontable.laid:hover .cardbed{transform:perspective(30cqw) rotateX(47deg)}
+.ontable.laid:hover .cardbed{transform:perspective(90cqw) rotateX(52deg)}
 .ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.16)}
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}

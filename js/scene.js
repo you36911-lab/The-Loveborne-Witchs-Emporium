@@ -32,6 +32,7 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
   room.style.setProperty('--wall-l',`url("${new URL(ASSETS.altarWallL,location.href).href}")`);
   room.style.setProperty('--wall-r',`url("${new URL(ASSETS.altarWallR,location.href).href}")`);
   room.style.setProperty('--inside-img',`url("${new URL(ASSETS.cabinetInside,location.href).href}")`);
+  document.documentElement.style.setProperty('--cabinet-frame',`url("${new URL(ASSETS.cabinetInside,location.href).href}")`);
   document.documentElement.style.setProperty('--cabinet-back',`url("${new URL(ASSETS.cabinetBack,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
@@ -139,11 +140,13 @@ function shelfItemsHTML(c){
   const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
   return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
-    const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
+    /* bottled waters: how many are left, as a badge on the bottle's shoulder (like the unread count on the computer) */
+    const st=X.stock[i.n]!==undefined?`<b class="badge stock" aria-label="${S.stock[i.n]} left">${S.stock[i.n]}</b>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
-    const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}"></span>`:`<img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}">`;
+    const pi=pic?`<span class="bot"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}">${st}</span>`:'';
+    const img=!pic?'':bottle?`<span class="pic">${pi}</span>`:pi;
       /* a picture names itself (most have their name on the label), so only things without one show their name; hover shows it either way */
-    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" title="${esc(i.n)}" aria-label="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}${pic?'':`<span class="nm">${esc(i.n)}</span>`}${st}</button>`}).join('')}
+    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" title="${esc(i.n)}" aria-label="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}${pic?'':`<span class="nm">${esc(i.n)}</span>${st}`}</button>`}).join('')}
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
