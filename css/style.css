@@ -240,7 +240,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .modal.receiptsview{background:none;align-items:center;cursor:pointer}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
 /* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
-.receipt{position:relative;width:330px;aspect-ratio:484/643;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
+.receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
 .receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .receipt .who{font-size:14px}
@@ -508,11 +508,11 @@ button.small{font-size:12px;padding:2px 10px}
 .room{position:absolute;left:50%;bottom:0;translate:-50% 0;
   height:max(100vh,min(calc(100vw * 768 / 1376),106vh));width:max(calc(100vh * 1376 / 768),min(100vw,calc(106vh * 1376 / 768)));
   background-size:100% 100%;background-color:#2a1d2a;container-type:size}
-/* On a window wider than the picture, the walls carry on past its edges: one wall section (a panel and a pillar) from each edge
-   of the same room drawn empty repeats outward, the right way round, fading into the dark. 7.27% = the section's 200px of 2752. */
-.room::before,.room::after{content:'';position:absolute;top:0;bottom:0;width:45%;pointer-events:none;background-repeat:no-repeat,repeat-x;background-size:100% 100%,16.15% 100%}
-.room::before{right:100%;background-image:linear-gradient(to left,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--wall-l);background-position:0 0,right top}
-.room::after{left:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--wall-r);background-position:0 0,left top}
+/* On a window wider than the picture, the walls carry on past its edges. Each side strip (45% of the room wide) is the same room
+   drawn empty, enlarged step by step around its vanishing point, so every panel is the next one in from it, seamless at the edge. */
+.room::before,.room::after{content:'';position:absolute;top:0;bottom:0;width:45%;pointer-events:none;background-repeat:no-repeat;background-size:100% 100%}
+.room::before{right:100%;background-image:linear-gradient(to left,rgba(30,18,25,0) 25%,rgba(30,18,25,.3) 65%,rgba(30,18,25,.75) 100%),var(--wall-l)}
+.room::after{left:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 25%,rgba(30,18,25,.3) 65%,rgba(30,18,25,.75) 100%),var(--wall-r)}
 @media (max-aspect-ratio:3/2){.room{bottom:auto;top:50%;translate:-50% -50%;width:100vw;height:calc(100vw * 768 / 1376)}}  /* narrow windows: the whole room, letterboxed */
 .altarview{background:#1E1219}
 .altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}

@@ -141,7 +141,8 @@ function shelfItemsHTML(c){
     const st=X.stock[i.n]!==undefined?`<span class="n">${S.stock[i.n]}</span>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const img=!pic?'':bottle?`<span class="pic"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}"></span>`:`<img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}">`;
-    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}<span class="nm">${esc(i.n)}</span>${st}</button>`}).join('')}
+      /* a picture names itself (most have their name on the label), so only things without one show their name; hover shows it either way */
+    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" title="${esc(i.n)}" aria-label="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}${pic?'':`<span class="nm">${esc(i.n)}</span>`}${st}</button>`}).join('')}
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
@@ -157,7 +158,7 @@ function renderAltar(){
   sel.disabled=!S.ttype;
   sel.value=S.target||'';
   /* what is laid out stands on the table; tap a thing to put it back */
-  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:'<i class="minijar"></i>'}<span class="nm">${esc(n)}</span></button>`).join(''):'<span class="hint">Open a shelf and pick what to lay on the table.</span>';
+  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'<span class="hint">Open a shelf and pick what to lay on the table.</span>';
   $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="Put the candle back"><i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span></button>`:'<span class="hint">No candle</span>';
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
