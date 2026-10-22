@@ -72,8 +72,9 @@ function currentVisit(){const v=currentVisitor();if(!v)return null;
   return v.type==='return'?visitByKey(S.orders.find(o=>o.id===v.oid).key):v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key)}
 function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('#crystalBtn');
   ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
-/* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn. */
-function renderCustomer(){const cur=currentVisit(),src=cur&&ASSETS.characters[cur.who],box=$('#customer'),img=box.querySelector('img');
+/* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn; a visit can name
+   its own picture (pic in story.js), as when Rosalind brings her children. */
+function renderCustomer(){const cur=currentVisit(),src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
 function auraInfo(){
   const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:4px 0"><span class="aura" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c};vertical-align:middle"></span> ${esc(t)}</li>`).join('');

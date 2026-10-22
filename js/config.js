@@ -98,6 +98,7 @@ const ASSETS = {
     'Morwenna Hale':             'assets/characters/morwenna-hale.png',
     'Noor Haddad':               'assets/characters/noor-haddad.png',
     'Rosalind Larkin':           'assets/characters/rosalind-larkin.png',
+    'Rosalind Larkin with children': 'assets/characters/rosalind-larkin-children.png',  /* a visit with "pic" in story.js uses its own picture */
     /* walk-ins, by how story.js names them (only pictures whose file was named for the person) */
     'An exhausted bookshop owner':            'assets/characters/exhausted-bookshop-owner.png',
     'A couple holding hands':                 'assets/characters/couple-holding-hands.png',
