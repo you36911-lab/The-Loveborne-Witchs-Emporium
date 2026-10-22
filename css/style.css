@@ -301,9 +301,9 @@ button.small{font-size:12px;padding:2px 10px}
 .proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px}
 .proto[hidden],.tip[hidden]{display:none}
 .proto select,.proto button{font-size:13px;padding:2px 6px}
-/* What the customer says: a speech balloon over the right-hand window, its tail pointing back at the customer
+/* What the customer says: a speech balloon just right of the customer's face, its tail pointing at them
    behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
-.dialogue{position:absolute;top:clamp(12px,4vh,40px);right:clamp(12px,3vw,48px);z-index:7;width:min(440px,38vw);max-height:62vh;overflow:auto;padding:4px 4px 8px 32px}
+.dialogue{position:absolute;top:13vh;left:calc(50% + 6.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
 .balloon{position:relative;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
@@ -311,8 +311,8 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon .asked{font-size:14px;color:var(--ink-soft)}
 .balloon .tale{background:none;padding:0}
 /* the tail: two triangles (border colour, then fill) on the left edge */
-.balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:20px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
-.balloon::after{left:-25px;top:23px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
+.balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:44px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
+.balloon::after{left:-25px;top:47px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
 .dialogue .row{margin-top:10px}
 /* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
 .coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}

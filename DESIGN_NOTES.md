@@ -42,7 +42,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks.
 - **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.
 - **Names**: nobody at the counter is labelled, walk-in or regular. Who they are comes out in what they say and do; a regular says their own name in their first line. (The receipts and the diary still note who it was.)
-- **Speech balloon**: everything a customer says and does sits in one balloon over the right-hand window, its tail pointing back at them: the cue in brackets first, then their words. The buttons sit below it. The altar's reminder reads "They asked: …".
+- **Speech balloon**: everything a customer says and does sits in one balloon just right of their face, its tail pointing at them: the cue in brackets first, then their words. The buttons sit below it. The altar's reminder reads "They asked: …".
 - **Tutorials happen once**: the first order, the first order that can't be made while they wait, and the first advice question each get a numbered tutorial note during that visit only. Later visits carry no instructions, just what the customer says and the buttons. Each note has a × that puts it away for good, and a "Skip tutorials" link that turns them all off (the first-day email tip too). Jumping with the prototype bar counts every tutorial whose first visit comes earlier as seen.
 
 ## Grading and feedback
