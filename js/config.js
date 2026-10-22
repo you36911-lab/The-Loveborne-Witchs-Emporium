@@ -52,6 +52,7 @@ const ASSETS = {
      2752×1536 picture, where its lower wall lines meet) by 1.262 per panel, five steps, each strip 1238px (45%) wide */
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
+  cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
   logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon, the top bar, the day card at dawn */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   objects: {

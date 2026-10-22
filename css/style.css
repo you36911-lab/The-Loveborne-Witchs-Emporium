@@ -349,8 +349,8 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside .chip.jar .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 5px;max-width:100%}
 .cabinside .chip.jar .n{margin-left:0;color:#E9C9A8}
 .cabinside .chip.jar.on{background:rgba(244,173,207,.22);border-color:#F4ADCF;box-shadow:0 0 12px #F4ADCF}
-/* Bottles and jars: all the same width, so tall bottles stand tall; bottom-aligned on a wooden plank, each centred over its name tag.
-   A shelf row is 242px: 14px of space, 180px for the bottles, the plank, then the tag. Tiles are a fixed height so the planks line up. */
+/* Bottles and jars: all the same width, so tall bottles stand tall; bottom-aligned, each centred. Tiles are a fixed height so
+   the rows line up. (In an open cupboard the planks drawn behind them are switched off.) */
 .cabinside .chips.shelf{gap:12px 0;align-items:flex-start;justify-content:flex-start;padding:14px 8px 4px;
   background:repeating-linear-gradient(to bottom,transparent 0 191px,#8C5E46 191px 200px,rgba(0,0,0,.5) 200px 205px,transparent 205px 242px),#3B261C}
 .cabinside .chip.jar.vessel{width:150px;height:290px;justify-content:flex-start;padding:0 2px 4px;border-radius:0}
@@ -581,8 +581,9 @@ button.small{font-size:12px;padding:2px 10px}
 @media (prefers-reduced-motion:reduce){.shelfopen{animation-duration:.01s}}
 .shelfhead{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px}
 .shelfhead h3{margin:0;color:#F6E7C9;font-family:var(--font-title);font-weight:700;font-size:22px}
-.shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:0}
-.shelfopen .chips{border-radius:6px}
+/* an open cupboard: its things stand against the cupboard's own wooden back, with no shelves drawn */
+.shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:0;background:var(--cabinet-back) center/cover no-repeat,#2B1A13}
+.shelfopen .chips,.shelfopen .chips.shelf{border-radius:6px;background:none;box-shadow:none}
 .shelfopen .swatch{width:46px;height:46px}
 .fillnow{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px}
 

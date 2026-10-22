@@ -32,6 +32,7 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
   room.style.setProperty('--wall-l',`url("${new URL(ASSETS.altarWallL,location.href).href}")`);
   room.style.setProperty('--wall-r',`url("${new URL(ASSETS.altarWallR,location.href).href}")`);
   room.style.setProperty('--inside-img',`url("${new URL(ASSETS.cabinetInside,location.href).href}")`);
+  document.documentElement.style.setProperty('--cabinet-back',`url("${new URL(ASSETS.cabinetBack,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
    old hour's light to the new one over the same time the background takes to fade (1.2s in style.css). */
