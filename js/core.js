@@ -17,7 +17,7 @@ const WALKIN={
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
   orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],log:[],result:null,queue:null,
-  stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
+  tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
 try{S=JSON.parse(localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean))||fresh()}catch(e){S=fresh()}

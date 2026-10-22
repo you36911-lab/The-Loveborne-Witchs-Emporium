@@ -67,8 +67,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .chip .n{margin-left:4px;opacity:.7;font-weight:700}
 .who{display:flex;align-items:center;gap:10px}
 .aura{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--aura) 35%, transparent)}
-.say{margin:8px 0;font-style:italic}
-.req{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 8px;margin:6px 0}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .result .g{font-family:var(--font-title);font-weight:700;font-size:22px;color:var(--kw)}
 .log{max-height:160px;overflow:auto;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:6px}
@@ -174,7 +172,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes subIn{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){.scenenote.in{animation:none}}
 .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
-.guide{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:14px}
 /* Email (Moonpost): a webmail page. Folders, message list, reading pane. On a phone the list and the open email take turns. */
 .webmail{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);height:min(720px,calc(100vh - 40px));display:flex;flex-direction:column;overflow:hidden}
 .wm-top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--line)}
@@ -228,6 +225,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe.locked{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
 .muted{color:var(--ink-soft)}
 .receipts{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}
+/* the till: just the receipts over the shop, no panel or dimming behind them */
+.modal.receiptsview{background:none;align-items:center;cursor:pointer}
+.receiptsview .receipts{justify-content:center;gap:18px;margin:0}
 /* a receipt: the shop's printed slip, filled in by hand on its ruled lines (the first at 33.4% down, one every 3.9%) */
 .receipt{position:relative;width:280px;aspect-ratio:483/642;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Caveat',cursive;color:#3D2A5C}
@@ -290,11 +290,26 @@ button.small{font-size:12px;padding:2px 10px}
 .proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px}
 .proto[hidden],.tip[hidden]{display:none}
 .proto select,.proto button{font-size:13px;padding:2px 6px}
-/* What the customer says: a box over the right-hand window, clear of the counter objects. */
-.dialogue{position:absolute;top:clamp(12px,4vh,40px);right:clamp(12px,3vw,48px);z-index:7;width:min(440px,38vw);max-height:58vh;overflow:auto;
-  background:color-mix(in srgb,var(--card) 95%,transparent);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);padding:14px 18px}
+/* What the customer says: a speech balloon over the right-hand window, its tail pointing back at the customer
+   behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
+.dialogue{position:absolute;top:clamp(12px,4vh,40px);right:clamp(12px,3vw,48px);z-index:7;width:min(440px,38vw);max-height:62vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
-.dialogue .who b{font-family:var(--font-title);font-weight:700;font-size:28px;line-height:1.1;color:var(--kw)}
+.dialogue .who b{font-family:var(--font-title);font-weight:700;font-size:26px;line-height:1.1;color:#FFF6EE;text-shadow:0 1px 3px rgba(40,20,40,.85),0 0 12px rgba(40,20,40,.5)}
+.dialogue .cue{margin:2px 0 8px;color:#FBEFD9;text-shadow:0 1px 3px rgba(40,20,40,.9)}
+.balloon{position:relative;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
+.balloon p{margin:0 0 6px}.balloon p:last-child{margin-bottom:0}
+.balloon .asked{font-size:14px;color:var(--ink-soft)}
+.balloon .tale{background:none;padding:0}
+/* the tail: two triangles (border colour, then fill) on the left edge */
+.balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:20px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
+.balloon::after{left:-25px;top:23px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
+.dialogue .row{margin-top:10px}
+/* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
+.coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}
+.coach>b{font-family:var(--font-title);font-size:18px;display:block;margin-bottom:2px}
+.coach ol{margin:4px 0 0;padding-left:20px}.coach li{margin:2px 0}.coach p{margin:2px 0}
+/* a result read at the counter, with nobody there: a plain card */
+.dialogue.plain{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px}
 .dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}
 .daycard{position:absolute}
 

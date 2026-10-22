@@ -1,6 +1,7 @@
 /* Actions: clicks, the bell, giving orders, and the end of the day. */
 /* ---------- actions ---------- */
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#receiptsView').classList.remove('open');return}
+  const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
   if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#letters').classList.contains('open'))renderLetters();render();return}
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
@@ -32,7 +33,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)r
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
     case 'pcBtn':openLetters();break;
-    case 'tillBtn':openInfo('Receipts',receiptsHTML());break;
+    case 'tillBtn':openReceipts();break;
     case 'crystalBtn':openInfo('Crystal ball',auraInfo());break;
     case 'notebookBtn':openInfo('What customers told me',hintsHTML());break;
     case 'closeInfo':$('#info').classList.remove('open');break;
@@ -109,5 +110,5 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
   ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
-/* Escape closes an open shelf in the workroom. */
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&openShelf){openShelf='';renderShelves()}});
+/* Escape closes an open shelf in the workroom, or the receipts. */
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});

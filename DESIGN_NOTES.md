@@ -37,7 +37,10 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - "I don't know how to make this" appears only after Start making it, and needs a second tap.
 - No order brings 5 or more parts the player hasn't met yet (except the Day 6 Beaver Moon stretch goal).
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks.
-- **Advice seekers** ask a quick question ("which herb…?"); a dashed note says it's just a question. They fill quiet hours in week one.
+- **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.
+- **Names**: walk-ins are only ever shown by what you see ("A couple holding hands"). A regular is shown the same way on their first visit ("An old woman") and says their own name in that first line; from then on their name is used.
+- **Speech balloon**: what a customer says sits in a balloon over the right-hand window, its tail pointing back at them; who they are and what they do (the cue) are written above it, the buttons below.
+- **Tutorials happen once**: the first order, the first order that can't be made while they wait, and the first advice question each get a numbered tutorial note during that visit only. Later visits carry no instructions, just what the customer says and the buttons.
 
 ## Grading and feedback
 
@@ -75,7 +78,7 @@ The game has two full-screen views:
 On the counter, every object glows on hover and does something:
 - each book in the stack opens that book
 - crystal ball: the current customer's aura and the colour key
-- till: today's receipts
+- till: today's receipts on their own over the shop (no panel, no dimming); a click anywhere puts them away
 - notebook: what customers told me (hints)
 - bell: the next customer
 - computer: email (Moonpost), with the unread badge
