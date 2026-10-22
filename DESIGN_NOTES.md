@@ -41,8 +41,8 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - No order brings 5 or more parts the player hasn't met yet (except the Day 6 Beaver Moon stretch goal).
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks.
 - **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.
-- **Names**: walk-ins are only ever shown by what you see ("A couple holding hands"). A regular is shown the same way on their first visit ("An old woman") and says their own name in that first line; from then on their name is used.
-- **Speech balloon**: what a customer says sits in a balloon over the right-hand window, its tail pointing back at them; who they are and what they do (the cue) are written above it, the buttons below.
+- **Names**: nobody at the counter is labelled, walk-in or regular. Who they are comes out in what they say and do; a regular says their own name in their first line. (The receipts and the diary still note who it was.)
+- **Speech balloon**: everything a customer says and does sits in one balloon over the right-hand window, its tail pointing back at them: the cue in brackets first, then their words. The buttons sit below it. The altar's reminder reads "They asked: …".
 - **Tutorials happen once**: the first order, the first order that can't be made while they wait, and the first advice question each get a numbered tutorial note during that visit only. Later visits carry no instructions, just what the customer says and the buttons. Each note has a × that puts it away for good, and a "Skip tutorials" link that turns them all off (the first-day email tip too). Jumping with the prototype bar counts every tutorial whose first visit comes earlier as seen.
 
 ## Grading and feedback

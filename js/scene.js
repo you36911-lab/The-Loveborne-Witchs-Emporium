@@ -169,7 +169,7 @@ function renderAltar(){
   if(S.result){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;
   /* The order being made, as a reminder above the altar. */
   const ov=orderR&&(q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key));
-  $('#orderNote').innerHTML=ov?`<b>${esc(ov.who)}</b> asked: “${esc(ov.line)}”`:'';
+  $('#orderNote').innerHTML=ov?`They asked: “${esc(ov.line)}”`:'';
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
@@ -180,20 +180,21 @@ const TUTORIAL={
   order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
   back:v=>`<b>Some orders take time</b><p>This one can’t be made while they wait, so they will come back. Have it ready by then: when they return, make it at the altar and give it.</p>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol>`};
-/* What someone says goes in a speech balloon; what they do (the cue) is written above it, like a stage direction. */
-const balloon=(v,inner)=>`${whoHTML(v)}${v.cue?`<p class="cue">${esc(v.cue)}</p>`:''}<div class="balloon">${inner}</div>`;
+/* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
+   Nobody is labelled: who they are comes out in what they say and do. */
+const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}${inner}</div>`;
 /* The counter: what the customer says, in a balloon over the shop window. Hidden when nobody is there,
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
 function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
   if(q&&q.type==='report'){const r=S.reports.find(r=>r.at===q.at&&r.who===q.who);
-    el.innerHTML=`${whoHTML({who:r.who})}<p class="cue">back to tell you how ${esc(r.what||'it')} went</p><div class="balloon">${kw(r.text)}</div><div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
+    el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(r.text))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
   if(q&&(q.tales||[]).length&&!q.newsDone){const v=q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key);
-    el.innerHTML=`${whoHTML(v)}<p class="cue">before anything else, they pass on some news</p><div class="balloon">${talesHTML(q)}</div><div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
+    el.innerHTML=`${balloon({cue:'before anything else, they pass on some news'},talesHTML(q))}<div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
   if(!q){if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);
-    el.innerHTML=`${balloon({...v,desc:""},`<p>“I’m back for my order.”</p><p class="asked">They asked: “${esc(v.line)}”</p>`)}<div class="row"><button id="letGo">They can’t wait any longer</button></div>`;return}
+    el.innerHTML=`${balloon(v,`<p>“I’m back for my order.”</p><p class="asked">They asked: “${esc(v.line)}”</p>`)}<div class="row"><button id="letGo">They can’t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose…</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
@@ -212,8 +213,6 @@ function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; t
   return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}.`:`I\u2019ll come back on Day ${b.day}.`}
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
-/* A regular's first visit shows what you see (desc in story.js); they say their name in that visit, and from then on it is used. */
-function whoHTML(v){return `<div class="who"><b>${esc(v.desc||v.who)}</b></div>`}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
   if(Object.values(S.mail||{}).includes(false))return 'A new email came in. Click the <b>computer</b> to read it.';return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
