@@ -73,16 +73,17 @@ const ASSETS = {
   /* Each book: its closed cover, the open spread, and the colour of its paper (for the page that turns).
      `page` is where the paper sits inside the spread, in % of its size: top, outer edge, bottom.
      A book with no cover picture yet gets a plain cover in `color` with its title in `ink`;
-     with no open picture (`open:''`), the spread is drawn: boards in `color`, pages in `paper`. */
+     with no open picture (`open:''`), the spread is drawn: boards in `color`, pages in `paper`. A fur cover has gaps between the
+     fur tips, so `core` (the fur's colour) fills in behind it, and colours the cover's edge as it swings open. */
   books: {
-    'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F3F6E5', page:[4.4,6,5.3]},
+    'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F3F6E5', core:'#EA8C6F', page:[4.4,6,5.3]},
     'Book of Making':           {cover:'assets/books/book-of-making-cover.png',         open:'assets/books/book-of-making-open.png',         paper:'#F9F7E6', page:[1.5,3.8,3]},
     'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F3E5CA', page:[1.5,3.9,3]},
     'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F3F5E7', page:[1.5,3.8,3]},
     'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F4F5E5', page:[1.5,3.8,3]},
     'Herbiary':                 {cover:'assets/books/herbiary-cover.png',               open:'assets/books/herbiary-open.png',               paper:'#F2E7CF', page:[1.8,3.8,2.8]},
     'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F5E5', page:[1.8,3.7,3]},
-    'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F7F7E6', page:[7.2,6.2,8]},
+    'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F7F7E6', core:'#CDAB8C', page:[7.2,6.2,8]},
     /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
     'What customers told me':   {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
   },

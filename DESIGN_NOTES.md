@@ -62,7 +62,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - Each entry shows a fixed "slightly hard" choice of keywords; the rest are blanks. Recipe numbers are hidden.
 - Nothing goes into the word bank automatically: dotted words in any text are tapped to collect. A word leaves the bank once every blank that needs it is filled.
 - Every ingredient and tarot card has a short **look** shown where its picture will go (also the art brief).
-- A book opens as a book: its closed cover first, which swings open by itself (or at a click) onto the open spread; then two pages at a time, one entry per page, the index first (over as many pages as it needs). Pages turn with an animation (arrows beside the book, or the arrow keys); the turning sheet bends like paper, its free edge lagging behind. A ribbon at the top of each entry page bookmarks it. The word bank sits beside the book.
+- A book opens as a book: its closed cover first, which swings open by itself (or at a click) onto the open spread; then two pages at a time, one entry per page, the index first (over as many pages as it needs). Pages turn with an animation (arrows beside the book, or the arrow keys); the turning sheet bends like paper, its free edge lagging behind. The cover is a board with some thickness (its edge shows as it swings). Fur covers (Recipe Book, Gentle Bestiary) have a solid core in the fur's colour behind the fur, so the pages never show through the gaps between the fur tips. A ribbon at the top of each entry page bookmarks it. The word bank sits beside the book.
 
 ## Letters
 

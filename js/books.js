@@ -112,8 +112,11 @@ function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadIm
   if(a.open){tome.removeAttribute('data-drawn');img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open}
   else{tome.dataset.drawn='';img.onload=null;img.removeAttribute('src');tome.style.setProperty('--ar',1.42);tome.style.setProperty('--book-bg',a.color)}
   [['--pt',0],['--po',1],['--pb',2]].forEach(([v,i])=>tome.style.setProperty(v,a.page[i]+'%'));tome.style.setProperty('--paper-c',a.paper);
-  const [front,back]=$('#cover').children;back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
-  if(a.cover){front.style.background='';front.style.backgroundImage=`url("${a.cover}")`;front.innerHTML='';front.className='face front'}
+  const [front,back,side]=$('#cover').children;
+  /* the cover's edge, seen as it swings: the fur's colour, or the cover picture squeezed into a strip */
+  side.style.background=a.core||(a.cover?`url("${a.cover}") center/600% 100%`:a.color||'#5A3A28');back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
+  if(a.cover){front.style.background=a.core?`url("${a.cover}") center/100% 100% no-repeat,linear-gradient(${a.core},${a.core}) center/90% 93% no-repeat`:'';
+    if(!a.core)front.style.backgroundImage=`url("${a.cover}")`;front.innerHTML='';front.className='face front'}
   else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
   $('#cover').setAttribute('aria-label','Open the '+curBook)}
 /* Show a book closed, then let the cover swing open by itself (or at a click). */
