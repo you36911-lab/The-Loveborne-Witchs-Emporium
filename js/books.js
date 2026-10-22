@@ -124,12 +124,19 @@ function showBook(b){curBook=b;if(b!==DIARY)shelfBook=b;$('#search').value=searc
   const tome=$('#tome'),diary=b===DIARY;$('#books').classList.toggle('diary',diary);
   /* the diary has no cover to open: it is already open */
   if(diary){tome.className='tome open opened diary';renderBooks();return}
-  tome.className='tome closed';renderBooks();
-  openTimer=setTimeout(openTome,calm()?0:650)}
+  /* a new book starts closed at once (the last one's cover does not swing back first) */
+  const cover=$('#cover');tome.style.transition=cover.style.transition='none';tome.className='tome closed';void tome.offsetWidth;tome.style.transition=cover.style.transition='';
+  renderBooks();
+  /* the cover only swings once its pictures are decoded, so the swing is never skipped while a big picture loads */
+  const t0=Date.now();decodeBook(b).then(()=>{if(curBook!==b||!tome.classList.contains('closed'))return;
+    openTimer=setTimeout(openTome,Math.max(0,(calm()?0:650)-(Date.now()-t0)))})}
+const decoded={};
+function decodeBook(b){const a=ASSETS.books[b]||{};return decoded[b]||(decoded[b]=Promise.all([a.cover,a.open].filter(Boolean).map(src=>{const im=new Image();im.src=src;return im.decode().catch(()=>{})})))}
 function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))return;clearTimeout(openTimer);
   if(calm()){tome.className='tome open opened';return}
   tome.className='tome open';setTimeout(()=>{if(tome.classList.contains('open'))tome.classList.add('opened')},OPEN_MS)}
-function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick()}
+function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick();
+  setTimeout(()=>BOOKS.forEach(decodeBook),1500)}  /* the other books get ready in the background, for quick switching */
 /* The diary opens on its newest page. */
 function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(diaryPages().length-1);renderBooks();autoTick()}
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
