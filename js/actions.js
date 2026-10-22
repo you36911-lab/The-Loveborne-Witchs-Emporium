@@ -15,7 +15,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
     case 'giveBtn':doCraft(false);break;
-    case 'nowBtn':S.activeNow=S.queue.key;S.result=null;setView('altar');break;
+    case 'madeBtn':giveMade();break;
     case 'toAltar':case 'toAltar2':setView('altar');break;
     case 'toShop':setView('shop');break;
     case 'dismissResult':S.result=null;render();break;  /* whatever is laid out on the altar stays */
@@ -46,6 +46,18 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'booksBtn':openBooks();break;
     case 'closeBooks':$('#books').classList.remove('open');render();break;
   }});
+/* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
+document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
+  if(t.id==='info')$('#info').classList.remove('open');
+  if(t.id==='letters'){$('#letters').classList.remove('open');render()}
+  if(t.matches('#books, #books .bookmain, #books .tomewrap, #books .bookbar')){$('#books').classList.remove('open');render()}
+  if(t.id==='dayEnd')$('#dayGo')?.click();  /* the day's summary has one way out: on to the next day */
+  const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard'))fx.hidden=true;
+  if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
+  /* a result read at the counter (nobody there) */
+  if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
+/* whether that result was already showing before this click (so the click that brings it up does not close it) */
+let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
 $('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
 $('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
@@ -60,7 +72,15 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
       if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
     S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}.`)}
-  else{const q=S.queue;let v;
+  else{/* Made for real: it goes up to the counter, and is given when the player clicks it there (giveMade). */
+    const q=S.queue;if(!q)return;
+    S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;log(`Made ${r.name}.`);
+    S.altar=[];S.candle='';S.tarot='';setView('shop');return}
+  if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
+  render()}
+/* Hand over what was made: the grade was settled when it was made. */
+function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
+  {let v;
     if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
@@ -69,7 +89,6 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(ev.grade==='Perfect'){lines.push(v.hint.text);noteHint(v)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);lines.push('They thank you and take it home.')}
     S.result={grade:ev.grade,first:'',lines,test:false};log(`Gave ${r.name} to ${v.who}.`);S.queue=null}
-  if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
   render()}
 function nextHour(auto){
   if(S.queue&&S.queue.type==='report')S.queue=null;  /* an unheard report waits for another hour */

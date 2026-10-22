@@ -15,6 +15,8 @@ function currentVisitor(){
     if(v.gift){S.stock[v.gift]=(S.stock[v.gift]||0)+1;log(`${v.who} left a bottle of ${v.gift}.`);setTimeout(()=>toast(`+1 ${v.gift}, from ${v.who.split(' ')[0]}`),300)}
     return S.queue}
   return null}
+/* Which visit something made at the altar is for: a new customer, or one back for their order. */
+const visitorId=q=>q.type==='return'?'order:'+q.oid:q.key;
 function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */
 const SCORE={Perfect:5,Good:4,Clumsy:2,Failed:1,Missed:1};

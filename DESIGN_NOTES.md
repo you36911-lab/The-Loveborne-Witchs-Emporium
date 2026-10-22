@@ -33,8 +33,10 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - Regulars (Hester, Edmund, Dottie, Goldie, Rosalind, Morwenna, Felix, Ivy, Noor, Sam) have story arcs. Walk-ins order every other recipe exactly once over the year.
 - Every order has exactly one right recipe; a different recipe fails.
 - Week-one orders always say what kind of thing they want (a charm, something to spread on toast = butter, something to look into = hand mirror, and so on).
-- A customer waits ("Start making it") unless the order truly cannot be made during their visit; only then do they say which day they'll be back.
-- "I don't know how to make this" appears only after Start making it, and needs a second tap.
+- A customer simply waits while you make it, unless the order truly cannot be made during their visit; only then do they say which day they'll be back. There is no button to start an order.
+- **Making and giving**: at the altar, **Make it** makes the order and slides the view back up to the counter, where it waits as a wrapped parcel (pink ribbon, a handwritten tag with the recipe name) between the till and the notebook. Clicking the parcel hands it over. Making again before giving replaces it; it goes if the customer leaves.
+- "I don't know how to make this" needs a second tap.
+- **Popups**: every popup (books, diary, email, receipts, the crystal ball, the end of the day, the new-email card, an open cupboard, a result at the counter) closes when you click outside it. Clicking outside the end-of-day summary goes on to the next day, as its button does.
 - No order brings 5 or more parts the player hasn't met yet (except the Day 6 Beaver Moon stretch goal).
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks.
 - **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.

@@ -153,6 +153,17 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}
 .scene .notebook{left:54%;bottom:11%;width:13.5%;z-index:3}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
+/* what was made, wrapped as a parcel with a pink ribbon and a handwritten tag, between the till and the notebook */
+.scene .made{left:42.5%;bottom:13%;width:9%;aspect-ratio:1/1;z-index:4;animation:madein .5s ease-out}
+.scene .made[hidden]{display:none}
+@keyframes madein{from{opacity:0;transform:translateY(-12%)}}
+.made .parcel{position:absolute;left:10%;right:10%;top:28%;bottom:0;border-radius:6%;border:1px solid #8C6239;
+  background:linear-gradient(90deg,transparent 43%,#E57FAE 43% 57%,transparent 57%),linear-gradient(transparent 40%,#E57FAE 40% 54%,transparent 54%),linear-gradient(160deg,#D9AE7E,#B98756)}
+.made .bow{position:absolute;left:50%;top:0;width:60%;height:34%;translate:-50% -78%}
+.made .bow::before,.made .bow::after{content:"";position:absolute;bottom:0;width:50%;height:100%;border:max(3px,.35vw) solid #E57FAE;border-radius:50% 50% 10% 50%}
+.made .bow::before{left:0;rotate:-20deg}.made .bow::after{right:0;rotate:20deg;border-radius:50% 50% 50% 10%}
+.made .tag{position:absolute;right:-28%;top:42%;max-width:85%;background:#FFF9EC;border:1px solid #CBB79B;border-radius:3px;padding:.15em .45em;rotate:8deg;
+  font-family:'Caveat',cursive;font-size:clamp(11px,1vw,18px);line-height:1.05;color:#3D2A5C;box-shadow:0 2px 3px rgba(0,0,0,.25)}
 .scene .bell{left:68.4%;bottom:18.5%;width:4.8%;z-index:0}
 .scene .computer{left:72%;bottom:11.5%;width:27%;z-index:1}
 .scene .pcbadge{position:absolute;right:3%;top:2%;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;border-radius:1em}

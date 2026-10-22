@@ -26,6 +26,8 @@
     <button class="obj crystal" id="crystalBtn" aria-label="Crystal ball: what the colours mean"><img data-img="crystal-ball" alt=""></button>
     <button class="obj till" id="tillBtn" aria-label="Till: today's receipts"><img data-img="till" alt=""></button>
     <button class="obj notebook" id="notebookBtn" aria-label="Notebook: what customers told me"><img data-img="notebook" alt=""></button>
+    <!-- what was made at the altar waits here, on the counter in front of the customer; clicking it hands it over -->
+    <button class="obj made" id="madeBtn" hidden><span class="parcel"><i class="bow"></i></span><span class="tag" id="madeTag"></span></button>
     <button class="obj bell" id="bellBtn" aria-label="Bell: the next customer"><img data-img="bell" alt=""></button>
     <button class="obj computer" id="pcBtn" aria-label="Computer: email"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
   </div>
@@ -58,7 +60,7 @@
     </div>
     <div class="tablebar">
       <label class="making"><span>Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label>
-      <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make and give</button><button id="clearBtn">Clear the table</button>
+      <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make it</button><button id="clearBtn">Clear the table</button>
     </div>
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>

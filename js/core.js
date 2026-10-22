@@ -44,7 +44,7 @@ const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S
 function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.text===v.hint.text))return;
   S.hints.push({day:S.day,hour:HOURS[S.h],who:v.who,text:v.hint.text});setTimeout(()=>toast('Noted in your archive: what they told you'),2400)}
 /* A new email drops in with a little animation; the badge on the computer stays until it is opened. */
-function showMailFx(m){const fx=$('#mailFx');$('#mailFrom').textContent=m.from;fx.hidden=false;fx.classList.remove('go');void fx.offsetWidth;fx.classList.add('go')}
+function showMailFx(m){const fx=$('#mailFx');fx.dataset.at=Date.now();$('#mailFrom').textContent=m.from;fx.hidden=false;fx.classList.remove('go');void fx.offsetWidth;fx.classList.add('go')}
 function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A new email came in: ${m.title}.`);showMailFx(m)}})}
 const prev=()=>S.day>1?D.cal[S.day-2]:null;
 

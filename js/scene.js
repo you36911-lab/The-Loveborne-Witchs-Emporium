@@ -172,7 +172,7 @@ function renderAltar(){
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. */
 function tutorial(kind,key){S.tut=S.tut||{};if(S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;return TUTORIAL[kind](visitByKey(key))}
 const TUTORIAL={
-  order:()=>`<div class="coach"><b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make and give</b>.</li></ol></div>`,
+  order:()=>`<div class="coach"><b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol></div>`,
   back:v=>`<div class="coach"><b>Some orders take time</b><p>This one can’t be made while they wait, so they will come back. Have it ready by then: when they return, make it at the altar and give it.</p></div>`,
   advice:v=>`<div class="coach"><b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol></div>`};
 /* What someone says goes in a speech balloon; what they do (the cue) is written above it, like a stage direction. */
@@ -180,7 +180,7 @@ const balloon=(v,inner)=>`${whoHTML(v)}${v.cue?`<p class="cue">${esc(v.cue)}</p>
 /* The counter: what the customer says, in a balloon over the shop window. Hidden when nobody is there,
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
 function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
-  const q=currentVisitor();const el=$('#counter');el.hidden=false;el.classList.remove('plain');
+  const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
   if(q&&q.type==='report'){const r=S.reports.find(r=>r.at===q.at&&r.who===q.who);
     el.innerHTML=`${whoHTML({who:r.who})}<p class="cue">back to tell you how ${esc(r.what||'it')} went</p><div class="balloon">${kw(r.text)}</div><div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
@@ -193,10 +193,14 @@ function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.inner
   if(v.kind==='advice'){
     const opts='<option value="">Choose…</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
     el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
-  if(S.activeNow===q.key){el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}<div class="row"><button class="main" id="toAltar2">Go to the altar</button><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`;return}
-  /* The customer decides: they either wait while you make it, or say when they will be back. */
-  if(v.back){el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p><p>“${esc(backLine(v))}”</p>`)}${tutorial('back',q.key)}<div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}<div class="row"><button class="main" id="nowBtn">Start making it</button></div>`}
+  /* The customer decides: they either say when they will be back, or wait while you make it. */
+  if(v.back&&S.activeNow!==q.key){el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p><p>“${esc(backLine(v))}”</p>`)}${tutorial('back',q.key)}<div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
+  S.activeNow=q.key;
+  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row"><button class="main" id="toAltar2">Go to the altar</button><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
+/* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
+function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
+  const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
+  $('#madeTag').textContent=m.name;b.title=b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');log(`${v.who} left without anything.`);S.activeNow=null;S.queue=null}
 function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
   if(b.day===S.day)return 'I\u2019ll come back later today.';
