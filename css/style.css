@@ -240,12 +240,12 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .modal.receiptsview{background:none;align-items:center;cursor:pointer}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
 /* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
-.receipt{position:relative;width:280px;aspect-ratio:484/643;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
+.receipt{position:relative;width:330px;aspect-ratio:484/643;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
-.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:13.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.receipt .who{font-size:12.5px}
-.receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:16px;letter-spacing:2px}
-.receipt .when{text-align:right;font-size:12.5px}
+.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt .who{font-size:14px}
+.receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:19px;letter-spacing:2px}
+.receipt .when{text-align:right;font-size:14px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}
 .autobar[hidden]{display:none}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
@@ -343,8 +343,8 @@ button.small{font-size:12px;padding:2px 10px}
 .cabinside .chip:disabled{opacity:.35}
 /* Ingredients with a picture stand on the shelf with a little name tag; the stock count sits on the tag. */
 /* ingredients stand at their own sizes (--h, a share of a big bottle; see ITEM_SIZE in config.js), feet on one line */
-.cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;width:auto;min-width:96px;padding:6px 3px 4px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:12px;line-height:1.15;text-align:center}
-.cabinside .chip.jar img{width:auto;height:calc(var(--h,.7) * 160px);max-width:150px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));transition:transform .15s}
+.cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;width:auto;min-width:124px;padding:6px 3px 4px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:14.5px;line-height:1.15;text-align:center}
+.cabinside .chip.jar img{width:auto;height:calc(var(--h,.7) * 205px);max-width:190px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.55));transition:transform .15s}
 .cabinside .chip.jar:hover{background:rgba(255,240,220,.08);box-shadow:none}
 .cabinside .chip.jar:hover img{transform:translateY(-3px) scale(1.06)}
 .cabinside .chip.jar .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 5px;max-width:100%}
@@ -354,9 +354,9 @@ button.small{font-size:12px;padding:2px 10px}
    A shelf row is 242px: 14px of space, 180px for the bottles, the plank, then the tag. Tiles are a fixed height so the planks line up. */
 .cabinside .chips.shelf{gap:12px 0;align-items:flex-start;justify-content:flex-start;padding:14px 8px 4px;
   background:repeating-linear-gradient(to bottom,transparent 0 191px,#8C5E46 191px 200px,rgba(0,0,0,.5) 200px 205px,transparent 205px 242px),#3B261C}
-.cabinside .chip.jar.vessel{width:118px;height:230px;justify-content:flex-start;padding:0 2px 4px;border-radius:0}
-.cabinside .chip.jar.vessel .pic{display:flex;align-items:flex-end;justify-content:center;width:100%;height:180px;flex:none;margin-bottom:22px}
-.cabinside .chip.jar.vessel img{width:auto;height:calc(var(--h,.9) * 175px);max-width:116px;object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
+.cabinside .chip.jar.vessel{width:150px;height:290px;justify-content:flex-start;padding:0 2px 4px;border-radius:0}
+.cabinside .chip.jar.vessel .pic{display:flex;align-items:flex-end;justify-content:center;width:100%;height:228px;flex:none;margin-bottom:26px}
+.cabinside .chip.jar.vessel img{width:auto;height:calc(var(--h,.9) * 222px);max-width:148px;object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
 .cabinside .chip.jar.vessel:hover img{transform:translateY(-4px)}
 .cabinside .chip.jar.vessel.on{border-radius:8px 8px 0 0}
 
@@ -454,8 +454,8 @@ button.small{font-size:12px;padding:2px 10px}
 .pbody .entry .entrypic.card{max-height:22em;border-radius:.6em;filter:drop-shadow(0 6px 10px rgba(60,30,40,.3))}
 /* Tarot cards in the Cabinet: little cards with their name under them; the altar's card slot shows a thumbnail. */
 /* tarot cards are read by their pictures, so they come out big (sized with the room: about 140px wide on a 1920 screen) */
-.cabinside .chip.card{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:auto;padding:5px;background:none;border:1px solid transparent;border-radius:8px;box-shadow:none;color:#FBEFD9;font-size:11px;line-height:1.15;text-align:center}
-.cabinside .chip.card img{width:max(100px,7.3cqw);height:auto;border-radius:6px;box-shadow:0 3px 6px rgba(0,0,0,.5);transition:transform .15s}
+.cabinside .chip.card{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:auto;padding:5px;background:none;border:1px solid transparent;border-radius:8px;box-shadow:none;color:#FBEFD9;font-size:13px;line-height:1.15;text-align:center}
+.cabinside .chip.card img{width:max(130px,9.4cqw);height:auto;border-radius:6px;box-shadow:0 3px 6px rgba(0,0,0,.5);transition:transform .15s}
 .cabinside .chip.card:hover{background:rgba(255,240,220,.08);box-shadow:none}
 .cabinside .chip.card:hover img{transform:translateY(-4px) scale(1.08)}
 .cabinside .chip.card .nm{background:#F6E7C9;color:#4A2A1C;border-radius:3px;padding:1px 4px;max-width:100%}
@@ -508,12 +508,11 @@ button.small{font-size:12px;padding:2px 10px}
 .room{position:absolute;left:50%;bottom:0;translate:-50% 0;
   height:max(100vh,min(calc(100vw * 768 / 1376),106vh));width:max(calc(100vh * 1376 / 768),min(100vw,calc(106vh * 1376 / 768)));
   background-size:100% 100%;background-color:#2a1d2a;container-type:size}
-/* On a window wider than the picture, the walls carry on past its edges: each side shows the edge of the same room drawn empty
-   (assets/scene/altar-room-sides.jpg: walls and floor, no cupboards or table), mirrored at the seam and fading into the dark. */
-.room::before,.room::after{content:'';position:absolute;top:0;bottom:0;width:45%;scale:-1 1;pointer-events:none;
-  background-size:100% 100%,222.2% 100%;background-repeat:no-repeat}
-.room::before{right:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--room-sides);background-position:left top,left top}
-.room::after{left:100%;background-image:linear-gradient(to left,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--room-sides);background-position:right top,right top}
+/* On a window wider than the picture, the walls carry on past its edges: one wall section (a panel and a pillar) from each edge
+   of the same room drawn empty repeats outward, the right way round, fading into the dark. 7.27% = the section's 200px of 2752. */
+.room::before,.room::after{content:'';position:absolute;top:0;bottom:0;width:45%;pointer-events:none;background-repeat:no-repeat,repeat-x;background-size:100% 100%,16.15% 100%}
+.room::before{right:100%;background-image:linear-gradient(to left,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--wall-l);background-position:0 0,right top}
+.room::after{left:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 0%,rgba(30,18,25,.35) 50%,rgba(30,18,25,.85) 100%),var(--wall-r);background-position:0 0,left top}
 @media (max-aspect-ratio:3/2){.room{bottom:auto;top:50%;translate:-50% -50%;width:100vw;height:calc(100vw * 768 / 1376)}}  /* narrow windows: the whole room, letterboxed */
 .altarview{background:#1E1219}
 .altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}
@@ -570,12 +569,13 @@ button.small{font-size:12px;padding:2px 10px}
   border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 .45cqw 0 -.15cqw #9C6B4E}
 
 /* the open cupboard: everything inside it, between the cabinets; it comes out of the door that opened */
-.shelfopen{position:absolute;top:13%;max-height:56%;left:35%;width:30%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
+.shelfopen{position:absolute;top:max(13%,calc(100% - 100vh + 118px));max-height:63%;  /* below the order note, even when the ceiling is cropped */
+  left:29%;width:42%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
   background:#2B1A13;border:2px solid #6B4A35;border-radius:12px;box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(244,173,207,.3);
   animation:cupboardOut .32s .12s cubic-bezier(.2,.8,.3,1.1) backwards}
 .shelfopen[hidden]{display:none}
 /* the tarot cupboard opens wider, so its big cards fit five or six to a row */
-.shelfopen.wide{left:20%;width:60%;max-height:62%}
+.shelfopen.wide{left:14%;width:72%;max-height:66%}
 .shelfopen.fromL{transform-origin:0 30%;--from:-14%}
 .shelfopen.fromR{transform-origin:100% 30%;--from:14%}
 @keyframes cupboardOut{from{opacity:0;transform:translateX(var(--from)) scale(.8)}}
@@ -584,7 +584,7 @@ button.small{font-size:12px;padding:2px 10px}
 .shelfhead h3{margin:0;color:#F6E7C9;font-family:var(--font-title);font-weight:700;font-size:22px}
 .shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:0}
 .shelfopen .chips{border-radius:6px}
-.shelfopen .swatch{width:34px;height:34px}
+.shelfopen .swatch{width:46px;height:46px}
 .fillnow{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px}
 
 /* the table is the altar: things stand on its top (the picture's tabletop runs from 76% to 89% down); the candle at the
