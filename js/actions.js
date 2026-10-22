@@ -43,7 +43,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'cantBtn':if(b.dataset.sure){sendAway();render()}else{b.dataset.sure='1';b.textContent='They\u2019ll leave empty-handed. Tap again to let them go';b.classList.add('main');setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='I don\u2019t know how to make this';b.classList.remove('main')}},4000)}break;
     case 'restartBtn':if(b.dataset.sure){S=fresh();sanitize();delete b.dataset.sure;b.textContent='Restart';render()}else{b.dataset.sure='1';b.textContent='Tap again to restart';setTimeout(()=>{delete b.dataset.sure;b.textContent='Restart'},3000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
-    case 'booksBtn':openBooks();break;
   }});
 /* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);

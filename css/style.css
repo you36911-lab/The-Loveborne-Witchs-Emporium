@@ -529,7 +529,6 @@ button.small{font-size:12px;padding:2px 10px}
 .altarview{background:#1E1219}
 .altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}
 .altartop>*{pointer-events:auto}
-#booksBtn{position:absolute;top:14px;right:16px}
 .ordernote{max-width:min(760px,60vw);padding:6px 18px;border-radius:999px;font-size:15px;color:#fff;text-align:center;
   background:rgba(26,14,24,.78);border:1px solid rgba(244,173,207,.35);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ordernote:empty{display:none}
