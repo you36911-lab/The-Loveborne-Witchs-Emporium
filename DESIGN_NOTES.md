@@ -36,7 +36,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - A customer simply waits while you make it, unless the order truly cannot be made during their visit; only then do they say which day they'll be back. There is no button to start an order.
 - **Making and giving**: at the altar, **Make it** makes the order and slides the view back up to the counter, where it waits as a wrapped parcel (pink ribbon, a handwritten tag with the recipe name) between the till and the notebook. Clicking the parcel hands it over. Making again before giving replaces it; it goes if the customer leaves.
 - "I don't know how to make this" needs a second tap.
-- **Popups**: every popup (books, diary, email, receipts, the crystal ball, the end of the day, the new-email card, an open cupboard, a result at the counter) closes when you click outside it. Clicking outside the end-of-day summary goes on to the next day, as its button does.
+- **Popups**: every popup (books, diary, email, receipts, the crystal ball, the end of the day, the new-email card, an open cupboard, a result at the counter) closes when you click outside it (or with Esc), so none of them has a Close or × button. Only the tutorial note keeps its ×, since it is not a popup. Clicking outside the end-of-day summary goes on to the next day, as its button does.
 - No order brings 5 or more parts the player hasn't met yet (except the Day 6 Beaver Moon stretch goal).
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks.
 - **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.
@@ -90,7 +90,7 @@ On the counter, every object glows on hover and does something:
 - Shop background as a clean plate (shelves, windows, door, table). Interactive objects (till, computer, bell, crystal ball, open book, door) are separate transparent PNG layers with hover glow.
 - Window view as its own layer so it can change with hour, season and weather.
 - Remove brand logos (the computer's Apple logo). Aim for 1920×1080 or larger.
-- Interface look: clean and cozy. Cream panels with soft shadows (no glows), thin solid lines, rounded corners, deep plum text and one berry accent (main buttons, selected tabs, keywords); twilight-sky page with small stars, hearts around window titles. Fonts: Cormorant Garamond (serif) for titles, names and book entries; Nunito for reading text and, bolder, for buttons and labels; Great Vibes (script) only for the day card at dawn; Caveat for handwriting on receipts; IM Fell English for the ink on the cabinet labels. Dark mode is the same look at night.
+- Interface look: clean and cozy. Cream panels with soft shadows (no glows), thin solid lines, rounded corners, deep plum text and one berry accent (main buttons, selected tabs, keywords); twilight-sky page with small stars, hearts around window titles. Fonts: Cormorant Garamond (serif) for titles, names and book entries; Nunito for reading text and, bolder, for buttons and labels; Great Vibes (script) only for the day card at dawn; Caveat for handwriting (the diary, the parcel tag); Courier Prime on receipts, which the till prints; IM Fell English for the ink on the cabinet labels. Dark mode is the same look at night.
 
 ## Glamour forms
 

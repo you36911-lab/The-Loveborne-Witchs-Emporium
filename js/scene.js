@@ -126,7 +126,7 @@ function renderShelves(){
   box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
   if(shownShelf!==openShelf){box.style.animation='none';void box.offsetWidth;box.style.animation='';shownShelf=openShelf}
-  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3><button class="dclose" data-closeshelf="1" aria-label="Close the cupboard">×</button></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
+  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
 /* how tall an ingredient stands (ITEM_SIZE in config.js) */
 const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;
 function shelfItemsHTML(c){
@@ -188,7 +188,7 @@ function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.inner
     el.innerHTML=`${whoHTML({who:r.who})}<p class="cue">back to tell you how ${esc(r.what||'it')} went</p><div class="balloon">${kw(r.text)}</div><div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
   if(q&&(q.tales||[]).length&&!q.newsDone){const v=q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key);
     el.innerHTML=`${whoHTML(v)}<p class="cue">before anything else, they pass on some news</p><div class="balloon">${talesHTML(q)}</div><div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
-  if(!q){if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=`<button class="dclose" id="dismissResult" aria-label="Close">×</button>${resultHTML()}`}else{el.hidden=true;el.innerHTML=''}return}
+  if(!q){if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);
     el.innerHTML=`${balloon({...v,desc:""},`<p>“I’m back for my order.”</p><p class="asked">They asked: “${esc(v.line)}”</p>`)}<div class="row"><button id="letGo">They can’t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);

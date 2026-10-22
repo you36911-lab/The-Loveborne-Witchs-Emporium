@@ -183,6 +183,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes subIn{from{opacity:0}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){.scenenote.in{animation:none}}
 .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
+.badge[hidden]{display:none}
 /* Email (Moonpost): a webmail page. Folders, message list, reading pane. On a phone the list and the open email take turns. */
 .webmail{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);height:min(720px,calc(100vh - 40px));display:flex;flex-direction:column;overflow:hidden}
 .wm-top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--line)}
@@ -191,7 +192,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 #wmSearch{flex:1;min-width:0;max-width:520px;border-radius:20px;padding:7px 16px;background:var(--card)}
 .wm-me{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);white-space:nowrap}
 .wm-me i{font-style:normal;width:30px;height:30px;border-radius:50%;background:var(--pink);color:#fff;display:grid;place-items:center;font-weight:700}
-.wm-close{font-size:20px;line-height:1;padding:4px 10px}
 .wm-body{flex:1;min-height:0;display:grid;grid-template-columns:170px minmax(260px,360px) minmax(0,1fr)}
 .wm-side{padding:12px 8px;display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--paper2)}
 .wm-folder{display:flex;justify-content:space-between;align-items:center;gap:8px;border:0;box-shadow:none;border-radius:0 18px 18px 0;background:none;text-align:left;padding:7px 12px}
@@ -241,11 +241,11 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
 /* a receipt: the shop's printed slip, filled in by hand on its ruled lines (the first at 33.4% down, one every 3.9%) */
 .receipt{position:relative;width:280px;aspect-ratio:483/642;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
-  box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Caveat',cursive;color:#3D2A5C}
-.receipt .ln{position:absolute;left:9%;right:9%;bottom:calc(100% - 33.4% - var(--r) * 3.9%);font-size:18px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.receipt .who{left:13%;font-size:16px}
+  box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
+.receipt .ln{position:absolute;left:9%;right:9%;bottom:calc(100% - 33.4% - var(--r) * 3.9%);font-size:12.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt .who{left:13%;font-size:11.5px}
 .receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:16px;letter-spacing:2px}
-.receipt .when{text-align:right;font-size:15px}
+.receipt .when{text-align:right;font-size:11.5px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}
 .autobar[hidden]{display:none}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
@@ -323,7 +323,7 @@ button.small{font-size:12px;padding:2px 10px}
 .coach ol{margin:4px 0 0;padding-left:20px}.coach li{margin:2px 0}.coach p{margin:2px 0}
 /* a result read at the counter, with nobody there: a plain card */
 .dialogue.plain{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px}
-.dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}
+.dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}  /* the tutorial note's × */
 .daycard{position:absolute}
 
 .cabinside{flex:1;min-height:0;overflow:auto;background:#2B1A13;border:2px solid #3A2219;border-radius:6px;padding:8px;box-shadow:inset 0 6px 14px rgba(0,0,0,.6)}

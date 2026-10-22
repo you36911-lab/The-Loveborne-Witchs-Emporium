@@ -13,7 +13,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   /* tutorials: close this one for good, or skip them all */
   if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
   if(b.dataset.tutskip){S.tutOff=true;render();return}
-  if(b.dataset.closeshelf){openShelf='';renderShelves();return}
   switch(b.id){
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
@@ -21,7 +20,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'madeBtn':giveMade();break;
     case 'toAltar':case 'toAltar2':setView('altar');break;
     case 'toShop':setView('shop');break;
-    case 'dismissResult':S.result=null;render();break;  /* whatever is laid out on the altar stays */
     case 'okBtn':takeOrder(visitByKey(S.queue.key));render();break;
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
@@ -39,7 +37,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'tillBtn':openReceipts();break;
     case 'crystalBtn':openInfo('Crystal ball',auraInfo());break;
     case 'notebookBtn':openDiary();break;
-    case 'closeInfo':$('#info').classList.remove('open');break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
     case 'mailLater':$('#mailFx').hidden=true;break;
     case 'moveBtn':clearTimeout(autoT);nextHour();break;
@@ -47,7 +44,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'restartBtn':if(b.dataset.sure){S=fresh();sanitize();delete b.dataset.sure;b.textContent='Restart';render()}else{b.dataset.sure='1';b.textContent='Tap again to restart';setTimeout(()=>{delete b.dataset.sure;b.textContent='Restart'},3000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
     case 'booksBtn':openBooks();break;
-    case 'closeBooks':$('#books').classList.remove('open');render();break;
   }});
 /* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
@@ -133,4 +129,4 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
-document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');$('#info').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});

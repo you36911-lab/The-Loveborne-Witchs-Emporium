@@ -48,6 +48,6 @@ $('#letters').addEventListener('click',e=>{const b=e.target.closest('button');if
   if(b.dataset.lsel){letterSel=b.dataset.lsel;if(letterSel!=='hints')markOpen(letterSel);renderLetters();$('#letterRead').scrollTop=0;return}
   if(b.dataset.back){letterSel='';renderLetters();return}
   if(b.dataset.arc){const k=b.dataset.arc,a=S.archive;a.includes(k)?a.splice(a.indexOf(k),1):a.push(k);toast(a.includes(k)?'Archived':'Moved to Inbox');letterSel='';save();renderLetters();return}
-  if(b.id==='closeLetters'){$('#letters').classList.remove('open');render()}});
+});
 $('#wmSearch').addEventListener('input',e=>{mailQuery=e.target.value;renderLetters()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#letters').classList.contains('open')){$('#letters').classList.remove('open');render()}});
