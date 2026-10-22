@@ -577,7 +577,7 @@ button.small{font-size:12px;padding:2px 10px}
 
 /* the open cupboard: everything inside it, between the cabinets; it comes out of the door that opened */
 .shelfopen{position:absolute;top:max(13%,calc(100% - 100vh + 118px));max-height:63%;  /* below the order note, even when the ceiling is cropped */
-  left:29%;width:42%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:10px;
+  left:29%;width:42%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:0;
   /* framed in the cupboard's own wood: the edges of the cupboard picture (720×584; planks 56px top, 44px sides and bottom) */
   background:#2B1A13;border:22px solid #3A2219;border-width:24px 19px 19px;border-image:var(--cabinet-frame) 56 44 44 / 24px 19px 19px stretch;box-shadow:0 18px 40px rgba(0,0,0,.6);
   animation:cupboardOut .32s .12s cubic-bezier(.2,.8,.3,1.1) backwards}
@@ -588,10 +588,8 @@ button.small{font-size:12px;padding:2px 10px}
 .shelfopen.fromR{transform-origin:100% 30%;--from:14%}
 @keyframes cupboardOut{from{opacity:0;transform:translateX(var(--from)) scale(.8)}}
 @media (prefers-reduced-motion:reduce){.shelfopen{animation-duration:.01s}}
-.shelfhead{display:flex;align-items:center;justify-content:space-between;margin:0 2px 8px}
-.shelfhead h3{margin:0;color:#F6E7C9;font-family:var(--font-title);font-weight:700;font-size:22px}
 /* an open cupboard: its things stand against the cupboard's own wooden back, with no shelves drawn */
-.shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:0;background:var(--cabinet-back) center/cover no-repeat,#2B1A13}
+.shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:10px 6px;border:0;border-radius:0;box-shadow:inset 0 4px 12px rgba(0,0,0,.55);background:var(--cabinet-back) center/cover no-repeat,#2B1A13}
 .shelfopen .chips,.shelfopen .chips.shelf{border-radius:6px;background:none;box-shadow:none}
 .shelfopen .swatch{width:46px;height:46px}
 .fillnow{flex:0 0 100%;display:flex;flex-wrap:wrap;gap:6px;padding-bottom:6px}
@@ -599,7 +597,7 @@ button.small{font-size:12px;padding:2px 10px}
 /* the table is the altar: things stand on its top (the picture's tabletop runs from 76% to 89% down); the candle at the
    left end, what is laid out in between, and the card on the smooth part of the cloth just right of the middle (about 62%
    across; further right the cloth folds and drapes). The bar sits on the cloth hanging in front. */
-.tabletop{position:absolute;left:13%;right:33%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
+.tabletop{position:absolute;left:13%;right:27%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
 .plates{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1.2%}
 .ontable{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;cursor:pointer}
@@ -609,7 +607,7 @@ button.small{font-size:12px;padding:2px 10px}
 .ontable .nm{margin-top:.3cqw;padding:0 .5em;border-radius:3px;font-size:clamp(10px,.68cqw,14px);line-height:1.5;white-space:nowrap;color:#4A2A1C;background:#F6E7C9;box-shadow:0 1px 2px rgba(0,0,0,.4)}
 /* the tarot card lies flat on the table, tipped away from the viewer; an empty dashed outline marks its place */
 .ontable.laid{justify-content:flex-end}
-.cardbed{display:flex;align-items:center;justify-content:center;width:8.5cqw;aspect-ratio:420/722;margin-bottom:-1.8cqw;border-radius:.4cqw;
+.cardbed{display:flex;align-items:center;justify-content:center;width:6cqw;aspect-ratio:420/722;margin-bottom:.4cqw;border-radius:.4cqw;
   transform:perspective(90cqw) rotateX(60deg);transform-origin:50% 100%;transition:transform .25s;
   box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
 .cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}

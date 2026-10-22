@@ -131,11 +131,12 @@ function renderShelves(){
   box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
   if(shownShelf!==openShelf){box.style.animation='none';void box.offsetWidth;box.style.animation='';shownShelf=openShelf}
-  box.innerHTML=`<div class="shelfhead"><h3>${esc(SHELFNAME[openShelf]||openShelf)}</h3></div><div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
+  box.setAttribute('aria-label',SHELFNAME[openShelf]||openShelf);box.innerHTML=`<div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
 /* how tall an ingredient stands (ITEM_SIZE in config.js) */
 const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;
 function shelfItemsHTML(c){
-  if(c==='Candles')return Object.keys(D.colours).map(k=>`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
+  if(c==='Candles')return Object.keys(D.colours).map(k=>ASSETS.candles[k]?`<button class="chip jar ${S.candle===k?'on':''}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"><span class="bot"><img src="${ASSETS.candles[k]}" alt="" loading="lazy" style="--h:.8"></span></button>`
+    :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
   if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
   /* the waters cupboard also keeps the empty bottles: the ones that can be filled right now show first */
   const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
@@ -164,7 +165,7 @@ function renderAltar(){
   sel.value=S.target||'';
   /* what is laid out stands on the table; tap a thing to put it back */
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'<span class="hint">Open a shelf and pick what to lay on the table.</span>';
-  $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="Put the candle back"><i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span></button>`:'<span class="hint">No candle</span>';
+  $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img src="${ASSETS.candles[S.candle]}" alt="" style="--h:.8">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span>`}</button>`:'<span class="hint">No candle</span>';
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
     :'<button class="ontable laid" data-shelf="Tarot" title="Choose a tarot card" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';

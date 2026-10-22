@@ -120,6 +120,24 @@ const ASSETS = {
     'A first-year student':                   'assets/characters/first-year-student.png'
   },
   /* Tarot cards (Major Arcana), by name: shown in the Tarot Companion, the Cabinet and the altar's card slot. */
+  /* a candle of each colour (D.colours), the designer's pictures: in the Candles cupboard and on the altar */
+  candles: {
+    'White':       'assets/candles/candle-white.png',
+    'Black':       'assets/candles/candle-black.png',
+    'Red':         'assets/candles/candle-red.png',
+    'Pink':        'assets/candles/candle-pink.png',
+    'Orange':      'assets/candles/candle-orange.png',
+    'Yellow':      'assets/candles/candle-yellow.png',
+    'Gold':        'assets/candles/candle-gold.png',
+    'Green':       'assets/candles/candle-green.png',
+    'Light blue':  'assets/candles/candle-light-blue.png',
+    'Blue':        'assets/candles/candle-blue.png',
+    'Purple':      'assets/candles/candle-purple.png',
+    'Lavender':    'assets/candles/candle-lavender.png',
+    'Silver':      'assets/candles/candle-silver.png',
+    'Brown':       'assets/candles/candle-brown.png',
+    'Grey':        'assets/candles/candle-grey.png'
+  },
   tarot: {
     "The Fool":           "assets/tarot/the-fool.png",
     "The Magician":       "assets/tarot/the-magician.png",
