@@ -66,7 +66,7 @@ let NEEDS=null;
 function needsOf(w){if(!NEEDS){NEEDS={};BOOKS.filter(b=>!['Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>hiddenOf(e).forEach(p=>(NEEDS[p]=NEEDS[p]||[]).push(e.sk))))}return NEEDS[w]||[]}
 const usedUp=w=>needsOf(w).every(sk=>(S.fills[sk]||[]).includes(w));
 /* ---------- the book on screen: the cover swings open onto a spread, two pages at a time, and pages turn ---------- */
-const INDEX_LINES=22;            /* index lines on one page; a category heading takes three */
+const INDEX_LINES=20;            /* index lines on one page (rows are roomy; 20 fills the shortest pages, the Recipe Book's, without overflow); a heading takes three */
 const OPEN_MS=1100,TURN_MS=850;  /* the cover opening (match style.css) and a page turning, in ms */
 const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 let turning=false,openTimer=0;
