@@ -48,8 +48,8 @@ const ASSETS = {
   },
   /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
   altarRoom: 'assets/scene/altar-room.jpg',
-  /* the walls past the picture on a wide window: the same room drawn empty, enlarged around its vanishing point (1410, 815 on the
-     2752×1536 picture) by 1.254 per panel on the left and 1.214 on the right, four steps, each strip 1238px (45%) wide */
+  /* the walls past the picture on a wide window: the same room drawn empty, enlarged around its vanishing point (1376, 745 on the
+     2752×1536 picture, where its lower wall lines meet) by 1.262 per panel, five steps, each strip 1238px (45%) wide */
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon, the top bar, the day card at dawn */
