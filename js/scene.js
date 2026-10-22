@@ -29,6 +29,7 @@ function setBackground(key){if(key===bgNow)return;bgNow=key;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
+  room.style.setProperty('--room-sides',`url("${new URL(ASSETS.altarRoomSides,location.href).href}")`);
   room.style.setProperty('--inside-img',`url("${new URL(ASSETS.cabinetInside,location.href).href}")`);
   $('#'+next).classList.add('on');$('#'+bgTop).classList.remove('on');bgTop=next}
 /* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
