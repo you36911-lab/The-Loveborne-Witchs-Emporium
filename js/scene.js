@@ -169,12 +169,14 @@ function renderAltar(){
   $('#orderNote').innerHTML=ov?`<b>${esc(ov.who)}</b> asked: “${esc(ov.line)}”`:'';
   $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
-/* A tutorial is shown once: during the first visit of its kind, and never again after that visit. */
-function tutorial(kind,key){S.tut=S.tut||{};if(S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;return TUTORIAL[kind](visitByKey(key))}
+/* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
+   "Skip tutorials" turns them all off (S.tutOff). */
+function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
+  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
-  order:()=>`<div class="coach"><b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol></div>`,
-  back:v=>`<div class="coach"><b>Some orders take time</b><p>This one can’t be made while they wait, so they will come back. Have it ready by then: when they return, make it at the altar and give it.</p></div>`,
-  advice:v=>`<div class="coach"><b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol></div>`};
+  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
+  back:v=>`<b>Some orders take time</b><p>This one can’t be made while they wait, so they will come back. Have it ready by then: when they return, make it at the altar and give it.</p>`,
+  advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol>`};
 /* What someone says goes in a speech balloon; what they do (the cue) is written above it, like a stage direction. */
 const balloon=(v,inner)=>`${whoHTML(v)}${v.cue?`<p class="cue">${esc(v.cue)}</p>`:''}<div class="balloon">${inner}</div>`;
 /* The counter: what the customer says, in a balloon over the shop window. Hidden when nobody is there,
@@ -209,7 +211,7 @@ function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key
   log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
 /* A regular's first visit shows what you see (desc in story.js); they say their name in that visit, and from then on it is used. */
 function whoHTML(v){return `<div class="who"><b>${esc(v.desc||v.who)}</b></div>`}
-function dayTip(){if(S.day===1&&S.h===0&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
+function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
   if(Object.values(S.mail||{}).includes(false))return 'A new email came in. Click the <b>computer</b> to read it.';return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}

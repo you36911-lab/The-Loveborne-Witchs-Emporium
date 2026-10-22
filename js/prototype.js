@@ -14,6 +14,10 @@ function fillProto(){const w=Math.ceil(S.day/7);
 function jumpTo(day,h){clearTimeout(autoT);
   S.day=day;S.h=h;S.queue=null;S.activeNow=null;S.result=null;
   X.visits.forEach(v=>{if(v.day===day&&v.hour===HOURS[h])delete S.seen[v.day+'-'+v.hour+'-'+v.who]});
+  /* tutorials whose first visit comes before this point count as seen (jumping back before it brings it back) */
+  const kindOf=v=>v.kind==='advice'?'advice':v.back?'back':'order',at=(d,i)=>d*4+i;S.tut=S.tut||{};
+  Object.keys(TUTORIAL).forEach(k=>{const v=X.visits.find(v=>kindOf(v)===k);if(!v)return;
+    if(at(v.day,HOURS.indexOf(v.hour))<at(day,h)){if(!S.tut[k])S.tut[k]='skipped'}else if(S.tut[k]==='skipped')delete S.tut[k]});
   $('#dayEnd').classList.remove('open');dawnUntil=0;$('#dayCard').classList.remove('on');
   log('Jumped here (prototype).');render();fillProto()}
 if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();

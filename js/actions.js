@@ -10,6 +10,9 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;log(`Filled a bottle of ${n}.`);toast(`+1 ${n}`);render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */
   if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
+  /* tutorials: close this one for good, or skip them all */
+  if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
+  if(b.dataset.tutskip){S.tutOff=true;render();return}
   if(b.dataset.closeshelf){openShelf='';renderShelves();return}
   switch(b.id){
     case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
