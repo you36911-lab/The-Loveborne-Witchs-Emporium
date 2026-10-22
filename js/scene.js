@@ -125,7 +125,7 @@ function renderShelves(){
   if(!$('#cubbies').childElementCount)buildDoors();
   let side='L';
   document.querySelectorAll('#cubbies .cubby').forEach(d=>{const c=d.dataset.shelf,n=shelfOnTable(c),on=openShelf===c,b=d.querySelector('b');
-    d.classList.toggle('open',on);d.setAttribute('aria-expanded',on);b.textContent=n||'';b.hidden=!n;if(on)side=d.dataset.side});
+    d.classList.toggle('open',on);d.setAttribute('aria-expanded',on);b.hidden=!n;d.setAttribute('aria-label',(SHELFNAME[c]||c)+(n?`, ${n} on the table`:''));if(on)side=d.dataset.side});
   const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';shownShelf='';return}
   box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
