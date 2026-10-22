@@ -239,13 +239,13 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* the till: just the receipts over the shop, no panel or dimming behind them */
 .modal.receiptsview{background:none;align-items:center;cursor:pointer}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
-/* a receipt: the shop's printed slip, filled in by hand on its ruled lines (the first at 33.4% down, one every 3.9%) */
-.receipt{position:relative;width:280px;aspect-ratio:483/642;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
+/* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
+.receipt{position:relative;width:280px;aspect-ratio:484/643;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
-.receipt .ln{position:absolute;left:9%;right:9%;bottom:calc(100% - 33.4% - var(--r) * 3.9%);font-size:12.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.receipt .who{left:13%;font-size:11.5px}
+.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:13.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt .who{font-size:12.5px}
 .receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:16px;letter-spacing:2px}
-.receipt .when{text-align:right;font-size:11.5px}
+.receipt .when{text-align:right;font-size:12.5px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}
 .autobar[hidden]{display:none}
 .cue{font-style:italic;color:var(--ink-soft);margin:8px 0 0;font-size:14px}
@@ -508,6 +508,12 @@ button.small{font-size:12px;padding:2px 10px}
 .room{position:absolute;left:50%;bottom:0;translate:-50% 0;
   height:max(100vh,min(calc(100vw * 768 / 1376),106vh));width:max(calc(100vh * 1376 / 768),min(100vw,calc(106vh * 1376 / 768)));
   background-size:100% 100%;background-color:#2a1d2a;container-type:size}
+/* On a window wider than the picture, the walls carry on past its edges: each side shows the picture's own edge, mirrored at
+   the seam and fading into the dark; the mirrored tablecloth below is darkened away. A stand-in until a wider picture is drawn. */
+.room::before,.room::after{content:'';position:absolute;top:0;bottom:0;width:45%;scale:-1 1;pointer-events:none;
+  background-size:100% 100%,100% 100%,222.2% 100%;background-repeat:no-repeat}
+.room::before{right:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 0%,rgba(30,18,25,.55) 45%,rgba(30,18,25,.95) 100%),linear-gradient(rgba(30,18,25,0) 66%,rgba(30,18,25,.97) 76%),var(--room-img);background-position:left top,left top,left top}
+.room::after{left:100%;background-image:linear-gradient(to left,rgba(30,18,25,0) 0%,rgba(30,18,25,.55) 45%,rgba(30,18,25,.95) 100%),linear-gradient(rgba(30,18,25,0) 66%,rgba(30,18,25,.97) 76%),var(--room-img);background-position:right top,right top,right top}
 @media (max-aspect-ratio:3/2){.room{bottom:auto;top:50%;translate:-50% -50%;width:100vw;height:calc(100vw * 768 / 1376)}}  /* narrow windows: the whole room, letterboxed */
 .altarview{background:#1E1219}
 .altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}
