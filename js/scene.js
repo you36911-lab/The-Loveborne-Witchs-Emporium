@@ -11,7 +11,8 @@ const STACK=[['Recipe Book','book-recipe-book',78,0,508],['Book of Making','book
   ['Crystal Almanac','book-crystal-almanac',19,433,637],['Herbiary','book-herbiary',19,494,631]];
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
-  $('#bookStack').innerHTML=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
+  const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
+  $('#bookStack').innerHTML=$('#altarBooks').innerHTML=stack;
   /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
   [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom,ASSETS.cabinetInside].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
 }
