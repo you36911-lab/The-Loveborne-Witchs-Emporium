@@ -79,7 +79,7 @@ On the counter, every object glows on hover and does something:
 - each book in the stack opens that book
 - crystal ball: the current customer's aura and the colour key
 - till: today's receipts on their own over the shop (no panel, no dimming); a click anywhere puts them away
-- notebook: what customers told me (hints)
+- notebook: what customers told me (hints), as a handwritten diary: it opens straight onto its ruled pages (assets/books/diary-open.png, no cover), the notes written on the lines in Caveat, newest page first, turned like the other books; no tabs, search, bookmarks or word bank
 - bell: the next customer
 - computer: email (Moonpost), with the unread badge
 

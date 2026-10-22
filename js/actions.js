@@ -35,7 +35,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'pcBtn':openLetters();break;
     case 'tillBtn':openReceipts();break;
     case 'crystalBtn':openInfo('Crystal ball',auraInfo());break;
-    case 'notebookBtn':openInfo('What customers told me',hintsHTML());break;
+    case 'notebookBtn':openDiary();break;
     case 'closeInfo':$('#info').classList.remove('open');break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
     case 'mailLater':$('#mailFx').hidden=true;break;

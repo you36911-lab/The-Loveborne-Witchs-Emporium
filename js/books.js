@@ -9,7 +9,10 @@ const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
  ['Sky Events',az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars'])],
  ['Weather',az(['Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow'])],
  ['Weekdays',D.days.map(d=>d[0])]];
-let curBook='Herbiary',selWord=null;
+let curBook='Herbiary',shelfBook='Herbiary',selWord=null;
+/* The notebook on the counter (what customers told me) opens in the same book view: no cover, no tabs, search or word bank,
+   just its ruled pages, written in by hand and turned like any other book. */
+const DIARY='What customers told me';
 /* Each book remembers its own search, across closing the shelf and switching books. */
 const searchOf=()=>((S.search||(S.search={}))[curBook]||'');
 function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L.push({k,sk:ns+':'+k,props,note,always});
@@ -68,7 +71,7 @@ const OPEN_MS=1100,TURN_MS=850;  /* the cover opening (match style.css) and a pa
 const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
 let turning=false,openTimer=0;
 /* Every page of the book in order: the index (split over as many pages as it needs, filtered by the search), then one entry per page. */
-function allPages(book){
+function allPages(book){if(book===DIARY)return diaryPages();
   const entries=bookPages(book),q=searchOf().toLowerCase(),marks=S.marks||[];
   const list=entries.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
   const intro=book==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
@@ -81,11 +84,27 @@ function allPages(book){
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
       return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
   return [...idx,...entries]}
+/* The diary's pages: each note is a heading (day, hour, who) and what they said, one blank line between notes.
+   A page holds 15 ruled lines; each note is measured on a hidden page to see how many lines it takes. */
+const DIARY_LINES=15;
+function noteLines(html){const tome=$('#tome');let m=tome.querySelector('.measure');
+  if(!m){m=document.createElement('div');m.className='pg left measure';m.setAttribute('aria-hidden','true');m.innerHTML='<div class="pbody"></div>';tome.append(m)}
+  const b=m.firstChild;b.innerHTML=html;const lh=parseFloat(getComputedStyle(b).lineHeight);
+  return lh>0?Math.max(1,Math.round(b.offsetHeight/lh)):4}
+function diaryPages(){const h=S.hints||[],pages=[];let cur='',used=1;  /* the title takes the first line */
+  const start=()=>{pages.push(cur);cur='';used=0};
+  cur='<p class="dtitle">What customers told me</p>';
+  if(!h.length)cur+='<p>Nothing yet. When a customer is happy with what you made, they sometimes let something slip. I write it down here.</p>';
+  h.forEach(x=>{const note=`<span class="dh">Day ${x.day}, ${esc(x.hour)} · ${esc(x.who)}</span><br>${kw(x.text)}`,need=noteLines(`<p class="dnote">${note}</p>`);
+    if(used&&used+1+need>DIARY_LINES)start();
+    cur+=`<p class="dnote${used?' gap':''}">${note}</p>`;used+=(used?1:0)+need});
+  pages.push(cur);
+  return pages.map((html,i)=>({key:'diary:'+i,plain:true,html:()=>html}))}
 /* The page the reader is on (S.page keeps its key per book), and the spread that holds it. */
 function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
 function pageHTML(pages,i){const p=pages[i];if(!p)return '';
   const m=!p.index&&(S.marks||[]).find(x=>x.book===curBook&&x.key===p.key);
-  return (p.index?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" style="${m?`--mc:${m.color}`:''}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
+  return (p.index||p.plain?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" style="${m?`--mc:${m.color}`:''}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
     `<div class="pbody">${p.html()}</div><div class="pnum">${i+1}</div>`}
 /* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
 function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
@@ -98,13 +117,18 @@ function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadIm
   else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
   $('#cover').setAttribute('aria-label','Open the '+curBook)}
 /* Show a book closed, then let the cover swing open by itself (or at a click). */
-function showBook(b){curBook=b;$('#search').value=searchOf();setArt();clearTimeout(openTimer);
-  const tome=$('#tome');tome.className='tome closed';renderBooks();
+function showBook(b){curBook=b;if(b!==DIARY)shelfBook=b;$('#search').value=searchOf();setArt();clearTimeout(openTimer);
+  const tome=$('#tome'),diary=b===DIARY;$('#books').classList.toggle('diary',diary);
+  /* the diary has no cover to open: it is already open */
+  if(diary){tome.className='tome open opened diary';renderBooks();return}
+  tome.className='tome closed';renderBooks();
   openTimer=setTimeout(openTome,calm()?0:650)}
 function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))return;clearTimeout(openTimer);
   if(calm()){tome.className='tome open opened';return}
   tome.className='tome open';setTimeout(()=>{if(tome.classList.contains('open'))tome.classList.add('opened')},OPEN_MS)}
-function openBooks(){$('#books').classList.add('open');showBook(curBook);autoTick()}
+function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick()}
+/* The diary opens on its newest page. */
+function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(diaryPages().length-1);renderBooks();autoTick()}
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
    hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
 const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */

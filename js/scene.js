@@ -75,7 +75,6 @@ function auraInfo(){
   const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:4px 0"><span class="aura" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c};vertical-align:middle"></span> ${esc(t)}</li>`).join('');
   return `<p>When someone stands at the counter, the crystal ball glows with what they are feeling. Feelings bend what people say, so the colour tells you how far to trust their words.</p>
     <p class="muted" style="margin-bottom:2px">What the colours mean:</p><ul style="list-style:none;padding:0;margin:0">${list}</ul>`}
-function hintsHTML(){const h=S.hints||[];return h.length?h.map(x=>`<p><span class="muted" style="font-size:13px">Day ${x.day}, ${esc(x.hour)} \u00B7 ${esc(x.who)}</span><br>${kw(x.text)}</p>`).join(''):'<p class="muted">Nothing yet. When a customer is happy with what you made, they sometimes let something slip. It is written down here.</p>'}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}

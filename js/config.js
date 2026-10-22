@@ -78,7 +78,9 @@ const ASSETS = {
     'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F4F5E5', page:[1.5,3.8,3]},
     'Herbiary':                 {cover:'', color:'#5B3A26', ink:'#E9C77B',               open:'', paper:'#EFE8CD', page:[1.5,4,3]},
     'Crystal Almanac':          {cover:'', color:'linear-gradient(135deg,#F4F1FA,#DCE9F5 40%,#F6DDEB 75%,#E6F3EC)', ink:'#6B5A86', open:'', paper:'#F0F4E1', page:[1.5,3.8,3]},
-    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'', paper:'#F5F7E9', page:[1.5,3.8,3]}
+    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'', paper:'#F5F7E9', page:[1.5,3.8,3]},
+    /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
+    'What customers told me':   {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
      Anyone not listed here (most walk-ins, Hester, Sam Okafor for now) is not drawn. */

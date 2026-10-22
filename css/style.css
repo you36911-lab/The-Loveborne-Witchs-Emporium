@@ -466,6 +466,25 @@ button.small{font-size:12px;padding:2px 10px}
 /* the drawn spread stays underneath the pages and the cover */
 .tome[data-drawn]::before,.tome[data-drawn]::after{z-index:0}
 .tome .pg,.tome .cover{z-index:1}
+/* The diary (the notebook on the counter): handwriting that sits on the picture's ruled lines. All sizes are in cqw (1% of the
+   book's width), measured on diary-open.png (968px wide): 15 rules, 37.25px apart, the first 8.05cqw below the page's top. */
+.bookview.diary :is(.booktabs,[data-nav],#search,.marks,.bank){display:none}
+.bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}
+.bookview.diary .bookbar{justify-content:flex-end}
+.tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3D2A5C;overflow:hidden;
+  padding:5.2cqw 3.5cqw 3.7cqw 2.9cqw}
+.tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}
+.tome.diary .pnum{display:none}
+.tome .pg.measure{visibility:hidden;bottom:auto;pointer-events:none}
+.tome.diary .pbody p{margin:0}
+.tome.diary .dnote.gap{margin-top:3.848cqw}
+.tome.diary .dtitle{font-size:1.3em;color:var(--kw)}
+.tome.diary .dh{color:#8A6A80}
+.tome.diary .kw{font-family:inherit;line-height:inherit;vertical-align:baseline}
+/* the turning sheet has no picture behind it, so it draws its own ruled lines */
+.tome.diary .leaf .pcopy{background:repeating-linear-gradient(to bottom,transparent 0 calc(3.848cqw - 1.5px),rgba(70,82,82,.75) calc(3.848cqw - 1.5px) 3.848cqw) no-repeat;
+  background-size:39.9cqw 57.72cqw;background-position:2.9cqw 4.2cqw}
+.tome.diary .leaf .pcopy.right{background-position:3.4cqw 4.2cqw}
 
 /* ---------- the workroom: one picture (assets/scene/altar-room.jpg, 1376×768), standing on the bottom of the window so the
    table and the bar in front of it are always in view, whatever the screen. A window wider than the picture crops a little
