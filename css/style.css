@@ -499,7 +499,7 @@ button.small{font-size:12px;padding:2px 10px}
   background-size:39.9cqw 57.72cqw;background-position:2.9cqw 4.2cqw}
 .tome.diary .leaf .pcopy.right{background-position:3.4cqw 4.2cqw}
 
-/* ---------- the workroom: one picture (assets/scene/altar-room.jpg, 1376×768), standing on the bottom of the window so the
+/* ---------- the workroom: one picture (assets/scene/altar-room.jpg, 2752×1536; its 1376/768 shape is used below), standing on the bottom of the window so the
    table and the bar in front of it are always in view, whatever the screen. A window wider than the picture crops a little
    of the ceiling (at most 6%), then shows dark wall either side; a narrower one crops the side walls.
    Everything sits on it in % of the picture: the cabinet doors on the painted doors, the altar on the table.
