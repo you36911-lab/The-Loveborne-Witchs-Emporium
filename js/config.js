@@ -80,9 +80,9 @@ const ASSETS = {
     'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F3E5CA', page:[1.5,3.9,3]},
     'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F3F5E7', page:[1.5,3.8,3]},
     'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F4F5E5', page:[1.5,3.8,3]},
-    'Herbiary':                 {cover:'', color:'#5B3A26', ink:'#E9C77B',               open:'', paper:'#EFE8CD', page:[1.5,4,3]},
-    'Crystal Almanac':          {cover:'', color:'linear-gradient(135deg,#F4F1FA,#DCE9F5 40%,#F6DDEB 75%,#E6F3EC)', ink:'#6B5A86', open:'', paper:'#F0F4E1', page:[1.5,3.8,3]},
-    'Gentle Bestiary':          {cover:'', color:'#D8C29A', ink:'#5A3E22',               open:'', paper:'#F5F7E9', page:[1.5,3.8,3]},
+    'Herbiary':                 {cover:'assets/books/herbiary-cover.png',               open:'assets/books/herbiary-open.png',               paper:'#F2E7CF', page:[1.8,3.8,2.8]},
+    'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F5E5', page:[1.8,3.7,3]},
+    'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F7F7E6', page:[7.2,6.2,8]},
     /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
     'What customers told me':   {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
   },
