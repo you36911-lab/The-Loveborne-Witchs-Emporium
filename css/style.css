@@ -136,6 +136,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .room .books{position:absolute;left:6.5%;bottom:14.5%;width:12%;aspect-ratio:659/672;z-index:2}
 .scene .books button,.room .books button{position:absolute;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transition:transform .15s,filter .15s;filter:drop-shadow(0 3px 2px rgba(60,20,30,.3))}
 .scene .books button img,.room .books button img{display:block;width:100%;height:auto}
+/* in the workroom the stack takes the room's dim, rosy light, so it sits in the scene instead of looking pasted on */
+.room .books button img{filter:brightness(.8) saturate(.88) sepia(.12) hue-rotate(-28deg)}
 .scene .books button:hover,.scene .books button:focus-visible,.room .books button:hover,.room .books button:focus-visible{transform:translateX(3%);filter:drop-shadow(0 0 5px #ffd6f0) drop-shadow(0 0 12px #ffd6f0);outline:none;z-index:5}
 .scene .crystal{left:17.5%;bottom:17.5%;width:8%;z-index:1}
 /* The aura: a soft glow of the customer's colour around the crystal ball. */
