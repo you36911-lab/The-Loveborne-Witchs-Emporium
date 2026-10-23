@@ -609,14 +609,14 @@ button.small{font-size:12px;padding:2px 10px}
    right (about 77% across). The bar sits on the cloth hanging in front. */
 .tabletop{position:absolute;left:21.5%;right:15%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
-/* the candle stand (assets/candles/candle-stand.png, 403×600, the designer's cut-out): always there; a candle stands in its cup. The cup's opening is an
-   ellipse centred 12.67% down, 42.9% × 9.83% of the picture; the front copy is cut along its lower half, so the lip hides the candle's foot. */
+/* the candle stand (assets/candles/candle-stand.png, 403×600, the designer's cut-out): always there; a candle stands in its cup. The front copy is cut
+   along the rim's front edge, traced from the picture, so the candle's foot tucks behind the lip and meets its line exactly. */
 .stand{position:relative;height:60%;aspect-ratio:403/600;margin-bottom:.4cqw;filter:brightness(.86) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .stand img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
-.stand .standfront{z-index:2;clip-path:polygon(0 12.67%,7.1% 12.7%,7.9% 14.6%,10.4% 16.4%,14.3% 18.1%,19.7% 19.6%,26.2% 20.8%,33.6% 21.8%,41.6% 22.3%,50.0% 22.5%,58.4% 22.3%,66.4% 21.8%,73.8% 20.8%,80.3% 19.6%,85.7% 18.1%,89.6% 16.4%,92.1% 14.6%,92.9% 12.7%,100% 12.67%,100% 100%,0 100%)}
+.stand .standfront{z-index:2;clip-path:polygon(0 12.67%,6.9% 12.33%,9.9% 17.50%,14.9% 18.67%,19.9% 19.67%,24.8% 20.67%,29.8% 21.33%,34.7% 21.83%,39.7% 22.17%,44.7% 22.33%,49.6% 22.33%,54.6% 22.33%,59.6% 22.17%,64.5% 21.83%,69.5% 21.33%,74.4% 20.67%,79.4% 19.83%,84.4% 18.83%,89.3% 17.33%,92.8% 12.33%,100% 12.67%,100% 100%,0 100%)}
 .stand .standbtn{position:absolute;inset:0;z-index:3;padding:0;border:0;background:none;box-shadow:none;border-radius:40%;cursor:pointer}
 .stand:has(.standbtn:hover) .standpic{filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF)}
-.stand .ontable{position:absolute;left:50%;bottom:80%;translate:-50% 0;z-index:1;height:90%;  /* its foot rests on the floor of the cup, just behind the lip, so the whole rim shows */
+.stand .ontable{position:absolute;left:50%;bottom:74.5%;translate:-50% 0;z-index:1;height:90%;  /* its rounded foot just behind the rim's front edge (22.7% down), so the two meet in one line */
   width:auto;display:block}
 .stand .ontable img{position:static;height:100%;width:auto;max-width:none}
 .stand .ontable .candle{width:3cqw;height:100%}
