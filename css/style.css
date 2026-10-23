@@ -251,8 +251,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
 .receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FFF9F4 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
-.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.receipt .who{font-size:14px}
+.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:min(15.5px,calc(264px / (var(--len,1) * .62)));  /* a long line prints smaller so it fits (Courier letters are .6em wide) */
+  line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.receipt .who{font-size:min(14px,calc(264px / (var(--len,1) * .62)))}
 .receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:19px;letter-spacing:2px}
 .receipt .when{text-align:right;font-size:14px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}

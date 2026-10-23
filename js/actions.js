@@ -102,13 +102,11 @@ function nextHour(auto){
 const stars=n=>'\u2605'.repeat(n)+'\u2606'.repeat(5-n);
 /* A receipt is written by hand on the shop's printed slip (ASSETS.receipt), one thing per ruled line (--r counts the lines):
    what was sold, to whom, the stars, and when. */
-function receiptHTML(x){const who=(x.who||'a customer').replace(/^A(n?) /,'a$1 ');
-  /* an order reads 'Name (Type)': the name gets the first line, and the type goes with who it was for ("Charm for a student");
-     advice and spoiled batches keep their own wording */
-  const m=String(x.item||'').match(/^(.*) \((.*)\)$/),order=m&&m[2]!=='no charge';
-  const l1=order?m[1]:x.item||'',l2=order?m[2]+' for '+who:m?'for '+who:x.who||'';
+function receiptHTML(x){
+  /* the first line is what was sold, as 'Name (Type)' ("Advice (no charge)", "No sale"); the second is the customer */
+  const l1=x.item||'',l2=x.who||'A customer';
   return `<div class="receipt" style="background-image:url('${ASSETS.receipt}')">`+
-    `<span class="ln" style="--r:0">${esc(l1)}</span><span class="ln who" style="--r:1">${esc(l2)}</span>`+
+    `<span class="ln" style="--r:0;--len:${l1.length}">${esc(l1)}</span><span class="ln who" style="--r:1;--len:${l2.length}">${esc(l2)}</span>`+
     `<span class="ln rs" style="--r:2" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
     `<span class="ln when" style="--r:4">Day ${S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
