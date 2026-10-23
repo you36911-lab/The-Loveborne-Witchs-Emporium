@@ -104,6 +104,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 ## Open items
 
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
+- Redo the tutorial properly (the designer finds the current numbered notes weak). Hints were taken off the screen so the tutorial alone teaches them: ring the bell to call each customer (nobody comes in otherwise), open a cupboard in the workroom and pick what to lay on the table, and when each bottle can be filled.
 - Plain ink vs coloured inks: proposed renaming "Ink" to "Plain ink", making it a base only for drawn spells (Sigil, Rune), with "a coloured ink replaces plain ink". Not yet decided.
 - Angelica root (first needed Day 47) is the one confusing dead end no letter covers; optional second hint on the Pippin Green letter (Day 44).
 - The first customer's hint (the High Priestess) has no dotted keyword to collect; decide whether to add "intuition" to the line.
