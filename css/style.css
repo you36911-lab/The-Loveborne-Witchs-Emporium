@@ -632,13 +632,13 @@ button.small{font-size:12px;padding:2px 10px}
 /* the tarot card lies flat on the table, tipped away from the viewer; an empty dashed outline marks its place */
 .ontable.laid{justify-content:flex-end}
 .cardbed{display:flex;align-items:center;justify-content:center;width:6cqw;aspect-ratio:420/722;margin-bottom:.4cqw;border-radius:.4cqw;
-  transform:perspective(90cqw) rotateX(60deg);transform-origin:calc(50% - 44cqw) 100%;  /* its vanishing point is the room's middle, left of the card, so the far edge leans left */
-  transition:transform .25s;
+  transform:perspective(90cqw) rotateX(60deg);transform-origin:calc(50% - 32cqw) 100%;  /* its vanishing point is left of the card (a little nearer than the room's middle), so the far edge leans left */
+  transition:transform .25s,background .2s;
   box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
 .cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
-.ontable.laid:hover .cardbed{transform:perspective(90cqw) rotateX(52deg)}
-.ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.16)}
+.ontable.laid:hover .cardbed:not(.empty){transform:perspective(90cqw) rotateX(52deg)}
+.ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22)}  /* the empty outline stays put; only its inside fills in a little */
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}
 .candle::before{content:"";position:absolute;left:50%;top:-1.5cqw;width:.8cqw;height:1.4cqw;translate:-50% 0;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
