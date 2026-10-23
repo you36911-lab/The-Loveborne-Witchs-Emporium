@@ -249,7 +249,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .modal.receiptsview{background:none;align-items:center;cursor:pointer}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
 /* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
-.receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FBF4E2 center/100% 100% no-repeat;border-radius:2px;
+.receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FFF9F4 center/100% 100% no-repeat;border-radius:2px;
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
 .receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .receipt .who{font-size:14px}
