@@ -16,7 +16,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],log:[],result:null,queue:null,
+  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
@@ -31,7 +31,6 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
 sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
-function log(t){S.log.unshift(`Day ${S.day}, ${HOURS[S.h]}: ${t}`);S.log=S.log.slice(0,40)}
 /* Keywords not yet collected show a dotted underline; tapping one adds it to the word bank and picks it. Collected ones read as plain text. */
 const KWRE=new RegExp('\\b('+[...D.vocab].sort((a,b)=>b.length-a.length).map(w=>w.replace('-','\\-')).join('|')+')\\b','gi');
 function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)=>{out+=esc(s.slice(last,i))+(S.bank.includes(w.toLowerCase())?esc(m0):`<button class="kw" data-collect="${esc(w.toLowerCase())}">${esc(m0)}</button>`);  /* already collected: plain text */last=i+m0.length;return m0});return out+esc(s.slice(last))}
@@ -45,7 +44,7 @@ function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.tex
   S.hints.push({day:S.day,hour:HOURS[S.h],who:v.who,text:v.hint.text});setTimeout(()=>toast('Noted in your archive: what they told you'),2400)}
 /* A new email drops in with a little animation; the badge on the computer stays until it is opened. */
 function showMailFx(m){const fx=$('#mailFx');fx.dataset.at=Date.now();$('#mailFrom').textContent=m.from;fx.hidden=false;fx.classList.remove('go');void fx.offsetWidth;fx.classList.add('go')}
-function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;log(`A new email came in: ${m.title}.`);showMailFx(m)}})}
+function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;showMailFx(m)}})}
 const prev=()=>S.day>1?D.cal[S.day-2]:null;
 
 /* ---------- conditions ---------- */

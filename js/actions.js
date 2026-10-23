@@ -7,7 +7,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
-  if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;log(`Filled a bottle of ${n}.`);toast(`+1 ${n}`);render();return}
+  if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;toast(`+1 ${n}`);render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */
   if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
   /* tutorials: close this one for good, or skip them all */
@@ -24,12 +24,12 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
-      record(grade,v.who,'Advice (no charge)');S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;log(`${v.who} took your advice: ${a}.`);
+      record(grade,v.who,'Advice (no charge)');S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
       if(grade==='Perfect'){S.result={grade,first:'',lines:[v.hint.text],test:false};noteHint(v)}
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
-    case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');log('A customer left without their order.');S.queue=null;render();break}
+    case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');S.queue=null;render();break}
     case 'reportBtn':{const q=S.queue;S.reports=S.reports.filter(r=>!(r.at===q.at&&r.who===q.who));S.queue=null;render();break}
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
@@ -69,10 +69,10 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
       if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
-    S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true};log(`Test craft of ${r.name}.`)}
+    S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true}}
   else{/* Made for real: it goes up to the counter, and is given when the player clicks it there (giveMade). */
     const q=S.queue;if(!q)return;
-    S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;log(`Made ${r.name}.`);
+    S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;
     S.altar=[];S.candle='';S.tarot='';setView('shop');return}
   if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
   render()}
@@ -86,15 +86,15 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))ret
     const lines=[];
     if(ev.grade==='Perfect'){lines.push(v.hint.text);noteHint(v)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);lines.push('They thank you and take it home.')}
-    S.result={grade:ev.grade,first:'',lines,test:false};log(`Gave ${r.name} to ${v.who}.`);S.queue=null}
+    S.result={grade:ev.grade,first:'',lines,test:false};S.queue=null}
   render()}
 function nextHour(auto){
   if(S.queue&&S.queue.type==='report')S.queue=null;  /* an unheard report waits for another hour */
   if(S.queue){const q=S.queue;
     if(q.type==='new'&&visitByKey(q.key).back&&S.activeNow!==q.key)takeOrder(visitByKey(q.key));
     else if(q.type==='new'){const v=visitByKey(q.key);S.seen[q.key]=true;
-      if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale');log(`${v.who} left without anything.`)}S.activeNow=null}
-    else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');log('A customer left without their order.')}
+      if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale')}S.activeNow=null}
+    else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale')}
     S.queue=null}
   if(!auto)S.result=null;
   if(S.h<3){S.h++;render();return}

@@ -177,7 +177,6 @@ function renderAltar(){
   /* The order being made, as a reminder above the altar. */
   const ov=orderR&&(q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key));
   $('#orderNote').innerHTML=ov?`They asked: “${esc(ov.line)}”`:'';
-  $('#log').innerHTML=S.log.map(l=>`<div>${esc(l)}</div>`).join('');
 }
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
    "Skip tutorials" turns them all off (S.tutOff). */
@@ -214,12 +213,12 @@ function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.inner
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
   $('#madeTag').textContent=m.name;b.title=b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
-function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');log(`${v.who} left without anything.`);S.activeNow=null;S.queue=null}
+function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');S.activeNow=null;S.queue=null}
 function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
   if(b.day===S.day)return 'I\u2019ll come back later today.';
   return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}.`:`I\u2019ll come back on Day ${b.day}.`}
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
-  log(`${v.who} will come back on Day ${v.back.day} at ${v.back.hour}.`);S.queue=null}
+  S.queue=null}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
   if(Object.values(S.mail||{}).includes(false))return 'A new email came in. Click the <b>computer</b> to read it.';return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */

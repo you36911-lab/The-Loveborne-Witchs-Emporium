@@ -73,7 +73,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .aura{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--aura) 35%, transparent)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .result .g{font-family:var(--font-title);font-weight:700;font-size:22px;color:var(--kw)}
-.log{max-height:160px;overflow:auto;font-size:13px;color:var(--ink-soft);border-top:1px solid var(--line);margin-top:10px;padding-top:6px}
 .swatch{width:26px;height:26px;border-radius:50% 50% 4px 4px;border:1px solid var(--line);padding:0;box-shadow:var(--lift)}
 .swatch.on{outline:2px solid var(--kw);outline-offset:2px}
 /* No backdrop blur: the shop keeps animating behind an open window, and re-blurring the whole screen every frame made books and pages stutter. */
@@ -653,5 +652,3 @@ button.small{font-size:12px;padding:2px 10px}
 /* a test result between the cabinets; the shop log in the corner of the window */
 .result{position:absolute;left:36%;right:36%;top:13%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;
   border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--glow),0 12px 30px rgba(0,0,0,.45)}
-.logbox{position:absolute;left:16px;bottom:16px;width:min(340px,26vw);z-index:3;max-height:40vh;overflow:auto;box-sizing:border-box;
-  background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);border-radius:10px;padding:4px 12px}

@@ -12,7 +12,7 @@ function currentVisitor(){
   if(sv.back.length){const o=sv.back[0];S.queue={type:'return',oid:o.id};S.queue.tales=pullTales(visitByKey(o.key));return S.queue}
   if(sv.new.length){const v=sv.new[0];S.queue={type:'new',key:v.day+'-'+v.hour+'-'+v.who};S.queue.tales=pullTales(v);
     /* Morwenna always brings a bottle of sea water from Caldwell-on-Sea; it can't be gathered anywhere else. */
-    if(v.gift){S.stock[v.gift]=(S.stock[v.gift]||0)+1;log(`${v.who} left a bottle of ${v.gift}.`);setTimeout(()=>toast(`+1 ${v.gift}, from ${v.who.split(' ')[0]}`),300)}
+    if(v.gift){S.stock[v.gift]=(S.stock[v.gift]||0)+1;setTimeout(()=>toast(`+1 ${v.gift}, from ${v.who.split(' ')[0]}`),300)}
     return S.queue}
   return null}
 /* Which visit something made at the altar is for: a new customer, or one back for their order. */

@@ -19,7 +19,7 @@ function jumpTo(day,h){clearTimeout(autoT);
   Object.keys(TUTORIAL).forEach(k=>{const v=X.visits.find(v=>kindOf(v)===k);if(!v)return;
     if(at(v.day,HOURS.indexOf(v.hour))<at(day,h)){if(!S.tut[k])S.tut[k]='skipped'}else if(S.tut[k]==='skipped')delete S.tut[k]});
   $('#dayEnd').classList.remove('open');dawnUntil=0;$('#dayCard').classList.remove('on');
-  log('Jumped here (prototype).');render();fillProto()}
+  render();fillProto()}
 if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();
   $('#protoWeek').onchange=e=>{$('#protoDay').innerHTML=protoDays(+e.target.value)};
   $('#protoWho').onchange=e=>{const v=X.visits[e.target.value];if(!v)return;
