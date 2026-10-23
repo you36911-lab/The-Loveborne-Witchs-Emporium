@@ -36,6 +36,10 @@ body{margin:0;min-height:100%;color:var(--ink);font-family:var(--font-text);font
     radial-gradient(1.2px 1.2px at 91% 84%,#fff,transparent),var(--sky);
   background-size:260px 260px,260px 260px,260px 260px,260px 260px,260px 260px,260px 260px,260px 260px,100% 100%;background-attachment:fixed}
 ::selection{background:var(--pink);color:var(--ink)}
+/* A game, not a web page: clicks and drags never select pictures or words, and pictures can't be dragged off. Typing fields still select. */
+body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+input,textarea{-webkit-user-select:text;user-select:text}
+img{-webkit-user-drag:none}
 html{scrollbar-color:var(--pink) transparent;scrollbar-width:thin}
 h1,h2{font-family:var(--font-title);font-weight:700;color:var(--kw);line-height:1.1}
 h3,.px,.deco,.tabs button,.booktabs button,button.main,.proto b{font-family:var(--font-deco);font-weight:700;letter-spacing:.01em}
