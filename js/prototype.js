@@ -12,7 +12,7 @@ function fillProto(){const w=Math.ceil(S.day/7);
   $('#protoWho').innerHTML='<option value="">Customer (optional)</option>'+X.visits.map((v,i)=>`<option value="${i}">${esc(visitLabel(v))}</option>`).join('')}
 /* Whoever is booked for that hour comes in again, even if you have already served them. */
 function jumpTo(day,h){clearTimeout(autoT);
-  S.day=day;S.h=h;S.queue=null;S.activeNow=null;S.result=null;
+  S.day=day;S.h=h;S.queue=null;S.activeNow=null;S.result=null;S.parting=null;S.rung=true;  /* a jump rings the bell for you */
   X.visits.forEach(v=>{if(v.day===day&&v.hour===HOURS[h])delete S.seen[v.day+'-'+v.hour+'-'+v.who]});
   /* tutorials whose first visit comes before this point count as seen (jumping back before it brings it back) */
   const kindOf=v=>v.kind==='advice'?'advice':v.back?'back':'order',at=(d,i)=>d*4+i;S.tut=S.tut||{};

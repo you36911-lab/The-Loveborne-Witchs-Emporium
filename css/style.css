@@ -315,6 +315,9 @@ button.small{font-size:12px;padding:2px 10px}
 .dialogue{position:absolute;top:13vh;left:calc(50% + 6.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
+/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns berry (.main) */
+#cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
+#cantBtn:not(.main):hover{background:color-mix(in srgb,var(--peri) 82%,#000);color:#fff}
 .balloon{position:relative;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
 .balloon p{margin:0 0 6px}.balloon p:last-child{margin-bottom:0}
 .balloon .asked{font-size:14px;color:var(--ink-soft)}
@@ -534,11 +537,6 @@ button.small{font-size:12px;padding:2px 10px}
 .room::after{left:100%;background-image:linear-gradient(to right,rgba(30,18,25,0) 25%,rgba(30,18,25,.3) 65%,rgba(30,18,25,.75) 100%),var(--wall-r)}
 @media (max-aspect-ratio:3/2){.room{bottom:auto;top:50%;translate:-50% -50%;width:100vw;height:calc(100vw * 768 / 1376)}}  /* narrow windows: the whole room, letterboxed */
 .altarview{background:#1E1219}
-.altartop{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;justify-content:center;padding:76px 16px 0;pointer-events:none}
-.altartop>*{pointer-events:auto}
-.ordernote{max-width:min(760px,60vw);padding:6px 18px;border-radius:999px;font-size:15px;color:#fff;text-align:center;
-  background:rgba(26,14,24,.78);border:1px solid rgba(244,173,207,.35);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ordernote:empty{display:none}
 .hint{color:#FFEAF4;text-shadow:0 1px 2px rgba(40,5,30,.9);font-size:clamp(12px,.8cqw,16px)}
 
 /* The cabinet doors. Each .cubby is the dark inside of a cupboard; its .door is a slice of the room picture laid exactly
@@ -586,7 +584,7 @@ button.small{font-size:12px;padding:2px 10px}
   border:1px solid rgba(255,255,255,.35);box-shadow:inset 0 .45cqw 0 -.15cqw #9C6B4E}
 
 /* the open cupboard: everything inside it, between the cabinets; it comes out of the door that opened */
-.shelfopen{position:absolute;top:max(13%,calc(100% - 100vh + 118px));max-height:63%;  /* below the order note, even when the ceiling is cropped */
+.shelfopen{position:absolute;top:max(13%,calc(100% - 100vh + 118px));max-height:63%;  /* below the ceiling, even when it is cropped */
   left:29%;width:42%;z-index:4;display:flex;flex-direction:column;box-sizing:border-box;padding:0;
   /* framed in the cupboard's own wood: the edges of the cupboard picture (720×584; planks 56px top, 44px sides and bottom) */
   background:#2B1A13;border:22px solid #3A2219;border-width:24px 19px 19px;border-image:var(--cabinet-frame) 56 44 44 / 24px 19px 19px stretch;box-shadow:0 18px 40px rgba(0,0,0,.6);
@@ -632,11 +630,10 @@ button.small{font-size:12px;padding:2px 10px}
 .ontable.laid{justify-content:flex-end}
 .cardbed{display:flex;align-items:center;justify-content:center;width:6cqw;aspect-ratio:420/722;margin-bottom:.4cqw;border-radius:.4cqw;
   transform:perspective(90cqw) rotateX(60deg);transform-origin:calc(50% - 58cqw) 100%;  /* its vanishing point lies far to the left of the card, so the top leans left */
-  transition:transform .25s,background .2s;
+  transition:background .2s;
   box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
 .cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
-.ontable.laid:hover .cardbed:not(.empty){transform:perspective(90cqw) rotateX(52deg)}
 .ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22)}  /* the empty outline stays put; only its inside fills in a little */
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}

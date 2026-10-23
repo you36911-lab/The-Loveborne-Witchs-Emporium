@@ -8,6 +8,7 @@ function currentVisitor(){
   const sv=slotVisitors();
   if(S.queue){return S.queue}
   if(S.parting)return null;  /* the last customer is still saying goodbye; the next one waits */
+  if(!S.rung)return null;S.rung=false;  /* nobody comes in until the bell is rung */
   const busy=sv.back.length||sv.new.length,rp=dueReport(busy);
   if(rp){S.queue={type:'report',at:rp.at,who:rp.who};return S.queue}
   if(sv.back.length){const o=sv.back[0];S.queue={type:'return',oid:o.id};S.queue.tales=pullTales(visitByKey(o.key));return S.queue}
@@ -31,6 +32,8 @@ function record(g,who,item){S.pend.push({g,who,item,hour:HOURS[S.h]})}
 function tell(v,text,what){if(v.usual){S.tales.push({who:v.who,text,what,regular:true});return}
   (S.reports=S.reports||[]).push({who:v.who,aura:v.aura,text,what,at:S.day*4+S.h})}
 function dueReport(busy){const now=S.day*4+S.h;return (S.reports||[]).find(r=>r.at<now&&(!busy||now-r.at>=8))}
+/* whether someone would come in if the bell were rung now */
+function someoneDue(){const sv=slotVisitors(),busy=sv.back.length||sv.new.length;return !!(busy||dueReport(busy))}
 function pullTales(v){const own=S.tales.filter(t=>t.who===v.who),gossip=S.tales.find(t=>!t.regular&&t.who!==v.who);
   const out=[...own.map(t=>({own:true,...t})),...(gossip?[{own:false,...gossip}]:[])];S.tales=S.tales.filter(t=>!out.some(o=>o.who===t.who&&o.text===t.text));return out}
 function talesHTML(q){return (q.tales||[]).map(t=>`<p class="tale">${t.own?'<b>About last time:</b> ':`<b>News of ${esc(t.who.replace(/^(A|An|Two) /,m=>m.toLowerCase()))}${t.what?` and ${esc(t.what)}`:''}:</b> `}${kw(t.text)}</p>`).join('')}

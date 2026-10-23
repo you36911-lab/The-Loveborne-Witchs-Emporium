@@ -58,14 +58,17 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
   const v=currentVisitor(),note=$('#sceneNote');
   if(v||S.parting||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   const line=moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
-/* The bell brings the next customer: time moves on to the next hour with someone (or something) in it. */
+/* The bell brings the next customer, and only the bell does: someone due this hour comes straight in; otherwise time moves
+   on to the next hour with someone (or something) in it, and if that is a customer, they come in. */
 function ringBell(){const bell=$('#bellBtn');
-  if(S.parting){S.parting=null;if(currentVisitor()){render();return}}  /* the bell sends a lingering customer on their way */
+  S.parting=null;  /* the bell sends a lingering customer on their way */
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Someone is already at the counter.');return}
   bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');
+  if(someoneDue()){S.rung=true;S.result=null;render();return}
   if(S.h>=3){nextHour();return}
   const mail0=Object.keys(S.mail||{}).length;
-  do{nextHour(true)}while(S.h<3&&!currentVisitor()&&Object.keys(S.mail||{}).length===mail0&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]));
+  do{nextHour(true)}while(S.h<3&&!someoneDue()&&Object.keys(S.mail||{}).length===mail0&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]));
+  if(someoneDue())S.rung=true;
   S.result=null;render()}
 function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').innerHTML=html;$('#info').classList.add('open')}
 /* The aura is read from the colour glowing around the crystal ball, never as words.
@@ -175,9 +178,6 @@ function renderAltar(){
   $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
   const res=$('#result');
   if(S.result){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;
-  /* The order being made, as a reminder above the altar. */
-  const ov=orderR&&(q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key));
-  $('#orderNote').innerHTML=ov?`They asked: “${esc(ov.line)}”`:'';
 }
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
    "Skip tutorials" turns them all off (S.tutOff). */
