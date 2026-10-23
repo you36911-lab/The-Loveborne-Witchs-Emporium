@@ -7,6 +7,7 @@ function slotVisitors(){const d=S.day,h=HOURS[S.h];
 function currentVisitor(){
   const sv=slotVisitors();
   if(S.queue){return S.queue}
+  if(S.parting)return null;  /* the last customer is still saying goodbye; the next one waits */
   const busy=sv.back.length||sv.new.length,rp=dueReport(busy);
   if(rp){S.queue={type:'report',at:rp.at,who:rp.who};return S.queue}
   if(sv.back.length){const o=sv.back[0];S.queue={type:'return',oid:o.id};S.queue.tales=pullTales(visitByKey(o.key));return S.queue}
@@ -16,6 +17,9 @@ function currentVisitor(){
     return S.queue}
   return null}
 /* Which visit something made at the altar is for: a new customer, or one back for their order. */
+/* A customer who got just what they needed lingers to pass on a hint, in their own balloon, until the player clicks
+   away or rings the bell. */
+function part(v){S.parting={who:v.who,pic:v.pic,text:v.hint.text}}
 const visitorId=q=>q.type==='return'?'order:'+q.oid:q.key;
 function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */

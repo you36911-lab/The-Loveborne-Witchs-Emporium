@@ -56,10 +56,11 @@ function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
    teach that, and later the bottles themselves will be clickable in the scene. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote');
-  if(v||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  if(v||S.parting||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   const line=moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer: time moves on to the next hour with someone (or something) in it. */
 function ringBell(){const bell=$('#bellBtn');
+  if(S.parting){S.parting=null;if(currentVisitor()){render();return}}  /* the bell sends a lingering customer on their way */
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Someone is already at the counter.');return}
   bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');
   if(S.h>=3){nextHour();return}
@@ -75,7 +76,7 @@ function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('
   ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
 /* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn; a visit can name
    its own picture (pic in story.js), as when Rosalind brings her children. */
-function renderCustomer(){const cur=currentVisit(),src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
+function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
 function auraInfo(){
   const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:4px 0"><span class="aura" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c};vertical-align:middle"></span> ${esc(t)}</li>`).join('');
@@ -198,7 +199,8 @@ function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.inner
     el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(r.text))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
   if(q&&(q.tales||[]).length&&!q.newsDone){const v=q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key);
     el.innerHTML=`${balloon({cue:'before anything else, they pass on some news'},talesHTML(q))}<div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
-  if(!q){if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
+  if(!q){if(S.parting){el.innerHTML=balloon({},`<p>${kw(S.parting.text)}</p>`);return}
+    if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
   if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);
     el.innerHTML=`${balloon(v,`<p>“I’m back for my order.”</p><p class="asked">They asked: “${esc(v.line)}”</p>`)}<div class="row"><button id="letGo">They can’t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
@@ -208,7 +210,7 @@ function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.inner
   /* The customer decides: they either say when they will be back, or wait while you make it. */
   if(v.back&&S.activeNow!==q.key){el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p><p>“${esc(backLine(v))}”</p>`)}${tutorial('back',q.key)}<div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
   S.activeNow=q.key;
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row"><button class="main" id="toAltar2">Go to the altar</button><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
+  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;

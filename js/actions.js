@@ -18,14 +18,14 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'testBtn':doCraft(true);break;
     case 'giveBtn':doCraft(false);break;
     case 'madeBtn':giveMade();break;
-    case 'toAltar':case 'toAltar2':setView('altar');break;
+    case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
     case 'okBtn':takeOrder(visitByKey(S.queue.key));render();break;
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
       record(grade,v.who,'Advice (no charge)');S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
-      if(grade==='Perfect'){S.result={grade,first:'',lines:[v.hint.text],test:false};noteHint(v)}
+      if(grade==='Perfect'){part(v);noteHint(v)}
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
@@ -53,9 +53,12 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
   const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard'))fx.hidden=true;
   if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
   /* a result read at the counter (nobody there) */
+  /* a lingering customer leaves at a click elsewhere (the click that gave the order does not count) */
+  if(partingAtClick&&S.parting&&!inside('counter')&&!t.closest('.modal')){S.parting=null;render()}
   if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
-let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
+let partingAtClick=false;
+let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain');partingAtClick=!!S.parting},true);
 $('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
 $('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
@@ -83,10 +86,9 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))ret
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`);
-    const lines=[];
-    if(ev.grade==='Perfect'){lines.push(v.hint.text);noteHint(v)}
-    else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);lines.push('They thank you and take it home.')}
-    S.result={grade:ev.grade,first:'',lines,test:false};S.queue=null}
+    if(ev.grade==='Perfect'){part(v);noteHint(v)}
+    else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);S.result={grade:ev.grade,first:'',lines:['They thank you and take it home.'],test:false}}
+    S.queue=null}
   render()}
 function nextHour(auto){
   if(S.queue&&S.queue.type==='report')S.queue=null;  /* an unheard report waits for another hour */
@@ -96,18 +98,25 @@ function nextHour(auto){
       if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale')}S.activeNow=null}
     else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale')}
     S.queue=null}
+  S.parting=null;
   if(!auto)S.result=null;
   if(S.h<3){S.h++;render();return}
   endDay()}
 const stars=n=>'\u2605'.repeat(n)+'\u2606'.repeat(5-n);
 /* A receipt is written by hand on the shop's printed slip (ASSETS.receipt), one thing per ruled line (--r counts the lines):
    what was sold, to whom, the stars, and when. */
+/* a ruled line holds about 27 letters; a longer sale goes onto two lines, its (Type) on the second when the name fits the first */
+const RECEIPT_LINE=27;
+function receiptLines(t){if(t.length<=RECEIPT_LINE)return[t];
+  const m=t.match(/^(.*) (\(.*\))$/);if(m&&m[1].length<=RECEIPT_LINE)return[m[1],m[2]];
+  const w=t.split(' ');let a='';while(w.length&&(a?a+' '+w[0]:w[0]).length<=RECEIPT_LINE)a=a?a+' '+w.shift():w.shift();
+  return[a,w.join(' ')]}
 function receiptHTML(x){
-  /* the first line is what was sold, as 'Name (Type)' ("Advice (no charge)", "No sale"); the second is the customer */
-  const l1=x.item||'',l2=x.who||'A customer';
+  /* what was sold, as 'Name (Type)' ("Advice (no charge)", "No sale"), then the customer, the stars, and when on the last line */
+  const rows=[...receiptLines(x.item||''),x.who||'A customer'];
   return `<div class="receipt" style="background-image:url('${ASSETS.receipt}')">`+
-    `<span class="ln" style="--r:0;--len:${l1.length}">${esc(l1)}</span><span class="ln who" style="--r:1;--len:${l2.length}">${esc(l2)}</span>`+
-    `<span class="ln rs" style="--r:2" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
+    rows.map((t,i)=>`<span class="ln${i===rows.length-1?' who':''}" style="--r:${i}">${esc(t)}</span>`).join('')+
+    `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
     `<span class="ln when" style="--r:4">Day ${S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
   reviews.forEach(x=>S.hist.push(SCORE[x.g]));S.hist=S.hist.slice(-20);const after=rating();
