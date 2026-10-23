@@ -55,6 +55,7 @@ const ASSETS = {
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
   logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon, the top bar, the day card at dawn */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
+  candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
     'till':         'assets/scene/till.png',

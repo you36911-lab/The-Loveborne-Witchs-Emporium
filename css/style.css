@@ -136,8 +136,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .room .books{position:absolute;left:6.5%;bottom:14.5%;width:12%;aspect-ratio:659/672;z-index:2}
 .scene .books button,.room .books button{position:absolute;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transition:transform .15s,filter .15s;filter:drop-shadow(0 3px 2px rgba(60,20,30,.3))}
 .scene .books button img,.room .books button img{display:block;width:100%;height:auto}
-/* in the workroom the stack takes the room's dim, rosy light, so it sits in the scene instead of looking pasted on */
-.room .books button img{filter:brightness(.8) saturate(.88) sepia(.12) hue-rotate(-28deg)}
+/* in the workroom the stack is a little dimmer, so it sits in the room's low light instead of looking pasted on */
+.room .books button img{filter:brightness(.82) saturate(.9)}
 .scene .books button:hover,.scene .books button:focus-visible,.room .books button:hover,.room .books button:focus-visible{transform:translateX(3%);filter:drop-shadow(0 0 5px #ffd6f0) drop-shadow(0 0 12px #ffd6f0);outline:none;z-index:5}
 .scene .crystal{left:17.5%;bottom:17.5%;width:8%;z-index:1}
 /* The aura: a soft glow of the customer's colour around the crystal ball. */
@@ -609,6 +609,16 @@ button.small{font-size:12px;padding:2px 10px}
    right (about 77% across). The bar sits on the cloth hanging in front. */
 .tabletop{position:absolute;left:21.5%;right:15%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
+/* the candle stand (assets/candles/candle-stand.png, 403×600, the designer's cut-out): always there; a candle stands in its cup. The cup's opening is an
+   ellipse centred 12.67% down, 42.9% × 9.83% of the picture; the front copy is cut along its lower half, so the lip hides the candle's foot. */
+.stand{position:relative;height:46%;aspect-ratio:403/600;margin-bottom:.4cqw;filter:brightness(.86) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
+.stand img{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.stand .standfront{z-index:2;clip-path:polygon(0 12.67%,7.1% 12.7%,7.9% 14.6%,10.4% 16.4%,14.3% 18.1%,19.7% 19.6%,26.2% 20.8%,33.6% 21.8%,41.6% 22.3%,50.0% 22.5%,58.4% 22.3%,66.4% 21.8%,73.8% 20.8%,80.3% 19.6%,85.7% 18.1%,89.6% 16.4%,92.1% 14.6%,92.9% 12.7%,100% 12.67%,100% 100%,0 100%)}
+.stand .standbtn{position:absolute;inset:0;z-index:3;padding:0;border:0;background:none;box-shadow:none;border-radius:40%;cursor:pointer}
+.stand:has(.standbtn:hover) .standpic{filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF)}
+.stand .ontable{position:absolute;left:50%;bottom:81.9%;translate:-50% 0;z-index:1;height:115%;width:auto;display:block}
+.stand .ontable img{position:static;height:100%;width:auto;max-width:none}
+.stand .ontable .candle{width:3cqw;height:100%}
 .plates{flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;gap:1.2%}
 .ontable{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;cursor:pointer}
 .ontable:hover{background:none;box-shadow:none}  /* no box: the thing itself glows */

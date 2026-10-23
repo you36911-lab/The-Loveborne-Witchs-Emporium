@@ -170,7 +170,10 @@ function renderAltar(){
   sel.value=S.target||'';
   /* what is laid out stands on the table; tap a thing to put it back */
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'';
-  $('#candleSlot').innerHTML=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img src="${ASSETS.candles[S.candle]}" alt="" style="--h:.8">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i><span class="nm">${esc(S.candle)} candle</span>`}</button>`:'<span class="hint">No candle</span>';
+  /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
+     of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
+  const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
+  $('#candleSlot').innerHTML=`<div class="stand">${S.candle?'':'<button class="standbtn" data-shelf="Candles" title="Choose a candle" aria-label="Choose a candle"></button>'}<img class="standpic" src="${ASSETS.candleStand}" alt="">${lit}<img class="standfront" src="${ASSETS.candleStand}" alt=""></div>`;
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
     :'<button class="ontable laid" data-shelf="Tarot" title="Choose a tarot card" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
