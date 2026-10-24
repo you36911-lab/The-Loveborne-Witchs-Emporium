@@ -80,8 +80,10 @@ function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('
    its own picture (pic in story.js), as when Rosalind brings her children. */
 function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
+/* "Gold glow: joy" lists as "Joy": the dot already shows the colour. */
+const auraMeaning=t=>{const m=t.includes(': ')?t.split(': ')[1]:t;return m[0].toUpperCase()+m.slice(1)};
 function auraInfo(){
-  const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:4px 0"><span class="aura" style="display:inline-block;width:14px;height:14px;border-radius:50%;background:${c};vertical-align:middle"></span> ${esc(t)}</li>`).join('');
+  const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:8px 0"><span class="aura" style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${c};vertical-align:middle;margin-right:6px"></span> ${esc(auraMeaning(t))}</li>`).join('');
   return `<p>When someone stands at the counter, the crystal ball glows with what they are feeling. Feelings bend what people say, so the colour tells you how far to trust their words.</p>
     <p class="muted" style="margin-bottom:2px">What the colours mean:</p><ul style="list-style:none;padding:0;margin:0">${list}</ul>`}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
