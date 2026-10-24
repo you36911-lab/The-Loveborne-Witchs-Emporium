@@ -182,13 +182,13 @@ const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
 function renderCounter(){fillCounter();balloonEnter()}
 /* Whenever someone new speaks, the balloon floats up and fades in. A customer walking in shows first (the picture fades
-   in over 1.2s, see .customer in style.css) and the balloon follows half a second later; someone already standing there speaks straight away. */
+   in over 1.2s, see .customer in style.css) and the balloon follows a moment later; someone already standing there speaks straight away. */
 let balloonKey='',balloonWho='';
 function balloonEnter(){const q=S.queue,el=$('#counter');
   const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')):S.parting?'parting:'+S.parting.who:'';
   if(key===balloonKey)return;
   const v=q?currentVisit():S.parting,who=v&&ASSETS.characters[v.pic||v.who]?(v.pic||v.who):'';
-  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'1.7s':'0s');balloonKey=key;balloonWho=who;
+  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'1.4s':'0s');balloonKey=key;balloonWho=who;
   if(!key)return;el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
