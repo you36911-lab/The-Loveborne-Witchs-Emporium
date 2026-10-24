@@ -21,11 +21,11 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 ## Time and calendar
 
 - One day is one session, split into four Magic Hours: Sunrise, Noon, Twilight, Nightfall.
-- A moon cycle is **6 days** (New, Waxing Crescent, Waxing Gibbous, Full, Waning Gibbous, Waning Crescent; no quarter moons). A year is 72 days.
-- The game runs **Day 1 to Day 75**, Samhain to Samhain. Named full moons fall on Days 6, 12, … 72 (Beaver Moon first). Sabbats: Samhain 1–3 and 73–75, Yule 10–12, Imbolc 19–21, Ostara 27–29, Beltane 37–39, Litha 46–48, Lughnasadh 55–57, Mabon 64–66.
-- Time never moves by itself. The four hours still exist underneath (recipes and bottles use them) but are not labelled; the light in the shop shows the hour.
-- The **bell** brings the next customer, and nobody comes in without it: someone due this hour comes straight in; otherwise it moves time to the next hour with a customer (who then comes in), a letter or a bottle to fill, and closes the night at Nightfall. While someone is at the counter it only shakes; a customer lingering over their hint leaves when it rings. (A prototype jump rings it for you.)
-- Quiet hours show a mood line at the top of the scene, and a Fill button when a bottle can be filled.
+- **No weather and no daily moon phase** (removed: too complicated for what they gave). A year is 72 days. What is left of the sky is calendar days, like the festivals: a **full moon every sixth day**, each with its own name, and a few **sky events** (Clear starry night, Shooting stars, Rainbow, Lunar Eclipse, Blue Moon).
+- The game runs **Day 1 to Day 75**, Samhain to Samhain. Full moons fall on Days 6, 12, … 72 (Beaver Moon first); a recipe can ask for any full moon ("Full Moon") or one by name. Clear starry nights are Days 6, 30, 36, 42, 48, 54, 57, 58, 60, 66 and 72 (Nightfall only). Sabbats: Samhain 1–3 and 73–75, Yule 10–12, Imbolc 19–21, Ostara 27–29, Beltane 37–39, Litha 46–48, Lughnasadh 55–57, Mabon 64–66.
+- Time never moves by itself. The four hours still exist underneath (recipes use them) but are not labelled; the light in the shop shows the hour.
+- The **bell** brings the next customer, and nobody comes in without it: someone due this hour comes straight in; otherwise it moves time to the next hour with a customer (who then comes in) or a letter, and closes the night at Nightfall. While someone is at the counter it only shakes; a customer lingering over their hint leaves when it rings. (A prototype jump rings it for you.)
+- Quiet hours show a mood line at the top of the scene.
 - Over the year: 19 quiet hours with no customer or letter, left as breathing room. Week one has none.
 
 ## Customers and orders
@@ -54,7 +54,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
   - A missing ingredient is described by its shelf and **look** ("Picture it: green, jagged and a little hairy").
   - A theme is only called missing if nothing in the mix brings it.
   - A wrong or missing card gets the right card's blended feel, without naming keywords ("feels like a still mind that knows what is real without being told").
-- Bottled waters: test crafts use no stock; giving an order uses one bottle of each water. One bottle per kind per day while its condition holds. Morwenna leaves a bottle of Sea Water on every visit. Supply is checked for the whole year.
+- Waters (Moonwater, Rainwater, Snow Water and the rest) are ordinary ingredients, always on the shelf; nothing is gathered. Only Sea Water is counted: Morwenna leaves a bottle on every visit, giving an order uses one, test crafts use none.
 
 ## Books and words
 
@@ -89,7 +89,7 @@ On the counter, every object glows on hover and does something:
 ## Art direction (agreed so far)
 
 - Shop background as a clean plate (shelves, windows, door, table). Interactive objects (till, computer, bell, crystal ball, open book, door) are separate transparent PNG layers with hover glow.
-- Window view as its own layer so it can change with hour, season and weather.
+- Window view as its own layer so it can change with hour and season.
 - Remove brand logos (the computer's Apple logo). Aim for 1920×1080 or larger.
 - Interface look: clean and cozy. Cream panels with soft shadows (no glows), thin solid lines, rounded corners, deep plum text and one berry accent (main buttons, selected tabs, keywords); twilight-sky page with small stars, hearts around window titles. Fonts: Cormorant Garamond (serif) for titles, names and book entries; Nunito for reading text and, bolder, for buttons and labels; Great Vibes (script) only for the day card at dawn; Caveat for handwriting (the diary, the parcel tag); Courier Prime on receipts, which the till prints; IM Fell English for the ink on the cabinet labels. Dark mode is the same look at night.
 
@@ -104,13 +104,12 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 ## Open items
 
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
-- Redo the tutorial properly (the designer finds the current numbered notes weak). Hints were taken off the screen so the tutorial alone teaches them: ring the bell to call each customer (nobody comes in otherwise), open a cupboard in the workroom and pick what to lay on the table, and when each bottle can be filled.
+- Redo the tutorial properly (the designer finds the current numbered notes weak). Hints were taken off the screen so the tutorial alone teaches them: ring the bell to call each customer (nobody comes in otherwise), open a cupboard in the workroom and pick what to lay on the table, and click the computer when a new email comes in (the "A new email came in" line was taken off the screen for this).
 - Plain ink vs coloured inks: proposed renaming "Ink" to "Plain ink", making it a base only for drawn spells (Sigil, Rune), with "a coloured ink replaces plain ink". Not yet decided.
 - Angelica root (first needed Day 47) is the one confusing dead end no letter covers; optional second hint on the Pippin Green letter (Day 44).
 - The first customer's hint (the High Priestess) has no dotted keyword to collect; decide whether to add "intuition" to the line.
 - #202 The Unconditional Pillow and #105 Permission to Be are easy to confuse; consider clearer naming or a "this isn't what they asked for" message.
-- Gathering bottles (Dawn dew, Moonwater and so on): the scene no longer points them out. Plan: the tutorial teaches when each can be gathered, and bottle pictures in the scene become clickable to collect them. Until then the Waters cupboard shows a "Fill a bottle" button for each one that can be filled now.
-- Quiet hours show a mood line as a film-style subtitle at the bottom of the scene. The background follows the hour only, not the weather, so a "grey" line can sit over a sunny window.
+- Quiet hours show a mood line as a film-style subtitle at the bottom of the scene. The background follows the hour.
 - Ingredient pictures: the current cut-outs were made automatically and some keep a faint outline. The designer will supply background-removed PNGs to replace them (same names in assets/items). Festival backgrounds (Beltane, Imbolc, Ostara, Yule) are still being edited; not in the game yet.
 - Book art (assets/books): every book uses the designer's own cut-out cover and open spread (Downloads/Game/books, "-Photoroom" covers and "_open" spreads), upscaled and sized to what the book view needs: covers 1400px tall, spreads 2000px wide. A book's pictures are decoded before its cover swings, so the swing is never skipped while a big picture loads; switching books snaps the cover shut instead of swinging it back. The closed cover has no hover glow, since it opens by itself.
 - Only use art whose file is named for what it shows, or that is certain. Unnamed generated images that would have to be matched by guesswork stay out until confirmed.

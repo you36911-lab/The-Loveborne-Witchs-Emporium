@@ -52,8 +52,7 @@ function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`<img src="${ASSETS.logo}" alt="">Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
-   of the scene like a film subtitle. Bottles that can be filled are not pointed out here: the tutorial will
-   teach that, and later the bottles themselves will be clickable in the scene. */
+   of the scene like a film subtitle. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote');
   if(v||S.parting||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
@@ -67,7 +66,7 @@ function ringBell(){const bell=$('#bellBtn');
   if(someoneDue()){S.rung=true;S.result=null;render();return}
   if(S.h>=3){nextHour();return}
   const mail0=Object.keys(S.mail||{}).length;
-  do{nextHour(true)}while(S.h<3&&!someoneDue()&&Object.keys(S.mail||{}).length===mail0&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]));
+  do{nextHour(true)}while(S.h<3&&!someoneDue()&&Object.keys(S.mail||{}).length===mail0);
   if(someoneDue())S.rung=true;
   S.result=null;render()}
 function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').innerHTML=html;$('#info').classList.add('open')}
@@ -90,16 +89,10 @@ function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');retur
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
 function renderTop(){renderBadge();const T=today();
   const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
-  $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span><span>\u263E ${T.phase}</span><span>${T.weather}${HOURS[S.h]==='Nightfall'?` (night ${T.night})`:''}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
+  $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
 <span title="Every fifth test craft that isn't perfect costs a one-star review">Failed tests: ${S.failTests%5}/5</span>`;
   const rt=rating(),full=Math.round(rt);$('#stars').textContent='\u2605'.repeat(full)+'\u2606'.repeat(5-full)+' '+rt.toFixed(1);
   $('#stars').title=S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}
-const GATHER=[['Moonwater',()=>today().phase==='Full Moon'&&HOURS[S.h]==='Nightfall','Full Moon, Nightfall'],
- ['New Moon Water',()=>today().phase==='New Moon'&&HOURS[S.h]==='Nightfall','New Moon, Nightfall'],
- ['Sunwater',()=>today().weather==='Clear & sunny'&&HOURS[S.h]==='Noon','Clear day, Noon'],
- ['Rainwater',()=>today().weather==='Rain','Rain'],['Storm Water',()=>today().weather==='Thunderstorm','Thunderstorm'],
- ['Snow Water',()=>today().weather==='Snow','Snow'],['Dawn dew',()=>HOURS[S.h]==='Sunrise'&&!['Rain','Snow','Thunderstorm'].includes(today().weather),'Sunrise, dry'],
- ['Web Dew',()=>HOURS[S.h]==='Sunrise'&&today().weather==='Fog / Mist','Sunrise, mist']];
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
    swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
    off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg) as first drawn at 1376×768; it is now 2752×1536, the same shape. The bottom row
@@ -143,11 +136,9 @@ function shelfItemsHTML(c){
   if(c==='Candles')return Object.keys(D.colours).map(k=>ASSETS.candles[k]?`<button class="chip jar ${S.candle===k?'on':''}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"><span class="bot"><img src="${ASSETS.candles[k]}" alt="" loading="lazy" style="--h:.8"></span></button>`
     :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
   if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
-  /* the waters cupboard also keeps the empty bottles: the ones that can be filled right now show first */
-  const fill=c==='Base waters'?GATHER.filter(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]).map(([n,,when])=>`<button class="chip" data-gather="${esc(n)}" title="${esc(when)}">Fill a bottle: ${esc(n)}</button>`).join(''):'';
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
-  return (fill?`<div class="fillnow">${fill}</div>`:'')+D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
-    /* bottled waters: how many are left, as a badge on the bottle's shoulder (like the unread count on the computer) */
+  return D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
+    /* a gift kept in stock (sea water): how many are left, as a badge on the bottle's shoulder (like the unread count on the computer) */
     const st=X.stock[i.n]!==undefined?`<b class="badge stock" aria-label="${S.stock[i.n]} left">${S.stock[i.n]}</b>`:'';
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const pi=pic?`<span class="bot"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}">${st}</span>`:'';
@@ -225,27 +216,22 @@ function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; t
 function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
   S.queue=null}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
-  if(Object.values(S.mail||{}).includes(false))return 'A new email came in. Click the <b>computer</b> to read it.';return ''}
+  return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
 let autoT=null;
-function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tarot&&!GATHER.some(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n])}
+function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tarot}
 /* Time never moves by itself. While a customer is at the counter, time waits. Once nobody is waiting, the bar says
    whether anything is left to do this hour and offers Next hour; at Nightfall it offers Close for the night. */
-/* A quiet hour gets one line of mood from the day's weather, moon and festival, and offers any bottle that can be filled now. */
+/* A quiet hour gets one line of mood from the hour, a full moon and the festival. */
 function moodLine(){const T=today(),h=HOURS[S.h];
-  if(T.phase==='Full Moon'&&h==='Nightfall')return 'The full moon fills the window.';
-  if(T.phase==='New Moon'&&h==='Nightfall')return 'No moon tonight; the lane is very dark.';
-  const W={'Rain':'Rain taps on the window.','Snow':'Snow muffles the lane. Nobody is coming out in this.','Thunderstorm':'Thunder rolls over the rooftops.',
-    'Fog / Mist':'Fog presses at the glass.','Windy':'The wind rattles the shop sign.','Cloudy':'A grey, quiet hour.'}[T.weather]||
-    {Sunrise:'Sun spills across the counter.',Noon:'The shop is warm and bright.',Twilight:'The light goes gold, then grey.',Nightfall:'Stars are coming out over the lane.'}[h];
+  if(T.named&&h==='Nightfall')return `The ${T.named} fills the window.`;
+  const W={Sunrise:'Sun spills across the counter.',Noon:'The shop is warm and bright.',Twilight:'The light goes gold, then grey.',Nightfall:'Stars are coming out over the lane.'}[h];
   return W+(T.sabbat?` It is ${T.sabbat}; the village is busy elsewhere.`:'')}
 function autoTick(){return;clearTimeout(autoT);const bar=$('#autoBar'),msg=$('#autoMsg'),stay=$('#stayBtn'),move=$('#moveBtn');
   const busy=$('#books').classList.contains('open')||$('#dayEnd').classList.contains('open');
   if(busy||currentVisitor()){bar.hidden=true;return}
   bar.hidden=false;stay.hidden=true;move.hidden=false;
-  const fill=GATHER.find(([n,ok])=>ok()&&!S.gathered[S.day+'-'+n]);
   if(S.altar.length||S.candle||S.tarot)msg.textContent='No one is waiting. Something is still laid out on the altar.';
-  else if(fill)msg.innerHTML=`${esc(moodLine())} A good hour to fill a bottle of ${esc(fill[0])}. <button class="chip" data-gather="${esc(fill[0])}">Fill ${esc(fill[0])}</button>`;
   else msg.textContent=moodLine()+' Nothing more to do this hour.';
   move.textContent=S.h>=3?'Close for the night':`Next hour: ${HOURS[S.h+1]}`}

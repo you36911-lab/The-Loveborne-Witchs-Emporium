@@ -7,7 +7,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
-  if(b.dataset.gather){const n=b.dataset.gather;S.stock[n]=(S.stock[n]||0)+1;S.gathered[S.day+'-'+n]=true;toast(`+1 ${n}`);render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */
   if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
   /* tutorials: close this one for good, or skip them all */
@@ -63,7 +62,7 @@ $('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
 $('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
   if(!test){const lacking=S.altar.filter(n=>X.stock[n]!==undefined&&S.stock[n]<=0);
-    if(lacking.length){toast(`No ${lacking[0]} left. Fill a bottle first.`);return}
+    if(lacking.length){toast(`No ${lacking[0]} left.`);return}
     S.altar.forEach(n=>{if(X.stock[n]!==undefined)S.stock[n]--})}
   const ev=evaluate(r,test);
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */

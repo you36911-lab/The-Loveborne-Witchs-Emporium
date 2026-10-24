@@ -4,10 +4,8 @@ const BOOKS=['Herbiary','Crystal Almanac','Gentle Bestiary','Tarot Companion','A
 const az=a=>[...a].sort((x,y)=>x.localeCompare(y));
 /* Almanac categories (alphabetical); entries keep their natural order where there is one. */
 const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
- ['Moon Phases',['New Moon','Waxing Crescent','Waxing Gibbous','Full Moon','Waning Gibbous','Waning Crescent','Dark Moon']],
- ['Named Moons',['Wolf Moon','Snow Moon','Worm Moon','Pink Moon','Flower Moon','Strawberry Moon','Buck Moon','Sturgeon Moon','Harvest Moon',"Hunter's Moon",'Beaver Moon','Cold Moon']],
+ ['Full Moons',['Full Moon','Wolf Moon','Snow Moon','Worm Moon','Pink Moon','Flower Moon','Strawberry Moon','Buck Moon','Sturgeon Moon','Harvest Moon',"Hunter's Moon",'Beaver Moon','Cold Moon']],
  ['Sky Events',az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars'])],
- ['Weather',az(['Clear & sunny','Rain','After Rain','Thunderstorm','Fog / Mist','Windy','Snow'])],
  ['Weekdays',D.days.map(d=>d[0])]];
 let curBook='Herbiary',shelfBook='Herbiary',selWord=null;
 /* The notebook on the counter (what customers told me) opens in the same book view: no cover, no tabs, search or word bank,
@@ -182,10 +180,10 @@ function renderBooks(){
   $('#turnPrev').disabled=s===0;$('#turnNext').disabled=2*s+2>=pages.length}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
 const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
-const CONDKIND={day:'Weekday',phase:'Moon Phase',pg:'Moon Phase',dark:'Moon Phase',time:'Magic Hour',weather:'Weather',afterrain:'Weather',starry:'Sky Event',sabbat:'Festival',named:'Named Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
-const KINDOPTS={'Weekday':D.days.map(d=>d[0]),'Moon Phase':['New Moon','Waxing Crescent','Waxing Gibbous','Full Moon','Waning Gibbous','Waning Crescent','Waxing Moon','Waning Moon','Dark Moon'],
- 'Magic Hour':HOURS,'Weather':['after Rain','Clear & sunny','Fog / Mist','Rain','Snow','Thunderstorm','Windy'],'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
- 'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Named Moon':ALMANAC[3][1],
+const CONDKIND={day:'Weekday',full:'Full Moon',time:'Magic Hour',starry:'Sky Event',sabbat:'Festival',named:'Full Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
+const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
+ 'Magic Hour':HOURS,'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
+ 'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Full Moon':ALMANAC[2][1],
  'Special':['Morning after a Full Moon',"The customer's birthday","The day of the customer's milestone",'A full week, starting on a Monday']};
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
 function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>[...a].sort().join('|')===[...b].sort().join('|');

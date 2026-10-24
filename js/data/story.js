@@ -46,7 +46,7 @@ const X = {
  {"day": 63, "hour": "Twilight", "from": "Wend Mill, Greywater", "title": "From the mill at Greywater", "hints": [["Cedar chips", "home"]], "lines": ["To the Emporium,", "My mum and dad were married fifty-two years. Dad kept a corked bottle of cedar chips on the mantel, and scattered more in the drawers, until the whole mill house smelled like home. He said it kept them fond of each other through every winter.", "My wife and I could use some. Could you send a bag?", "Sam Wend, Wend Mill, Greywater"], "uses": [[66, 3, "walk-in"]]}
 ],
 "auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FF9FCB","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
-"stock":{"Moonwater":3,"Sunwater":2,"Rainwater":2,"Dawn dew":1,"New Moon Water":1,"Sea Water":1,"Snow Water":0,"Storm Water":0,"Web Dew":0},
+"stock":{"Sea Water":1},
 "letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home","intuition","transformation","truth"]]
 }
 ;

@@ -4,7 +4,6 @@ const KEY=SAVE_KEY;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ITEM=Object.fromEntries(D.items.map(i=>[i.n,i]));
-const WAX=['Waxing Crescent','Waxing Gibbous'], WAN=['Waning Gibbous','Waning Crescent'];  /* a moon cycle is six days */
 const COLOURHEX={White:'#FFFFFF',Black:'#2A2233',Red:'#E2483D',Pink:'#FF9FCB',Orange:'#F59A3B',Yellow:'#FFE15A',Gold:'#D9A82E',Green:'#5DBB6A','Light blue':'#A9D6F5',Blue:'#4C7BD9',Purple:'#9B5FD0',Lavender:'#C8B2F0',Silver:'#C9CDD6',Brown:'#9A6B45',Grey:'#9A97A8'};
 /* Swap clue lines, keyed by kind of miss: 'Needed>Got' target, too strong, too weak, or same feel. */
 const CLUETAG={ing:'Ingredients',candle:'Candle',card:'Card',when:'Timing',came:'Came through',done:'Done',sum:'Overall'};
@@ -16,7 +15,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  orders:[],seen:{},gathered:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
+  orders:[],seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
@@ -50,30 +49,23 @@ const prev=()=>S.day>1?D.cal[S.day-2]:null;
 /* ---------- conditions ---------- */
 function met(c){const T=today(),hr=HOURS[S.h];
   switch(c.t){
-    case 'day':return T.weekday===c.v; case 'phase':return T.phase===c.v;
-    case 'pg':return (c.v==='waxing'?WAX:WAN).includes(T.phase);
-    case 'dark':return T.phase==='New Moon'&&hr==='Nightfall';
-    case 'time':return hr===c.v; case 'weather':return T.weather===c.v;
-    case 'afterrain':{const p=prev();return !!p&&['Rain','Thunderstorm'].includes(p.weather)&&T.weather!=='Rain'}
-    case 'starry':return T.night==='clear'&&hr==='Nightfall';
+    case 'day':return T.weekday===c.v;
+    case 'full':return !!T.named;  /* every sixth day is a full moon, and each one has a name */
+    case 'time':return hr===c.v;
+    case 'starry':return (T.event||'').includes('Clear starry night')&&hr==='Nightfall';
     case 'sabbat':return T.sabbat===c.v;
     case 'named':return T.named===c.v;
     case 'event':return (T.event||'').includes(c.v);
-    case 'afterfull':{const p=prev();return !!p&&p.phase==='Full Moon'}
+    case 'afterfull':{const p=prev();return !!p&&!!p.named}
     case 'sabset':return c.v.split('|').includes(T.sabbat);
     case 'special':return false;}  /* customer-specific days are never met yet */
   return false}
-function condName(c){return ({day:c.v,phase:c.v,pg:c.v==='waxing'?'Waxing Moon':'Waning Moon',dark:'Dark Moon',time:c.v,weather:c.v,afterrain:'after Rain',starry:'Clear starry night',sabbat:c.v,named:c.v,event:c.v,afterfull:'Morning after a Full Moon',sabset:c.v==='Ostara|Mabon'?'Any equinox':'Any equinox or solstice',special:c.v})[c.t]}
-const WEATHERLINE={'Rain':'the smell of rain','Snow':'snow','Fog / Mist':'mist','Windy':'a wind','Thunderstorm':'thunder','Clear & sunny':'sunshine'};
+function condName(c){return ({day:c.v,full:'Full Moon',time:c.v,starry:'Clear starry night',sabbat:c.v,named:c.v,event:c.v,afterfull:'Morning after a Full Moon',sabset:c.v==='Ostara|Mabon'?'Any equinox':'Any equinox or solstice',special:c.v})[c.t]}
 function condClue(c,themes){const hr=S.h;
   switch(c.t){
     case 'day':{const p=(D.cond[c.v]||[]).find(x=>themes.includes(x));return[`It feels like it belongs to another day, a day of ${p||'something else'}.`,p?[p]:[]]}
-    case 'phase':case 'pg':case 'dark':{let w='a different moon';const v=c.t==='pg'?c.v:c.v;
-      if(c.t==='dark'||v==='New Moon')w='a new moon';else if(v==='Full Moon')w='a full moon';else if(c.v==='waxing'||WAX.includes(v))w='a growing moon';else if(c.v==='waning'||WAN.includes(v))w='a shrinking moon';
-      return[`It glows faintly, waiting for ${w}.`,[]]}
+    case 'full':return['It glows faintly, waiting for a full moon.',[]];
     case 'time':{const need=HOURS.indexOf(c.v);return[hr<need?'It feels half-awake. Too early in the day?':'It feels sleepy. Too late in the day?',[]]}
-    case 'weather':return[`It longs for ${WEATHERLINE[c.v]||'different weather'}.`,[]];
-    case 'afterrain':return['It longs for the fresh air after rain.',[]];
     case 'starry':return['It longs for an open, starry sky.',[]];
     case 'sabbat':return['It hums like a festival song, but not today\u2019s.',[]];
     case 'named':return['It is waiting for one particular full moon.',[]];
