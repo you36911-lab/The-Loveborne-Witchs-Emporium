@@ -103,6 +103,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 
 ## Open items
 
+- Wayfarer's Ward (Morwenna, Day 6) now brings six parts the player has not met (amazonite, comfrey leaf, malachite, snail shell, white candle, The Chariot), breaking the under-5 rule: the walk-ins that taught some of them came on Days 7–11. Options: an easier first order for her, or earlier walk-ins teaching some of these.
 - Day 8+ regular visits still follow the old plan, where 42 orders are collected later ("Later today" or "By Day X" in the design document's schedule). Each needs moving to a day and hour when its recipe can be made, so the customer can wait for it.
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
 - Redo the tutorial properly (the designer finds the current numbered notes weak). Hints were taken off the screen so the tutorial alone teaches them: ring the bell to call each customer (nobody comes in otherwise), open a cupboard in the workroom and pick what to lay on the table, and click the computer when a new email comes in (the "A new email came in" line was taken off the screen for this).
