@@ -15,15 +15,15 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  orders:[],seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
+  seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
 try{S=JSON.parse(localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean))||fresh()}catch(e){S=fresh()}
-/* Drop anything a save points at that this build no longer has (customers, orders, recipes). */
+/* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
-  S.orders=(S.orders||[]).filter(o=>keys.has(o.key)&&D.recipes[o.rid]);
-  if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):!S.orders.some(o=>o.id===S.queue.oid)))S.queue=null;
+  delete S.orders;  /* orders taken for later belong to older builds */
+  if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):S.queue.type!=='report'))S.queue=null;
   if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
   if(S.target&&!D.recipes[S.target])S.target='';
 }

@@ -19,7 +19,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
-    case 'okBtn':takeOrder(visitByKey(S.queue.key));render();break;
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
@@ -28,13 +27,11 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
-    case 'letGo':{const o=S.orders.find(o=>o.id===S.queue.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale');S.queue=null;render();break}
     case 'reportBtn':{const q=S.queue;S.reports=S.reports.filter(r=>!(r.at===q.at&&r.who===q.who));S.queue=null;render();break}
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
     case 'pcBtn':openLetters();break;
     case 'tillBtn':openReceipts();break;
-    case 'crystalBtn':openInfo('Crystal ball',auraInfo());break;
     case 'notebookBtn':openDiary();break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
     case 'mailLater':$('#mailFx').hidden=true;break;
@@ -80,8 +77,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
   render()}
 /* Hand over what was made: the grade was settled when it was made. */
 function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
-  {let v;
-    if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);o.status='done';v=visitByKey(o.key)}else{v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null}
+  {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`);
@@ -92,10 +88,8 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))ret
 function nextHour(auto){
   if(S.queue&&S.queue.type==='report')S.queue=null;  /* an unheard report waits for another hour */
   if(S.queue){const q=S.queue;
-    if(q.type==='new'&&visitByKey(q.key).back&&S.activeNow!==q.key)takeOrder(visitByKey(q.key));
-    else if(q.type==='new'){const v=visitByKey(q.key);S.seen[q.key]=true;
-      if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale')}S.activeNow=null}
-    else{const o=S.orders.find(o=>o.id===q.oid);o.status='missed';S.stats.missed++;record('Missed',visitByKey(o.key).who,'No sale')}
+    const v=visitByKey(q.key);S.seen[q.key]=true;
+    if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale')}S.activeNow=null;
     S.queue=null}
   S.parting=null;
   if(!auto)S.result=null;
@@ -132,10 +126,8 @@ function endDay(){const before=rating(),reviews=S.pend.splice(0);
     if(last){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
     showDawn()}}
 function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
-  const pend=S.orders.filter(o=>o.status==='waiting').map(o=>D.recipes[o.rid].name);
   return `<h3>Your week</h3><p>Orders by stars: \u2605\u2605\u2605\u2605\u2605 ${s.perfect}, \u2605\u2605\u2605\u2605 ${s.good}, \u2605\u2605 ${s.clumsy}, \u2605 ${s.failed}. Advice given ${s.advice}. Customers who left empty-handed ${s.missed}.</p>
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
-  ${pend.length?`<p>Still to collect: ${pend.map(esc).join(', ')} (Tobias will fetch it next week).</p>`:''}
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');$('#info').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});

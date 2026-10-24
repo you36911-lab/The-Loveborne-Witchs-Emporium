@@ -71,21 +71,15 @@ function ringBell(){const bell=$('#bellBtn');
   S.result=null;render()}
 function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').innerHTML=html;$('#info').classList.add('open')}
 /* The aura is read from the colour glowing around the crystal ball, never as words.
-   Clicking the ball only explains what the colours mean. */
+   Hester's first letter says what the colours mean. */
 function currentVisit(){const v=currentVisitor();if(!v)return null;
-  return v.type==='return'?visitByKey(S.orders.find(o=>o.id===v.oid).key):v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key)}
+  return v.type==='report'?S.reports.find(r=>r.at===v.at&&r.who===v.who):visitByKey(v.key)}
 function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('#crystalBtn');
   ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
 /* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn; a visit can name
    its own picture (pic in story.js), as when Rosalind brings her children. */
 function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
-/* "Gold glow: joy" lists as "Joy": the dot already shows the colour. */
-const auraMeaning=t=>{const m=t.includes(': ')?t.split(': ')[1]:t;return m[0].toUpperCase()+m.slice(1)};
-function auraInfo(){
-  const list=Object.entries(X.auras).map(([k,[c,t]])=>`<li style="margin:8px 0"><span class="aura" style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${c};vertical-align:middle;margin-right:6px"></span> ${esc(auraMeaning(t))}</li>`).join('');
-  return `<p>When someone stands at the counter, the crystal ball glows with what they are feeling. Feelings bend what people say, so the colour tells you how far to trust their words.</p>
-    <p class="muted" style="margin-bottom:2px">What the colours mean:</p><ul style="list-style:none;padding:0;margin:0">${list}</ul>`}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
@@ -151,8 +145,7 @@ function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test cra
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
   const q=currentVisitor();let orderR=null;
-  if(q){if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);orderR=o&&D.recipes[o.rid]}
-    else if(q.type==='new'&&S.activeNow===q.key){const v=visitByKey(q.key);orderR=D.recipes[v.rid]}}
+  if(q&&q.type==='new'&&S.activeNow===q.key)orderR=D.recipes[visitByKey(q.key).rid];
   const sel=$('#target');const rs=knownRecipes();
   /* choose the spell type first, then a recipe of that type (names only, no numbers) */
   if(S.target&&D.recipes[S.target])S.ttype=D.recipes[S.target].type;
@@ -181,30 +174,36 @@ function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind
   return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
   order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
-  back:v=>`<b>Some orders take time</b><p>This one can’t be made while they wait, so they will come back. Have it ready by then: when they return, make it at the altar and give it.</p>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol>`};
 /* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
    Nobody is labelled: who they are comes out in what they say and do. */
 const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}${inner}</div>`;
 /* The counter: what the customer says, in a balloon over the shop window. Hidden when nobody is there,
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
-function renderCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
+function renderCounter(){fillCounter();balloonEnter()}
+/* Whenever someone new speaks, the balloon floats up and fades in. A customer walking in shows first (the picture fades
+   in over 0.6s, see .customer in style.css) and the balloon follows; someone already standing there speaks straight away. */
+let balloonKey='',balloonWho='';
+function balloonEnter(){const q=S.queue,el=$('#counter');
+  const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')):S.parting?'parting:'+S.parting.who:'';
+  if(key===balloonKey)return;
+  const v=q?currentVisit():S.parting,who=v&&ASSETS.characters[v.pic||v.who]?(v.pic||v.who):'';
+  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'.6s':'0s');balloonKey=key;balloonWho=who;
+  if(!key)return;el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}
+function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
   if(q&&q.type==='report'){const r=S.reports.find(r=>r.at===q.at&&r.who===q.who);
     el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(r.text))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
-  if(q&&(q.tales||[]).length&&!q.newsDone){const v=q.type==='return'?visitByKey(S.orders.find(o=>o.id===q.oid).key):visitByKey(q.key);
+  if(q&&(q.tales||[]).length&&!q.newsDone){const v=visitByKey(q.key);
     el.innerHTML=`${balloon({cue:'before anything else, they pass on some news'},talesHTML(q))}<div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
   if(!q){if(S.parting){el.innerHTML=balloon({},`<p>${kw(S.parting.text)}</p>`);return}
     if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
-  if(q.type==='return'){const o=S.orders.find(o=>o.id===q.oid);const v=visitByKey(o.key);
-    el.innerHTML=`${balloon(v,`<p>“I’m back for my order.”</p><p class="asked">They asked: “${esc(v.line)}”</p>`)}<div class="row"><button id="letGo">They can’t wait any longer</button></div>`;return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     const opts='<option value="">Choose…</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
     el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
-  /* The customer decides: they either say when they will be back, or wait while you make it. */
-  if(v.back&&S.activeNow!==q.key){el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p><p>“${esc(backLine(v))}”</p>`)}${tutorial('back',q.key)}<div class="row"><button class="main" id="okBtn">All right</button></div>`;return}
+  /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
   el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
@@ -212,11 +211,6 @@ function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
   $('#madeTag').textContent=m.name;b.title=b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');S.activeNow=null;S.queue=null}
-function backLine(v){const b=v.back;if(b.line)return b.line;  /* the day only; the hour is left vague */
-  if(b.day===S.day)return 'I\u2019ll come back later today.';
-  return b.day<=D.cal.length?`I\u2019ll come back on ${D.cal[b.day-1].weekday}.`:`I\u2019ll come back on Day ${b.day}.`}
-function takeOrder(v){S.orders.push({id:Date.now()+Math.random(),key:S.queue.key,rid:v.rid,day:v.back.day,hour:v.back.hour,status:'waiting'});S.seen[S.queue.key]=true;
-  S.queue=null}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
   return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */

@@ -190,8 +190,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
 .scenenote[hidden]{display:none}
-.scenenote.in{animation:subIn .6s ease both}
-@keyframes subIn{from{opacity:0}to{opacity:1}}
+.scenenote.in{animation:subIn .6s ease-out both}
+@keyframes subIn{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translateX(-50%)}}  /* floats up as it fades in, like the speech balloon */
 @media (prefers-reduced-motion: reduce){.scenenote.in{animation:none}}
 .badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
 .badge[hidden]{display:none}
@@ -316,6 +316,10 @@ button.small{font-size:12px;padding:2px 10px}
    behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
 .dialogue{position:absolute;top:13vh;left:calc(50% + 6.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
+/* someone new speaks: the balloon (and the buttons under it) float up and fade in, after the customer has appeared */
+.dialogue.enter{animation:balloonIn .45s ease-out var(--enter-delay,0s) both}
+@keyframes balloonIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.dialogue.enter{animation-duration:.01s}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
 /* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns berry (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
