@@ -49,7 +49,7 @@ function fadeLight(key){const from=lightNow,to=LIGHT[key]||[1,1,1],t0=performanc
   fadeLight.raf=requestAnimationFrame(step)}
 /* A new day opens at dawn: the day's name shows for a moment, then the morning light comes in. */
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
-  $('#dayCard').innerHTML=`<img src="${ASSETS.logo}" alt="">Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
+  $('#dayCard').innerHTML=`Day ${S.day}<small>${esc(T.weekday)}${T.sabbat?' \u00B7 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
@@ -182,13 +182,13 @@ const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
 function renderCounter(){fillCounter();balloonEnter()}
 /* Whenever someone new speaks, the balloon floats up and fades in. A customer walking in shows first (the picture fades
-   in over 0.6s, see .customer in style.css) and the balloon follows; someone already standing there speaks straight away. */
+   in over 1.2s, see .customer in style.css) and the balloon follows half a second later; someone already standing there speaks straight away. */
 let balloonKey='',balloonWho='';
 function balloonEnter(){const q=S.queue,el=$('#counter');
   const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')):S.parting?'parting:'+S.parting.who:'';
   if(key===balloonKey)return;
   const v=q?currentVisit():S.parting,who=v&&ASSETS.characters[v.pic||v.who]?(v.pic||v.who):'';
-  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'.6s':'0s');balloonKey=key;balloonWho=who;
+  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'1.7s':'0s');balloonKey=key;balloonWho=who;
   if(!key)return;el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');

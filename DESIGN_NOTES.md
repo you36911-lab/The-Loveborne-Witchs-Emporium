@@ -33,17 +33,17 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 - Regulars (Hester, Edmund, Dottie, Goldie, Rosalind, Morwenna, Felix, Ivy, Noor, Sam) have story arcs. Walk-ins order every other recipe exactly once over the year.
 - Every order has exactly one right recipe; a different recipe fails.
 - Week-one orders always say what kind of thing they want (a charm, something to spread on toast = butter, something to look into = hand mirror, and so on).
-- A customer simply waits while you make it, unless the order truly cannot be made during their visit; only then do they say which day they'll be back. There is no button to start an order.
+- **Every order is made while the customer waits.** Nobody says they'll come back for it: each visit is placed on a day and hour when its recipe can be made (week one: Edmund comes at Nightfall, Goldie on Wednesday at Noon, and Wayfarer's Ward is now Full Moon · Nightfall, Morwenna's night). There is no button to start an order.
 - **Making and giving**: at the altar, **Make it** makes the order and slides the view back up to the counter, where it waits as a wrapped parcel (pink ribbon, a handwritten tag with the recipe name) between the till and the notebook. Clicking the parcel hands it over.
 - **Cupboards**: an open cupboard shows its things large enough to tell apart (42% of the room wide, 72% for the tarot cards), and always starts below the ceiling. Its things stand against the cupboard's own wooden back (assets/scene/cabinet-back.jpg, the middle of the designer's cupboard picture, upscaled), with no shelf planks drawn, framed by the cupboard picture's own wooden edges, with no title and nothing between the frame and the back. Bottled waters show how many are left as a pink badge on the bottle's shoulder, like the unread count on the computer. Things with a picture show no name label (the picture says what it is; hovering shows the name); only things without a picture yet are labelled. The same on the table. Making again before giving replaces it; it goes if the customer leaves.
 - "I don't know how to make this" needs a second tap.
-- **Popups**: every popup (books, diary, email, receipts, the crystal ball, the end of the day, the new-email card, an open cupboard, a result at the counter) sits in the middle of the screen and closes when you click outside it (or with Esc), so none of them has a Close or × button. Only the tutorial note keeps its ×, since it is not a popup. Clicking outside the end-of-day summary goes on to the next day, as its button does.
+- **Popups**: every popup (books, diary, email, receipts, the end of the day, the new-email card, an open cupboard, a result at the counter) sits in the middle of the screen and closes when you click outside it (or with Esc), so none of them has a Close or × button. Only the tutorial note keeps its ×, since it is not a popup. Clicking outside the end-of-day summary goes on to the next day, as its button does.
 - No order brings 5 or more parts the player hasn't met yet (except the Day 6 Beaver Moon stretch goal).
 - **Results**: a regular tells their own result on their next visit, on its own screen before the new request. A walk-in comes back themselves in the next quiet hour (or after two days, before the next customer) to say how it went, in their own voice and about the right person. A perfect order needs no report; the customer's passing hint is the thanks. They stay at the counter to say it in their own balloon, and leave at the next click elsewhere or when the bell is rung (the next customer waits until then).
 - **Advice seekers** ask a quick question ("which herb…?"). They fill quiet hours in week one.
 - **Names**: nobody at the counter is labelled, walk-in or regular. Who they are comes out in what they say and do; a regular says their own name in their first line. (The receipts and the diary still note who it was.)
-- **Speech balloon**: everything a customer says and does sits in one balloon just right of their face, its tail pointing at them: the cue in brackets first, then their words. The buttons sit below it. The altar's reminder reads "They asked: …".
-- **Tutorials happen once**: the first order, the first order that can't be made while they wait, and the first advice question each get a numbered tutorial note during that visit only. Later visits carry no instructions, just what the customer says and the buttons. Each note has a × that puts it away for good, and a "Skip tutorials" link that turns them all off (the first-day email tip too). Jumping with the prototype bar counts every tutorial whose first visit comes earlier as seen.
+- **Speech balloon**: everything a customer says and does sits in one balloon just right of their face, its tail pointing at them: the cue in brackets first, then their words. The buttons sit below it. When someone new speaks, the balloon floats up and fades in, after the customer's picture has faded in (1.2s, then a half-second pause; the balloon takes 0.8s); the mood line at the bottom floats in the same way. The altar's reminder reads "They asked: …".
+- **Tutorials happen once**: the first order and the first advice question each get a numbered tutorial note during that visit only. Later visits carry no instructions, just what the customer says and the buttons. Each note has a × that puts it away for good, and a "Skip tutorials" link that turns them all off (the first-day email tip too). Jumping with the prototype bar counts every tutorial whose first visit comes earlier as seen.
 
 ## Grading and feedback
 
@@ -80,7 +80,7 @@ The game has two full-screen views:
 
 On the counter, every object glows on hover and does something:
 - each book in the stack opens that book
-- crystal ball: the current customer's aura and the colour key
+- crystal ball: glows with the current customer's aura. It is not a button; Hester's first letter (P.S.) says what each colour means.
 - till: today's receipts on their own over the shop (no panel, no dimming); a click anywhere puts them away
 - notebook: what customers told me (hints), as a handwritten diary: it opens straight onto its ruled pages (assets/books/diary-open.png, no cover), the notes written on the lines in Caveat, newest page first, turned like the other books; no tabs, search, bookmarks or word bank
 - bell: the next customer
@@ -103,6 +103,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 
 ## Open items
 
+- Day 8+ regular visits still follow the old plan, where 42 orders are collected later ("Later today" or "By Day X" in the design document's schedule). Each needs moving to a day and hour when its recipe can be made, so the customer can wait for it.
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
 - Redo the tutorial properly (the designer finds the current numbered notes weak). Hints were taken off the screen so the tutorial alone teaches them: ring the bell to call each customer (nobody comes in otherwise), open a cupboard in the workroom and pick what to lay on the table, and click the computer when a new email comes in (the "A new email came in" line was taken off the screen for this).
 - Plain ink vs coloured inks: proposed renaming "Ink" to "Plain ink", making it a base only for drawn spells (Sigil, Rune), with "a coloured ink replaces plain ink". Not yet decided.
