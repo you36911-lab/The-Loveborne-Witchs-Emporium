@@ -119,9 +119,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .daycard.on{opacity:1}
 /* The customer stands behind the counter: the box ends at the counter's top edge, so everything
    below the waist is hidden. The picture is 95% of the scene's height, head at 22% from the top. */
-.scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.2s ease}
+.scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .45s ease}  /* leaving: a quick fade out */
 .scene .customer img{position:absolute;left:50%;top:28.4%;height:122.6%;width:auto;translate:-50% 0}
-.scene .customer.on{opacity:1}
+.scene .customer.on{opacity:1;transition-duration:1.2s}  /* coming in: a slow fade in */
 @media (prefers-reduced-motion: reduce){.scene .bg,.daycard,.scene .customer{transition:none}}
 /* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
 .proto[hidden]{display:none}
