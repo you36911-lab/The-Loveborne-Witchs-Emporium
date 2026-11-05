@@ -232,3 +232,5 @@ $('#books').addEventListener('change',e=>{const t=e.target;
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}
   /* the arrow keys turn the pages, unless a box or list has the keyboard */
   if($('#books').classList.contains('open')&&/^Arrow(Left|Right)$/.test(e.key)&&!e.target.closest('input,select,textarea')){e.preventDefault();turnBy(e.key==='ArrowRight'?1:-1)}});
+/* the word bank stands as tall as the book */
+new ResizeObserver(()=>$('#books').style.setProperty('--tome-h',$('#tome').offsetHeight+'px')).observe($('#tome'));
