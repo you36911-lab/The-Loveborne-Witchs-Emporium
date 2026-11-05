@@ -80,7 +80,7 @@ function allPages(book){if(book===DIARY)return diaryPages();
   const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
     (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
-      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
+      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:var(--kw)"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
   return [...idx,...entries]}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
@@ -96,7 +96,7 @@ $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===un
 function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
 function pageHTML(pages,i){const p=pages[i];if(!p)return '';
   const m=!p.index&&(S.marks||[]).find(x=>x.book===curBook&&x.key===p.key);
-  return (p.index||p.plain?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" style="${m?`--mc:${m.color}`:''}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
+  return (p.index||p.plain?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
     `<div class="pbody">${p.html()}</div><div class="pnum">${i+1}</div>`}
 /* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
 function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
@@ -164,9 +164,8 @@ function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(p
   requestAnimationFrame(frame);setTimeout(done,TURN_MS+400)}  /* finishes even if the window stops drawing frames */
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
-  $('#booktabs').innerHTML=BOOKS.map(b=>`<button aria-pressed="${b===curBook}" data-book="${esc(b)}">${esc(b)}</button>`).join('');
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" style="--mc:${m.color}" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):(S.bank.length?'<span class="muted">Every word you have collected is used up. Tap dotted words to collect more.</span>':'<span class="muted">No words yet. Tap a dotted word in an email, a result or a book to collect it.</span>'));
   const pages=allPages(curBook),s=pageAt(pages)>>1;
