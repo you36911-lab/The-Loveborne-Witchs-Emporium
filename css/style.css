@@ -393,13 +393,9 @@ button.small{font-size:12px;padding:2px 10px}
    The open spread is a picture (assets/books); the text sits on its paper. --pt, --po, --pb (top, outer edge, bottom)
    and --paper-c come from ASSETS.books in config.js. Timings match OPEN_MS and TURN_MS in books.js. */
 .modal.bookview{background:color-mix(in srgb,#1A1430 78%,transparent);flex-direction:column;align-items:stretch;gap:8px;overflow:hidden;padding-left:16px;padding-right:16px}
-.bookbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.bookbar .booktabs{margin:0;flex:1 1 auto;gap:5px}
-.bookbar .booktabs button{font-size:14px;padding:4px 11px}
-.bookbar #search{width:220px;border-radius:20px}
 .bookview .marks{margin:0}
 .bookmain{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px;align-items:center}
-.bookview .bank{max-height:100%;overflow:auto}
+.bookview .bank{max-height:100%;overflow:auto;margin-right:24px}
 @media (max-width:860px){.bookmain{grid-template-columns:1fr;align-items:start}.bookview .bank{max-height:30vh}.modal.bookview{overflow:auto}}
 .tomewrap{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;height:100%}
 .tome{--ar:1.422;position:relative;flex:none;aspect-ratio:var(--ar);width:min(calc(100% - 90px),calc((100dvh - 200px) * var(--ar)));
@@ -485,6 +481,9 @@ button.small{font-size:12px;padding:2px 10px}
 .ribbon.on{background:var(--kw);opacity:1}
 .pg.left .ribbon,.pcopy.left .ribbon{right:auto;left:1.6em}
 .turn{flex:none;width:38px;height:56px;padding:0;border-radius:20px;font-size:28px;line-height:1;display:grid;place-items:center}
+/* beside each arrow, a smaller one jumps to the first page (the index) or the last */
+.turnside{flex:none;display:flex;flex-direction:column;align-items:center;gap:12px}
+.turn.jump{height:36px;font-size:20px}
 .turn:disabled{opacity:.3;cursor:default;box-shadow:none}
 .tomewrap:has(.tome:not(.opened)) .turn{visibility:hidden}
 @media (prefers-reduced-motion:reduce){.tome,.cover,.leaf,.spread,.tome .pg{transition:none}}
@@ -520,9 +519,8 @@ button.small{font-size:12px;padding:2px 10px}
 .tome .pg,.tome .cover{z-index:1}
 /* The diary (the notebook on the counter): handwriting that sits on the picture's ruled lines. All sizes are in cqw (1% of the
    book's width), measured on diary-open.png (968px wide): 15 rules, 37.25px apart, the first 8.05cqw below the page's top. */
-.bookview.diary :is(.booktabs,[data-nav],#search,.marks,.bank){display:none}
+.bookview.diary :is(.marks,.bank){display:none}
 .bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}
-.bookview.diary .bookbar{justify-content:flex-end}
 .tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3D2A5C;overflow:hidden;
   padding:5.2cqw 3.5cqw 3.7cqw 2.9cqw}
 .tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}

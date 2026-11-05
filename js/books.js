@@ -11,8 +11,7 @@ let curBook='Herbiary',shelfBook='Herbiary',selWord=null;
 /* The notebook on the counter (my notes) opens in the same book view: no cover, no tabs, search or word bank,
    just its ruled pages, where the player writes, turned like any other book. */
 const DIARY='My notes';
-/* Each book remembers its own search, across closing the shelf and switching books. */
-const searchOf=()=>((S.search||(S.search={}))[curBook]||'');
+const searchOf=()=>'';  /* the search box is gone; the index always lists everything */
 function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L.push({k,sk:ns+':'+k,props,note,always});
   const cats={Herbiary:['Base waters','Oils, butters & waxes','Herbs & flowers','Fruits','Spices','Pantry: salts, sugars & baking','Resins & incense'],'Crystal Almanac':['Crystals'],'Gentle Bestiary':['Animal gifts']};
   if(cats[book])D.items.filter(i=>cats[book].includes(i.c)).sort((a,b)=>a.c.localeCompare(b.c)||a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,i.base.length?'Base for '+i.base.join(', '):'',false);L[L.length-1].cat=cats[book].length>1?i.c:''});
@@ -91,7 +90,7 @@ function diaryPages(){const n=memoWritten(),count=n+1+((n+1)%2);
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
   if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. Turn the page to write on.')}
   S.memo[+t.dataset.memo]=t.value;save();
-  const s=pageAt(diaryPages())>>1;$('#turnNext').disabled=2*s+2>=diaryPages().length})
+  const s=pageAt(diaryPages())>>1;$('#turnNext').disabled=$('#turnLast').disabled=2*s+2>=diaryPages().length})
 /* The page the reader is on (S.page keeps its key per book), and the spread that holds it. */
 function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
 function pageHTML(pages,i){const p=pages[i];if(!p)return '';
@@ -112,7 +111,7 @@ function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadIm
   else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
   $('#cover').setAttribute('aria-label','Open the '+curBook)}
 /* Show a book closed, then let the cover swing open by itself (or at a click). */
-function showBook(b){curBook=b;if(b!==DIARY)shelfBook=b;$('#search').value=searchOf();setArt();clearTimeout(openTimer);
+function showBook(b){curBook=b;if(b!==DIARY)shelfBook=b;setArt();clearTimeout(openTimer);
   const tome=$('#tome'),diary=b===DIARY;$('#books').classList.toggle('diary',diary);
   /* the diary has no cover to open: it is already open */
   if(diary){tome.className='tome open opened diary';renderBooks();return}
@@ -170,7 +169,7 @@ function renderBooks(){
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):(S.bank.length?'<span class="muted">Every word you have collected is used up. Tap dotted words to collect more.</span>':'<span class="muted">No words yet. Tap a dotted word in an email, a result or a book to collect it.</span>'));
   const pages=allPages(curBook),s=pageAt(pages)>>1;
   $('#pgL').innerHTML=pageHTML(pages,2*s);$('#pgR').innerHTML=pageHTML(pages,2*s+1);
-  $('#turnPrev').disabled=s===0;$('#turnNext').disabled=2*s+2>=pages.length}
+  $('#turnPrev').disabled=$('#turnFirst').disabled=s===0;$('#turnNext').disabled=$('#turnLast').disabled=2*s+2>=pages.length}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
 const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
 const CONDKIND={day:'Weekday',full:'Full Moon',time:'Magic Hour',starry:'Sky Event',sabbat:'Festival',named:'Full Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
@@ -205,7 +204,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   if(b.id==='cover'){openTome();return}
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
   if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}
-  if(b.dataset.nav){turnTo(0);return}
+  if(b.id==='turnFirst'||b.id==='turnLast'){turnTo(b.id==='turnFirst'?0:allPages(curBook).length-1);return}
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
@@ -222,7 +221,6 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
 });
 $('#books').addEventListener('change',e=>{const t=e.target;
-  if(t.id==='search')return;  /* the search box's change-on-blur would redraw the tabs mid-click */
   if(t.dataset.addIng&&t.value){const[iid,ii]=t.dataset.addIng.split('|');noteOf(iid).ing[+ii]=t.value}
   if(t.dataset.addWhen&&t.value){const[wid,wi]=t.dataset.addWhen.split('|');noteOf(wid).when[+wi]=t.value}
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
@@ -230,8 +228,6 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
   if(id&&recipeLocked(id))toast('Recipe solved \u2726')
   save();renderBooks()});
-/* Searching shows the index from its first page. */
-$('#search').addEventListener('input',e=>{(S.search||(S.search={}))[curBook]=e.target.value;S.page[curBook]='';save();renderBooks()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}
   /* the arrow keys turn the pages, unless a box or list has the keyboard */
   if($('#books').classList.contains('open')&&/^Arrow(Left|Right)$/.test(e.key)&&!e.target.closest('input,select,textarea')){e.preventDefault();turnBy(e.key==='ArrowRight'?1:-1)}});
