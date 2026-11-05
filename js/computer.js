@@ -5,8 +5,8 @@
 const PC_ICONS={
   /* Moonpost: an envelope sealed with a crescent moon */
   mail:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="15" width="52" height="36" rx="6" fill="#FFF8EE" stroke="#B9A4C6" stroke-width="2"/><path d="M8 19l24 18 24-18" fill="none" stroke="#B9A4C6" stroke-width="2.5" stroke-linejoin="round"/><circle cx="32" cy="37" r="10" fill="#8F7BD9"/><circle cx="30.5" cy="37" r="5.6" fill="#FFEFA8"/><circle cx="33.2" cy="35.2" r="4.8" fill="#8F7BD9"/></svg>',
-  /* My Shop: the shop's winged heart */
-  shop:`<img src="${ASSETS.logo}" alt="">`};
+  /* My Shop: a little shopfront with a striped awning */
+  shop:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="11" y="24" width="42" height="30" rx="2" fill="#FFF8EE" stroke="#B9A4C6" stroke-width="2"/><rect x="15" y="34" width="16" height="12" rx="1.5" fill="#D6E8F6" stroke="#B9A4C6" stroke-width="1.5"/><rect x="36" y="35" width="12" height="19" rx="1.5" fill="#C9B6F2"/><path d="M42 40.5c-1-1.6-3.4-1-3.4.8 0 1.5 2 2.7 3.4 3.8 1.4-1.1 3.4-2.3 3.4-3.8 0-1.8-2.4-2.4-3.4-.8z" fill="#FFF8EE"/><rect x="8" y="16" width="8" height="10" fill="#8F7BD9"/><circle cx="12" cy="26" r="4" fill="#8F7BD9"/><rect x="16" y="16" width="8" height="10" fill="#FFF8EE"/><circle cx="20" cy="26" r="4" fill="#FFF8EE"/><rect x="24" y="16" width="8" height="10" fill="#8F7BD9"/><circle cx="28" cy="26" r="4" fill="#8F7BD9"/><rect x="32" y="16" width="8" height="10" fill="#FFF8EE"/><circle cx="36" cy="26" r="4" fill="#FFF8EE"/><rect x="40" y="16" width="8" height="10" fill="#8F7BD9"/><circle cx="44" cy="26" r="4" fill="#8F7BD9"/><rect x="48" y="16" width="8" height="10" fill="#FFF8EE"/><circle cx="52" cy="26" r="4" fill="#FFF8EE"/><rect x="7" y="12" width="50" height="5" rx="2.5" fill="#6F58B8"/></svg>'};
 const PC_NAMES={mail:'Moonpost',shop:'My Shop'};
 let pcOpen=[];  /* the open apps, the bottom window first */
 const pcMin=new Set();  /* the ones minimised to the taskbar */
@@ -72,13 +72,14 @@ function reviewHTML(r){const bought=r.item==='No sale'?'Left without buying':r.i
   return `<article class="rv"><header class="rv-head">${avatarHTML({name:r.who})}<div><b>${esc(r.who)}</b><small class="muted">Day ${r.day}, ${esc(r.hour)}</small></div>
     <span class="rv-stars" aria-label="${SCORE[r.g]} of 5 stars">${stars(SCORE[r.g])}</span></header>
     ${bought?`<p class="rv-item">${esc(bought)}</p>`:''}${r.text?`<p>${kw(r.text)}</p>`:''}${r.hint?`<p class="rv-ps">P.S. ${kw(unquote(r.hint))}</p>`:''}</article>`}
-/* My Shop: the rating and the days on the left, that day's reviews (or every day's, newest first) on the right. */
+/* My Shop: the shop's name and logo, the rating and the days on the left, that day's reviews (or every day's, newest first) on the right. */
 function renderShop(){const rt=rating(),days=[...new Set(S.reviews.map(r=>r.day))].sort((a,b)=>b-a);
   if(reviewDay&&!days.includes(reviewDay))reviewDay=0;
   const count=d=>S.reviews.filter(r=>!d||r.day===d).length;
   const shown=days.filter(d=>!reviewDay||d===reviewDay).map(d=>`<h3 class="sh-day">Day ${d} <span class="muted">${esc(D.cal[d-1].weekday)}</span></h3>`+
     S.reviews.filter(r=>r.day===d).reverse().map(reviewHTML).join('')).join('');
   $('#shopApp').innerHTML=`<aside class="sh-side">
+      <div class="sh-brand"><img src="${ASSETS.logo}" alt=""><b>The Loveborne Witch’s Emporium</b></div>
       <div class="sh-rating"><div class="sh-big">${rt.toFixed(1)}</div><div class="sh-stars">${stars(Math.round(rt))}</div>
         <small class="muted">${S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}</small></div>
       <nav class="sh-days" aria-label="Days">${[0,...days].map(d=>`<button data-rday="${d}" aria-pressed="${d===reviewDay}">${d?`Day ${d}`:'All days'}<span class="muted">${count(d)}</span></button>`).join('')}</nav>

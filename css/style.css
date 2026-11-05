@@ -1,9 +1,9 @@
-/* Look and feel: cream paper, deep plum ink and one berry accent over the twilight sky. Clean shapes (soft shadows,
+/* Look and feel: cream paper, deep plum ink and one lilac accent over the twilight sky. Clean shapes (soft shadows,
    thin solid lines, rounded corners); the romance is in the pictures, the serif titles and the little hearts.
    Dark mode is the same at night. */
 :root{
   --paper:#F8EEF1; --paper2:#EFDCE4; --ink:#33213A; --ink-soft:#7A6475; --pink:#F2A9C9; --pink-soft:#FBE4EE;
-  --butter:#FCE7A0; --kw:#A63D74; --kw-dark:#8A2F5F; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
+  --butter:#FCE7A0; --kw:#8B6FD1; --kw-dark:#7259BF; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
   --lift:0 1px 2px rgba(51,33,58,.10); --lift-hover:0 2px 6px rgba(51,33,58,.16);
   --glow:0 1px 3px rgba(51,33,58,.10),0 10px 30px rgba(51,33,58,.16); --glow-soft:0 0 0 transparent;
   --sky:linear-gradient(180deg,#6C7DB8 0%,#9C97CF 38%,#D9A9CB 70%,#F3C2C6 100%);
@@ -12,14 +12,14 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#FFB3D6; --kw-dark:#F28FC0; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#B9A3F5; --kw-dark:#A58BEE; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
   }
 }
 :root[data-theme="dark"]{
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#FFB3D6; --kw-dark:#F28FC0; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#B9A3F5; --kw-dark:#A58BEE; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
 }
@@ -94,7 +94,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .mailcard{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 26px;text-align:center;max-width:320px;box-shadow:var(--glow),var(--glow-soft)}
 .env{position:relative;width:120px;height:78px;margin:0 auto 12px;background:#FFF6E8;border:1px solid var(--line);border-radius:6px}
 .env .flap{position:absolute;left:-3px;right:-3px;top:-3px;height:48px;background:#FBE3EE;border:1px solid var(--line);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top}
-.env .seal{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:#D9417E;color:#fff;font-size:14px;line-height:26px}
+.env .seal{position:absolute;left:50%;top:30px;transform:translateX(-50%);width:26px;height:26px;border-radius:50%;background:var(--kw);color:#fff;font-size:14px;line-height:26px}
 .mailfx.go .env{animation:drop .7s cubic-bezier(.3,1.4,.6,1) both,wiggle .5s .7s ease-in-out 2}
 .mailfx.go .mailcard p,.mailfx.go .mailcard .row{animation:fadein .4s .5s both}
 @keyframes drop{from{transform:translateY(-120vh) rotate(-25deg)}to{transform:none}}
@@ -186,7 +186,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scenenote.in{animation:subIn .6s ease-out both}
 @keyframes subIn{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translateX(-50%)}}  /* floats up as it fades in, like the speech balloon */
 @media (prefers-reduced-motion: reduce){.scenenote.in{animation:none}}
-.badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#D9417E;color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
+.badge{display:inline-block;min-width:18px;height:18px;line-height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:var(--kw);color:#fff;font-size:12px;font-weight:700;text-align:center;vertical-align:middle}
 .badge[hidden]{display:none}
 /* Email (Moonpost): a webmail page. Folders, message list, reading pane. On a phone the list and the open email take turns. */
 .webmail{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);height:min(720px,calc(100vh - 40px));display:flex;flex-direction:column;overflow:hidden}
@@ -331,7 +331,7 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon .ch{animation:chIn .12s ease-out both}
 @keyframes chIn{from{opacity:0}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
-/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns berry (.main) */
+/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns lilac (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
 #cantBtn:not(.main):hover{background:color-mix(in srgb,var(--peri) 82%,#000);color:#fff}
 .balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
@@ -728,6 +728,9 @@ button.small{font-size:12px;padding:2px 10px}
 /* My Shop: the rating and the days on the left, the reviews on the right */
 .shopapp{flex:1;min-height:0;display:grid;grid-template-columns:220px minmax(0,1fr)}
 .sh-side{border-right:1px solid var(--line);background:var(--paper);padding:16px 12px;overflow:auto}
+.sh-brand{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
+.sh-brand img{width:64px;height:auto}
+.sh-brand b{font-family:var(--font-title);font-size:18px;line-height:1.15;color:var(--kw)}
 .sh-rating{text-align:center;padding-bottom:14px;margin-bottom:10px;border-bottom:1px solid var(--line)}
 .sh-big{font-family:var(--font-title);font-size:46px;font-weight:700;line-height:1;color:var(--ink)}
 .sh-stars{color:var(--pink);font-size:22px;letter-spacing:2px;margin:4px 0}
@@ -747,6 +750,7 @@ button.small{font-size:12px;padding:2px 10px}
 .rv .rv-ps{color:var(--ink-soft)}
 @media (max-width:720px){.shopapp{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}
   .sh-side{border-right:0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:center;padding:10px}
+  .sh-brand{display:none}
   .sh-rating{border:0;margin:0;padding:0;flex:none}.sh-big{font-size:30px}
   .sh-days{flex-direction:row;overflow-x:auto}.sh-days button{white-space:nowrap;gap:6px}
   .tb-fest{display:none}}
