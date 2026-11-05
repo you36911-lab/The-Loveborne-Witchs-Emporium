@@ -6,10 +6,11 @@ const newReviews=()=>Math.max(0,S.reviews.length-S.reviewsSeen);
 function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer')}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
-/* The book stack: each book cut from the stack picture along its drawn outline (659x672): left, top, width in that frame. */
-const STACK=[['Recipe Book','book-recipe-book',78,0,508],['Book of Making','book-book-of-making',35,75,595],['Grimoire of Craft','book-grimoire-of-craft',6,155,653],
-  ['Almanac of Sky & Seasons','book-almanac-of-sky-seasons',0,235,659],['Tarot Companion','book-tarot-companion',6,320,616],['Gentle Bestiary','book-gentle-bestiary',20,380,629],
-  ['Crystal Almanac','book-crystal-almanac',19,433,637],['Herbiary','book-herbiary',19,494,631]];
+/* The book stack: each book cut from the stack picture along its drawn outline (a watershed from points inside each book,
+   so every cut follows the darkest line between two books) (659x672): left, top, width in that frame. */
+const STACK=[['Recipe Book','book-recipe-book',79,0,528],['Book of Making','book-book-of-making',71,77,545],['Grimoire of Craft','book-grimoire-of-craft',29,159,603],
+  ['Almanac of Sky & Seasons','book-almanac-of-sky-seasons',0,229,659],['Tarot Companion','book-tarot-companion',37,330,580],['Gentle Bestiary','book-gentle-bestiary',20,362,630],
+  ['Crystal Almanac','book-crystal-almanac',19,429,637],['Herbiary','book-herbiary',32,514,611]];
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');

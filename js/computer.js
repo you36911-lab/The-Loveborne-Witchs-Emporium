@@ -36,13 +36,13 @@ function focusApp(app){pcOpen=[...pcOpen.filter(a=>a!==app),app];pcOpen.forEach(
 function minApp(app){const win=winOf(app);pcMin.add(app);renderPCBar();zoom(win,tbOf(app),false,()=>{if(pcMin.has(app))win.hidden=true})}
 function closeApp(app){const win=winOf(app);pcOpen=pcOpen.filter(a=>a!==app);pcMin.delete(app);renderPCBar();
   zoom(win,iconOf(app),false,()=>{if(!pcOpen.includes(app)){win.hidden=true;win.classList.remove('max');win.style.left=win.style.top=''}})}
-/* A day as the computer shows it: weekday, month and the day's number, e.g. "Tue · Dec · Day 9" (a game year is 72 days,
-   about six to a month, so the days have no date of the month). */
-const dayLabel=d=>{const c=D.cal[d-1];return c?`${c.weekday.slice(0,3)} · ${c.month.slice(0,3)} · Day ${d}`:`Day ${d}`};
+/* A day in My Shop's reviews: "Day 9 · Tuesday · December" over the list (a game year is 72 days, about six to a month, so
+   the days have no date of the month); the list of days on the left just says "Day 9". */
+const dayLabel=d=>{const c=D.cal[d-1];return c?`Day ${d} · ${c.weekday} · ${c.month}`:`Day ${d}`};
 /* The taskbar: the open apps only (pressed: the one in front), and the date in the corner. */
 function renderPCBar(){const T=today(),fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', '),top=topApp();
-  $('#pcDate').innerHTML=`<b>${esc(dayLabel(S.day))}</b>${fest?`<small class="tb-fest">${esc(fest)}</small>`:''}`;
-  $('#pcDate').title=`${dayLabel(S.day)}${fest?', '+fest:''}`;
+  $('#pcDate').innerHTML=`<b>Day ${S.day}</b><small>${esc(T.weekday)}${fest?` · <span class="tb-fest">${esc(fest)}</span>`:''}</small>`;
+  $('#pcDate').title=`Day ${S.day}, ${T.weekday}${fest?', '+fest:''}`;
   $('#tbApps').innerHTML=pcOpen.map(a=>`<button class="tb-app" data-tb="${a}" aria-pressed="${a===top}" title="${PC_NAMES[a]}" aria-label="${PC_NAMES[a]}">${PC_ICONS[a]}</button>`).join('');
   [['#mailIconBadge',unreadLetters()],['#shopIconBadge',newReviews()]].forEach(([id,n])=>{const b=$(id);b.hidden=!n;b.textContent=n})}
 /* Windows move by their title bar, and a double-click on it maximises them. */
@@ -85,7 +85,7 @@ function renderShop(){const rt=rating(),days=[...new Set(S.reviews.map(r=>r.day)
       <div class="sh-brand"><img src="${ASSETS.logo}" alt=""><b>The Loveborne Witch’s Emporium</b></div>
       <div class="sh-rating"><div class="sh-big">${rt.toFixed(1)}</div><div class="sh-stars">${stars(Math.round(rt))}</div>
         <small class="muted">${S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}</small></div>
-      <nav class="sh-days" aria-label="Days">${[0,...days].map(d=>`<button data-rday="${d}" aria-pressed="${d===reviewDay}">${d?esc(dayLabel(d)):'All days'}<span class="muted">${count(d)}</span></button>`).join('')}</nav>
+      <nav class="sh-days" aria-label="Days">${[0,...days].map(d=>`<button data-rday="${d}" aria-pressed="${d===reviewDay}">${d?`Day ${d}`:'All days'}<span class="muted">${count(d)}</span></button>`).join('')}</nav>
     </aside>
     <div class="sh-list">${shown||'<p class="muted sh-empty">No reviews yet. Customers leave their reviews when the shop closes for the night.</p>'}</div>`}
 

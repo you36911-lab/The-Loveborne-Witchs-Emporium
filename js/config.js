@@ -89,7 +89,7 @@ const ASSETS = {
     'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F4E4', page:[1.5,3.7,3], flags:[[0.05,2.1,3.7],[0.05,2.15,3.85]]},
     'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F8F8E6', core:'#CDAB8C', page:[7.2,6.6,8], flags:[[0.8,6,7.5],[1.25,6.05,7.65]]},
     /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
-    'My notes':                 {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
+    'My notes':                 {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2], flags:[[0,1.95,3.55],[0,1.95,3.65]]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
      Anyone not listed here (most walk-ins, Hester, Sam Okafor for now) is not drawn. */
