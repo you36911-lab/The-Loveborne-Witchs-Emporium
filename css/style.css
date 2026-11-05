@@ -326,12 +326,15 @@ button.small{font-size:12px;padding:2px 10px}
 .proto select,.proto button{font-size:13px;padding:2px 6px}
 /* What the customer says: a speech balloon just right of the customer's face, its tail pointing at them
    behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
-.dialogue{position:absolute;top:13vh;left:calc(50% + 6.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
+.dialogue{position:absolute;top:13vh;left:calc(50% + 7.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
 /* someone new speaks: the balloon (and the buttons under it) float up and fade in, after the customer has appeared */
 .dialogue.enter{animation:balloonIn .8s ease-out var(--enter-delay,0s) both}
 @keyframes balloonIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion: reduce){.dialogue.enter{animation-duration:.01s}}
+/* the words appear letter by letter (typeBalloon in scene.js) */
+.balloon .ch{animation:chIn .12s ease-out both}
+@keyframes chIn{from{opacity:0}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
 /* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns berry (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}

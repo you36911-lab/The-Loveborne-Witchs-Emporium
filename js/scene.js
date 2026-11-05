@@ -186,7 +186,7 @@ const TUTORIAL={
 const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}${inner}</div>`;
 /* The counter: what the customer says, in a balloon over the shop window. Hidden when nobody is there,
    unless there is a result to read (advice answered at the counter). Tips go under the day info. */
-function renderCounter(){fillCounter();balloonEnter()}
+function renderCounter(){fillCounter();balloonEnter();typeBalloon()}
 /* Whenever someone new speaks, the balloon floats up and fades in. A customer walking in shows first (the picture fades
    in over 1.2s, see .customer in style.css) and the balloon follows a moment later; someone already standing there speaks straight away. */
 let balloonKey='',balloonWho='';
@@ -194,8 +194,21 @@ function balloonEnter(){const q=S.queue,el=$('#counter');
   const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')):S.parting?'parting:'+S.parting.who:'';
   if(key===balloonKey)return;
   const v=q?currentVisit():S.parting,who=v&&ASSETS.characters[v.pic||v.who]?(v.pic||v.who):'';
-  el.style.setProperty('--enter-delay',who&&who!==balloonWho?'1.4s':'0s');balloonKey=key;balloonWho=who;
+  const wait=who&&who!==balloonWho?1400:0;
+  el.style.setProperty('--enter-delay',wait/1000+'s');balloonKey=key;balloonWho=who;typeFrom=Date.now()+wait+300;
   if(!key)return;el.classList.remove('enter');void el.offsetWidth;el.classList.add('enter')}
+/* The words in the balloon appear one letter at a time, starting as the balloon floats in. The counter is redrawn on
+   every click, so each letter's delay is counted from typeFrom and the typing carries on where it was. Clicking the
+   balloon shows the rest at once. */
+let typeFrom=0;
+const TYPE_STEP=.025;  /* seconds per letter */
+function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const nodes=[],walk=document.createTreeWalker(b,NodeFilter.SHOW_TEXT);while(walk.nextNode())nodes.push(walk.currentNode);
+  const t=(typeFrom-Date.now())/1000,total=nodes.reduce((n,nd)=>n+[...nd.data].length,0);if(t+total*TYPE_STEP<=0)return;
+  let i=0;nodes.forEach(nd=>{const f=document.createDocumentFragment();
+    for(const c of nd.data){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(t+i++*TYPE_STEP).toFixed(3)+'s';f.append(s)}
+    nd.replaceWith(f)});
+  b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none')}}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
