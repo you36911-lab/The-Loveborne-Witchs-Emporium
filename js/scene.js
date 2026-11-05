@@ -206,7 +206,9 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
   let i=0;nodes.forEach(nd=>{const f=document.createDocumentFragment();
     for(const c of nd.data){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(t+i++*TYPE_STEP).toFixed(3)+'s';f.append(s)}
     nd.replaceWith(f)});
-  b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none')}}
+  /* "I don't know how to make this" waits until the customer has finished speaking. */
+  const after=$('#counter .after-words');if(after)after.style.animation=`fadein .4s ease-out ${(t+total*TYPE_STEP).toFixed(3)}s both`;
+  b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none'}}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
@@ -222,7 +224,7 @@ function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHT
     el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
+  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row after-words"><button id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
