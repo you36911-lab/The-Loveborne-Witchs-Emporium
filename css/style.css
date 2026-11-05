@@ -129,7 +129,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .obj img{display:block;width:100%;height:auto}
 .scene button.obj:hover,.scene button.obj:focus-visible{transform:translateY(-1.5%) scale(1.03);filter:drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 6px 4px rgba(60,20,30,.35));outline:none}
 /* the things standing on the desk only glow; they do not lift */
-.scene button.obj:is(.crystal,.till,.notebook,.computer):is(:hover,:focus-visible){transform:none}  /* more specific than the lift above */
+.scene button.obj:is(.till,.notebook,.computer):is(:hover,:focus-visible){transform:none}  /* more specific than the lift above */
 .scene .books{left:2%;bottom:12%;width:15%;aspect-ratio:659/672;cursor:default;filter:none;z-index:2}
 /* the same stack on the altar, standing on the left end of the table */
 .room .books{position:absolute;left:6.5%;bottom:14.5%;width:12%;aspect-ratio:659/672;z-index:2}
@@ -146,11 +146,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal img{position:relative;z-index:1}
 .scene .crystal.glowing::before{opacity:1;animation:auraPulse 3.2s ease-in-out infinite}
 .scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 18px var(--aura-glow))}
-/* On hover the pink glow goes on the ball itself, not the whole button, so the aura keeps its colour. */
-.scene .crystal img{transition:filter .15s}
-.scene button.obj.crystal:hover,.scene button.obj.crystal:focus-visible{filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
-.scene .crystal:hover img,.scene .crystal:focus-visible img{filter:var(--light) drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0)}
-.scene .crystal.glowing:hover img,.scene .crystal.glowing:focus-visible img{filter:var(--light) drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 0 18px var(--aura-glow))}
+/* The ball is only looked at, never clicked, so it has no hover. */
+.scene .crystal{cursor:default}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
   /* The inside of the glass takes the aura colour; the bottom fades out so the stand keeps its own colour. */
   background:var(--aura-glow,transparent);mix-blend-mode:color;opacity:0;transition:opacity .8s ease,background .8s ease;
@@ -306,6 +303,22 @@ body{overflow:hidden}
 .sky{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:center}
 .sky span{white-space:nowrap}
 .stars{color:var(--pink);font-size:16px;letter-spacing:1px;white-space:nowrap}
+/* Failed tests: five little candles (candlesHTML in scene.js). A failed test leaves an unlit candle; the one just
+   put out gives a puff of smoke. */
+.candles{display:inline-flex;align-items:flex-end;gap:5px;height:20px;padding-top:2px;cursor:help}
+.candle{position:relative;display:block;width:6px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#fff4e0,#f1dcc0);box-shadow:inset -1px 0 0 rgba(120,80,60,.25)}
+.candle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:3px;translate:-50% 0;background:#4a3540}  /* wick */
+.candle::before{content:"";position:absolute;left:50%;bottom:calc(100% + 2px);width:5px;height:8px;translate:-50% 0;transform-origin:50% 100%;
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;background:radial-gradient(circle at 50% 70%,#fff8d0 0 25%,#ffc145 55%,#ff8a3c 100%);
+  box-shadow:0 0 5px 1px rgba(255,190,90,.7);animation:flicker 2.4s ease-in-out infinite}
+.candle:nth-child(2)::before{animation-delay:-.5s}.candle:nth-child(3)::before{animation-delay:-1.1s}
+.candle:nth-child(4)::before{animation-delay:-1.7s}.candle:nth-child(5)::before{animation-delay:-.8s}
+.candle.out{background:linear-gradient(90deg,#e6dccd,#cfc2b0)}
+.candle.out::before{content:none}
+.candle.puff::before{content:"";width:4px;height:10px;border-radius:50%;background:rgba(150,140,150,.6);box-shadow:none;animation:puff 1s ease-out forwards}
+@keyframes flicker{0%,100%{transform:scale(1,1) rotate(0)}30%{transform:scale(.92,1.06) rotate(-3deg)}60%{transform:scale(1.05,.95) rotate(2deg)}}
+@keyframes puff{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-8px) scale(1.4)}}
+@media (prefers-reduced-motion: reduce){.candle::before{animation:none}.candle.puff::before{content:none}}
 button.small{font-size:12px;padding:2px 10px}
 .tip{margin:0;border-radius:14px;padding:5px 14px;font-size:14px}
 .proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px}

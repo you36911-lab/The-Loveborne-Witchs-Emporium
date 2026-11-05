@@ -83,10 +83,16 @@ function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.ch
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
+/* Failed tests are five candles: each test craft that isn't perfect puts one out; when all five are out it costs a
+   star and they are lit again. The candle that has just gone out gives a little puff (once, not on every redraw). */
+let candlesOut=null;
+function candlesHTML(){const out=S.failTests%5,puff=candlesOut!==null&&out>candlesOut;candlesOut=out;
+  return `<span class="candles" title="Every fifth test craft that isn't perfect costs a one-star review" aria-label="Failed tests: ${out} of 5">${
+    [0,1,2,3,4].map(i=>`<i class="candle${i>=5-out?' out':''}${i===5-out&&puff?' puff':''}"></i>`).join('')}</span>`}
 function renderTop(){renderBadge();const T=today();
   const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
   $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
-<span title="Every fifth test craft that isn't perfect costs a one-star review">Failed tests: ${S.failTests%5}/5</span>`;
+${candlesHTML()}`;
   const rt=rating(),full=Math.round(rt);$('#stars').textContent='\u2605'.repeat(full)+'\u2606'.repeat(5-full)+' '+rt.toFixed(1);
   $('#stars').title=S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
