@@ -275,7 +275,13 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* the birthstone page: each month and its stone */
 .bookline.months{display:grid;grid-template-columns:auto 1fr;gap:0 1.2em;margin-top:.6em;font-style:normal;font-size:.9em;line-height:1.45;color:var(--ink)}
 .bookline.months b{font-weight:600;color:var(--kw-text)}
-.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;box-shadow:var(--glow);font-weight:600;padding:7px 16px;z-index:30;display:none}
+/* Short notices ("Someone is already at the counter.") read like a film subtitle, the same as the scene's mood line. */
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 22px);transform:translateX(-50%);max-width:min(80%,900px);width:max-content;text-align:center;z-index:30;pointer-events:none;
+  color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
+  text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5);display:none}
+.toast.in{animation:subIn .6s ease-out both}
+.toast.out{transition:opacity .4s ease;opacity:0}
+@media (prefers-reduced-motion: reduce){.toast.in{animation:none}}
 @media (prefers-reduced-motion: no-preference){.sparkle{animation:spk .9s ease-out}@keyframes spk{0%{box-shadow:0 0 0 0 var(--butter)}100%{box-shadow:0 0 0 14px transparent}}}
 
 /* ---------- the two full-screen views ---------- */

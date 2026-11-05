@@ -32,7 +32,9 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
 }
 sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>el.style.display='none',2200)}
+/* A short notice along the bottom, styled like a film subtitle: it floats in, stays a moment, then fades. */
+function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';el.classList.remove('in','out');void el.offsetWidth;el.classList.add('in');
+  clearTimeout(toast.t);clearTimeout(toast.h);toast.t=setTimeout(()=>{el.classList.remove('in');el.classList.add('out');toast.h=setTimeout(()=>{el.style.display='none';el.classList.remove('in','out')},400)},2200)}
 /* Keywords not yet collected show a dotted underline; tapping one adds it to the word bank and picks it. Collected ones read as plain text. */
 const KWRE=new RegExp('\\b('+[...D.vocab].sort((a,b)=>b.length-a.length).map(w=>w.replace('-','\\-')).join('|')+')\\b','gi');
 function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)=>{out+=esc(s.slice(last,i))+(S.bank.includes(w.toLowerCase())?esc(m0):`<button class="kw" data-collect="${esc(w.toLowerCase())}">${esc(m0)}</button>`);  /* already collected: plain text */last=i+m0.length;return m0});return out+esc(s.slice(last))}
