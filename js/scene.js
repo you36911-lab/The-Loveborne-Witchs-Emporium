@@ -85,7 +85,7 @@ function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.ch
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
 /* Failed tests are five candles: each test craft that isn't perfect puts one out; when all five are out it costs a
-   star and they are lit again. They stand on the workroom's table bar, beside Test craft. The candle that has just gone
+   star and they are lit again. They stand in a little panel at the top left of the shop. The candle that has just gone
    out gives a little puff (once, not on every redraw). */
 let candlesOut=null;
 function candlesHTML(){const out=S.failTests%5,puff=candlesOut!==null&&out>candlesOut;candlesOut=out;

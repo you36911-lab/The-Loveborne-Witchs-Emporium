@@ -294,8 +294,11 @@ body{overflow:hidden}
 .shopview .scene{position:absolute;left:50%;top:50%;translate:-50% -50%;overflow:hidden;
   width:max(100vw,calc(100vh * 1376 / 768));height:max(100vh,calc(100vw * 768 / 1376));background:#2a1d2a}
 .hud{position:absolute;top:12px;left:12px;z-index:7;display:flex;flex-direction:column;align-items:flex-start;gap:6px;max-width:min(640px,58vw)}
-.tip,.proto{background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(51,33,58,.18)}
-/* Failed tests: five little candles on the workroom table bar, beside Test craft (candlesHTML in scene.js). A failed test leaves an unlit candle; the one just
+.hudinfo,.tip,.proto{background:color-mix(in srgb,var(--card) 92%,transparent);border:1px solid var(--line);box-shadow:0 2px 10px rgba(51,33,58,.18)}
+/* Failed tests: five little candles at the top left of the shop (candlesHTML in scene.js).
+   (#testCandles is the little panel they stand in.) */
+.hudinfo{display:inline-flex;align-items:center;border-radius:20px;padding:4px 12px}
+/* A failed test leaves an unlit candle; the one just
    put out gives a puff of smoke. */
 .tcandles{display:inline-flex;align-items:flex-end;gap:5px;height:20px;padding-top:2px;cursor:help}
 .tcandle{position:relative;display:block;width:10px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#5A4660,#2E2233 45%,#1A1220);box-shadow:inset 1px 0 0 rgba(255,214,240,.25),0 0 0 .5px rgba(255,214,240,.3)}  /* a black witch's candle with a plum sheen; the faint pink rim keeps it visible on the dark theme */
@@ -305,7 +308,6 @@ body{overflow:hidden}
   box-shadow:0 0 5px 1px rgba(255,190,90,.7);animation:tflicker 2.4s ease-in-out infinite}
 .tcandle:nth-child(2)::before{animation-delay:-.5s}.tcandle:nth-child(3)::before{animation-delay:-1.1s}
 .tcandle:nth-child(4)::before{animation-delay:-1.7s}.tcandle:nth-child(5)::before{animation-delay:-.8s}
-.tablebar .tcandle:not(.out){box-shadow:inset 1px 0 0 rgba(255,214,240,.35),0 0 0 1px rgba(255,214,240,.45)}  /* on the dark bar the black candles need a brighter rim */
 .tcandle.out{background:linear-gradient(90deg,#9A8C9E,#7A6C7F 45%,#64566A);opacity:.75}  /* a spent candle: the black faded to ash grey */
 .tcandle.out::before{content:none}
 .tcandle.puff::before{content:"";width:4px;height:10px;border-radius:50%;background:rgba(150,140,150,.6);box-shadow:none;animation:tpuff 1s ease-out forwards}
@@ -677,35 +679,51 @@ button.small{font-size:12px;padding:2px 10px}
 .result{position:absolute;left:36%;right:36%;top:13%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;
   border:1px solid var(--line);border-radius:14px;background:var(--card);box-shadow:var(--glow),0 12px 30px rgba(0,0,0,.45)}
 
-/* ---------- the computer (computer.js): a screen in a dark frame, a desktop with two app icons, a taskbar with the date.
-   An open app fills the screen above the taskbar. The wallpaper is a twilight gradient until its picture comes. */
+/* ---------- the computer (computer.js): a monitor with a thin dark bezel; inside, the wallpaper with app icons, windows,
+   and a taskbar along the bottom. Windows grow out of their icon when they open (the motion is in computer.js). */
 .pcview{align-items:center}
-.pcscreen{position:relative;width:min(1180px,100%);height:min(780px,calc(100vh - 28px));display:flex;flex-direction:column;overflow:hidden;
-  border:10px solid #241A2C;border-radius:18px;box-shadow:0 0 0 1px #4A3A55,0 18px 50px rgba(10,5,20,.55);
-  background:radial-gradient(1.2px 1.2px at 18% 22%,#fff,transparent),radial-gradient(1px 1px at 72% 14%,#fff,transparent),radial-gradient(1.4px 1.4px at 86% 40%,#fff,transparent),
-    radial-gradient(1px 1px at 40% 34%,#fff,transparent),var(--sky) center/cover}
-.desk{flex:1;min-height:0;display:flex;flex-direction:column;flex-wrap:wrap;align-content:flex-start;gap:14px;padding:22px}
-.dicon{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;width:96px;padding:10px 6px;border:1px solid transparent;border-radius:14px;background:none;box-shadow:none;color:#fff}
-.dicon:hover,.dicon:focus-visible{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);box-shadow:none}
-.dico{display:grid;place-items:center;width:58px;height:58px;border-radius:16px;font-size:30px;color:#fff;background:linear-gradient(160deg,#C25B93,#7D3A78);box-shadow:0 4px 12px rgba(30,10,40,.4)}
-.dico.shop{background:linear-gradient(160deg,#F2A9C9,#D9417E)}
-.dname{font-size:14px;font-weight:700;text-shadow:0 1px 3px rgba(20,8,30,.8)}
-.dicon .badge{position:absolute;top:2px;right:14px;margin:0}
-.pcwin{position:absolute;inset:0 0 44px 0;display:flex;flex-direction:column;background:var(--card);z-index:2}
+.monitor{width:min(1240px,100%);height:min(800px,calc(100vh - 28px));padding:12px 12px 26px;border-radius:20px;background:linear-gradient(#2B2230,#1C1520);
+  box-shadow:0 0 0 1px #4A3A55,inset 0 1px 0 rgba(255,255,255,.08),0 22px 60px rgba(10,5,20,.6);position:relative}
+.monitor::after{content:"";position:absolute;left:50%;bottom:9px;width:7px;height:7px;translate:-50% 0;border-radius:50%;background:#5A4A62}  /* the power light */
+.pcscreen{position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:6px;
+  background:var(--wall,none) center/cover,var(--sky);font-family:var(--font-text)}
+.desk{position:relative;flex:1;min-height:0;overflow:hidden}
+.dicon{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:92px;margin:14px 0 0 14px;padding:8px 4px 6px;border:1px solid transparent;border-radius:8px;background:none;box-shadow:none;color:#fff}
+.dicon:hover,.dicon:focus-visible{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);box-shadow:none;outline:none}
+.dico{display:block;width:54px;height:54px;filter:drop-shadow(0 3px 5px rgba(20,8,30,.45))}
+.dico :is(svg,img),.pcico :is(svg,img),.tb-app :is(svg,img),.wm-logoico :is(svg,img){display:block;width:100%;height:100%;object-fit:contain}
+.dname{font-size:13px;font-weight:600;line-height:1.2;padding:1px 5px;border-radius:4px;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.5)}
+.dicon .badge{position:absolute;top:2px;right:16px;margin:0}
+/* a window: title bar with its icon and name, minimise, maximise and close on the right */
+.pcwin{position:absolute;left:7%;top:4%;width:86%;height:90%;display:flex;flex-direction:column;overflow:hidden;background:var(--card);
+  border:1px solid rgba(60,40,70,.35);border-radius:10px;box-shadow:0 18px 50px rgba(20,8,30,.45),0 2px 8px rgba(20,8,30,.25);transform-origin:50% 50%}
 .pcwin[hidden]{display:none}
-.pcbar{display:flex;align-items:center;justify-content:space-between;padding:4px 6px 4px 14px;background:var(--paper2);border-bottom:1px solid var(--line);font-size:13px;font-weight:700;color:var(--ink-soft)}
-.pcclose{width:30px;height:26px;padding:0;border:0;border-radius:6px;background:none;box-shadow:none;font-size:20px;line-height:1;color:var(--ink-soft)}
-.pcclose:hover{background:var(--bad);color:#fff}
+.pcwin.max{left:0!important;top:0!important;width:100%;height:100%;border-radius:0;border:0}
+.pcbar{display:flex;align-items:center;justify-content:space-between;height:34px;flex:none;padding-left:10px;background:var(--paper2);border-bottom:1px solid var(--line);cursor:default;user-select:none;touch-action:none}
+.pctitle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink)}
+.pcico{display:block;width:18px;height:18px}
+.pcbtns{display:flex;height:100%}
+.pcbtns button{width:46px;height:100%;padding:0;border:0;border-radius:0;background:none;box-shadow:none;font-size:15px;line-height:1;color:var(--ink-soft)}
+.pcbtns button:hover{background:rgba(51,33,58,.1);color:var(--ink)}
+.pcbtns .pcclose{font-size:20px}
+.pcbtns .pcclose:hover{background:#E0465C;color:#fff}
 .pcwin .webmail{flex:1;width:100%;height:auto;min-height:0;border:0;border-radius:0;box-shadow:none}
-.taskbar{position:relative;z-index:3;height:44px;flex:none;display:flex;align-items:center;gap:6px;padding:0 12px;background:color-mix(in srgb,#1E1528 86%,transparent);
-  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#FBEFD9;margin-top:auto}
-.tb-home,.tb-app{width:36px;height:32px;padding:0;border:0;border-radius:8px;background:none;box-shadow:none;color:#FBEFD9;font-size:18px}
-.tb-home img{display:block;width:26px;height:auto;margin:auto}
-.tb-home:hover,.tb-app:hover{background:rgba(255,255,255,.14);color:#fff}
-.tb-app[aria-pressed="true"]{background:rgba(255,255,255,.18);box-shadow:inset 0 -2px 0 var(--pink)}
-.tb-apps{display:flex;gap:4px}
-.tb-date{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;white-space:nowrap}
-.tb-date b{font-family:var(--font-deco);font-size:15px}
+.wm-logoico{display:block;width:30px;height:30px}
+/* the taskbar: show-the-desktop on the left, then the open apps, the tray and the date on the right */
+.taskbar{position:relative;z-index:50;height:46px;flex:none;display:flex;align-items:center;gap:4px;padding:0 8px;background:rgba(32,24,40,.72);
+  -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);color:#F6ECF3;border-top:1px solid rgba(255,255,255,.12)}
+.tb-start,.tb-app{width:40px;height:36px;padding:0;border:0;border-radius:6px;background:none;box-shadow:none;color:#F6ECF3}
+.tb-start{font-size:18px}
+.tb-app{position:relative;padding:6px}
+.tb-start:hover,.tb-app:hover{background:rgba(255,255,255,.14);color:#fff}
+.tb-app::after{content:"";position:absolute;left:50%;bottom:2px;width:6px;height:3px;translate:-50% 0;border-radius:2px;background:rgba(255,255,255,.55);transition:width .15s}
+.tb-app[aria-pressed="true"]{background:rgba(255,255,255,.12)}
+.tb-app[aria-pressed="true"]::after{width:16px;background:var(--pink)}
+.tb-apps{display:flex;gap:2px}
+.tb-tray{margin-left:auto;display:flex;align-items:center;gap:10px;padding:0 8px;opacity:.85}
+.tb-tray svg{width:16px;height:16px}
+.tb-date{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;padding:0 6px;font-size:12px;line-height:1.25;white-space:nowrap}
+.tb-date b{font-weight:600}
 .tb-fest{color:var(--butter)}
 /* My Shop: the rating and the days on the left, the reviews on the right */
 .shopapp{flex:1;min-height:0;display:grid;grid-template-columns:220px minmax(0,1fr)}

@@ -53,7 +53,8 @@ const ASSETS = {
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
-  logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon and the computer's home button */
+  logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon and the My Shop app's icon */
+  pcWallpaper: 'assets/scene/desktop-background.jpg',  /* the computer's desktop */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
   objects: {

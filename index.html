@@ -33,6 +33,7 @@
   </div>
   <div class="daycard" id="dayCard" aria-live="polite"></div>
   <div class="hud">
+    <div class="hudinfo" id="testCandles"></div>
     <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
       <b>Prototype</b>
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
@@ -60,7 +61,7 @@
     </div>
     <div class="tablebar">
       <label class="making"><span>Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label>
-      <span id="testCandles"></span><button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make it</button><button id="clearBtn">Clear the table</button>
+      <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make it</button><button id="clearBtn">Clear the table</button>
     </div>
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>
@@ -92,29 +93,31 @@
     <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Words you have collected. Tap any <span class="kw" style="cursor:default">dotted word</span> to collect it, pick one here, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside>
   </div>
 </div>
-<!-- The computer on the counter: a desktop with two apps, Moonpost (email) and the Shop (reviews and rating), and a taskbar
-     that shows the date. One app is open at a time, filling the screen above the taskbar. -->
+<!-- The computer on the counter, like a real one: a wallpaper with app icons, windows that open from their icon (and can be
+     moved, maximised, minimised to the taskbar or closed), and a taskbar with the open apps and the date. See computer.js. -->
 <div class="modal pcview" id="pc" role="dialog" aria-modal="true" aria-label="Computer">
- <div class="pcscreen" id="pcScreen">
+ <div class="monitor"><div class="pcscreen" id="pcScreen">
   <div class="desk" id="desk">
-    <button class="dicon" data-app="mail"><span class="dico" aria-hidden="true">☾</span><span class="dname">Moonpost</span><span class="badge" id="mailIconBadge" hidden></span></button>
-    <button class="dicon" data-app="shop"><span class="dico shop" aria-hidden="true">♥</span><span class="dname">My Shop</span><span class="badge" id="shopIconBadge" hidden></span></button>
+    <button class="dicon" data-app="mail"><span class="dico" data-icon="mail"></span><span class="dname">Moonpost</span><span class="badge" id="mailIconBadge" hidden></span></button>
+    <button class="dicon" data-app="shop"><span class="dico" data-icon="shop"></span><span class="dname">My Shop</span><span class="badge" id="shopIconBadge" hidden></span></button>
+    <div class="pcwin" id="mailWin" data-win="mail" hidden>
+      <div class="pcbar"><span class="pctitle"><span class="pcico" data-icon="mail"></span>Moonpost</span><span class="pcbtns"><button data-winmin="mail" aria-label="Minimise">–</button><button data-winmax="mail" aria-label="Maximise">□</button><button class="pcclose" data-winclose="mail" aria-label="Close Moonpost">×</button></span></div>
+      <div class="webmail" id="webmail">
+        <header class="wm-top"><div class="wm-logo"><span class="wm-logoico" data-icon="mail"></span>Moonpost</div>
+          <input id="wmSearch" type="search" placeholder="Search mail" aria-label="Search mail">
+          <span class="wm-me" title="Your address"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span></header>
+        <div class="wm-body"><nav class="wm-side" id="wmSide" aria-label="Folders"></nav><div class="wm-list" id="letterList"></div><article class="wm-read" id="letterRead"></article></div>
+      </div>
+    </div>
+    <div class="pcwin" id="shopWin" data-win="shop" hidden>
+      <div class="pcbar"><span class="pctitle"><span class="pcico" data-icon="shop"></span>My Shop</span><span class="pcbtns"><button data-winmin="shop" aria-label="Minimise">–</button><button data-winmax="shop" aria-label="Maximise">□</button><button class="pcclose" data-winclose="shop" aria-label="Close My Shop">×</button></span></div>
+      <div class="shopapp" id="shopApp"></div>
+    </div>
   </div>
-  <div class="pcwin" id="mailWin" hidden>
-  <div class="pcbar"><span>☾ Moonpost</span><button class="pcclose" data-closeapp="1" aria-label="Close Moonpost">×</button></div>
-  <div class="webmail" id="webmail">
-    <header class="wm-top"><div class="wm-logo"><span aria-hidden="true">☾</span>Moonpost</div>
-      <input id="wmSearch" type="search" placeholder="Search mail" aria-label="Search mail">
-      <span class="wm-me" title="Your address"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span></header>
-    <div class="wm-body"><nav class="wm-side" id="wmSide" aria-label="Folders"></nav><div class="wm-list" id="letterList"></div><article class="wm-read" id="letterRead"></article></div>
-  </div>
-  </div>
-  <div class="pcwin" id="shopWin" hidden>
-    <div class="pcbar"><span>♥ My Shop</span><button class="pcclose" data-closeapp="1" aria-label="Close My Shop">×</button></div>
-    <div class="shopapp" id="shopApp"></div>
-  </div>
-  <footer class="taskbar"><button class="tb-home" data-closeapp="1" aria-label="Desktop"><img src="assets/scene/logo.png" alt=""></button><span class="tb-apps" id="tbApps"></span><span class="tb-date" id="pcDate"></span></footer>
- </div>
+  <footer class="taskbar"><button class="tb-start" data-desktop="1" aria-label="Show the desktop">✦</button><span class="tb-apps" id="tbApps"></span>
+    <span class="tb-tray" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.5" fill="currentColor"/></svg><svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+    <span class="tb-date" id="pcDate"></span></footer>
+ </div></div>
 </div>
 <div class="modal receiptsview" id="receiptsView" aria-label="Today's receipts"></div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>

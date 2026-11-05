@@ -1,22 +1,59 @@
-/* The computer on the counter: a desktop with two apps and a taskbar, like a real computer.
-   Moonpost (email.js) holds the emails; My Shop holds the reviews customers leave each night, and the shop's rating.
-   The taskbar shows the date: the day, the weekday, and any festival, full moon or sky event. */
-let pcApp='';  /* the open app: 'mail', 'shop', or '' for the desktop */
-let reviewDay=0;  /* the day My Shop shows; 0 is every day */
-const PC_APPS=[['mail','☾','Moonpost'],['shop','♥','My Shop']];
-function openPC(app){$('#pc').classList.add('open');showApp(app||'')}
+/* The computer on the counter, like a real one: app icons on a wallpaper, windows that open out of their icon (and can be
+   moved, maximised, minimised to the taskbar or closed), and a taskbar with the open apps and the date: the day, the
+   weekday, and any festival, full moon or sky event. Moonpost (email.js) holds the emails; My Shop holds the reviews
+   customers leave each night, and the shop's rating. */
+const PC_ICONS={
+  /* Moonpost: an envelope sealed with a crescent moon */
+  mail:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="15" width="52" height="36" rx="6" fill="#FFF8EE" stroke="#B9A4C6" stroke-width="2"/><path d="M8 19l24 18 24-18" fill="none" stroke="#B9A4C6" stroke-width="2.5" stroke-linejoin="round"/><circle cx="32" cy="37" r="10" fill="#8F7BD9"/><circle cx="30.5" cy="37" r="5.6" fill="#FFEFA8"/><circle cx="33.2" cy="35.2" r="4.8" fill="#8F7BD9"/></svg>',
+  /* My Shop: the shop's winged heart */
+  shop:`<img src="${ASSETS.logo}" alt="">`};
+const PC_NAMES={mail:'Moonpost',shop:'My Shop'};
+let pcOpen=[];  /* the open apps, the bottom window first */
+const pcMin=new Set();  /* the ones minimised to the taskbar */
+const winOf=app=>$(`#pc [data-win="${app}"]`),iconOf=app=>$(`#desk .dicon[data-app="${app}"]`),tbOf=app=>$(`#tbApps [data-tb="${app}"]`);
+const topApp=()=>[...pcOpen].reverse().find(a=>!pcMin.has(a))||'';
+document.querySelectorAll('#pc [data-icon]').forEach(el=>el.innerHTML=PC_ICONS[el.dataset.icon]);
+/* (the wallpaper path is made absolute: a relative url() in a CSS variable would be read from the css folder) */
+function openPC(app){$('#pcScreen').style.setProperty('--wall',`url("${new URL(ASSETS.pcWallpaper,location.href).href}")`);$('#pc').classList.add('open');
+  if(app)openApp(app);else renderPCBar()}
 function closePC(){$('#pc').classList.remove('open');render()}
-function showApp(app){pcApp=app;$('#mailWin').hidden=app!=='mail';$('#shopWin').hidden=app!=='shop';
-  if(app==='mail')renderLetters();
-  if(app==='shop'){S.reviewsSeen=S.reviews.length;save();renderBadge();renderShop()}
-  renderPCBar()}
-function renderPC(){if(pcApp==='mail')renderLetters();if(pcApp==='shop')renderShop();renderPCBar()}
-/* The taskbar and the badges on the desktop icons. */
-function renderPCBar(){const T=today(),fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
-  $('#pcDate').innerHTML=`<b>Day ${S.day}</b><span>${esc(T.weekday)}</span>${fest?`<span class="tb-fest">✦ ${esc(fest)}</span>`:''}`;
-  [['#mailIconBadge',unreadLetters()],['#shopIconBadge',newReviews()]].forEach(([id,n])=>{const b=$(id);b.hidden=!n;b.textContent=n});
-  $('#tbApps').innerHTML=PC_APPS.map(([a,icon,name])=>`<button class="tb-app" data-app="${a}" aria-pressed="${pcApp===a}" title="${name}" aria-label="${name}">${icon}</button>`).join('')}
+function renderPC(){pcOpen.forEach(fillApp);renderPCBar()}
+function fillApp(app){if(app==='mail')renderLetters();if(app==='shop'){S.reviewsSeen=S.reviews.length;save();renderBadge();renderShop()}}
+/* A window grows out of where it comes from (its desktop icon, or its taskbar button) and shrinks back into it. */
+function zoom(win,from,opening,then){
+  if(calm()||!from||!win.animate){if(then)then();return}
+  const w=win.getBoundingClientRect(),f=from.getBoundingClientRect();
+  const k=`translate(${f.left+f.width/2-(w.left+w.width/2)}px,${f.top+f.height/2-(w.top+w.height/2)}px) scale(${Math.max(.04,f.width/w.width)})`;
+  const frames=[{transform:k,opacity:0},{transform:'none',opacity:1}];
+  const an=win.animate(opening?frames:frames.reverse(),{duration:opening?300:200,easing:opening?'cubic-bezier(.2,.9,.25,1)':'ease-in',fill:opening?'none':'forwards'});
+  an.onfinish=()=>{if(then)then();if(!opening)an.cancel()}}
+function openApp(app){const win=winOf(app);
+  if(pcOpen.includes(app)&&!pcMin.has(app)){fillApp(app);focusApp(app);return}
+  const from=pcMin.has(app)?tbOf(app):iconOf(app);
+  if(!pcOpen.includes(app))pcOpen.push(app);pcMin.delete(app);
+  fillApp(app);win.hidden=false;focusApp(app);zoom(win,from,true)}
+function focusApp(app){pcOpen=[...pcOpen.filter(a=>a!==app),app];pcOpen.forEach((a,i)=>winOf(a).style.zIndex=2+i);renderPCBar()}
+function minApp(app){const win=winOf(app);pcMin.add(app);renderPCBar();zoom(win,tbOf(app),false,()=>{if(pcMin.has(app))win.hidden=true})}
+function closeApp(app){const win=winOf(app);pcOpen=pcOpen.filter(a=>a!==app);pcMin.delete(app);renderPCBar();
+  zoom(win,iconOf(app),false,()=>{if(!pcOpen.includes(app)){win.hidden=true;win.classList.remove('max');win.style.left=win.style.top=''}})}
+/* The taskbar: the open apps only (pressed: the one in front), and the date in the corner. */
+function renderPCBar(){const T=today(),fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', '),top=topApp();
+  $('#pcDate').innerHTML=`<b>Day ${S.day}</b><small>${esc(T.weekday)}${fest?` · <span class="tb-fest">${esc(fest)}</span>`:''}</small>`;
+  $('#pcDate').title=`Day ${S.day}, ${T.weekday}${fest?', '+fest:''}`;
+  $('#tbApps').innerHTML=pcOpen.map(a=>`<button class="tb-app" data-tb="${a}" aria-pressed="${a===top}" title="${PC_NAMES[a]}" aria-label="${PC_NAMES[a]}">${PC_ICONS[a]}</button>`).join('');
+  [['#mailIconBadge',unreadLetters()],['#shopIconBadge',newReviews()]].forEach(([id,n])=>{const b=$(id);b.hidden=!n;b.textContent=n})}
+/* Windows move by their title bar, and a double-click on it maximises them. */
+let drag=null;
+$('#desk').addEventListener('pointerdown',e=>{const win=e.target.closest('.pcwin');if(!win)return;focusApp(win.dataset.win);
+  const bar=e.target.closest('.pcbar');if(!bar||e.target.closest('button')||win.classList.contains('max'))return;
+  const r=win.getBoundingClientRect(),d=$('#desk').getBoundingClientRect();
+  drag={win,dx:e.clientX-r.left,dy:e.clientY-r.top,d,w:r.width};bar.setPointerCapture(e.pointerId)});
+$('#desk').addEventListener('pointermove',e=>{if(!drag)return;const {win,d}=drag;
+  win.style.left=Math.min(Math.max(e.clientX-drag.dx-d.left,80-drag.w),d.width-80)+'px';win.style.top=Math.min(Math.max(e.clientY-drag.dy-d.top,0),d.height-40)+'px'});
+$('#desk').addEventListener('pointerup',()=>{drag=null});
+$('#desk').addEventListener('dblclick',e=>{const bar=e.target.closest('.pcbar');if(bar&&!e.target.closest('button'))bar.parentElement.classList.toggle('max')});
 
+let reviewDay=0;  /* the day My Shop shows; 0 is every day */
 /* ---------- reviews ---------- */
 /* At closing every receipt becomes a review. A customer who got just what they needed writes their own (review in
    story.js) and adds, as a P.S., what they let slip at the counter (the hint). Everyone else writes a line that fits their stars. */
@@ -48,9 +85,13 @@ function renderShop(){const rt=rating(),days=[...new Set(S.reviews.map(r=>r.day)
     </aside>
     <div class="sh-list">${shown||'<p class="muted sh-empty">No reviews yet. Customers leave their reviews when the shop closes for the night.</p>'}</div>`}
 
-$('#pc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.collect)return;
-  if(b.dataset.app){showApp(b.dataset.app);return}
-  if(b.dataset.closeapp){showApp('');return}
-  if(b.dataset.rday!==undefined){reviewDay=+b.dataset.rday;renderShop();$('#shopApp .sh-list').scrollTop=0}});
-/* Escape closes the open app first, then the computer. */
-document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!$('#pc').classList.contains('open'))return;if(pcApp)showApp('');else closePC()});
+$('#pc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.collect)return;const d=b.dataset;
+  if(d.app)openApp(d.app);
+  else if(d.tb){if(d.tb===topApp())minApp(d.tb);else openApp(d.tb)}
+  else if(d.winmin)minApp(d.winmin);
+  else if(d.winmax)winOf(d.winmax).classList.toggle('max');
+  else if(d.winclose)closeApp(d.winclose);
+  else if(d.desktop)pcOpen.filter(a=>!pcMin.has(a)).forEach(minApp);
+  else if(d.rday!==undefined){reviewDay=+d.rday;renderShop();$('#shopApp .sh-list').scrollTop=0}});
+/* Escape closes the window in front, then the computer. */
+document.addEventListener('keydown',e=>{if(e.key!=='Escape'||!$('#pc').classList.contains('open'))return;const a=topApp();if(a)closeApp(a);else closePC()});
