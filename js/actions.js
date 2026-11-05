@@ -141,7 +141,7 @@ function receiptLines(t){if(t.length<=RECEIPT_LINE)return[t];
   return[a,w.join(' ')]}
 function receiptHTML(x,i=0){
   /* what was sold, as 'Name (Type)' ("Advice (no charge)", "No sale"), then the customer, the stars, and when on the last line */
-  const rows=[...receiptLines(x.item||''),x.who||'A customer'];
+  const rows=[...receiptLines(x.item||''),(X.names||{})[x.who]||x.who||'A customer'];  /* a walk-in by their own name */
   /* each slip sits a hair off straight, differently, and its stamp lands at its own angle, as paper and a hand stamp do */
   const tilt=[-.8,.6,-.4,.9,-.6,.3][i%6],stamp=[-2.5,1.5,-1,2,-2,1][i%6];
   return `<div class="receipt" style="background-image:url('${ASSETS.receipt}');--tilt:${tilt}deg;--stamp:${stamp}deg">`+

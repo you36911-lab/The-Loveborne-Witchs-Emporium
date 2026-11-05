@@ -45,6 +45,25 @@ const X = {
  {"day": 57, "hour": "Nightfall", "from": "Old Things, Buttonwick", "title": "From an antique shop in Buttonwick", "hints": [["Square button", "play"]], "lines": ["Dear neighbour,", "A house clearance turned up a box of buttons, and among them one odd square button that must be a lost counter from some old board game. I left it on the counter, and the grandchildren wanted to play all afternoon. The little one swears he won every game while it sat by the board.", "I'll hold it for you. Come by.", "Mr Ambrose Tuck, Old Things, Buttonwick"], "uses": [[69, 215, "walk-in"]]},
  {"day": 63, "hour": "Twilight", "from": "Wend Mill, Greywater", "title": "From the mill at Greywater", "hints": [["Cedar chips", "home"]], "lines": ["To the Emporium,", "My mum and dad were married fifty-two years. Dad kept a corked bottle of cedar chips on the mantel, and scattered more in the drawers, until the whole mill house smelled like home. He said it kept them fond of each other through every winter.", "My wife and I could use some. Could you send a bag?", "Sam Wend, Wend Mill, Greywater"], "uses": [[66, 3, "walk-in"]]}
 ],
+/* the walk-ins' own names, printed on their receipts (at the counter they stay unnamed; see DESIGN_NOTES.md) */
+"names":{"An exhausted bookshop owner":"Oliver Penrose",
+ "A couple holding hands":"Amara & Daniel Asante",
+ "A night-shift nurse":"Megan Hollis",
+ "A woman with smudged mascara":"Chloe Bramwell",
+ "A drowsy night-bus driver":"Desmond Okafor",
+ "A novelist with a blank page":"Lena Choi",
+ "A nervous witness":"James Whitlock",
+ "A first-time homeowner":"Sofia Moreno",
+ "A worried allotment keeper":"Arthur Pembridge",
+ "A bored teenager":"Lily Fenwick",
+ "A shy young man":"Sam Ashworth",
+ "A mother with a school bag":"Priya Sharma",
+ "A father with a pushchair":"Marcus Bell",
+ "An aspiring influencer":"Jasmine Cole",
+ "A learner driver":"Ravi Mehta",
+ "A woman who keeps dating the same man":"Hattie Lowe",
+ "A young poet":"Theo Linden",
+ "A first-year student":"Ellie Tanaka"},
 "auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FF9FCB","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
 
 "letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home","intuition","transformation","truth"]]
