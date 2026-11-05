@@ -79,7 +79,7 @@ function allPages(book){if(book===DIARY)return diaryPages();
   const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
     (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
-      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}"><span class="t">${esc(p.title)}</span><span class="muted">${p.done?' ✦':p.started?' •':''}</span>${m?`<i class="dot" style="background:var(--kw)"></i>`:''}</button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
+      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}"><span class="t">${esc(p.title)}</span>${m?`<i class="dot" style="background:var(--kw)"></i>`:''}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
   return [...idx,...entries]}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
