@@ -261,10 +261,10 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .mark{--mc:var(--kw);border-left:6px solid var(--mc);padding:3px 10px;font-size:13px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .idx{margin:0 0 4px;font-size:28px}
 .idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
-.idxrow:hover{background:var(--pink-soft)}
+.idxrow:hover{background:none;text-decoration:underline;text-underline-offset:3px}  /* index entries: an underline on hover, no pink wash */
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
 .kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw-text);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
-.kw:hover{background:var(--pink-soft)}
+.kw:hover{background:none;box-shadow:none}  /* dotted words: no hover effect */
 .kw:active{transform:none;box-shadow:none}
 .tale{background:var(--pink-soft);border-radius:8px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
