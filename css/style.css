@@ -1,9 +1,9 @@
-/* Look and feel: cream paper, deep plum ink and one midnight blue accent over the twilight sky. Clean shapes (soft shadows,
+/* Look and feel: cream paper, deep plum ink and one cornflower blue accent (deeper blue for text) over the twilight sky. Clean shapes (soft shadows,
    thin solid lines, rounded corners); the romance is in the pictures, the serif titles and the little hearts.
    Dark mode is the same at night. */
 :root{
   --paper:#F8EEF1; --paper2:#EFDCE4; --ink:#33213A; --ink-soft:#7A6475; --pink:#F2A9C9; --pink-soft:#FBE4EE;
-  --butter:#FCE7A0; --kw:#4A5AA8; --kw-dark:#3B4A92; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
+  --butter:#FCE7A0; --kw:#5B74D6; --kw-dark:#4A5AA8; --kw-text:#4A5AA8; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
   --lift:0 1px 2px rgba(51,33,58,.10); --lift-hover:0 2px 6px rgba(51,33,58,.16);
   --glow:0 1px 3px rgba(51,33,58,.10),0 10px 30px rgba(51,33,58,.16); --glow-soft:0 0 0 transparent;
   --sky:linear-gradient(180deg,#6C7DB8 0%,#9C97CF 38%,#D9A9CB 70%,#F3C2C6 100%);
@@ -12,14 +12,14 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#A9B4F2; --kw-dark:#96A2EC; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#B3BEF7; --kw-dark:#A0ACF2; --kw-text:#B3BEF7; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
   }
 }
 :root[data-theme="dark"]{
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#A9B4F2; --kw-dark:#96A2EC; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#B3BEF7; --kw-dark:#A0ACF2; --kw-text:#B3BEF7; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
 }
@@ -41,7 +41,7 @@ body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:trans
 input,textarea{-webkit-user-select:text;user-select:text}
 img{-webkit-user-drag:none}
 html{scrollbar-color:var(--pink) transparent;scrollbar-width:thin}
-h1,h2{font-family:var(--font-title);font-weight:700;color:var(--kw);line-height:1.1}
+h1,h2{font-family:var(--font-title);font-weight:700;color:var(--kw-text);line-height:1.1}
 h3,.px,.deco,.tabs button,.booktabs button,button.main,.proto b{font-family:var(--font-deco);font-weight:700;letter-spacing:.01em}
 h1{font-size:38px;margin:0}
 h2{font-size:30px;margin:0 0 8px}
@@ -64,12 +64,12 @@ details{border-top:1px solid var(--line);padding:4px 0}
 summary{cursor:pointer;font-weight:600;padding:3px 0}
 .chips{display:flex;flex-wrap:wrap;gap:5px;padding:4px 0 6px}
 .chip{font-size:13px;padding:3px 10px;box-shadow:var(--lift)}
-.chip.on{background:var(--pink-soft);border-color:var(--kw);color:var(--kw-dark)}
+.chip.on{background:var(--pink-soft);border-color:var(--kw-text);color:var(--kw-dark)}
 .chip .n{margin-left:4px;opacity:.7;font-weight:700}
 .who{display:flex;align-items:center;gap:10px}
 .aura{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);flex:none;box-shadow:0 0 0 4px color-mix(in srgb, var(--aura) 35%, transparent)}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.result .g{font-family:var(--font-title);font-weight:700;font-size:22px;color:var(--kw)}
+.result .g{font-family:var(--font-title);font-weight:700;font-size:22px;color:var(--kw-text)}
 .swatch{width:26px;height:26px;border-radius:50% 50% 4px 4px;border:1px solid var(--line);padding:0;box-shadow:var(--lift)}
 .swatch.on{outline:2px solid var(--kw);outline-offset:2px}
 /* No backdrop blur: the shop keeps animating behind an open window, and re-blurring the whole screen every frame made books and pages stutter. */
@@ -79,14 +79,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .modal:not(.bookview)>*{margin-block:auto}
 .sheet{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);padding:14px}
 .booktabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.booktabs button[aria-pressed="true"]{background:var(--kw);border-color:var(--kw);color:#fff}
+.booktabs button[aria-pressed="true"]{background:var(--kw);border-color:var(--kw-text);color:#fff}
 .entry{border-bottom:2px dotted var(--paper2);padding:6px 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .entry b{min-width:150px}
 .entry.locked b::after{content:" ✦";color:var(--pink)}
 .blank{min-width:70px;border-bottom:2px solid var(--ink);padding:0 6px;cursor:pointer;background:none;box-shadow:none;border-top:0;border-left:0;border-right:0;border-radius:0}
 .blank.filled{background:var(--pink-soft)}
 .word{font-size:13px;padding:2px 9px}
-.word.sel{background:var(--kw);border-color:var(--kw);color:#fff}
+.word.sel{background:var(--kw);border-color:var(--kw-text);color:#fff}
 .bank{border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--paper)}
 .entry .look{flex-basis:100%;font-size:13px;color:var(--ink-soft);border:1px solid var(--line);border-radius:6px;padding:2px 8px;width:max-content;max-width:100%}
 .mailfx{position:fixed;inset:0;background:rgba(40,25,60,.3);display:flex;align-items:center;justify-content:center;z-index:60}
@@ -191,7 +191,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* Email (Moonpost): a webmail page. Folders, message list, reading pane. On a phone the list and the open email take turns. */
 .webmail{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow),var(--glow-soft);width:min(1100px,100%);height:min(720px,calc(100vh - 40px));display:flex;flex-direction:column;overflow:hidden}
 .wm-top{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--line)}
-.wm-logo{font-family:var(--font-title);font-weight:700;font-size:28px;color:var(--kw);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.wm-logo{font-family:var(--font-title);font-weight:700;font-size:28px;color:var(--kw-text);display:flex;align-items:center;gap:6px;white-space:nowrap}
 .wm-logo span{font-style:normal;font-size:20px}
 #wmSearch{flex:1;min-width:0;max-width:520px;border-radius:20px;padding:7px 16px;background:var(--card)}
 .wm-me{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);white-space:nowrap}
@@ -263,14 +263,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
 .idxrow:hover{background:var(--pink-soft)}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
-.kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
+.kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw-text);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
 .kw:hover{background:var(--pink-soft)}
 .kw:active{transform:none;box-shadow:none}
 .tale{background:var(--pink-soft);border-radius:8px;padding:6px 8px;margin:6px 0;font-size:14px}
 .bookline{flex-basis:100%;font-size:13px;font-style:italic;color:var(--ink-soft);padding-left:2px}
 /* the birthstone page: each month and its stone */
 .bookline.months{display:grid;grid-template-columns:auto 1fr;gap:0 1.2em;margin-top:.6em;font-style:normal;font-size:.9em;line-height:1.45;color:var(--ink)}
-.bookline.months b{font-weight:600;color:var(--kw)}
+.bookline.months b{font-weight:600;color:var(--kw-text)}
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;box-shadow:var(--glow);font-weight:600;padding:7px 16px;z-index:30;display:none}
 @media (prefers-reduced-motion: no-preference){.sparkle{animation:spk .9s ease-out}@keyframes spk{0%{box-shadow:0 0 0 0 var(--butter)}100%{box-shadow:0 0 0 14px transparent}}}
 
@@ -283,7 +283,7 @@ body{overflow:hidden}
 @media (prefers-reduced-motion: reduce){.world{transition:none}}
 /* The arrows between the counter and the altar: a round glowing button that bobs gently. */
 .arrow{position:absolute;left:50%;translate:-50% 0;z-index:8;width:54px;height:54px;padding:0;border-radius:50%;display:grid;place-items:center;
-  background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--kw);border-color:transparent;box-shadow:0 2px 10px rgba(51,33,58,.3)}
+  background:color-mix(in srgb,var(--card) 92%,transparent);color:var(--kw-text);border-color:transparent;box-shadow:0 2px 10px rgba(51,33,58,.3)}
 .arrow svg{width:30px;height:30px}
 .arrowdown{bottom:clamp(8px,2vh,22px)}
 .arrowup{top:10px}
@@ -331,7 +331,7 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon .ch{animation:chIn .12s ease-out both}
 @keyframes chIn{from{opacity:0}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
-/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns midnight blue (.main) */
+/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns cornflower blue (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
 #cantBtn:not(.main):hover{background:color-mix(in srgb,var(--peri) 82%,#000);color:#fff}
 .balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
@@ -430,7 +430,7 @@ button.small{font-size:12px;padding:2px 10px}
 .pg,.leaf{position:absolute;top:var(--pt,1.5%);bottom:var(--pb,3%)}
 .pg.left,.leaf.bwd{left:var(--po,3.8%);right:50%}
 .pg.right,.leaf.fwd{left:50%;right:var(--po,3.8%)}
-.pg,.pcopy{--ink:#3A2530;--ink-soft:#7D5F70;--kw:#B4457E;--card:#FFFBF2;--paper:#FBF4E8;--paper2:#EBDCCB;--pink-soft:#F8D9E6;--line:#C98AAA;
+.pg,.pcopy{--ink:#3A2530;--ink-soft:#7D5F70;--kw:#B4457E;--kw-text:#B4457E;--card:#FFFBF2;--paper:#FBF4E8;--paper2:#EBDCCB;--pink-soft:#F8D9E6;--line:#C98AAA;
   color:var(--ink);font-size:max(12.5px,1.45cqw);line-height:1.5;box-sizing:border-box;padding:2.2em 2em 2.6em;overflow:auto;scrollbar-width:none}
 .pg.left,.pcopy.left{padding-right:2.6em}
 .pg.right,.pcopy.right{padding-left:2.6em}
@@ -465,13 +465,13 @@ button.small{font-size:12px;padding:2px 10px}
 .pcat{font-family:var(--font-deco);font-weight:700;font-size:.75em;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.4em}
 .pnum{position:absolute;bottom:.9em;left:0;right:0;text-align:center;font-family:var(--font-deco);font-size:.8em;color:var(--ink-soft)}
 .pbody .entry{border-bottom:0;font-size:1.05em;align-items:baseline;row-gap:.7em;padding-top:.3em}
-.pbody .entry>b{flex-basis:100%;font-family:var(--font-title);font-weight:700;font-size:1.9em;color:var(--kw);line-height:1.1;margin-bottom:.35em}
+.pbody .entry>b{flex-basis:100%;font-family:var(--font-title);font-weight:700;font-size:1.9em;color:var(--kw-text);line-height:1.1;margin-bottom:.35em}
 .pbody .entry .muted{margin-left:0!important;font-size:.9em!important;flex-basis:100%}
 .pbody .recipe{border:0;background:none;padding:.3em 0 0;margin:0;box-shadow:none;display:flex;flex-direction:column;gap:1em;line-height:1.6}
 .pbody .recipe>div{line-height:2.3}  /* wrapped dropdowns get a row each, not pressed together */
 .pbody .recipe select,.pbody .recipe .chip{margin:0 .35em .25em 0}
 .pbody .recipe .row{gap:.5em .7em;margin-top:.4em}
-.pbody .recipe h3{font-family:var(--font-title);font-weight:700;font-size:1.9em;color:var(--kw);line-height:1.1;margin-bottom:-.3em}
+.pbody .recipe h3{font-family:var(--font-title);font-weight:700;font-size:1.9em;color:var(--kw-text);line-height:1.1;margin-bottom:-.3em}
 .pbody .recipe.locked{box-shadow:none}
 .pg :is(button,select,input),.leaf :is(button,select,input){font-size:.88em;padding:.15em .55em}
 .pg .chip,.leaf .chip,.pg .entry .look,.leaf .entry .look{font-size:.85em}
@@ -527,10 +527,10 @@ button.small{font-size:12px;padding:2px 10px}
 .tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}
 .tome.diary .pnum{display:none}
 .tome.diary .pbody p{margin:0}
-.tome.diary .dtitle{font-size:1.3em;color:var(--kw)}
+.tome.diary .dtitle{font-size:1.3em;color:var(--kw-text)}
 /* the player writes straight onto the lines: 15 to a page, 14 under the title on the first */
 .tome.diary .memo{display:block;width:100%;height:calc(15 * 3.848cqw);margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;resize:none;overflow:hidden;
-  font:inherit;line-height:inherit;color:inherit;outline:none;caret-color:var(--kw)}
+  font:inherit;line-height:inherit;color:inherit;outline:none;caret-color:var(--kw-text)}
 .tome.diary .memo.first{height:calc(14 * 3.848cqw)}
 .tome.diary .leaf .memo{pointer-events:none}
 .tome.diary .kw{font-family:inherit;line-height:inherit;vertical-align:baseline}
@@ -730,13 +730,13 @@ button.small{font-size:12px;padding:2px 10px}
 .sh-side{border-right:1px solid var(--line);background:var(--paper);padding:16px 12px;overflow:auto}
 .sh-brand{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
 .sh-brand img{width:64px;height:auto}
-.sh-brand b{font-family:var(--font-title);font-size:18px;line-height:1.15;color:var(--kw)}
+.sh-brand b{font-family:var(--font-title);font-size:18px;line-height:1.15;color:var(--kw-text)}
 .sh-rating{text-align:center;padding-bottom:14px;margin-bottom:10px;border-bottom:1px solid var(--line)}
 .sh-big{font-family:var(--font-title);font-size:46px;font-weight:700;line-height:1;color:var(--ink)}
 .sh-stars{color:var(--pink);font-size:22px;letter-spacing:2px;margin:4px 0}
 .sh-days{display:flex;flex-direction:column;gap:3px}
 .sh-days button{display:flex;justify-content:space-between;border:0;border-radius:18px;background:none;box-shadow:none;text-align:left}
-.sh-days button[aria-pressed="true"]{background:var(--pink-soft);color:var(--kw);font-weight:700}
+.sh-days button[aria-pressed="true"]{background:var(--pink-soft);color:var(--kw-text);font-weight:700}
 .sh-list{overflow:auto;padding:6px 22px 22px}
 .sh-day{margin:18px 0 8px;font-family:var(--font-title)}
 .sh-day .muted{font-family:var(--font-text);font-size:14px;font-weight:400}
