@@ -516,8 +516,10 @@ button.small{font-size:12px;padding:2px 10px}
 
 /* Pictures in the books: an ingredient or a card stands at the foot of its entry page. */
 /* pictures in the books in one soft sepia tone, like an old book's plates; drawn normally over the paper (not blended into it) so they stay clear */
-.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:66%;max-height:17em;object-fit:contain;filter:grayscale(1) sepia(.4) contrast(1.1)}
-.pbody .entry .entrypic.card{max-height:22em;border-radius:.6em}
+/* every picture gets the same fixed frame, so none is tiny or huge and the page never shifts while a picture loads
+   (which made pictures jump up and down as pages turned); the picture fits inside it */
+.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:72%;height:13em;object-fit:contain;filter:grayscale(1) sepia(.4) contrast(1.1)}
+.pbody .entry .entrypic.card{height:19em}
 /* Tarot cards in the Cabinet: little cards with their name under them; the altar's card slot shows a thumbnail. */
 /* tarot cards are read by their pictures, so they come out big (sized with the room: about 140px wide on a 1920 screen) */
 .cabinside .chip.card{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:auto;padding:5px;background:none;border:1px solid transparent;border-radius:8px;box-shadow:none;color:#FBEFD9;font-size:13px;line-height:1.15;text-align:center}
