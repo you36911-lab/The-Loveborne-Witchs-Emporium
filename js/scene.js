@@ -56,9 +56,10 @@ function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
-  const v=currentVisitor(),note=$('#sceneNote');
-  if(v||S.parting||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
-  const line=moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
+  const v=currentVisitor(),note=$('#sceneNote'),av=v&&v.key&&(!(v.tales||[]).length||v.newsDone)?visitByKey(v.key):null;
+  const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
+  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer, and only the bell does: someone due this hour comes straight in; otherwise time moves
    on to the next hour with someone (or something) in it, and if that is a customer, they come in. */
 function ringBell(){const bell=$('#bellBtn');
@@ -179,7 +180,7 @@ function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind
   return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
   order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
-  advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Choose one thing from ${esc(v.ask.cat)} below and press <b>Answer</b>.</li></ol>`};
+  advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};
 /* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
    Nobody is labelled: who they are comes out in what they say and do. */
 const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}${inner}</div>`;
@@ -207,7 +208,7 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
   let i=0;nodes.forEach(nd=>{const f=document.createDocumentFragment();
     for(const c of nd.data){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(t+i++*TYPE_STEP).toFixed(3)+'s';f.append(s)}
     nd.replaceWith(f)});
-  /* "I don't know how to make this", and the advice answer (dropdown and Answer), wait until the customer has finished speaking. */
+  /* "I don't know how to make this", and the advice answer (the name box and Answer), wait until the customer has finished speaking. */
   const after=$('#counter .after-words');if(after)after.style.animation=`afterWords .4s ease-out ${(t+total*TYPE_STEP+.6).toFixed(3)}s both`;
   b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none'}}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
@@ -221,8 +222,11 @@ function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHT
     if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
-    const opts='<option value="">Choose…</option>'+az(D.items.filter(i=>i.c===v.ask.cat).map(i=>i.n)).map(n=>`<option>${esc(n)}</option>`).join('');
-    el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row after-words"><select id="adviceSel" aria-label="Your answer">${opts}</select><button class="main" id="adviceBtn">Answer</button></div>`;return}
+    /* The answer is typed. The counter is redrawn on clicks, so what was typed (and the focus) is kept in adviceDraft. */
+    const focused=document.activeElement&&document.activeElement.id==='adviceIn';
+    if(adviceDraft.key!==q.key)adviceDraft={key:q.key,text:'',hi:-1};
+    el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
+    const inp=$('#adviceIn');inp.value=adviceDraft.text;fillSuggest();if(focused){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
   el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
@@ -240,6 +244,11 @@ function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tar
 /* Time never moves by itself. While a customer is at the counter, time waits. Once nobody is waiting, the bar says
    whether anything is left to do this hour and offers Next hour; at Nightfall it offers Close for the night. */
 /* A quiet hour gets one line of mood from the hour, a full moon and the festival. */
+/* The witch thinking to herself while an advice customer waits: it only narrows the answer to the right kind of thing. */
+function adviceThought(v){const c=v.ask.cat;
+  if(c==='Crystals')return 'A crystal that does just that… I’ve read about one somewhere.';
+  if(c==='Herbs & flowers')return 'There’s a herb for that… it was in one of the books, wasn’t it?';
+  return `Something from ${c.toLowerCase()} for that… I’ve seen it somewhere.`}
 function moodLine(){const T=today(),h=HOURS[S.h];
   if(T.named&&h==='Nightfall')return `The ${T.named} fills the window.`;
   const W={Sunrise:'Sun spills across the counter.',Noon:'The shop is warm and bright.',Twilight:'The light goes gold, then grey.',Nightfall:'Stars are coming out over the lane.'}[h];

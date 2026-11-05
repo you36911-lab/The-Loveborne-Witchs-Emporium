@@ -351,6 +351,14 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:auto;bottom:14px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
 .balloon::after{left:-25px;bottom:17px;border-width:10px 26px 10px 0;border-color:transparent color-mix(in srgb,var(--card) 95%,transparent) transparent transparent}
 .dialogue .row{margin-top:10px}
+/* the advice answer: a name typed in, with suggestions listed under it (in the flow, since the balloon column scrolls) */
+.askwrap{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.askwrap input{width:100%}
+.suggest{display:flex;flex-direction:column;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--glow);padding:3px;overflow:hidden}
+.suggest[hidden]{display:none}
+.suggest button{text-align:left;border:0;box-shadow:none;border-radius:7px;padding:5px 10px;font-weight:500}
+.suggest button:hover,.suggest button.hi{background:var(--butter);color:#3A2530}
+.dialogue .row:has(.askwrap){align-items:flex-start}
 /* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
 .coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}
 .coach>b{font-family:var(--font-title);font-size:18px;display:block;margin-bottom:2px}

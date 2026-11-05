@@ -19,7 +19,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
-    case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
+    case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=adviceAnswer(v);if(!a)break;adviceDraft={key:'',text:'',hi:-1};
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
       record(grade,v.who,'Advice (no charge)',S.queue.key);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
@@ -40,6 +40,43 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'restartBtn':if(b.dataset.sure){S=fresh();sanitize();delete b.dataset.sure;b.textContent='Restart';render()}else{b.dataset.sure='1';b.textContent='Tap again to restart';setTimeout(()=>{delete b.dataset.sure;b.textContent='Restart'},3000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
   }});
+/* ---------- the advice answer: typed, with suggestions ----------
+   The player types the name. From two letters, names from the asked-for kind (crystals, herbs…) are suggested.
+   Only an exact name counts (capitals, spaces and accents do not matter). A misspelt or unknown name does nothing
+   but bring up a thought along the bottom, like a subtitle. */
+let adviceDraft={key:'',text:'',hi:-1};
+const normName=s=>String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+function adviceCat(){const q=S.queue,v=q&&q.key&&visitByKey(q.key);return v&&v.kind==='advice'?v.ask.cat:''}
+function suggestions(text){const t=normName(text),cat=adviceCat();if(t.length<2||!cat)return [];
+  const pool=D.items.filter(i=>i.c===cat).map(i=>i.n),words=n=>n.split(/[\s\-']+/).map(normName);
+  /* names that start with it first, then names with a later word that starts with it, then names that contain it */
+  const rank=n=>normName(n).startsWith(t)?0:words(n).some(w=>w.startsWith(t))?1:normName(n).includes(t)?2:3;
+  return az(pool).map(n=>[rank(n),n]).filter(x=>x[0]<3).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).slice(0,6)}
+function fillSuggest(){const list=$('#adviceList');if(!list)return;const s=suggestions(adviceDraft.text);
+  if(adviceDraft.hi>=s.length)adviceDraft.hi=s.length-1;
+  list.hidden=!s.length||(s.length===1&&normName(s[0])===normName(adviceDraft.text));
+  list.innerHTML=s.map((n,i)=>`<button type="button" role="option" data-advpick="${esc(n)}"${i===adviceDraft.hi?' class="hi" aria-selected="true"':''}>${esc(n)}</button>`).join('')}
+function pickSuggest(n){if(!n)return;adviceDraft.text=n;adviceDraft.hi=-1;const inp=$('#adviceIn');inp.value=n;inp.focus();fillSuggest()}
+/* the name typed, if it is one of the asked-for kind; otherwise a thought, and nothing happens */
+function adviceAnswer(v){const t=normName(adviceDraft.text);
+  if(!t){toast('What was it called again…');return ''}
+  const hit=D.items.find(i=>normName(i.n)===t);
+  if(hit&&hit.c===v.ask.cat)return hit.n;
+  if(hit){const kind={'Crystals':'a crystal','Herbs & flowers':'a herb or a flower'}[v.ask.cat]||'from '+v.ask.cat.toLowerCase();
+    toast(`${hit.n}? No, that isn’t ${kind}.`);return ''}
+  toast('Hmm. Did I spell that right?');return ''}
+{const c=$('#counter');
+  c.addEventListener('input',e=>{if(e.target.id!=='adviceIn')return;adviceDraft.text=e.target.value;adviceDraft.hi=-1;fillSuggest()});
+  c.addEventListener('keydown',e=>{if(e.target.id!=='adviceIn')return;const list=$('#adviceList'),open=!list.hidden,s=open?suggestions(adviceDraft.text):[],d=adviceDraft;
+    if(e.key==='ArrowDown'&&open){e.preventDefault();d.hi=(d.hi+1)%s.length;fillSuggest()}
+    else if(e.key==='ArrowUp'&&open){e.preventDefault();d.hi=d.hi<=0?s.length-1:d.hi-1;fillSuggest()}
+    else if(open&&(e.key==='Tab'||e.key==='Enter'&&d.hi>=0)){e.preventDefault();pickSuggest(s[Math.max(0,d.hi)])}
+    else if(e.key==='Enter'){e.preventDefault();$('#adviceBtn').click()}
+    else if(e.key==='Escape'&&open){e.stopPropagation();list.hidden=true}});
+  c.addEventListener('pointerdown',e=>{if(e.target.closest('#adviceList'))e.preventDefault()});  /* picking keeps the typing focus */
+  c.addEventListener('click',e=>{const b=e.target.closest('[data-advpick]');if(b)pickSuggest(b.dataset.advpick)});
+  c.addEventListener('focusin',e=>{if(e.target.id==='adviceIn')fillSuggest()});
+  c.addEventListener('focusout',e=>{if(e.target.id==='adviceIn'){const l=$('#adviceList');if(l)l.hidden=true}})}
 /* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
   if(t.id==='info')$('#info').classList.remove('open');
