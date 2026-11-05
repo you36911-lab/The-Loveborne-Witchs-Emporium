@@ -138,8 +138,9 @@ function leafHTML(fwd,frontHTML,backHTML){
   const fs=fwd?'right':'left',bs=fwd?'left':'right';let h='';
   for(let k=STRIPS-1;k>=0;k--){
     const fo=fwd?k:STRIPS-1-k,bo=fwd?STRIPS-1-k:k;
-    h=`<div class="strip${k?'':' root'}"><div class="sface front"><div class="pcopy ${fs}" style="left:${-fo*100}%;width:${STRIPS*100}%">${frontHTML}</div><i class="shade"></i></div>`+
-      `<div class="sface back"><div class="pcopy ${bs}" style="left:${-bo*100}%;width:${STRIPS*100}%">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
+    const fm=`style="-webkit-mask-position:${fo/(STRIPS-1)*100}% 0;mask-position:${fo/(STRIPS-1)*100}% 0"`,bm=`style="-webkit-mask-position:${bo/(STRIPS-1)*100}% 0;mask-position:${bo/(STRIPS-1)*100}% 0"`;
+    h=`<div class="strip${k?'':' root'}"><div class="sface front p${fs[0]}" ${fm}><div class="pcopy ${fs}" style="left:${-fo*100}%;width:${STRIPS*100}%">${frontHTML}</div><i class="shade"></i></div>`+
+      `<div class="sface back p${bs[0]}" ${bm}><div class="pcopy ${bs}" style="left:${-bo*100}%;width:${STRIPS*100}%">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
   return h}
 function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(pages)>>1;i=Math.max(0,Math.min(i,pages.length-1));
   S.page[curBook]=pages[i].key;save();const to=i>>1;

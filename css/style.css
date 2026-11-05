@@ -401,9 +401,9 @@ button.small{font-size:12px;padding:2px 10px}
 .bookmain{flex:1;min-height:0;display:grid;grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr);gap:14px;align-items:center}
 .bookmain>.tomewrap{grid-column:2}
 .bookview .bank{grid-column:3;justify-self:center;width:230px;box-sizing:border-box;height:var(--tome-h,auto);max-height:100%;overflow:auto}
-/* no box: just a light title with a faint line, and the words floating beside the book; the list fades out at the bottom when it scrolls */
+/* no box: just a light title, and the words floating beside the book; the list fades out at the bottom when it scrolls */
 .bookview .bank{background:none;border:0;border-radius:0;padding:0 4px;-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(to bottom,#000 calc(100% - 28px),transparent)}
-.bookview .bank h3{color:#FBEFD9;padding-bottom:6px;margin-bottom:10px;border-bottom:1px solid rgba(251,239,217,.25)}
+.bookview .bank h3{color:#FBEFD9;padding-bottom:6px;margin-bottom:10px;}
 @media (max-width:860px){.bookmain{grid-template-columns:1fr;align-items:start}.bookmain>.tomewrap,.bookview .bank{grid-column:auto}
   .bookview .bank{justify-self:stretch;width:auto;height:auto;max-height:30vh}.modal.bookview{overflow:auto}.bookmain .tome{width:min(calc(100% - 132px),calc((100dvh - 200px) * var(--ar)))}}
 .tomewrap{position:relative;display:flex;align-items:center;justify-content:center;gap:26px;min-width:0;height:100%}
@@ -460,6 +460,11 @@ button.small{font-size:12px;padding:2px 10px}
 .leaf.bwd .strip:not(.root){right:100%}
 .sface{position:absolute;inset:0 -0.5px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper-c,#F6F3E6)}
 .sface.back{transform:rotateY(180deg)}
+/* a turning page has the paper's own shape: a touch shorter towards the spine, where the binding pulls it in, and rounded outer
+   corners. Each strip shows its slice of the shape (mask 1200% wide = STRIPS in books.js; position set per strip there). */
+.sface.pr{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 2.6C5 1.4 12 .9 25 .8H98.5Q100 .8 100 2V98Q100 99.2 98.5 99.2H25C12 99.1 5 98.7 0 97.6Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M0 2.6C5 1.4 12 .9 25 .8H98.5Q100 .8 100 2V98Q100 99.2 98.5 99.2H25C12 99.1 5 98.7 0 97.6Z'/></svg>")}
+.sface.pl{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M100 2.6C95 1.4 88 .9 75 .8H1.5Q0 .8 0 2V98Q0 99.2 1.5 99.2H75C88 99.1 95 98.7 100 97.6Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M100 2.6C95 1.4 88 .9 75 .8H1.5Q0 .8 0 2V98Q0 99.2 1.5 99.2H75C88 99.1 95 98.7 100 97.6Z'/></svg>")}
+.sface.pr,.sface.pl{-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:1200% 100%;mask-size:1200% 100%}
 .pcopy{position:absolute;top:0;bottom:0;overflow:hidden}
 .shade{position:absolute;inset:0;pointer-events:none}
 /* page furniture */
@@ -490,15 +495,19 @@ button.small{font-size:12px;padding:2px 10px}
 .ribbon.on{background:var(--kw);opacity:1}
 .pg.left .ribbon,.pcopy.left .ribbon{right:auto;left:1.6em}
 .turn{flex:none;width:40px;height:40px;padding:0 0 3px;border-radius:50%;font-size:24px;line-height:1;display:grid;place-items:center}
-/* sticky page flags, like the translucent ones from a stationery shop, stuck on the outer edges (1.6em out past the cover, 1.5em onto the paper): one high on the left page
-   (to the first page, the index), one low on the right (to the last). The part on the paper lets it show through; the tip is solid. */
-.jumptab{--fc:var(--kw);position:absolute;z-index:4;width:calc(var(--po,3.8%) + 3.1em);height:1.15em;padding:0;border:0;border-radius:1px;font-size:max(11px,1.05cqw);
-  box-shadow:0 1px 2px rgba(30,10,40,.25);transition:translate .2s ease,opacity .2s}
-.jumptab.first{left:-1.6em;top:14%;background:linear-gradient(to right,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
-.jumptab.last{--fc:#F6CF5A;right:-1.6em;bottom:14%;background:linear-gradient(to left,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
-.jumptab:hover{box-shadow:0 1px 3px rgba(30,10,40,.3)}
+/* sticky page flags, like the translucent ones from a stationery shop, on the outer edges: one high on the left (stuck on the
+   first page, the index), one low on the right (stuck on the last page). While that page is open (the flag's button is then
+   disabled) the flag lies on top, its see-through part on the paper; otherwise its page is further in, so only the solid tip
+   shows past the cover and the rest is tucked under the book. */
+.jumptab{--fc:var(--kw);position:absolute;z-index:-1;width:calc(var(--po,3.8%) + 3.1em);height:1.75em;padding:0;border:0;border-radius:1px;font-size:max(11px,1.05cqw);
+  background:var(--fc);box-shadow:0 1px 2px rgba(30,10,40,.25);transition:translate .2s ease}
+.jumptab.first{left:-1.6em;top:14%}
+.jumptab.last{--fc:#F6CF5A;right:-1.6em;bottom:14%}
+.jumptab:hover{background:var(--fc);box-shadow:0 1px 3px rgba(30,10,40,.3)}
 .jumptab.first:hover:not(:disabled){translate:-3px 0}.jumptab.last:hover:not(:disabled){translate:3px 0}
-.jumptab:disabled{opacity:.5;cursor:default}
+.jumptab:disabled{z-index:4;cursor:default}
+.jumptab.first:disabled{background:linear-gradient(to right,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
+.jumptab.last:disabled{background:linear-gradient(to left,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
 .tome:not(.opened) .jumptab{visibility:hidden;opacity:0}
 .turn:disabled{opacity:.3;cursor:default;box-shadow:none}
 .tomewrap:has(.tome:not(.opened)) .turn{visibility:hidden}
@@ -506,8 +515,9 @@ button.small{font-size:12px;padding:2px 10px}
 
 
 /* Pictures in the books: an ingredient or a card stands at the foot of its entry page. */
-.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:66%;max-height:17em;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(60,30,40,.25))}
-.pbody .entry .entrypic.card{max-height:22em;border-radius:.6em;filter:drop-shadow(0 6px 10px rgba(60,30,40,.3))}
+/* pictures in the books are printed like an old book's engravings: one sepia ink, soaked into the paper (multiply), no shadow */
+.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:66%;max-height:17em;object-fit:contain;filter:grayscale(1) sepia(.5) contrast(1.2) brightness(.96);mix-blend-mode:multiply}
+.pbody .entry .entrypic.card{max-height:22em;border-radius:.6em}
 /* Tarot cards in the Cabinet: little cards with their name under them; the altar's card slot shows a thumbnail. */
 /* tarot cards are read by their pictures, so they come out big (sized with the room: about 140px wide on a 1920 screen) */
 .cabinside .chip.card{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:auto;padding:5px;background:none;border:1px solid transparent;border-radius:8px;box-shadow:none;color:#FBEFD9;font-size:13px;line-height:1.15;text-align:center}
