@@ -96,9 +96,6 @@ let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#c
 $('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
 $('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
-  if(!test){const lacking=S.altar.filter(n=>X.stock[n]!==undefined&&S.stock[n]<=0);
-    if(lacking.length){toast(`No ${lacking[0]} left.`);return}
-    S.altar.forEach(n=>{if(X.stock[n]!==undefined)S.stock[n]--})}
   const ev=evaluate(r,test);
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost you a star tonight.')}}

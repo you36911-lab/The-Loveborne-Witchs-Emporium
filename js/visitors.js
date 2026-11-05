@@ -10,8 +10,6 @@ function currentVisitor(){
   const busy=sv.length,rp=dueReport(busy);
   if(rp){S.queue={type:'report',at:rp.at,who:rp.who};return S.queue}
   if(sv.length){const v=sv[0];S.queue={type:'new',key:v.day+'-'+v.hour+'-'+v.who};S.queue.tales=pullTales(v);
-    /* Morwenna always brings a bottle of sea water from Caldwell-on-Sea; it can't be had anywhere else. */
-    if(v.gift){S.stock[v.gift]=(S.stock[v.gift]||0)+1;setTimeout(()=>toast(`+1 ${v.gift}, from ${v.who.split(' ')[0]}`),300)}
     return S.queue}
   return null}
 /* A customer who got just what they needed lingers to pass on a hint, in their own balloon, until the player clicks

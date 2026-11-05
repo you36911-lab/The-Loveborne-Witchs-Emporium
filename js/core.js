@@ -15,7 +15,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],reviews:[],reviewsSeen:0,memo:[],reports:[],result:null,queue:null,
+  seen:{},letters:[false,false,false],mail:{},archive:[],reviews:[],reviewsSeen:0,memo:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
