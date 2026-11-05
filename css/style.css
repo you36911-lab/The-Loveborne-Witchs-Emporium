@@ -118,9 +118,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .daycard small{display:block;font-family:var(--font-text);font-size:.45em;opacity:.9}
 .daycard.on{opacity:1}
 /* The customer stands behind the counter: the box ends at the counter's top edge, so everything
-   below the waist is hidden. The picture is 95% of the scene's height, head at 22% from the top. */
-.scene .customer{position:absolute;left:0;right:0;top:0;bottom:22.5%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .45s ease}  /* leaving: a quick fade out */
-.scene .customer img{position:absolute;left:50%;top:28.4%;height:122.6%;width:auto;translate:-50% 0}
+   below the waist is hidden (the cloth top is 76.4% down the shop picture). The picture is 95% of the scene's height, head at 22% from the top. */
+.scene .customer{position:absolute;left:0;right:0;top:0;bottom:23.6%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .45s ease}  /* leaving: a quick fade out */
+.scene .customer img{position:absolute;left:50%;top:28.81%;height:124.37%;width:auto;translate:-50% 0}
 .scene .customer.on{opacity:1;transition-duration:1.2s}  /* coming in: a slow fade in */
 @media (prefers-reduced-motion: reduce){.scene .bg,.daycard,.scene .customer{transition:none}}
 /* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
@@ -304,20 +304,20 @@ body{overflow:hidden}
 .stars{color:var(--pink);font-size:16px;letter-spacing:1px;white-space:nowrap}
 /* Failed tests: five little candles (candlesHTML in scene.js). A failed test leaves an unlit candle; the one just
    put out gives a puff of smoke. */
-.candles{display:inline-flex;align-items:flex-end;gap:5px;height:20px;padding-top:2px;cursor:help}
-.candle{position:relative;display:block;width:6px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#fff4e0,#f1dcc0);box-shadow:inset -1px 0 0 rgba(120,80,60,.25)}
-.candle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:3px;translate:-50% 0;background:#4a3540}  /* wick */
-.candle::before{content:"";position:absolute;left:50%;bottom:calc(100% + 2px);width:5px;height:8px;translate:-50% 0;transform-origin:50% 100%;
+.tcandles{display:inline-flex;align-items:flex-end;gap:5px;height:20px;padding-top:2px;cursor:help}
+.tcandle{position:relative;display:block;width:6px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#fff4e0,#f1dcc0);box-shadow:inset -1px 0 0 rgba(120,80,60,.25)}
+.tcandle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:3px;translate:-50% 0;background:#4a3540}  /* wick */
+.tcandle::before{content:"";position:absolute;left:50%;bottom:calc(100% + 2px);width:5px;height:8px;translate:-50% 0;transform-origin:50% 100%;
   border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;background:radial-gradient(circle at 50% 70%,#fff8d0 0 25%,#ffc145 55%,#ff8a3c 100%);
-  box-shadow:0 0 5px 1px rgba(255,190,90,.7);animation:flicker 2.4s ease-in-out infinite}
-.candle:nth-child(2)::before{animation-delay:-.5s}.candle:nth-child(3)::before{animation-delay:-1.1s}
-.candle:nth-child(4)::before{animation-delay:-1.7s}.candle:nth-child(5)::before{animation-delay:-.8s}
-.candle.out{background:linear-gradient(90deg,#e6dccd,#cfc2b0)}
-.candle.out::before{content:none}
-.candle.puff::before{content:"";width:4px;height:10px;border-radius:50%;background:rgba(150,140,150,.6);box-shadow:none;animation:puff 1s ease-out forwards}
-@keyframes flicker{0%,100%{transform:scale(1,1) rotate(0)}30%{transform:scale(.92,1.06) rotate(-3deg)}60%{transform:scale(1.05,.95) rotate(2deg)}}
-@keyframes puff{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-8px) scale(1.4)}}
-@media (prefers-reduced-motion: reduce){.candle::before{animation:none}.candle.puff::before{content:none}}
+  box-shadow:0 0 5px 1px rgba(255,190,90,.7);animation:tflicker 2.4s ease-in-out infinite}
+.tcandle:nth-child(2)::before{animation-delay:-.5s}.tcandle:nth-child(3)::before{animation-delay:-1.1s}
+.tcandle:nth-child(4)::before{animation-delay:-1.7s}.tcandle:nth-child(5)::before{animation-delay:-.8s}
+.tcandle.out{background:linear-gradient(90deg,#e6dccd,#cfc2b0)}
+.tcandle.out::before{content:none}
+.tcandle.puff::before{content:"";width:4px;height:10px;border-radius:50%;background:rgba(150,140,150,.6);box-shadow:none;animation:tpuff 1s ease-out forwards}
+@keyframes tflicker{0%,100%{transform:scale(1,1) rotate(0)}30%{transform:scale(.92,1.06) rotate(-3deg)}60%{transform:scale(1.05,.95) rotate(2deg)}}
+@keyframes tpuff{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-8px) scale(1.4)}}
+@media (prefers-reduced-motion: reduce){.tcandle::before{animation:none}.tcandle.puff::before{content:none}}
 button.small{font-size:12px;padding:2px 10px}
 .tip{margin:0;border-radius:14px;padding:5px 14px;font-size:14px}
 .proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px}
@@ -338,13 +338,13 @@ button.small{font-size:12px;padding:2px 10px}
 /* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns berry (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
 #cantBtn:not(.main):hover{background:color-mix(in srgb,var(--peri) 82%,#000);color:#fff}
-.balloon{position:relative;background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
+.balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
 .balloon p{margin:0 0 6px}.balloon p:last-child{margin-bottom:0}
 .balloon .asked{font-size:14px;color:var(--ink-soft)}
 .balloon .tale{background:none;padding:0}
 /* the tail: two triangles (border colour, then fill) on the left edge */
 .balloon::before,.balloon::after{content:"";position:absolute;left:-30px;top:auto;bottom:14px;border-style:solid;border-width:13px 30px 13px 0;border-color:transparent var(--line) transparent transparent}
-.balloon::after{left:-25px;bottom:17px;border-width:10px 26px 10px 0;border-color:transparent var(--card) transparent transparent}
+.balloon::after{left:-25px;bottom:17px;border-width:10px 26px 10px 0;border-color:transparent color-mix(in srgb,var(--card) 95%,transparent) transparent transparent}
 .dialogue .row{margin-top:10px}
 /* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
 .coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}
@@ -664,7 +664,7 @@ button.small{font-size:12px;padding:2px 10px}
   box-shadow:0 1.2cqw 1cqw -.6cqw rgba(60,10,40,.45)}
 .cardbed img{display:block;width:100%;height:100%;border-radius:.4cqw}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
-.ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22)}  /* the empty outline stays put; only its inside fills in a little */
+.ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22);filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF)}  /* the empty outline stays put; only its inside fills in a little */
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}
 .candle::before{content:"";position:absolute;left:50%;top:-1.5cqw;width:.8cqw;height:1.4cqw;translate:-50% 0;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;

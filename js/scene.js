@@ -87,8 +87,8 @@ function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');retur
    star and they are lit again. The candle that has just gone out gives a little puff (once, not on every redraw). */
 let candlesOut=null;
 function candlesHTML(){const out=S.failTests%5,puff=candlesOut!==null&&out>candlesOut;candlesOut=out;
-  return `<span class="candles" title="Every fifth test craft that isn't perfect costs a one-star review" aria-label="Failed tests: ${out} of 5">${
-    [0,1,2,3,4].map(i=>`<i class="candle${i>=5-out?' out':''}${i===5-out&&puff?' puff':''}"></i>`).join('')}</span>`}
+  return `<span class="tcandles" title="Every fifth test craft that isn't perfect costs a one-star review" aria-label="Failed tests: ${out} of 5">${
+    [0,1,2,3,4].map(i=>`<i class="tcandle${i>=5-out?' out':''}${i===5-out&&puff?' puff':''}"></i>`).join('')}</span>`}
 function renderTop(){renderBadge();const T=today();
   const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
   $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
