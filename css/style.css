@@ -403,7 +403,7 @@ button.small{font-size:12px;padding:2px 10px}
 .shelfopen[data-shelf^="Oils"] .cabinside{--big:1.45}  /* the oil shelf a little larger than the waters */
 .shelfopen[data-shelf="Herbs & flowers"] .cabinside{--big:1.8}
 /* herbs: always four to a row, each jar in a quarter of the cupboard (smaller on a narrow screen rather than fewer to a row) */
-.shelfopen[data-shelf="Herbs & flowers"] .chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 6px;justify-items:center;align-items:end}
+.shelfopen[data-shelf="Herbs & flowers"] .chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 6px;justify-items:center;align-items:end;padding-inline:5%}  /* the side padding draws the four columns a little closer together */
 .shelfopen[data-shelf="Herbs & flowers"] .chip.jar{min-width:0;width:100%}
 .shelfopen[data-shelf="Herbs & flowers"] .chip.jar img{max-width:100%}
 .cabinside .chip.jar{display:inline-flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;width:auto;min-width:calc(124px * var(--big));padding:6px 3px 4px;background:none;border:1px solid transparent;border-radius:10px;box-shadow:none;color:#FBEFD9;font-size:14.5px;line-height:1.15;text-align:center}
