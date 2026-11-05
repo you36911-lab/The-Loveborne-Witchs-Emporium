@@ -688,12 +688,12 @@ button.small{font-size:12px;padding:2px 10px}
 .pcscreen{position:relative;width:100%;height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:6px;
   background:var(--wall,none) center/cover,var(--sky);font-family:var(--font-text)}
 .desk{position:relative;flex:1;min-height:0;overflow:hidden}
-.dicon{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;width:92px;margin:14px 0 0 14px;padding:8px 4px 6px;border:1px solid transparent;border-radius:8px;background:none;box-shadow:none;color:#fff}
+.dicon{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;width:116px;margin:14px 0 0 14px;padding:8px 4px 6px;border:1px solid transparent;border-radius:8px;background:none;box-shadow:none;color:#fff}
 .dicon:hover,.dicon:focus-visible{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4);box-shadow:none;outline:none}
-.dico{display:block;width:54px;height:54px;filter:drop-shadow(0 3px 5px rgba(20,8,30,.45))}
+.dico{display:block;width:76px;height:76px;filter:drop-shadow(0 3px 5px rgba(20,8,30,.45))}
 .dico :is(svg,img),.pcico :is(svg,img),.tb-app :is(svg,img),.wm-logoico :is(svg,img){display:block;width:100%;height:100%;object-fit:contain}
-.dname{font-size:13px;font-weight:600;line-height:1.2;padding:1px 5px;border-radius:4px;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.5)}
-.dicon .badge{position:absolute;top:2px;right:16px;margin:0}
+.dname{font-size:14px;font-weight:600;line-height:1.2;padding:1px 5px;border-radius:4px;text-shadow:0 1px 2px rgba(0,0,0,.85),0 0 6px rgba(0,0,0,.5)}
+.dicon .badge{position:absolute;top:14px;right:22px;margin:0;box-shadow:0 1px 3px rgba(20,8,30,.45)}  /* sits over the corner of the icon */
 /* a window: title bar with its icon and name, minimise, maximise and close on the right */
 .pcwin{position:absolute;left:7%;top:4%;width:86%;height:90%;display:flex;flex-direction:column;overflow:hidden;background:var(--card);
   border:1px solid rgba(60,40,70,.35);border-radius:10px;box-shadow:0 18px 50px rgba(20,8,30,.45),0 2px 8px rgba(20,8,30,.25);transform-origin:50% 50%}
