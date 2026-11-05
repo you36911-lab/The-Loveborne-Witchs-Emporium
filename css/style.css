@@ -402,9 +402,9 @@ button.small{font-size:12px;padding:2px 10px}
 .bookmain>.tomewrap{grid-column:2}
 .bookview .bank{grid-column:3;justify-self:center;width:230px;box-sizing:border-box;height:var(--tome-h,auto);max-height:100%;overflow:auto}
 @media (max-width:860px){.bookmain{grid-template-columns:1fr;align-items:start}.bookmain>.tomewrap,.bookview .bank{grid-column:auto}
-  .bookview .bank{justify-self:stretch;width:auto;height:auto;max-height:30vh}.modal.bookview{overflow:auto}.bookmain .tome{width:min(calc(100% - 92px),calc((100dvh - 200px) * var(--ar)))}}
-.tomewrap{position:relative;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;height:100%}
-.tome{--ar:1.422;position:relative;flex:none;aspect-ratio:var(--ar);width:min(calc(100vw - 32px - 520px - 28px - 92px),calc((100dvh - 200px) * var(--ar)));  /* screen less padding, the two side columns, gaps and arrows */
+  .bookview .bank{justify-self:stretch;width:auto;height:auto;max-height:30vh}.modal.bookview{overflow:auto}.bookmain .tome{width:min(calc(100% - 132px),calc((100dvh - 200px) * var(--ar)))}}
+.tomewrap{position:relative;display:flex;align-items:center;justify-content:center;gap:26px;min-width:0;height:100%}
+.tome{--ar:1.422;position:relative;flex:none;aspect-ratio:var(--ar);width:min(calc(100vw - 32px - 520px - 28px - 132px),calc((100dvh - 200px) * var(--ar)));  /* screen less padding, the two side columns, gaps and arrows */
   container-type:inline-size;perspective:3400px;transition:transform 1.1s cubic-bezier(.45,.05,.3,1)}
 .tome.closed{transform:translateX(-25%)}
 /* once open, a far-off viewpoint, so a page lifting as it turns barely grows past the book (the cover swings with the nearer one) */
@@ -487,13 +487,15 @@ button.small{font-size:12px;padding:2px 10px}
 .ribbon.on{background:var(--kw);opacity:1}
 .pg.left .ribbon,.pcopy.left .ribbon{right:auto;left:1.6em}
 .turn{flex:none;width:40px;height:40px;padding:0 0 3px;border-radius:50%;font-size:24px;line-height:1;display:grid;place-items:center}
-/* sticky index tabs tucked under the book, sticking out past its edge: top left goes to the first page (the index), bottom right to the last */
-.jumptab{position:absolute;z-index:-1;height:2.9em;min-width:5.2em;padding:0 .9em;border:0;box-shadow:0 2px 5px rgba(30,10,40,.3);font-family:var(--font-deco);font-weight:700;font-size:max(11px,1.05cqw);letter-spacing:.03em;transition:translate .2s ease,opacity .2s}
-.jumptab.first{left:calc(var(--po,3.8%) + 5%);bottom:calc(100% - 1.3em);border-radius:7px 7px 0 0;padding-bottom:1.3em;background:var(--kw);color:#fff}
-.jumptab.last{right:calc(var(--po,3.8%) + 5%);top:calc(100% - 1.3em);border-radius:0 0 7px 7px;padding-top:1.3em;background:var(--butter);color:#3A2530}
-.jumptab.first:hover:not(:disabled){translate:0 -3px}.jumptab.last:hover:not(:disabled){translate:0 3px}
-.jumptab:hover{box-shadow:0 2px 5px rgba(30,10,40,.3)}.jumptab.first:hover{background:var(--kw)}.jumptab.last:hover{background:var(--butter)}
-.jumptab:disabled{opacity:.55;cursor:default}
+/* sticky page flags, like the translucent ones from a stationery shop, stuck on the outer edges (1.6em out past the cover, 1.5em onto the paper): one high on the left page
+   (to the first page, the index), one low on the right (to the last). The part on the paper lets it show through; the tip is solid. */
+.jumptab{--fc:var(--kw);position:absolute;z-index:4;width:calc(var(--po,3.8%) + 3.1em);height:1.15em;padding:0;border:0;border-radius:1px;font-size:max(11px,1.05cqw);
+  box-shadow:0 1px 2px rgba(30,10,40,.25);transition:translate .2s ease,opacity .2s}
+.jumptab.first{left:-1.6em;top:14%;background:linear-gradient(to right,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
+.jumptab.last{--fc:#F6CF5A;right:-1.6em;bottom:14%;background:linear-gradient(to left,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
+.jumptab:hover{box-shadow:0 1px 3px rgba(30,10,40,.3)}
+.jumptab.first:hover:not(:disabled){translate:-3px 0}.jumptab.last:hover:not(:disabled){translate:3px 0}
+.jumptab:disabled{opacity:.5;cursor:default}
 .tome:not(.opened) .jumptab{visibility:hidden;opacity:0}
 .turn:disabled{opacity:.3;cursor:default;box-shadow:none}
 .tomewrap:has(.tome:not(.opened)) .turn{visibility:hidden}
@@ -531,7 +533,7 @@ button.small{font-size:12px;padding:2px 10px}
 /* The diary (the notebook on the counter): handwriting that sits on the picture's ruled lines. All sizes are in cqw (1% of the
    book's width), measured on diary-open.png (968px wide): 15 rules, 37.25px apart, the first 8.05cqw below the page's top. */
 .bookview.diary :is(.marks,.bank){display:none}
-.bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}.bookview.diary .bookmain>.tomewrap{grid-column:1}.bookview.diary .tome{width:min(calc(100% - 92px),calc((100dvh - 200px) * var(--ar)))}
+.bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}.bookview.diary .bookmain>.tomewrap{grid-column:1}.bookview.diary .tome{width:min(calc(100% - 132px),calc((100dvh - 200px) * var(--ar)))}
 .tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3D2A5C;overflow:hidden;
   padding:5.2cqw 3.5cqw 3.7cqw 2.9cqw}
 .tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}
