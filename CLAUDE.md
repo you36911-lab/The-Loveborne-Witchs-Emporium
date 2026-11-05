@@ -32,6 +32,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/actions.js`: clicks, the bell, giving orders, the end of the day.
 - `js/books.js`: the books (cover, opening, page turns), entries, blanks, word bank.
 - `js/email.js`: Moonpost, the webmail on the computer (the story's letters, shown as email).
+- `js/computer.js`: the computer screen: desktop, taskbar with the date, and the My Shop app (reviews and rating).
 - `js/prototype.js`: prototype-only jump bar (week, day, hour, customer); off with `PROTOTYPE_TOOLS`.
 - `js/main.js`: starts the game.
 

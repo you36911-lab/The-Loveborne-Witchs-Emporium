@@ -48,8 +48,9 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 
 ## Grading and feedback
 
-- Grades (Perfect, Good, Clumsy, Failed) are internal; the player sees stars on receipts. Rating = average of the last 20, counted at closing.
-- Test crafts are unlimited; every 5th imperfect one adds a 1-star review. A perfect test says so plainly ("Done") and writes the recipe into the Recipe Book.
+- Grades (Perfect, Good, Clumsy, Failed) are internal; the player sees stars on receipts and reviews. Rating = average of the last 20, counted at closing.
+- **Reviews**: at closing every receipt becomes a review in **My Shop** on the computer, read by day (Day 1, Day 2...) or all at once, with the rating above. A customer who got just what they needed writes their own review (`review` in story.js; new writing, not in the design document yet) and adds what they let slip as a P.S. (the hint). Other grades write a short stock line that fits their stars.
+- Test crafts are unlimited; every 5th imperfect one adds a 1-star review (from a neighbour: the street smells of burnt herbs). Failed tests show as **five black candles** on the workroom table bar beside Test craft: each imperfect test puts one out (a puff of smoke); when all five are out the star is lost and they light again. A perfect test says so plainly ("Done") and writes the recipe into the Recipe Book.
 - Test-craft feedback: an **Overall** count of things off, then an **Ingredients** count ("2 ingredients are off: 1 wrong, 1 missing"), then one plain line per problem.
   - Lines name the **shelf**, never the wrong ingredient ("The one from Herbs & flowers: the cleansing is right, but it works on the heart. This needs one that works on the home.").
   - A missing ingredient is described by its shelf and **look** ("Picture it: green, jagged and a little hairy").
@@ -69,9 +70,9 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
 
 - 3 starting letters from "H." (Hester), plus **17 post letters** from places around the map, one or two hints each.
 - Letters only point at **dead ends**: ingredients whose needed keyword is hidden, so a keyword search can't find them. They name the ingredient and the keyword, and carry a light thread to the order they help, but never say which order.
-- In the game the letters arrive as **email**, read on the computer in **Moonpost**, a made-up webmail (Inbox, Archive, Notes; sender, subject, preview, date). The design document still calls them letters.
+- In the game the letters arrive as **email**, read on the computer in **Moonpost**, a made-up webmail (Inbox, Archive; sender, subject, preview, date). The design document still calls them letters.
 - An email arrives in a quiet hour with an envelope animation (Read it now / Later); unread emails show a badge on the computer.
-- Emails can be archived and moved back to the inbox. Customer hints are copied automatically into "What customers told me" (the notebook on the counter, also the Notes folder).
+- Emails can be archived and moved back to the inbox.
 
 ## The counter screen
 
@@ -83,9 +84,10 @@ On the counter, every object glows on hover and does something:
 - each book in the stack opens that book
 - crystal ball: glows with the current customer's aura. It is not a button; Hester's first letter (P.S.) says what each colour means.
 - till: today's receipts on their own over the shop (no panel, no dimming); a click anywhere puts them away
-- notebook: what customers told me (hints), as a handwritten diary: it opens straight onto its ruled pages (assets/books/diary-open.png, no cover), the notes written on the lines in Caveat, newest page first, turned like the other books; no tabs, search, bookmarks or word bank
+- notebook: my notes, written by the player: it opens straight onto its ruled pages (assets/books/diary-open.png, no cover), typing goes onto the lines in Caveat, a page holds what fits its lines, there is always a blank spread after the last page written on; turned like the other books; no tabs, search, bookmarks or word bank. (Hints moved to the reviews; what the notebook is for may be looked at again.)
 - bell: the next customer
-- computer: email (Moonpost), with the unread badge
+- computer: opens like a real computer screen: a desktop (wallpaper picture to come from the designer; a twilight gradient until then) with two apps, **Moonpost** (email) and **My Shop** (reviews and rating), and a taskbar with the winged-heart home button, the open app, and the date (Day n, weekday, and the festival, full moon or sky event). One app at a time fills the screen. The badge on the computer counts unread emails and new reviews.
+- **No top bar** over the shop: the date is on the computer, the rating in My Shop, failed tests on the workroom candles. The prototype bar (with Restart) stays while PROTOTYPE_TOOLS is on.
 
 ## Art direction (agreed so far)
 

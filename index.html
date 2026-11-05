@@ -25,21 +25,20 @@
     <div class="obj books" id="bookStack"></div>
     <div class="obj crystal" id="crystalBtn" role="img" aria-label="Crystal ball"><img data-img="crystal-ball" alt=""></div>
     <button class="obj till" id="tillBtn" aria-label="Till: today's receipts"><img data-img="till" alt=""></button>
-    <button class="obj notebook" id="notebookBtn" aria-label="Notebook: what customers told me"><img data-img="notebook" alt=""></button>
+    <button class="obj notebook" id="notebookBtn" aria-label="Notebook: my notes"><img data-img="notebook" alt=""></button>
     <!-- what was made at the altar waits here, on the counter in front of the customer; clicking it hands it over -->
     <button class="obj made" id="madeBtn" hidden><span class="parcel"><i class="bow"></i></span><span class="tag" id="madeTag"></span></button>
     <button class="obj bell" id="bellBtn" aria-label="Bell: the next customer"><img data-img="bell" alt=""></button>
-    <button class="obj computer" id="pcBtn" aria-label="Computer: email"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
+    <button class="obj computer" id="pcBtn" aria-label="Computer"><img data-img="computer" alt=""><span class="badge pcbadge" id="booksBadge" hidden></span></button>
   </div>
   <div class="daycard" id="dayCard" aria-live="polite"></div>
   <div class="hud">
-    <div class="hudinfo"><span class="sky" id="sky"></span><span class="stars" id="stars" aria-label="Shop rating"></span>
-      <button id="restartBtn" class="small" title="Start a new game from Day 1">Restart</button></div>
     <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
       <b>Prototype</b>
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
       <button id="protoGo" class="main">Go</button><button id="protoDawn" title="Start the chosen day from the dawn card">From dawn</button>
+      <button id="restartBtn" title="Start a new game from Day 1">Restart</button>
     </div>
     <p class="tip" id="tip" hidden></p>
   </div>
@@ -61,7 +60,7 @@
     </div>
     <div class="tablebar">
       <label class="making"><span>Making</span><select id="ttype" aria-label="Spell type"></select><select id="target" aria-label="Recipe"></select></label>
-      <button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make it</button><button id="clearBtn">Clear the table</button>
+      <span id="testCandles"></span><button id="testBtn">Test craft</button><button id="giveBtn" class="main">Make it</button><button id="clearBtn">Clear the table</button>
     </div>
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>
@@ -93,13 +92,29 @@
     <aside class="bank"><h3 style="margin-top:0">Word bank</h3><p class="muted" style="margin:0 0 6px;font-size:13px">Words you have collected. Tap any <span class="kw" style="cursor:default">dotted word</span> to collect it, pick one here, then tap a blank. To clear a blank, tap it with no word picked.</p><div class="chips" id="bank"></div></aside>
   </div>
 </div>
-<div class="modal" id="letters" role="dialog" aria-modal="true" aria-label="Email">
+<!-- The computer on the counter: a desktop with two apps, Moonpost (email) and the Shop (reviews and rating), and a taskbar
+     that shows the date. One app is open at a time, filling the screen above the taskbar. -->
+<div class="modal pcview" id="pc" role="dialog" aria-modal="true" aria-label="Computer">
+ <div class="pcscreen" id="pcScreen">
+  <div class="desk" id="desk">
+    <button class="dicon" data-app="mail"><span class="dico" aria-hidden="true">☾</span><span class="dname">Moonpost</span><span class="badge" id="mailIconBadge" hidden></span></button>
+    <button class="dicon" data-app="shop"><span class="dico shop" aria-hidden="true">♥</span><span class="dname">My Shop</span><span class="badge" id="shopIconBadge" hidden></span></button>
+  </div>
+  <div class="pcwin" id="mailWin" hidden>
+  <div class="pcbar"><span>☾ Moonpost</span><button class="pcclose" data-closeapp="1" aria-label="Close Moonpost">×</button></div>
   <div class="webmail" id="webmail">
     <header class="wm-top"><div class="wm-logo"><span aria-hidden="true">☾</span>Moonpost</div>
       <input id="wmSearch" type="search" placeholder="Search mail" aria-label="Search mail">
       <span class="wm-me" title="Your address"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span></header>
     <div class="wm-body"><nav class="wm-side" id="wmSide" aria-label="Folders"></nav><div class="wm-list" id="letterList"></div><article class="wm-read" id="letterRead"></article></div>
   </div>
+  </div>
+  <div class="pcwin" id="shopWin" hidden>
+    <div class="pcbar"><span>♥ My Shop</span><button class="pcclose" data-closeapp="1" aria-label="Close My Shop">×</button></div>
+    <div class="shopapp" id="shopApp"></div>
+  </div>
+  <footer class="taskbar"><button class="tb-home" data-closeapp="1" aria-label="Desktop"><img src="assets/scene/logo.png" alt=""></button><span class="tb-apps" id="tbApps"></span><span class="tb-date" id="pcDate"></span></footer>
+ </div>
 </div>
 <div class="modal receiptsview" id="receiptsView" aria-label="Today's receipts"></div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>
@@ -117,6 +132,7 @@
 <script src="js/actions.js"></script>
 <script src="js/books.js"></script>
 <script src="js/email.js"></script>
+<script src="js/computer.js"></script>
 <script src="js/prototype.js"></script>
 <script src="js/main.js"></script>
 </body>

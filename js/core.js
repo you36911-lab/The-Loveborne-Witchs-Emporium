@@ -15,7 +15,7 @@ const WALKIN={
 
 /* ---------- state ---------- */
 function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],candle:'',tarot:'',target:'',bank:[],fills:{},notes:{},
-  seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],hints:[],reports:[],result:null,queue:null,
+  seen:{},stock:{...X.stock},letters:[false,false,false],mail:{},archive:[],reviews:[],reviewsSeen:0,memo:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
@@ -26,6 +26,9 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):S.queue.type!=='report'))S.queue=null;
   if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
   if(S.target&&!D.recipes[S.target])S.target='';
+  /* hints used to be written in the notebook; they now come in the reviews on the computer, and the notebook is the player's own */
+  if(!S.reviews)S.reviews=(S.hints||[]).map(h=>({day:h.day,hour:h.hour,who:h.who,g:'Perfect',item:'',text:'',hint:h.text}));
+  delete S.hints;S.reviewsSeen=S.reviewsSeen||0;S.memo=S.memo||[];
 }
 sanitize();
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
@@ -38,9 +41,6 @@ function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.ban
 const today=()=>D.cal[S.day-1];
 /* Post: a letter turns up at a set hour, some time before the order it helps with. It arrives as an email on the computer. */
 const mailIn=()=>X.mail.map((m,i)=>({...m,i})).filter(m=>m.day<S.day||(m.day===S.day&&HOURS.indexOf(m.hour)<=S.h));
-/* Hints customers let slip are copied, in order, into one page in the Notes folder of the email. */
-function noteHint(v){S.hints=S.hints||[];if(S.hints.some(h=>h.who===v.who&&h.text===v.hint.text))return;
-  S.hints.push({day:S.day,hour:HOURS[S.h],who:v.who,text:v.hint.text});setTimeout(()=>toast('Noted in your archive: what they told you'),2400)}
 /* A new email drops in with a little animation; the badge on the computer stays until it is opened. */
 function showMailFx(m){const fx=$('#mailFx');fx.dataset.at=Date.now();$('#mailFrom').textContent=m.from;fx.hidden=false;fx.classList.remove('go');void fx.offsetWidth;fx.classList.add('go')}
 function checkMail(){S.mail=S.mail||{};mailIn().forEach(m=>{if(!(m.i in S.mail)){S.mail[m.i]=false;showMailFx(m)}})}

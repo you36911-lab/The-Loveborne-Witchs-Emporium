@@ -3,7 +3,7 @@
 document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#receiptsView').classList.remove('open');return}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
-  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#letters').classList.contains('open'))renderLetters();render();return}
+  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();render();return}
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
@@ -22,15 +22,15 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=$('#adviceSel').value;if(!a){toast('Choose an answer first.');break}
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
-      record(grade,v.who,'Advice (no charge)');S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
-      if(grade==='Perfect'){part(v);noteHint(v)}
+      record(grade,v.who,'Advice (no charge)',S.queue.key);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
+      if(grade==='Perfect')part(v);
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
       render();break}
     case 'reportBtn':{const q=S.queue;S.reports=S.reports.filter(r=>!(r.at===q.at&&r.who===q.who));S.queue=null;render();break}
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
-    case 'pcBtn':openLetters();break;
+    case 'pcBtn':openPC();break;
     case 'tillBtn':openReceipts();break;
     case 'notebookBtn':openDiary();break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
@@ -43,7 +43,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
 /* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
   if(t.id==='info')$('#info').classList.remove('open');
-  if(t.id==='letters'){$('#letters').classList.remove('open');render()}
+  if(t.id==='pc')closePC();
   if(t.matches('#books, #books .bookmain, #books .tomewrap, #books .bookbar')){$('#books').classList.remove('open');render()}
   if(t.id==='dayEnd')$('#dayGo')?.click();  /* the day's summary has one way out: on to the next day */
   const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard'))fx.hidden=true;
@@ -80,8 +80,8 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))ret
   {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
-    S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`);
-    if(ev.grade==='Perfect'){part(v);noteHint(v)}
+    S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`,q.key);
+    if(ev.grade==='Perfect')part(v);
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);S.result={grade:ev.grade,first:'',lines:['They thank you and take it home.'],test:false}}
     S.queue=null}
   render()}
@@ -89,7 +89,7 @@ function nextHour(auto){
   if(S.queue&&S.queue.type==='report')S.queue=null;  /* an unheard report waits for another hour */
   if(S.queue){const q=S.queue;
     const v=visitByKey(q.key);S.seen[q.key]=true;
-    if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale')}S.activeNow=null;
+    if(S.activeNow===q.key||v.kind!=='advice'){S.stats.missed++;record('Missed',v.who,'No sale',q.key)}S.activeNow=null;
     S.queue=null}
   S.parting=null;
   if(!auto)S.result=null;
@@ -112,13 +112,13 @@ function receiptHTML(x){
     `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
     `<span class="ln when" style="--r:4">Day ${S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
-  reviews.forEach(x=>S.hist.push(SCORE[x.g]));S.hist=S.hist.slice(-20);const after=rating();
+  reviews.forEach(x=>S.hist.push(SCORE[x.g]));postReviews(reviews);S.hist=S.hist.slice(-20);const after=rating();
   const body=$('#dayEndBody');
   const last=S.day>=LAST_PLAYABLE_DAY;
   body.innerHTML=`<h2>${last?'End of the first week':'The shop closes for the night'}</h2>
   <h3>Today's receipts</h3>${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="muted">No sales today.</p>'}
   <p>Rating: ${before.toFixed(1)} \u2192 <b>${after.toFixed(1)}</b> of 5 (${S.hist.length?`average of the last ${S.hist.length} review${S.hist.length===1?'':'s'}`:'no reviews yet'}; Good work tops out at 4)</p>
-  <p class="muted">How things turned out, customers will tell you when they next come in.</p>
+  <p class="muted">Tonight's reviews are on the computer. How things turned out, customers will tell you when they next come in.</p>
   ${last?summaryHTML():''}
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');

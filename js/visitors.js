@@ -21,8 +21,8 @@ const visitorId=q=>q.key;  /* which visit something made at the altar is for */
 function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */
 const SCORE={Perfect:5,Good:4,Clumsy:2,Failed:1,Missed:1};
-/* Grades stay internal: the player sees them only as stars on tonight's receipts. */
-function record(g,who,item){S.pend.push({g,who,item,hour:HOURS[S.h]})}
+/* Grades stay internal: the player sees them only as stars on tonight's receipts and reviews. key: the visit, for its review. */
+function record(g,who,item,key){S.pend.push({g,who,item,hour:HOURS[S.h],key})}
 /* Results are told later, always by the customer themselves: a regular on their next visit,
    a walk-in by coming back in a quiet hour (or, after two days, before the next customer). */
 function tell(v,text,what){if(v.usual){S.tales.push({who:v.who,text,what,regular:true});return}

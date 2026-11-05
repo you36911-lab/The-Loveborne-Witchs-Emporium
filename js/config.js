@@ -53,7 +53,7 @@ const ASSETS = {
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
-  logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon */
+  logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon and the computer's home button */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
   objects: {
@@ -86,7 +86,7 @@ const ASSETS = {
     'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F4E4', page:[1.5,3.7,3]},
     'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F8F8E6', core:'#CDAB8C', page:[7.2,6.6,8]},
     /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
-    'What customers told me':   {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
+    'My notes':                 {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
      Anyone not listed here (most walk-ins, Hester, Sam Okafor for now) is not drawn. */

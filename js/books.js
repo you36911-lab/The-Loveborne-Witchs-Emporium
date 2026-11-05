@@ -8,9 +8,9 @@ const ALMANAC=[['Festivals',D.sabbats.map(s=>s[0])],['Magic Hours',HOURS],
  ['Sky Events',az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars'])],
  ['Weekdays',D.days.map(d=>d[0])]];
 let curBook='Herbiary',shelfBook='Herbiary',selWord=null;
-/* The notebook on the counter (what customers told me) opens in the same book view: no cover, no tabs, search or word bank,
-   just its ruled pages, written in by hand and turned like any other book. */
-const DIARY='What customers told me';
+/* The notebook on the counter (my notes) opens in the same book view: no cover, no tabs, search or word bank,
+   just its ruled pages, where the player writes, turned like any other book. */
+const DIARY='My notes';
 /* Each book remembers its own search, across closing the shelf and switching books. */
 const searchOf=()=>((S.search||(S.search={}))[curBook]||'');
 function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L.push({k,sk:ns+':'+k,props,note,always});
@@ -82,22 +82,16 @@ function allPages(book){if(book===DIARY)return diaryPages();
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
       return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:${m.color}"></i>`:''}${esc(p.title)}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
   return [...idx,...entries]}
-/* The diary's pages: each note is a heading (day, hour, who) and what they said, one blank line between notes.
-   A page holds 15 ruled lines; each note is measured on a hidden page to see how many lines it takes. */
-const DIARY_LINES=15;
-function noteLines(html){const tome=$('#tome');let m=tome.querySelector('.measure');
-  if(!m){m=document.createElement('div');m.className='pg left measure';m.setAttribute('aria-hidden','true');m.innerHTML='<div class="pbody"></div>';tome.append(m)}
-  const b=m.firstChild;b.innerHTML=html;const lh=parseFloat(getComputedStyle(b).lineHeight);
-  return lh>0?Math.max(1,Math.round(b.offsetHeight/lh)):4}
-function diaryPages(){const h=S.hints||[],pages=[];let cur='',used=1;  /* the title takes the first line */
-  const start=()=>{pages.push(cur);cur='';used=0};
-  cur='<p class="dtitle">What customers told me</p>';
-  if(!h.length)cur+='<p>Nothing yet. When a customer is happy with what you made, they sometimes let something slip. I write it down here.</p>';
-  h.forEach(x=>{const note=`<span class="dh">Day ${x.day}, ${esc(x.hour)} · ${esc(x.who)}</span><br>${kw(x.text)}`,need=noteLines(`<p class="dnote">${note}</p>`);
-    if(used&&used+1+need>DIARY_LINES)start();
-    cur+=`<p class="dnote${used?' gap':''}">${note}</p>`;used+=(used?1:0)+need});
-  pages.push(cur);
-  return pages.map((html,i)=>({key:'diary:'+i,plain:true,html:()=>html}))}
+/* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
+   lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
+const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
+function diaryPages(){const n=memoWritten(),count=n+1+((n+1)%2);
+  return Array.from({length:count},(_,i)=>({key:'diary:'+i,plain:true,html:()=>`${i?'':'<p class="dtitle">My notes</p>'}<textarea class="memo${i?'':' first'}" data-memo="${i}" aria-label="My notes, page ${i+1}" spellcheck="false">${esc(S.memo[i]||'')}</textarea>`}))}
+/* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
+$('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
+  if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. Turn the page to write on.')}
+  S.memo[+t.dataset.memo]=t.value;save();
+  const s=pageAt(diaryPages())>>1;$('#turnNext').disabled=2*s+2>=diaryPages().length})
 /* The page the reader is on (S.page keeps its key per book), and the spread that holds it. */
 function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
 function pageHTML(pages,i){const p=pages[i];if(!p)return '';
@@ -135,8 +129,8 @@ function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))
   tome.className='tome open';setTimeout(()=>{if(tome.classList.contains('open'))tome.classList.add('opened')},OPEN_MS)}
 function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick();
   setTimeout(()=>BOOKS.forEach(decodeBook),1500)}  /* the other books get ready in the background, for quick switching */
-/* The diary opens on its newest page. */
-function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(diaryPages().length-1);renderBooks();autoTick()}
+/* The notebook opens on the last page written on. */
+function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+Math.max(0,memoWritten()-1);renderBooks();autoTick()}
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
    hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
 const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */

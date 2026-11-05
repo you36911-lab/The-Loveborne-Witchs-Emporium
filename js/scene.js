@@ -1,8 +1,9 @@
 /* Rendering: the shop scene, the counter, shelves and altar. */
 /* ---------- rendering ---------- */
-/* Unread emails show a badge on the computer. */
+/* Unread emails and new reviews show a badge on the computer. */
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
-function renderBadge(){const n=unreadLetters(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: email, ${n} unread`:'Computer: email')}
+const newReviews=()=>Math.max(0,S.reviews.length-S.reviewsSeen);
+function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer')}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
 /* The book stack: each book cut from the stack picture along its drawn outline (659x672): left, top, width in that frame. */
@@ -84,17 +85,14 @@ function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.ch
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
 /* Failed tests are five candles: each test craft that isn't perfect puts one out; when all five are out it costs a
-   star and they are lit again. The candle that has just gone out gives a little puff (once, not on every redraw). */
+   star and they are lit again. They stand on the workroom's table bar, beside Test craft. The candle that has just gone
+   out gives a little puff (once, not on every redraw). */
 let candlesOut=null;
 function candlesHTML(){const out=S.failTests%5,puff=candlesOut!==null&&out>candlesOut;candlesOut=out;
   return `<span class="tcandles" title="Every fifth test craft that isn't perfect costs a one-star review" aria-label="Failed tests: ${out} of 5">${
     [0,1,2,3,4].map(i=>`<i class="tcandle${i>=5-out?' out':''}${i===5-out&&puff?' puff':''}"></i>`).join('')}</span>`}
-function renderTop(){renderBadge();const T=today();
-  const fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', ');
-  $('#sky').innerHTML=`<span class="px">Day ${S.day}</span><span>${T.weekday}</span>${fest?`<span>\u2726 ${esc(fest)}</span>`:''}
-${candlesHTML()}`;
-  const rt=rating(),full=Math.round(rt);$('#stars').textContent='\u2605'.repeat(full)+'\u2606'.repeat(5-full)+' '+rt.toFixed(1);
-  $('#stars').title=S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}
+/* There is no top bar: the date is on the computer's taskbar and the rating in its Shop app. */
+function renderTop(){renderBadge();$('#testCandles').innerHTML=candlesHTML();if($('#pc').classList.contains('open'))renderPCBar()}
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
    swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
    off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg) as first drawn at 1376×768; it is now 2752×1536, the same shape. The bottom row
@@ -229,8 +227,8 @@ function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHT
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
   $('#madeTag').textContent=m.name;b.title=b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
-function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale');S.activeNow=null;S.queue=null}
-function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter to read them.';
+function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
+function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter and open <b>Moonpost</b>.';
   return ''}
 function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
