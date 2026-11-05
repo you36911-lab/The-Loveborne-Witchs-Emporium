@@ -239,16 +239,36 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:10px;background:var(--paper)}
 .recipe.locked{border-color:var(--pink);box-shadow:0 0 0 3px var(--pink-soft)}
 .muted{color:var(--ink-soft)}
-.receipts{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px}
+.receipts{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 10px;
+  filter:drop-shadow(0 1px 1px rgba(40,10,40,.25)) drop-shadow(0 6px 10px rgba(40,10,40,.28))}  /* the slips' shadow: here, since their torn edges are a mask, which would cut a shadow of their own off */
 /* the till: just the receipts over the shop, no panel or dimming behind them */
 .modal.receiptsview{background:none;align-items:center;cursor:pointer}
 .receiptsview .receipts{justify-content:center;gap:18px;margin:0}
-/* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets */
-.receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FFF9F4 center/100% 100% no-repeat;border-radius:2px;
-  box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
-.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* a receipt: the shop's slip, printed on its five ruled lines (the first at 39.2% down, one every 10.9%), beside the bullets.
+   It should feel like paper, not a picture: torn from the till roll top and bottom (little teeth), a faint grain,
+   a soft curl of shadow in one corner, a hair off straight, and ink that sits in the paper rather than on the screen. */
+.receipt{position:relative;width:330px;aspect-ratio:486/644;background:#FFF9F4 center/100% 100% no-repeat;border-radius:1px;rotate:var(--tilt,0deg);
+  --teeth:conic-gradient(from -45deg at bottom,#000 90deg,transparent 0) 50% 100%/9px 5px repeat-x;
+  -webkit-mask:var(--teeth),conic-gradient(from 135deg at top,#000 90deg,transparent 0) 50% 0/9px 5px repeat-x,linear-gradient(#000 0 0) 0 5px/100% calc(100% - 10px) no-repeat;
+          mask:var(--teeth),conic-gradient(from 135deg at top,#000 90deg,transparent 0) 50% 0/9px 5px repeat-x,linear-gradient(#000 0 0) 0 5px/100% calc(100% - 10px) no-repeat;
+  font-family:'Courier Prime','Courier New',monospace;color:#4A3868}  /* printed by the till */
+/* the paper's grain and a corner that curls up a little */
+.receipt::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .55 0 0 0 0 .48 0 0 0 0 .42 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.receipt::after{content:'';position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(135deg,transparent 78%,rgba(120,90,80,.10) 92%,rgba(90,60,60,.18)),linear-gradient(to bottom,rgba(255,255,255,.18),transparent 30%,transparent 80%,rgba(120,90,80,.06))}
+/* thermal print: the ink a little soft, a little uneven from line to line */
+.receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  mix-blend-mode:multiply;text-shadow:0 0 .7px rgba(74,56,104,.55);opacity:.88}
+.receipt .ln:nth-of-type(2n){opacity:.8}
+.receipt .ln:nth-of-type(3n){opacity:.92}
 .receipt .who{font-size:14px}
-.receipt .rs{color:#B03A7E;font-family:var(--font-text);font-size:19px;letter-spacing:2px}
+/* the stars are rubber-stamped by hand: tipped, a little blotchy */
+.receipt .rs{overflow:visible;opacity:1}
+.receipt .stamp{display:inline-block;rotate:var(--stamp,-6deg);transform-origin:20% 60%;color:#B03A7E;font-family:var(--font-text);font-size:21px;letter-spacing:2px;opacity:.82;
+  text-shadow:0 0 1px rgba(176,58,126,.6);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='40'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+          mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='40'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 2.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E")}
 .receipt .when{text-align:right;font-size:14px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}
 .autobar[hidden]{display:none}

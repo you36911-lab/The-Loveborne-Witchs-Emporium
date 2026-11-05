@@ -139,12 +139,14 @@ function receiptLines(t){if(t.length<=RECEIPT_LINE)return[t];
   const m=t.match(/^(.*) (\(.*\))$/);if(m&&m[1].length<=RECEIPT_LINE)return[m[1],m[2]];
   const w=t.split(' ');let a='';while(w.length&&(a?a+' '+w[0]:w[0]).length<=RECEIPT_LINE)a=a?a+' '+w.shift():w.shift();
   return[a,w.join(' ')]}
-function receiptHTML(x){
+function receiptHTML(x,i=0){
   /* what was sold, as 'Name (Type)' ("Advice (no charge)", "No sale"), then the customer, the stars, and when on the last line */
   const rows=[...receiptLines(x.item||''),x.who||'A customer'];
-  return `<div class="receipt" style="background-image:url('${ASSETS.receipt}')">`+
+  /* each slip sits a hair off straight, differently, and its stamp lands at its own angle, as paper and a hand stamp do */
+  const tilt=[-.8,.6,-.4,.9,-.6,.3][i%6],stamp=[-7,-4,-9,-5,-8,-3][i%6];
+  return `<div class="receipt" style="background-image:url('${ASSETS.receipt}');--tilt:${tilt}deg;--stamp:${stamp}deg">`+
     rows.map((t,i)=>`<span class="ln${i===rows.length-1?' who':''}" style="--r:${i}">${esc(t)}</span>`).join('')+
-    `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars">${stars(SCORE[x.g])}</span>`+
+    `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars"><span class="stamp">${stars(SCORE[x.g])}</span></span>`+
     `<span class="ln when" style="--r:4">Day ${S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
   reviews.forEach(x=>S.hist.push(SCORE[x.g]));postReviews(reviews);S.hist=S.hist.slice(-20);const after=rating();
