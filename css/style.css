@@ -330,6 +330,8 @@ button.small{font-size:12px;padding:2px 10px}
 /* the words appear letter by letter (typeBalloon in scene.js) */
 .balloon .ch{animation:chIn .12s ease-out both}
 @keyframes chIn{from{opacity:0}}
+/* buttons under the balloon wait for the words: hidden (so they cannot be clicked) until they fade in, see typeBalloon in scene.js */
+@keyframes afterWords{from{opacity:0;transform:translateY(6px);visibility:hidden}to{opacity:1;transform:none;visibility:visible}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
 .balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
 .balloon p{margin:0 0 6px}.balloon p:last-child{margin-bottom:0}

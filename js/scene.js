@@ -207,7 +207,7 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
     for(const c of nd.data){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(t+i++*TYPE_STEP).toFixed(3)+'s';f.append(s)}
     nd.replaceWith(f)});
   /* "I don't know how to make this", and the advice answer (dropdown and Answer), wait until the customer has finished speaking. */
-  const after=$('#counter .after-words');if(after)after.style.animation=`fadein .4s ease-out ${(t+total*TYPE_STEP+.6).toFixed(3)}s both`;
+  const after=$('#counter .after-words');if(after)after.style.animation=`afterWords .4s ease-out ${(t+total*TYPE_STEP+.6).toFixed(3)}s both`;
   b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none'}}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
