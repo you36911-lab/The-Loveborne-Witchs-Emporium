@@ -329,6 +329,14 @@ button.small{font-size:12px;padding:2px 10px}
 .proto{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border-radius:14px;padding:5px 10px;font-size:13px}
 .proto[hidden],.tip[hidden]{display:none}
 .proto select,.proto button{font-size:13px;padding:2px 6px}
+/* the prototype bar folds away to its label, to see the shop as the real game will look */
+.protobody{display:contents}
+.proto .protofold{display:inline-flex;align-items:center;gap:5px;background:none;border:0;box-shadow:none;padding:2px 4px}
+.protofold .chev{font-size:11px;opacity:.7}
+.proto.folded{padding:3px 8px;opacity:.55;transition:opacity .15s}
+.proto.folded:hover,.proto.folded:focus-within{opacity:1}
+.proto.folded .protobody{display:none}
+.proto.folded .chev{rotate:180deg}
 /* What the customer says: a speech balloon just right of the customer's face, its tail pointing at them
    behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
 .dialogue{position:absolute;top:13vh;left:calc(50% + 7.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
