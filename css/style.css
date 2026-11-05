@@ -248,7 +248,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
   box-shadow:0 4px 12px rgba(40,10,40,.35);font-family:'Courier Prime','Courier New',monospace;color:#3D2A5C}  /* printed by the till */
 .receipt .ln{position:absolute;left:12%;right:8%;bottom:calc(100% - 38.2% - var(--r) * 10.89%);font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .receipt .who{font-size:14px}
-.receipt .rs{color:#C2456B;font-family:var(--font-text);font-size:19px;letter-spacing:2px}
+.receipt .rs{color:#B03A7E;font-family:var(--font-text);font-size:19px;letter-spacing:2px}
 .receipt .when{text-align:right;font-size:14px}
 .autobar{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 60px);transform:translateX(-50%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 10px;z-index:25;box-shadow:var(--glow);white-space:nowrap}
 .autobar[hidden]{display:none}
@@ -427,7 +427,7 @@ button.small{font-size:12px;padding:2px 10px}
 .pg,.leaf{position:absolute;top:var(--pt,1.5%);bottom:var(--pb,3%)}
 .pg.left,.leaf.bwd{left:var(--po,3.8%);right:50%}
 .pg.right,.leaf.fwd{left:50%;right:var(--po,3.8%)}
-.pg,.pcopy{--ink:#3A2530;--ink-soft:#7D5F70;--kw:#B4457E;--kw-text:#B4457E;--card:#FFFBF2;--paper:#FBF4E8;--paper2:#EBDCCB;--pink-soft:#F8D9E6;--line:#C98AAA;
+.pg,.pcopy{--ink:#3A2530;--ink-soft:#7D5F70;--kw:#D9559E;--kw-dark:#C24488;--kw-text:#B03A7E;--card:#FFFBF2;--paper:#FBF4E8;--paper2:#EBDCCB;--pink-soft:#F8D9E6;--line:#C98AAA;
   color:var(--ink);font-size:max(12.5px,1.45cqw);line-height:1.5;box-sizing:border-box;padding:2.2em 2em 2.6em;overflow:auto;scrollbar-width:none}
 .pg.left,.pcopy.left{padding-right:2.6em}
 .pg.right,.pcopy.right{padding-left:2.6em}
