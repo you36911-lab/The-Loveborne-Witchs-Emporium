@@ -500,15 +500,15 @@ button.small{font-size:12px;padding:2px 10px}
 .turn{flex:none;width:40px;height:40px;padding:0 0 3px;border-radius:50%;font-size:24px;line-height:1;display:grid;place-items:center}
 /* sticky page flags, like the translucent ones from a stationery shop, on the outer edges: one high on the left (stuck on the
    first page, the index), one low on the right (stuck on the last page). While that page is open (the flag's button is then
-   disabled) the flag lies on top, its see-through part on the paper; otherwise its page is further in, so only the solid tip
-   shows past the cover and the rest is tucked under the book. */
-.jumptab{--fc:var(--kw);position:absolute;z-index:-1;width:calc(var(--po,3.8%) + 3.1em);height:1.75em;padding:0;border:0;border-radius:1px;font-size:max(11px,1.05cqw);
+   disabled) its see-through part lies on the open paper; otherwise its page is further in, so the flag comes out from between
+   the pages: over the cover, up to the paper's edge, and no further. */
+.jumptab{--fc:var(--kw);position:absolute;z-index:4;width:calc(var(--po,3.8%) + 1.6em);height:1.75em;padding:0;border:0;border-radius:1px;font-size:max(11px,1.05cqw);
   background:var(--fc);box-shadow:0 1px 2px rgba(30,10,40,.25);transition:translate .2s ease}
 .jumptab.first{left:-1.6em;top:14%}
 .jumptab.last{--fc:#F6CF5A;right:-1.6em;bottom:14%}
 .jumptab:hover{background:var(--fc);box-shadow:0 1px 3px rgba(30,10,40,.3)}
 .jumptab.first:hover:not(:disabled){translate:-3px 0}.jumptab.last:hover:not(:disabled){translate:3px 0}
-.jumptab:disabled{z-index:4;cursor:default}
+.jumptab:disabled{width:calc(var(--po,3.8%) + 3.1em);cursor:default}
 .jumptab.first:disabled{background:linear-gradient(to right,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
 .jumptab.last:disabled{background:linear-gradient(to left,var(--fc) 0 calc(100% - 1.5em),color-mix(in srgb,var(--fc) 40%,transparent) 0)}
 .tome:not(.opened) .jumptab{visibility:hidden;opacity:0}
