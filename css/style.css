@@ -674,6 +674,13 @@ button.small{font-size:12px;padding:2px 10px}
 @media (prefers-reduced-motion:reduce){.shelfopen{animation-duration:.01s}}
 /* an open cupboard: its things stand against the cupboard's own wooden back, with no shelves drawn */
 .shelfopen .cabinside{flex:1;min-height:0;overflow:auto;padding:10px 6px;border:0;border-radius:0;box-shadow:inset 0 4px 12px rgba(0,0,0,.55);background:var(--cabinet-back) center/cover no-repeat,#2B1A13}
+/* no scrollbar inside a cupboard; instead its top or bottom falls into shadow while there is more that way (see renderShelves) */
+.shelfopen .cabinside{scrollbar-width:none}
+.shelfopen .cabinside::-webkit-scrollbar{display:none}
+.shelfopen::before,.shelfopen::after{content:'';position:absolute;left:0;right:0;height:min(80px,18%);pointer-events:none;z-index:1;opacity:0;transition:opacity .25s ease}
+.shelfopen::before{top:0;background:linear-gradient(rgba(12,6,3,.92),rgba(12,6,3,.5) 45%,transparent)}
+.shelfopen::after{bottom:0;background:linear-gradient(transparent,rgba(12,6,3,.5) 55%,rgba(12,6,3,.95))}
+.shelfopen.moreup::before,.shelfopen.moredown::after{opacity:1}
 .shelfopen .chips,.shelfopen .chips.shelf{border-radius:6px;background:none;box-shadow:none}
 .shelfopen .swatch{width:46px;height:46px}
 
@@ -722,6 +729,7 @@ button.small{font-size:12px;padding:2px 10px}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
 /* the empty outline stays put; its inside fills in a little and it glows pink like the other things (a box-shadow: the outline is too faint for a drop-shadow) */
 .ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22);box-shadow:0 0 .5cqw .15cqw rgba(255,214,240,.95),0 0 1.4cqw .4cqw rgba(244,173,207,.75),inset 0 0 .6cqw rgba(255,214,240,.6)}
+#tarotSlot .ontable:active{transform:none}  /* the card's place does not press in on a click: it lies on the table */
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}
 .candle::before{content:"";position:absolute;left:50%;top:-1.5cqw;width:.8cqw;height:1.4cqw;translate:-50% 0;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;

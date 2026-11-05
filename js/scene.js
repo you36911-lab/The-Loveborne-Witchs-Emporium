@@ -132,7 +132,13 @@ function renderShelves(){
   box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
   if(shownShelf!==openShelf){box.style.animation='none';void box.offsetWidth;box.style.animation='';shownShelf=openShelf}
-  box.setAttribute('aria-label',SHELFNAME[openShelf]||openShelf);box.innerHTML=`<div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`}
+  const was=box.querySelector('.cabinside'),top=was&&box.dataset.shelf===openShelf?was.scrollTop:0;box.dataset.shelf=openShelf;
+  box.setAttribute('aria-label',SHELFNAME[openShelf]||openShelf);box.innerHTML=`<div class="cabinside"><div class="chips${SHELF_CATEGORIES.includes(openShelf)?' shelf':''}">${shelfItemsHTML(openShelf)}</div></div>`;
+  /* No scrollbar: the cupboard scrolls, and its top or bottom edge falls into shadow while there is more that way.
+     It keeps its place when a click redraws it. */
+  const ins=box.querySelector('.cabinside');ins.scrollTop=top;
+  const edges=()=>{const more=ins.scrollHeight-ins.clientHeight-ins.scrollTop;box.classList.toggle('moreup',ins.scrollTop>2);box.classList.toggle('moredown',more>2)};
+  ins.addEventListener('scroll',edges,{passive:true});ins.addEventListener('load',edges,true);edges()}
 /* how tall an ingredient stands (ITEM_SIZE in config.js) */
 const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;
 function shelfItemsHTML(c){
