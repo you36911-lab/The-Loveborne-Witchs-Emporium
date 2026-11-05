@@ -129,7 +129,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene button.obj:is(.till,.notebook,.computer):is(:hover,:focus-visible){transform:none}  /* more specific than the lift above */
 .scene .books{left:2%;bottom:12%;width:15%;aspect-ratio:659/672;cursor:default;filter:none;z-index:2}
 /* the same stack on the altar, standing on the left end of the table */
-.room .books{position:absolute;left:5%;bottom:14.5%;width:16%;aspect-ratio:659/672;z-index:2}
+.room .books{position:absolute;left:6%;bottom:14.5%;width:13.5%;aspect-ratio:659/672;z-index:2}
 .scene .books button,.room .books button{position:absolute;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transition:transform .15s,filter .15s;filter:drop-shadow(0 3px 2px rgba(60,20,30,.3))}
 .scene .books button img,.room .books button img{display:block;width:100%;height:auto}
 /* in the workroom the stack is a little dimmer, so it sits in the room's low light instead of looking pasted on */
