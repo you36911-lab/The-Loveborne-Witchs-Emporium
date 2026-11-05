@@ -1,9 +1,9 @@
-/* Look and feel: cream paper, deep plum ink and one deep teal accent over the twilight sky. Clean shapes (soft shadows,
+/* Look and feel: cream paper, deep plum ink and one midnight blue accent over the twilight sky. Clean shapes (soft shadows,
    thin solid lines, rounded corners); the romance is in the pictures, the serif titles and the little hearts.
    Dark mode is the same at night. */
 :root{
   --paper:#F8EEF1; --paper2:#EFDCE4; --ink:#33213A; --ink-soft:#7A6475; --pink:#F2A9C9; --pink-soft:#FBE4EE;
-  --butter:#FCE7A0; --kw:#2F7A6F; --kw-dark:#25665C; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
+  --butter:#FCE7A0; --kw:#4A5AA8; --kw-dark:#3B4A92; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#C2456B;
   --lift:0 1px 2px rgba(51,33,58,.10); --lift-hover:0 2px 6px rgba(51,33,58,.16);
   --glow:0 1px 3px rgba(51,33,58,.10),0 10px 30px rgba(51,33,58,.16); --glow-soft:0 0 0 transparent;
   --sky:linear-gradient(180deg,#6C7DB8 0%,#9C97CF 38%,#D9A9CB 70%,#F3C2C6 100%);
@@ -12,14 +12,14 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#7FD1C2; --kw-dark:#6CC0B1; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#A9B4F2; --kw-dark:#96A2EC; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
   }
 }
 :root[data-theme="dark"]{
     --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
-    --butter:#E9CF7A; --kw:#7FD1C2; --kw-dark:#6CC0B1; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
+    --butter:#E9CF7A; --kw:#A9B4F2; --kw-dark:#96A2EC; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7A9C;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
 }
@@ -331,7 +331,7 @@ button.small{font-size:12px;padding:2px 10px}
 .balloon .ch{animation:chIn .12s ease-out both}
 @keyframes chIn{from{opacity:0}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
-/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns teal (.main) */
+/* "I don't know how to make this": periwinkle, so it stands apart from the cream balloon; on the second tap it turns midnight blue (.main) */
 #cantBtn:not(.main){background:var(--peri);border-color:transparent;color:var(--ink)}
 #cantBtn:not(.main):hover{background:color-mix(in srgb,var(--peri) 82%,#000);color:#fff}
 .balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
