@@ -8,9 +8,9 @@ function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');
 
 /* The book stack: each book cut from the stack picture along its drawn outline (a watershed from points inside each book,
    so every cut follows the darkest line between two books) (659x672): left, top, width in that frame. */
-const STACK=[['Recipe Book','book-recipe-book',79,0,528],['Book of Making','book-book-of-making',71,77,545],['Grimoire of Craft','book-grimoire-of-craft',29,159,603],
-  ['Almanac of Sky & Seasons','book-almanac-of-sky-seasons',0,229,659],['Tarot Companion','book-tarot-companion',37,330,580],['Gentle Bestiary','book-gentle-bestiary',20,362,630],
-  ['Crystal Almanac','book-crystal-almanac',19,429,637],['Herbiary','book-herbiary',32,514,611]];
+const STACK=[['Recipe Book','book-recipe-book',79,0,528],['Book of Making','book-book-of-making',71,77,559],['Grimoire of Craft','book-grimoire-of-craft',29,154,603],
+  ['Almanac of Sky & Seasons','book-almanac-of-sky-seasons',0,224,659],['Tarot Companion','book-tarot-companion',37,327,584],['Gentle Bestiary','book-gentle-bestiary',20,360,630],
+  ['Crystal Almanac','book-crystal-almanac',19,431,637],['Herbiary','book-herbiary',32,509,614]];
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
