@@ -79,7 +79,7 @@ function allPages(book){if(book===DIARY)return diaryPages();
   const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
     (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
-      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}">${m?`<i class="dot" style="background:var(--kw)"></i>`:''}<span class="t">${esc(p.title)}</span><span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
+      return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}"><span class="t">${esc(p.title)}</span><span class="muted">${p.done?' ✦':p.started?' •':''}</span>${m?`<i class="dot" style="background:var(--kw)"></i>`:''}</button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
   return [...idx,...entries]}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
@@ -138,9 +138,11 @@ function leafHTML(fwd,frontHTML,backHTML){
   const fs=fwd?'right':'left',bs=fwd?'left':'right';let h='';
   for(let k=STRIPS-1;k>=0;k--){
     const fo=fwd?k:STRIPS-1-k,bo=fwd?STRIPS-1-k:k;
-    const fm=`style="-webkit-mask-position:${fo/(STRIPS-1)*100}% 0;mask-position:${fo/(STRIPS-1)*100}% 0"`,bm=`style="-webkit-mask-position:${bo/(STRIPS-1)*100}% 0;mask-position:${bo/(STRIPS-1)*100}% 0"`;
-    h=`<div class="strip${k?'':' root'}"><div class="sface front p${fs[0]}" ${fm}><div class="pcopy ${fs}" style="left:${-fo*100}%;width:${STRIPS*100}%">${frontHTML}</div><i class="shade"></i></div>`+
-      `<div class="sface back p${bs[0]}" ${bm}><div class="pcopy ${bs}" style="left:${-bo*100}%;width:${STRIPS*100}%">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
+    /* --mx places the page-shape mask and edge line on this slice. A face is 1px wider than its strip (inset:0 -.5px, so no seams),
+       so the copy is laid out at exactly the page's width, or its lines would wrap differently and jump when the turn ends. */
+    const fm=`style="--mx:${fo/(STRIPS-1)*100}%"`,bm=`style="--mx:${bo/(STRIPS-1)*100}%"`,cp=o=>`left:calc(${-o} * (100% - 1px) + .5px);width:calc(${STRIPS} * (100% - 1px))`;
+    h=`<div class="strip${k?'':' root'}"><div class="sface front p${fs[0]}" ${fm}><div class="pcopy ${fs}" style="${cp(fo)}">${frontHTML}</div><i class="shade"></i></div>`+
+      `<div class="sface back p${bs[0]}" ${bm}><div class="pcopy ${bs}" style="${cp(bo)}">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
   return h}
 function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(pages)>>1;i=Math.max(0,Math.min(i,pages.length-1));
   S.page[curBook]=pages[i].key;save();const to=i>>1;

@@ -261,6 +261,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .mark{--mc:var(--kw);border-left:6px solid var(--mc);padding:3px 10px;font-size:13px;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .idx{margin:0 0 4px;font-size:28px}
 .idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
+.idxrow .dot{margin-left:auto;flex:none}  /* a bookmarked entry's dot sits at the right end */
 .idxrow:hover{background:none;box-shadow:none}.idxrow:active{transform:none}  /* no press-in on click */
 /* index entries: on hover a highlighter stroke, a little uneven as if drawn by hand, sweeps along under the name */
 .idxrow .t{padding:0 .15em;margin:0 -.15em;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24' preserveAspectRatio='none'><path d='M4 8 C30 4 60 7 92 5 S160 4 197 7 C199 11 196 15 198 19 C160 21 120 18 84 20 S24 21 3 18 C1 14 5 12 4 8 Z' fill='%23F6CF5A' fill-opacity='.6'/></svg>") no-repeat left 62%/0% .95em;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:background-size .3s ease-out}
@@ -464,9 +465,16 @@ button.small{font-size:12px;padding:2px 10px}
 .sface.back{transform:rotateY(180deg)}
 /* a turning page has the paper's own shape: a touch shorter towards the spine, where the binding pulls it in, rounded outer
    corners, and stopping just short of the spine so the stitched binding line stays in view. Each strip shows its slice of the shape (mask 1200% wide = STRIPS in books.js; position set per strip there). */
-.sface.pr{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M1.6 1.5C6 .9 13 .6 25 .5H98.5Q100 .5 100 1.7V98.3Q100 99.5 98.5 99.5H25C13 99.4 6 99.1 1.6 98.5Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M1.6 1.5C6 .9 13 .6 25 .5H98.5Q100 .5 100 1.7V98.3Q100 99.5 98.5 99.5H25C13 99.4 6 99.1 1.6 98.5Z'/></svg>")}
-.sface.pl{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M98.4 1.5C94 .9 87 .6 75 .5H1.5Q0 .5 0 1.7V98.3Q0 99.5 1.5 99.5H75C87 99.4 94 99.1 98.4 98.5Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M98.4 1.5C94 .9 87 .6 75 .5H1.5Q0 .5 0 1.7V98.3Q0 99.5 1.5 99.5H75C87 99.4 94 99.1 98.4 98.5Z'/></svg>")}
-.sface.pr,.sface.pl{-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:1200% 100%;mask-size:1200% 100%}
+.sface.pr{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M1.6 1.5C6 .9 13 .6 25 .5H99Q100 .5 100 1.4V98.6Q100 99.5 99 99.5H25C13 99.4 6 99.1 1.6 98.5Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M1.6 1.5C6 .9 13 .6 25 .5H99Q100 .5 100 1.4V98.6Q100 99.5 99 99.5H25C13 99.4 6 99.1 1.6 98.5Z'/></svg>")}
+.sface.pl{-webkit-mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M98.4 1.5C94 .9 87 .6 75 .5H1Q0 .5 0 1.4V98.6Q0 99.5 1 99.5H75C87 99.4 94 99.1 98.4 98.5Z'/></svg>");mask-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M98.4 1.5C94 .9 87 .6 75 .5H1Q0 .5 0 1.4V98.6Q0 99.5 1 99.5H75C87 99.4 94 99.1 98.4 98.5Z'/></svg>")}
+.sface.pr,.sface.pl{-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-size:1200% 100%;mask-size:1200% 100%;-webkit-mask-position:var(--mx) 0;mask-position:var(--mx) 0}
+/* a thin brown line along the page's outer edge and round its corners, like the edge of the paper in the book pictures */
+.sface.pr::after,.sface.pl::after{content:"";position:absolute;inset:0;pointer-events:none;background-repeat:no-repeat;background-size:1200% 100%;background-position:var(--mx) 0}
+.sface.pr::after{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M88 .5H99Q100 .5 100 1.4V98.6Q100 99.5 99 99.5H88' fill='none' stroke='%235A3E28' stroke-opacity='.75' stroke-width='2.4' vector-effect='non-scaling-stroke'/></svg>")}
+.sface.pl::after{background-image:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='none'><path d='M12 .5H1Q0 .5 0 1.4V98.6Q0 99.5 1 99.5H12' fill='none' stroke='%235A3E28' stroke-opacity='.75' stroke-width='2.4' vector-effect='non-scaling-stroke'/></svg>")}
+/* the bookmarks and the word bank come in once the book has opened */
+.bookview :is(.markside,.bank){transition:opacity .4s,visibility .4s}
+.bookview:has(.tome:not(.opened)) :is(.markside,.bank){opacity:0;visibility:hidden}
 .pcopy{position:absolute;top:0;bottom:0;overflow:hidden}
 .shade{position:absolute;inset:0;pointer-events:none}
 /* page furniture */
@@ -502,11 +510,10 @@ button.small{font-size:12px;padding:2px 10px}
    from where the cover meets the pages (taken as halfway into the --po margin) and ends there. While its page is open (the
    button is then disabled) it lies on that page and reaches a little onto the paper. */
 .jumptab{--fc:var(--kw);position:absolute;z-index:4;width:calc(var(--po,3.8%) * .5 + 1.1em);height:2.4em;padding:0;border:0;border-radius:1px;opacity:.88;font-size:max(11px,1.05cqw);
-  background:var(--fc);box-shadow:0 1px 2px rgba(30,10,40,.25);transition:translate .2s ease}
+  background:var(--fc);box-shadow:0 1px 2px rgba(30,10,40,.25);}
 .jumptab.first{left:-1.1em;top:14%}
 .jumptab.last{--fc:#F6CF5A;right:-1.1em;bottom:14%}
-.jumptab:hover{background:var(--fc);box-shadow:0 1px 3px rgba(30,10,40,.3)}
-.jumptab.first:hover:not(:disabled){translate:-3px 0}.jumptab.last:hover:not(:disabled){translate:3px 0}
+.jumptab:hover{background:var(--fc);border:0;box-shadow:0 1px 2px rgba(30,10,40,.25)}.jumptab:active{transform:none}  /* no hover or press effect */
 .jumptab:disabled{width:calc(var(--po,3.8%) + 2.1em);opacity:.88;cursor:default}  /* always just a little see-through, like real flags (buttons otherwise fade when disabled) */
 .tome:not(.opened) .jumptab{visibility:hidden;opacity:0}
 .turn:disabled{opacity:.3;cursor:default;box-shadow:none}
@@ -518,8 +525,8 @@ button.small{font-size:12px;padding:2px 10px}
 /* pictures in the books in one soft sepia tone, like an old book's plates; drawn normally over the paper (not blended into it) so they stay clear */
 /* every picture gets the same fixed frame, so none is tiny or huge and the page never shifts while a picture loads
    (which made pictures jump up and down as pages turned); the picture fits inside it */
-.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:72%;height:13em;object-fit:contain;filter:grayscale(1) sepia(.4) contrast(1.1)}
-.pbody .entry .entrypic.card{height:19em}
+.pbody .entry .entrypic{flex-basis:100%;display:block;margin:1.8em auto 0;max-width:88%;height:18em;object-fit:contain;filter:grayscale(1) sepia(.4) contrast(1.1)}
+.pbody .entry .entrypic.card{height:23em}
 /* Tarot cards in the Cabinet: little cards with their name under them; the altar's card slot shows a thumbnail. */
 /* tarot cards are read by their pictures, so they come out big (sized with the room: about 140px wide on a 1920 screen) */
 .cabinside .chip.card{display:inline-flex;flex-direction:column;align-items:center;gap:3px;width:auto;padding:5px;background:none;border:1px solid transparent;border-radius:8px;box-shadow:none;color:#FBEFD9;font-size:13px;line-height:1.15;text-align:center}
