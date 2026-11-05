@@ -107,7 +107,8 @@ function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadIm
   const fl=a.flags||[[0,a.page[1]/2,a.page[1]],[0,a.page[1]/2,a.page[1]]];['l','r'].forEach((s,k)=>['c','s','p'].forEach((v,i)=>tome.style.setProperty(`--f${s}${v}`,fl[k][i]+'%')));
   const [front,back,side]=$('#cover').children;
   /* the cover's edge, seen as it swings: the fur's colour, or the cover picture squeezed into a strip */
-  side.style.background=a.core||(a.cover?`url("${a.cover}") center/600% 100%`:a.color||'#5A3A28');back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
+  /* a fur cover's edge is its core colour, kept inside the fur (as the core is on the front) so no solid bar sticks out past the fur tips */
+  side.style.background=a.core?`linear-gradient(${a.core},${a.core}) center/100% 93% no-repeat`:(a.cover?`url("${a.cover}") center/600% 100%`:a.color||'#5A3A28');back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
   if(a.cover){front.style.background=a.core?`url("${a.cover}") center/100% 100% no-repeat,linear-gradient(${a.core},${a.core}) center/90% 93% no-repeat`:'';
     if(!a.core)front.style.backgroundImage=`url("${a.cover}")`;front.innerHTML='';front.className='face front'}
   else{front.style.backgroundImage='';front.style.background=a.color;front.style.color=a.ink;front.className='face front plain';front.innerHTML=`<span>${esc(curBook)}</span>`}
