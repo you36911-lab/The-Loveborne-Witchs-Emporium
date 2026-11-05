@@ -74,18 +74,20 @@ const ASSETS = {
   },
   /* Each book: its closed cover, the open spread, and the colour of its paper (for the page that turns).
      `page` is where the paper sits inside the spread, in % of its size: top, outer edge, bottom.
+     `flags` places the sticky page flags, measured in from each outer edge of the picture in % of its width (left side, then
+     right): where the cover starts, where the cover meets the stack of pages, and where the open page's paper starts.
      A book with no cover picture yet gets a plain cover in `color` with its title in `ink`;
      with no open picture (`open:''`), the spread is drawn: boards in `color`, pages in `paper`. A fur cover has gaps between the
      fur tips, so `core` (the fur's colour) fills in behind it, and colours the cover's edge as it swings open. */
   books: {
-    'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F9F8E8', core:'#EA8C6F', page:[4.6,6,5.2]},
-    'Book of Making':           {cover:'assets/books/book-of-making-cover.png',         open:'assets/books/book-of-making-open.png',         paper:'#FBF6E6', page:[1.5,3.8,3]},
-    'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F6E6CC', page:[1.5,3.9,3]},
-    'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F9F7EA', page:[1.5,3.8,3]},
-    'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F8F8E8', page:[1.5,3.8,3]},
-    'Herbiary':                 {cover:'assets/books/herbiary-cover.png',               open:'assets/books/herbiary-open.png',               paper:'#F2E6D0', page:[1.5,4,2.8]},
-    'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F4E4', page:[1.5,3.7,3]},
-    'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F8F8E6', core:'#CDAB8C', page:[7.2,6.6,8]},
+    'Recipe Book':              {cover:'assets/books/recipe-book-cover.png',            open:'assets/books/recipe-book-open.png',            paper:'#F9F8E8', core:'#EA8C6F', page:[4.6,6,5.2], flags:[[0.15,4.3,5.85],[0.25,4.45,6.1]]},
+    'Book of Making':           {cover:'assets/books/book-of-making-cover.png',         open:'assets/books/book-of-making-open.png',         paper:'#FBF6E6', page:[1.5,3.8,3], flags:[[0,2.1,3.7],[0,2.15,3.85]]},
+    'Grimoire of Craft':        {cover:'assets/books/grimoire-of-craft-cover.png',      open:'assets/books/grimoire-of-craft-open.png',      paper:'#F6E6CC', page:[1.5,3.9,3], flags:[[0.05,2.1,3.75],[0,2.15,3.9]]},
+    'Almanac of Sky & Seasons': {cover:'assets/books/almanac-of-sky-seasons-cover.png', open:'assets/books/almanac-of-sky-seasons-open.png', paper:'#F9F7EA', page:[1.5,3.8,3], flags:[[0,2,3.6],[0.1,2.1,3.85]]},
+    'Tarot Companion':          {cover:'assets/books/tarot-companion-cover.png',        open:'assets/books/tarot-companion-open.png',        paper:'#F8F8E8', page:[1.5,3.8,3], flags:[[0,2.05,3.7],[0,2.15,3.85]]},
+    'Herbiary':                 {cover:'assets/books/herbiary-cover.png',               open:'assets/books/herbiary-open.png',               paper:'#F2E6D0', page:[1.5,4,2.8], flags:[[0.2,2.2,3.8],[0.2,2.25,3.95]]},
+    'Crystal Almanac':          {cover:'assets/books/crystal-almanac-cover.png',        open:'assets/books/crystal-almanac-open.png',        paper:'#F4F4E4', page:[1.5,3.7,3], flags:[[0.05,2.1,3.7],[0.05,2.15,3.85]]},
+    'Gentle Bestiary':          {cover:'assets/books/gentle-bestiary-cover.png',        open:'assets/books/gentle-bestiary-open.png',        paper:'#F8F8E6', core:'#CDAB8C', page:[7.2,6.6,8], flags:[[0.8,6,7.5],[1.25,6.05,7.65]]},
     /* the notebook on the counter: no cover, it opens straight onto its ruled pages (see DIARY in books.js) */
     'My notes':                 {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2]}
   },

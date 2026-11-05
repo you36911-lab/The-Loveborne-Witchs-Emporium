@@ -103,6 +103,8 @@ function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadIm
   if(a.open){tome.removeAttribute('data-drawn');img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open}
   else{tome.dataset.drawn='';img.onload=null;img.removeAttribute('src');tome.style.setProperty('--ar',1.42);tome.style.setProperty('--book-bg',a.color)}
   [['--pt',0],['--po',1],['--pb',2]].forEach(([v,i])=>tome.style.setProperty(v,a.page[i]+'%'));tome.style.setProperty('--paper-c',a.paper);
+  /* the page flags follow this book's edges (flags in config.js); without measurements, a guess from the margin */
+  const fl=a.flags||[[0,a.page[1]/2,a.page[1]],[0,a.page[1]/2,a.page[1]]];['l','r'].forEach((s,k)=>['c','s','p'].forEach((v,i)=>tome.style.setProperty(`--f${s}${v}`,fl[k][i]+'%')));
   const [front,back,side]=$('#cover').children;
   /* the cover's edge, seen as it swings: the fur's colour, or the cover picture squeezed into a strip */
   side.style.background=a.core||(a.cover?`url("${a.cover}") center/600% 100%`:a.color||'#5A3A28');back.style.backgroundImage=a.open?`url("${a.open}")`:'';back.classList.toggle('drawn',!a.open);
