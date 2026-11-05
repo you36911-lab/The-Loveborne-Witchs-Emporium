@@ -305,14 +305,14 @@ body{overflow:hidden}
 /* Failed tests: five little candles (candlesHTML in scene.js). A failed test leaves an unlit candle; the one just
    put out gives a puff of smoke. */
 .tcandles{display:inline-flex;align-items:flex-end;gap:5px;height:20px;padding-top:2px;cursor:help}
-.tcandle{position:relative;display:block;width:8px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#FBD3E4,#F2A9C9 60%,#E28DB4);box-shadow:inset -1px 0 0 rgba(140,50,90,.25)}  /* rose pink, the shop's own pink */
+.tcandle{position:relative;display:block;width:10px;height:11px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#5A4660,#2E2233 45%,#1A1220);box-shadow:inset 1px 0 0 rgba(255,214,240,.25),0 0 0 .5px rgba(255,214,240,.3)}  /* a black witch's candle with a plum sheen; the faint pink rim keeps it visible on the dark theme */
 .tcandle::after{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:3px;translate:-50% 0;background:#4a3540}  /* wick */
 .tcandle::before{content:"";position:absolute;left:50%;bottom:calc(100% + 2px);width:5px;height:8px;translate:-50% 0;transform-origin:50% 100%;
   border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;background:radial-gradient(circle at 50% 70%,#fff8d0 0 25%,#ffc145 55%,#ff8a3c 100%);
   box-shadow:0 0 5px 1px rgba(255,190,90,.7);animation:tflicker 2.4s ease-in-out infinite}
 .tcandle:nth-child(2)::before{animation-delay:-.5s}.tcandle:nth-child(3)::before{animation-delay:-1.1s}
 .tcandle:nth-child(4)::before{animation-delay:-1.7s}.tcandle:nth-child(5)::before{animation-delay:-.8s}
-.tcandle.out{background:linear-gradient(90deg,#E4D3DC,#CDB8C4 60%,#B9A2AF)}  /* a spent candle: the same pink, faded to grey */
+.tcandle.out{background:linear-gradient(90deg,#9A8C9E,#7A6C7F 45%,#64566A);opacity:.75}  /* a spent candle: the black faded to ash grey */
 .tcandle.out::before{content:none}
 .tcandle.puff::before{content:"";width:4px;height:10px;border-radius:50%;background:rgba(150,140,150,.6);box-shadow:none;animation:tpuff 1s ease-out forwards}
 @keyframes tflicker{0%,100%{transform:scale(1,1) rotate(0)}30%{transform:scale(.92,1.06) rotate(-3deg)}60%{transform:scale(1.05,.95) rotate(2deg)}}
