@@ -266,7 +266,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .receipt .rs{overflow:visible;opacity:1}
 /* the stars are rubber-stamped by hand: a stamp in a single frame, nearly straight, in one flat ink that comes out patchy
    (some specks and worn bits missing) with slightly rough edges, as a real stamp does */
-.receipt .stamp{display:inline-flex;align-items:center;gap:1px;rotate:var(--stamp,-1deg);translate:0 9px;transform-origin:20% 60%;padding:4px 10px 5px;margin-left:-4px;
+.receipt .stamp{display:inline-flex;align-items:center;gap:1px;rotate:var(--stamp,-1deg);translate:0 14px;transform-origin:20% 60%;padding:4px 10px 5px;margin-left:-4px;
   border:2px solid currentColor;border-radius:6px;
   color:#B23A6E;font-family:var(--font-text);font-size:25px;letter-spacing:1px;line-height:1;opacity:.85;mix-blend-mode:multiply;filter:blur(.25px);
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -4.2 3.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -4.2 3.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E")}
