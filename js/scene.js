@@ -59,6 +59,7 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
   const v=currentVisitor(),note=$('#sceneNote'),av=v&&v.key&&(!(v.tales||[]).length||v.newsDone)?visitByKey(v.key):null;
   const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
   if(!thinking&&(v||S.parting)||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer, and only the bell does: someone due this hour comes straight in; otherwise time moves
    on to the next hour with someone (or something) in it, and if that is a customer, they come in. */
@@ -209,8 +210,10 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
     for(const c of nd.data){const s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(t+i++*TYPE_STEP).toFixed(3)+'s';f.append(s)}
     nd.replaceWith(f)});
   /* "I don't know how to make this", and the advice answer (the name box and Answer), wait until the customer has finished speaking. */
-  const after=$('#counter .after-words');if(after)after.style.animation=`afterWords .4s ease-out ${(t+total*TYPE_STEP+.6).toFixed(3)}s both`;
-  b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none'}}
+  const after=$('#counter .after-words'),wait=t+total*TYPE_STEP+.6;if(after)after.style.animation=`afterWords .4s ease-out ${wait.toFixed(3)}s both`;
+  /* the witch's thought at an advice question comes last: after the words, and after the name box has come up */
+  const note=$('#sceneNote');if(note.dataset.thought&&!note.hidden)note.style.animation=`subIn .6s ease-out ${(wait+.7).toFixed(3)}s both`;
+  b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none';if(note.dataset.thought)note.style.animation=`subIn .6s ease-out .5s both`}}
 function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
   const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
