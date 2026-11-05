@@ -147,7 +147,7 @@ function receiptHTML(x,i=0){
   return `<div class="receipt" style="background-image:url('${ASSETS.receipt}');--tilt:${tilt}deg;--stamp:${stamp}deg">`+
     rows.map((t,i)=>`<span class="ln${i===rows.length-1?' who':''}" style="--r:${i}">${esc(t)}</span>`).join('')+
     `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars"><span class="stamp">${stars(SCORE[x.g])}</span></span>`+
-    `<span class="ln when" style="--r:4">Day ${S.day}, ${esc(x.hour)}</span></div>`}
+    `<span class="ln when" style="--r:4">Day ${x.day||S.day}, ${esc(x.hour)}</span></div>`}
 function endDay(){const before=rating(),reviews=S.pend.splice(0);
   reviews.forEach(x=>S.hist.push(SCORE[x.g]));postReviews(reviews);S.hist=S.hist.slice(-20);const after=rating();
   const body=$('#dayEndBody');

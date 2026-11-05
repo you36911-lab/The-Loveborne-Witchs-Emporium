@@ -20,7 +20,7 @@ function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */
 const SCORE={Perfect:5,Good:4,Clumsy:2,Failed:1,Missed:1};
 /* Grades stay internal: the player sees them only as stars on tonight's receipts and reviews. key: the visit, for its review. */
-function record(g,who,item,key){S.pend.push({g,who,item,hour:HOURS[S.h],key})}
+function record(g,who,item,key){S.pend.push({g,who,item,day:S.day,hour:HOURS[S.h],key})}  /* a receipt keeps the day it was rung up */
 /* Results are told later, always by the customer themselves: a regular on their next visit,
    a walk-in by coming back in a quiet hour (or, after two days, before the next customer). */
 function tell(v,text,what){if(v.usual){S.tales.push({who:v.who,text,what,regular:true});return}
