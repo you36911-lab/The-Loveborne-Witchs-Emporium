@@ -262,7 +262,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .idx{margin:0 0 4px;font-size:28px}
 .idxrow{display:flex;align-items:center;gap:6px;width:100%;text-align:left;border:0;box-shadow:none;background:none;padding:3px 4px;border-radius:3px}
 .idxrow:hover{background:none;box-shadow:none}
-.idxrow:hover .t{text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:color-mix(in srgb,currentColor 35%,transparent);text-underline-offset:4px}  /* index entries: a soft underline under the name only on hover, no pink wash or shadow */
+.idxrow .t{text-decoration:underline;text-decoration-thickness:from-font;text-decoration-color:transparent;text-underline-offset:4px;text-decoration-skip-ink:auto;transition:text-decoration-color .25s ease}
+.idxrow:hover .t{text-decoration-color:color-mix(in srgb,currentColor 45%,transparent)}  /* index entries: on hover a soft underline (the usual thickness, a paler ink) fades in under the name only */
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;border:1px solid var(--line)}
 .kw{display:inline;background:none;border:0;box-shadow:none;padding:0;margin:0;font:inherit;color:var(--kw-text);text-decoration:underline dotted;text-underline-offset:3px;cursor:pointer;border-radius:0}
 .kw:hover{background:none;box-shadow:none}  /* dotted words: no hover effect */
