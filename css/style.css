@@ -248,18 +248,18 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* Recipe blanks are ruled lines in the book. Tapping one unfolds a short text index of what can go there, each with
    the keywords the player has for it in the books; what is chosen is written in by hand. */
 /* the headings of a recipe (Themes, Ingredients, Candle, Card, When) in the book's serif; what follows them in the reading font */
-.recipe .rbody{display:flex;flex-direction:column;gap:.4em}
+.recipe .rbody{display:flex;flex-direction:column;gap:.4em;font-size:1.18em}
 /* every row: a fixed column for its heading, then its slots, which wrap under the first slot (not under the heading) */
 .pbody .recipe .rbody,.pbody .recipe .rbody div{line-height:1.75}
-.recipe .wrow{display:grid;grid-template-columns:5.6em 1fr;align-items:baseline;column-gap:.4em}
+.recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
 .recipe .wvals{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1em .8em}
 .recipe .wvals.plain{display:block}
 .recipe .wrow b.inl{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink);margin-left:.6em}
 .recipe .wrow>b{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink)}
-.wblank{display:inline-flex;align-items:baseline;gap:6px;background:none;border:0;box-shadow:none;padding:2px 2px 0;border-radius:0;
+.wblank{display:inline-block;gap:6px;background:none;border:0;box-shadow:none;padding:2px 2px 0;border-radius:0;
   font-family:var(--font-text);font-style:italic;font-size:.9em;color:var(--ink-soft);cursor:pointer}
-.wblank i{display:inline-block;width:4.5em;border-bottom:1.5px solid #C9A8B8;transform:translateY(-3px)}
+.wblank i{display:inline-block;width:4.5em;height:1em;vertical-align:baseline;border-bottom:1.5px solid #C9A8B8;transform:translateY(.18em)}  /* the line sits where an underline would, just under the text */
 /* hovering a blank: no box, only its label and its line turn pink (the line a little bolder) */
 .wblank:hover,.wblank.open,.wblank:active{color:var(--kw-text);background:none;box-shadow:none;transform:none}
 .wblank:hover i,.wblank.open i{border-bottom:2px solid var(--pink)}
@@ -895,3 +895,12 @@ button.small{font-size:12px;padding:2px 10px}
 
 /* While the day card shows at dawn nothing in the shop can be clicked: a clear sheet lies over everything. */
 body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:default}
+
+/* The recipe's two actions read like lines written in the book, not app buttons: serif italic in ink pink, a small
+   flourish in front, a dotted underline that turns solid on hover. */
+.bookacts{display:flex;flex-wrap:wrap;gap:.3em 1.6em;margin-top:.6em}
+.pg .bookact,.leaf .bookact,.bookact{background:none;border:0;border-bottom:1px dotted var(--kw-text);border-radius:0;box-shadow:none;padding:0 .1em .05em;
+  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:1.15em;color:var(--kw-text);cursor:pointer}
+.bookact:hover,.bookact:focus-visible{background:none;box-shadow:none;transform:none;color:var(--kw-dark);border-bottom-style:solid}
+.bookact:active{transform:none}
+.bookact:disabled{color:var(--ink-soft);opacity:.55;border-bottom-color:transparent;cursor:default}
