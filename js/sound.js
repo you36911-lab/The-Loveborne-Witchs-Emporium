@@ -34,3 +34,42 @@ function playAltarBell(){const ctx=audio();if(!ctx)return;const t=ctx.currentTim
     const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;
     g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(0.0001,t+dec);
     o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+dec+.05)})}
+/* The till printing the day's receipts: a few short bursts of the print head buzzing over the paper (a hum from the little
+   motor under a rattle of ticks), one per stretch of slip, then the slip torn off. More receipts, a little longer. */
+function playReceiptPrint(n){const ctx=audio();if(!ctx)return;let t=ctx.currentTime+.02;
+  const bursts=Math.min(3+n,7);
+  for(let i=0;i<bursts;i++){const len=.16+Math.random()*.06;
+    /* the motor: a low buzzing hum */
+    const o=ctx.createOscillator(),lp=ctx.createBiquadFilter(),og=ctx.createGain();o.type='square';o.frequency.value=180+Math.random()*20;
+    lp.type='lowpass';lp.frequency.value=900;og.gain.setValueAtTime(0.0001,t);og.gain.exponentialRampToValueAtTime(.05,t+.01);
+    og.gain.setValueAtTime(.05,t+len-.02);og.gain.exponentialRampToValueAtTime(0.0001,t+len);
+    o.connect(lp).connect(og).connect(ctx.destination);o.start(t);o.stop(t+len+.02);
+    /* the print head: a fast rattle of ticks (noise, pulsed many times a second) */
+    const s=ctx.createBufferSource(),bp=ctx.createBiquadFilter(),sg=ctx.createGain(),lfo=ctx.createOscillator(),lg=ctx.createGain();
+    s.buffer=noiseBuffer(ctx,len);bp.type='bandpass';bp.frequency.value=3200;bp.Q.value=1.4;
+    sg.gain.value=.05;lfo.type='square';lfo.frequency.value=55;lg.gain.value=.05;lfo.connect(lg).connect(sg.gain);
+    s.connect(bp).connect(sg).connect(ctx.destination);s.start(t);lfo.start(t);s.stop(t+len);lfo.stop(t+len);
+    t+=len+.06+Math.random()*.04}
+  breath(ctx,t+.12,.16,1800,5000,.9,.16,.3)}  /* the slip torn off: a quick rising rip */
+/* A customer comes in: the shop door swings shut behind them. A short creak of the hinge, a soft wooden thump, and the
+   click of the latch. */
+function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
+  /* the hinge: a short, low creak (a buzzy tone wobbling in pitch, through a narrow band) */
+  const c=ctx.createOscillator(),cb=ctx.createBiquadFilter(),cg=ctx.createGain(),w=ctx.createOscillator(),wg=ctx.createGain();
+  c.type='sawtooth';c.frequency.setValueAtTime(240,t);c.frequency.linearRampToValueAtTime(170,t+.32);
+  w.frequency.value=23;wg.gain.value=14;w.connect(wg).connect(c.frequency);
+  cb.type='bandpass';cb.frequency.value=900;cb.Q.value=6;
+  cg.gain.setValueAtTime(0.0001,t);cg.gain.exponentialRampToValueAtTime(.035,t+.08);cg.gain.exponentialRampToValueAtTime(0.0001,t+.34);
+  c.connect(cb).connect(cg).connect(ctx.destination);c.start(t);w.start(t);c.stop(t+.36);w.stop(t+.36);
+  /* the door meeting its frame: a low wooden thump */
+  const th=t+.36,o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';
+  o.frequency.setValueAtTime(130,th);o.frequency.exponentialRampToValueAtTime(55,th+.18);
+  og.gain.setValueAtTime(0.0001,th);og.gain.exponentialRampToValueAtTime(.35,th+.006);og.gain.exponentialRampToValueAtTime(0.0001,th+.25);
+  o.connect(og).connect(ctx.destination);o.start(th);o.stop(th+.28);
+  const n=ctx.createBufferSource(),nl=ctx.createBiquadFilter(),ng=ctx.createGain();n.buffer=noiseBuffer(ctx,.08);
+  nl.type='lowpass';nl.frequency.value=700;ng.gain.setValueAtTime(.18,th);ng.gain.exponentialRampToValueAtTime(0.0001,th+.08);
+  n.connect(nl).connect(ng).connect(ctx.destination);n.start(th);
+  /* the latch: two small metal clicks */
+  [th+.03,th+.075].forEach((at,i)=>{const k=ctx.createBufferSource(),kh=ctx.createBiquadFilter(),kg=ctx.createGain();k.buffer=noiseBuffer(ctx,.02);
+    kh.type='bandpass';kh.frequency.value=3800-i*700;kh.Q.value=3;kg.gain.setValueAtTime(.16-i*.06,at);kg.gain.exponentialRampToValueAtTime(0.0001,at+.02);
+    k.connect(kh).connect(kg).connect(ctx.destination);k.start(at)})}

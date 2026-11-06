@@ -83,8 +83,12 @@ function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('
   ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
 /* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn; a visit can name
    its own picture (pic in story.js), as when Rosalind brings her children. */
+/* When someone comes in (the picture appears where nobody stood), the door is heard closing behind them; not when the
+   game is opened with a customer already there. */
+let customerOn=null;
 function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
-  if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src)}
+  if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src);
+  if(src&&customerOn===false)playDoorClose();customerOn=!!src}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}

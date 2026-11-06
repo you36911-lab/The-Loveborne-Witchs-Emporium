@@ -166,6 +166,7 @@ function endDay(){const before=rating(),reviews=S.pend.splice(0);
   ${last?summaryHTML():''}
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');
+  if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
   $('#dayGo').onclick=()=>{$('#dayEnd').classList.remove('open');
     if(last){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
     showDawn()}}
