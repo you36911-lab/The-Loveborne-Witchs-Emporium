@@ -201,8 +201,8 @@ function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test cra
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
   const orderR=orderRecipe();
-  /* what is being made is chosen in the Recipe Book (its kind in the index, then its name, then the bell icon on its page);
-     the bar on the table only names it, and opens that page */
+  /* what is being made is chosen in the Recipe Book (its kind in the index, then its name, then a tap on the name on its
+     page); a subtitle on the table names it, and opens that page */
   const tr=D.recipes[S.target];
   $('#makingBtn').innerHTML=tr?`<span class="mk">Making</span> <b>${esc(tr.name)}</b> <span class="mk">${esc(tr.type)}</span>`:'<span class="mk">Choose what to make in the Recipe Book</span>';
   /* what is laid out stands on the table; tap a thing to put it back */
@@ -223,7 +223,7 @@ function renderAltar(){
 function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
   return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
-  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>In the Recipe Book, find its kind in the index, then its name. On its page, the little <b>bell</b> chooses it as what you are making and lays out what you have written on the altar.</li><li>The little <b>bottle</b> test crafts it, as often as you like. When it is right, go down to the altar and ring the <b>silver bell</b> to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
+  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>In the Recipe Book, find its kind in the index, then its name. Tap the name on its page to choose it as what you are making (a tick appears). The little <b>bell</b> lays out what you have written on the altar.</li><li>The little <b>bottle</b> test crafts it, as often as you like. When it is right, go down to the altar and ring the <b>silver bell</b> to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};
 /* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
    Nobody is labelled: who they are comes out in what they say and do. */

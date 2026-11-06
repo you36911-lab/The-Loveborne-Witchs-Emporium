@@ -263,7 +263,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe .wrow>b{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink)}
 .wblank{display:inline-block;gap:6px;background:none;border:0;box-shadow:none;padding:2px 2px 0;border-radius:0;
   font-family:var(--font-text);font-style:italic;font-size:.9em;color:var(--ink-soft);cursor:pointer}
-.wblank i{display:inline-block;width:4.5em;height:1em;vertical-align:baseline;border-bottom:1.5px solid #C9A8B8;transform:translateY(.18em)}  /* the line sits where an underline would, just under the text */
+.wblank i{display:inline-block;margin-left:.4em;width:4.5em;height:1em;vertical-align:baseline;border-bottom:1.5px solid #C9A8B8;transform:translateY(.18em)}  /* the line sits where an underline would, just under the text */
 /* hovering a blank: no box, only its label and its line turn pink (the line a little bolder) */
 .wblank:hover,.wblank.open,.wblank:active{color:var(--kw-text);background:none;box-shadow:none;transform:none}
 .wblank:hover i,.wblank.open i{border-bottom:2px solid var(--pink)}
@@ -810,11 +810,13 @@ button.small{font-size:12px;padding:2px 10px}
 .testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:0;cursor:help;
   filter:brightness(.84) saturate(.9) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .testcandles img{display:block;width:100%;height:100%}
-.tablebar{position:absolute;left:50%;top:91%;translate:-50% 0;z-index:2;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;white-space:nowrap;
-  background:rgba(40,12,32,.78);border:1px solid rgba(255,214,240,.45);box-shadow:0 6px 18px rgba(0,0,0,.35)}
-.tablebar .making{display:flex;align-items:baseline;gap:6px;color:#FFE6F2;font-weight:700;font-size:14px;background:none;border:0;box-shadow:none;padding:2px 6px;cursor:pointer}
-.tablebar .making:hover{background:none;box-shadow:none;text-decoration:underline}
-.tablebar .making .mk{font-weight:600;opacity:.8}
+.tablebar{position:absolute;left:50%;top:91%;translate:-50% 0;z-index:2;display:flex;align-items:center;gap:8px;padding:0;white-space:nowrap;background:none;border:0;box-shadow:none}
+/* "Making …" reads like a film subtitle (the same look as the mood line), not a control */
+.tablebar .making{display:block;background:rgba(12,6,18,.42);border:0;box-shadow:none;border-radius:4px;padding:3px 14px;cursor:pointer;
+  color:#fff;font-weight:400;font-size:clamp(13px,1.5vw,19px);letter-spacing:.01em;text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
+.tablebar .making:hover{background:rgba(12,6,18,.55);box-shadow:none}
+.tablebar .making b{font-weight:700}
+.tablebar .making .mk{opacity:.85}
 .tablebar button,.tablebar select{font-size:14px}
 
 /* a test result between the cabinets; the shop log in the corner of the window */
@@ -906,6 +908,11 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
    it out; the bottle: test craft it). A long title wraps beside them rather than running under them. */
 .recipe .rtitle{display:flex;align-items:flex-start;gap:.6em}
 .recipe .rtitle h3{flex:1;min-width:0;margin-top:0}
+/* the title is the switch for "what I am making": plain until hovered; a handwritten tick beside it once chosen */
+.pg .rpick,.leaf .rpick,.rpick{all:unset;cursor:pointer;font:inherit;color:inherit}
+.rpick:hover,.rpick:focus-visible{color:var(--kw-text)}
+.recipe .tickword{white-space:nowrap}
+.recipe .tick{font-family:'Caveat',cursive;font-weight:700;font-size:1.25em;color:var(--kw);margin-left:.3em;display:inline-block;rotate:-8deg}
 .bookicons{flex:none;display:flex;gap:.35em;padding-top:.15em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:.15em;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
