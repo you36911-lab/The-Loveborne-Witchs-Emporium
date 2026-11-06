@@ -184,24 +184,52 @@ const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
  'Magic Hour':HOURS,'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
  'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Full Moon':ALMANAC[2][1],
  'Special':['Morning after a Full Moon',"The customer's birthday","The day of the customer's milestone",'A full week, starting on a Monday']};
+/* A blank in a recipe is a ruled line in the book: tapping it unfolds a short index of what could go there, in text, each
+   with the keywords the player has in the books for it (shown ones, and the words they have written into its blanks). */
+let pickOpen='',KWBYSK=null;
+function knownWords(sk){if(!KWBYSK){KWBYSK={};BOOKS.filter(b=>!['Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>{if(e.sk)KWBYSK[e.sk]=e}))}
+  const e=KWBYSK[sk];if(!e)return[];return [...new Set([...shownOf(e),...(S.fills[sk]||[]).filter(Boolean)])]}
+function wblank(key,label){return `<button class="wblank ${pickOpen===key?'open':''}" data-pick="${key}" aria-label="${esc(label)}: choose" aria-expanded="${pickOpen===key}"><span>${esc(label)}</span><i></i></button>`}
+function windex(key,opts,ns){return `<div class="windex" role="listbox">${opts.map(o=>{const k=knownWords(ns+o);
+  return `<button data-choose="${key}" data-val="${esc(o)}" role="option"><span>${esc(o)}</span>${k.length?`<i>${k.map(esc).join(', ')}</i>`:''}</button>`}).join('')}</div>`}
+/* The open index sits right under the blank that was tapped (above it, if the page has no room below). */
+function placeIndex(){const bl=$('#books .wblank.open'),w=$('#books .windex');if(!bl||!w)return;const g=w.parentElement.getBoundingClientRect(),r=bl.getBoundingClientRect(),
+  pg=bl.closest('.pg,.leaf')?.getBoundingClientRect()||g,ww=w.offsetWidth,wh=w.offsetHeight;
+  w.style.left=Math.max(0,Math.min(r.left-g.left,g.width-ww))+'px';
+  const below=r.bottom+4+wh<=pg.bottom-8;w.style.top=(below?r.bottom-g.top+4:r.top-g.top-wh-4)+'px'}
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
 function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>[...a].sort().join('|')===[...b].sort().join('|');
   return same(n.ing.filter(Boolean),r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
 function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
-  const chips=(arr,attr)=>arr.map(x=>lk?`<span class="chip on">${esc(x)}</span>`:`<button class="chip" data-${attr}="${r.id}|${esc(x)}">${esc(x)} ×</button>`).join(' ');
-  const pick=(attr,label,opts)=>`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">add…</option>${opts.map(o=>`<option>${esc(o)}</option>`).join('')}</select>`;
-  const one=(attr,want,val,opts,label)=>!want?'<span class="muted">none needed</span>':lk?esc(val):`<select data-${attr}="${r.id}" aria-label="${label}"><option value="">?</option>${opts.map(c=>`<option ${val===c?'selected':''}>${esc(c)}</option>`).join('')}</select>`;
-  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div><div><b>Themes:</b> ${r.themes.map(t=>kw(t)).join(', ')}</div>
-  <div><b>Ingredients (${n.ing.filter(Boolean).length}/${N}):</b> ${r.ing.map((want,i)=>{const cat=ITEM[want].c,lab=CATLABEL[cat]||cat,v=n.ing[i];
-    return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-ing="${r.id}|${i}">${esc(v)} \u00D7</button>`)
-      :`<select data-add-ing="${r.id}|${i}" aria-label="${esc(lab)}"><option value="">${esc(lab)}\u2026</option>${az(D.items.filter(x=>x.c===cat).map(x=>x.n)).map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' ')}</div>
-  <div class="row"><b>Candle:</b>${one('set-candle',r.candle,n.candle,Object.keys(D.colours),'Candle')}
-  <b>Card:</b>${one('set-tarot',r.tarot,n.tarot,Object.keys(D.tarot),'Card')}</div>
-  <div><b>When${M?` (${n.when.filter(Boolean).length}/${M})`:''}:</b> ${M?r.conds.map((c,i)=>{const kind=CONDKIND[c.t],v=n.when[i];
-    return v?(lk?`<span class="chip on">${esc(v)}</span>`:`<button class="chip" data-rm-when="${r.id}|${i}">${esc(v)} \u00D7</button>`)
-      :`<select data-add-when="${r.id}|${i}" aria-label="${kind}"><option value="">${kind}\u2026</option>${KINDOPTS[kind].map(o=>`<option>${esc(o)}</option>`).join('')}</select>`}).join(' '):'<span class="muted">any time</span>'}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:13px">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}
+  /* a written-in value: in handwriting, tap to rub it out (once the recipe is solved it stays) */
+  const written=(v,rm)=>lk?`<span class="chip hand on">${esc(v)}</span>`:`<button class="chip hand" ${rm} title="Rub out">${esc(v)} \u00D7</button>`;
+  /* the open index, if it belongs to this row: [key, options, keyword namespace] */
+  const open=pickOpen.split('|'),openFor=row=>open[0]===row&&open[1]===String(r.id);
+  let ingList='',ccList='',whenList='';
+  if(openFor('ing')){const cat=ITEM[r.ing[+open[2]]].c;ingList=windex(pickOpen,az(D.items.filter(x=>x.c===cat).map(x=>x.n)),'item:')}
+  if(openFor('candle'))ccList=windex(pickOpen,az(Object.keys(D.colours)),'colour:');
+  if(openFor('tarot'))ccList=windex(pickOpen,Object.keys(D.tarot),'tarot:');
+  if(openFor('when'))whenList=windex(pickOpen,KINDOPTS[CONDKIND[r.conds[+open[2]].t]],'cond:');
+  /* a slot: what is written there, or a ruled blank naming what kind of thing goes there */
+  const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
+  const none='<span class="muted">none needed</span>';
+  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
+  <div class="rbody"><div class="wrow"><b>Themes:</b> ${r.themes.map(t=>kw(t)).join(', ')}</div>
+  <div class="wgroup"><div class="wrow"><b>Ingredients:</b> ${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</div>${ingList}</div>
+  <div class="wgroup"><div class="wrow"><b>Candle:</b> ${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none} <b>Card:</b> ${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</div>${ccList}</div>
+  <div class="wgroup"><div class="wrow"><b>When:</b> ${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</div>${whenList}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:.85em">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>
   <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button>${lk?'':`<button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Test craft this</button>`}</div></div>`}
-$('#books').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.collect)return;
+$('#books').addEventListener('click',e=>{const b=e.target.closest('button');
+  /* a click anywhere else folds an open index away */
+  if(pickOpen&&!(b&&(b.dataset.pick||b.dataset.choose))&&!e.target.closest('.windex')){pickOpen='';if(!b){renderBooks();return}}
+  if(!b||b.dataset.collect)return;
+  if(b.dataset.pick){pickOpen=pickOpen===b.dataset.pick?'':b.dataset.pick;renderBooks();
+    if(pickOpen)placeIndex();return}
+  if(b.dataset.choose){const[row,id,i]=b.dataset.choose.split('|'),v=b.dataset.val,n=noteOf(id);
+    if(row==='ing')n.ing[+i]=v;else if(row==='when')n.when[+i]=v;else if(row==='candle')n.candle=v;else if(row==='tarot')n.tarot=v;
+    pickOpen='';if(recipeLocked(id))toast('Recipe solved ✦');save();renderBooks();return}
+  if(b.dataset.rmCandle){noteOf(b.dataset.rmCandle).candle='';save();renderBooks();return}
+  if(b.dataset.rmTarot){noteOf(b.dataset.rmTarot).tarot='';save();renderBooks();return}
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
     S.target=String(id);S.altar=[...new Set(n.ing.filter(x=>x&&x!==BIRTHSTONE))];S.candle=n.candle||'';S.tarot=n.tarot||'';S.result=null;
@@ -235,7 +263,7 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
   if(id&&recipeLocked(id))toast('Recipe solved \u2726')
   save();renderBooks()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('#books').classList.remove('open');render()}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(pickOpen){pickOpen='';renderBooks();return}$('#books').classList.remove('open');render()}
   /* the arrow keys turn the pages, unless a box or list has the keyboard */
   if($('#books').classList.contains('open')&&/^Arrow(Left|Right)$/.test(e.key)&&!e.target.closest('input,select,textarea')){e.preventDefault();turnBy(e.key==='ArrowRight'?1:-1)}});
 /* the word bank stands as tall as the book */

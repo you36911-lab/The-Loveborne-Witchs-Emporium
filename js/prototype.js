@@ -20,7 +20,7 @@ function jumpTo(day,h){clearTimeout(autoT);
   const kindOf=v=>v.kind==='advice'?'advice':'order',at=(d,i)=>d*4+i;S.tut=S.tut||{};
   Object.keys(TUTORIAL).forEach(k=>{const v=X.visits.find(v=>kindOf(v)===k);if(!v)return;
     if(at(v.day,HOURS.indexOf(v.hour))<at(day,h)){if(!S.tut[k])S.tut[k]='skipped'}else if(S.tut[k]==='skipped')delete S.tut[k]});
-  $('#dayEnd').classList.remove('open');dawnUntil=0;$('#dayCard').classList.remove('on');
+  $('#dayEnd').classList.remove('open');dawnUntil=0;$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');
   render();fillProto()}
 if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();
   $('#protoWeek').onchange=e=>{$('#protoDay').innerHTML=protoDays(+e.target.value)};
