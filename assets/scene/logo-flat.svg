@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 112">
+  <!-- The shop's winged heart, redrawn flat for the computer's My Shop app (made by a small script: each feather is a
+       curved blade from a root beside the heart to its tip). The game's pinks: deep #C24488, mid #E27BB1, light #F4B3D0. -->
+  <g>
+    <path d="M45 50Q36.9 23.7 26 4Q22.1 29.8 45 50Z" fill="#F4B3D0"/>
+    <path d="M44 52Q30.4 26.8 15 9Q16.3 36.3 44 52Z" fill="#F4B3D0"/>
+    <path d="M43 54Q25.6 31.8 7 18Q13.6 43.8 43 54Z" fill="#F4B3D0"/>
+    <path d="M42 56Q22.6 38.6 3 30Q13.8 51.9 42 56Z" fill="#E27BB1"/>
+    <path d="M42 59Q22.8 45.8 4 42Q16.7 59.5 42 59Z" fill="#E27BB1"/>
+    <path d="M42 61Q24.2 52.7 8 53Q21.3 65.3 42 61Z" fill="#E27BB1"/>
+    <path d="M43 63Q28.4 58 16 61Q27.6 69 43 63Z" fill="#C24488"/>
+    <path d="M44 65Q25.5 74.1 26 92Q36.3 81.3 44 65Z" fill="#F4B3D0"/>
+    <path d="M45 67Q28.8 82.4 34 101Q40.2 86.1 45 67Z" fill="#E27BB1"/>
+    <path d="M47 69Q35.9 88.6 44 106Q45.9 89.4 47 69Z" fill="#C24488"/>
+  </g>
+  <g transform="translate(120 0) scale(-1 1)">
+    <path d="M45 50Q36.9 23.7 26 4Q22.1 29.8 45 50Z" fill="#F4B3D0"/>
+    <path d="M44 52Q30.4 26.8 15 9Q16.3 36.3 44 52Z" fill="#F4B3D0"/>
+    <path d="M43 54Q25.6 31.8 7 18Q13.6 43.8 43 54Z" fill="#F4B3D0"/>
+    <path d="M42 56Q22.6 38.6 3 30Q13.8 51.9 42 56Z" fill="#E27BB1"/>
+    <path d="M42 59Q22.8 45.8 4 42Q16.7 59.5 42 59Z" fill="#E27BB1"/>
+    <path d="M42 61Q24.2 52.7 8 53Q21.3 65.3 42 61Z" fill="#E27BB1"/>
+    <path d="M43 63Q28.4 58 16 61Q27.6 69 43 63Z" fill="#C24488"/>
+    <path d="M44 65Q25.5 74.1 26 92Q36.3 81.3 44 65Z" fill="#F4B3D0"/>
+    <path d="M45 67Q28.8 82.4 34 101Q40.2 86.1 45 67Z" fill="#E27BB1"/>
+    <path d="M47 69Q35.9 88.6 44 106Q45.9 89.4 47 69Z" fill="#C24488"/>
+  </g>
+  <!-- the frame: two curls that hug the heart and meet beneath it -->
+  <path d="M52 31C45 28 39 32 38 39C36.5 50 44 61 60 80C76 61 83.5 50 82 39C81 32 75 28 68 31" fill="none" stroke="#C24488" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- the heart -->
+  <path d="M60 69C53 62.5 46 57 46 49C46 44 49.5 40.5 54 40.5C57.2 40.5 59 42.5 60 45C61 42.5 62.8 40.5 66 40.5C70.5 40.5 74 44 74 49C74 57 67 62.5 60 69Z" fill="#C24488"/>
+</svg>

@@ -51,28 +51,35 @@ function playReceiptPrint(n){const ctx=audio();if(!ctx)return;let t=ctx.currentT
     s.connect(bp).connect(sg).connect(ctx.destination);s.start(t);lfo.start(t);s.stop(t+len);lfo.stop(t+len);
     t+=len+.06+Math.random()*.04}
   breath(ctx,t+.12,.16,1800,5000,.9,.16,.3)}  /* the slip torn off: a quick rising rip */
-/* A customer comes in: the shop door swings shut behind them. A short creak of the hinge, a soft wooden thump, and the
-   click of the latch. */
-function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
-  /* the hinge: a short, low creak (a buzzy tone wobbling in pitch, through a narrow band) */
-  const c=ctx.createOscillator(),cb=ctx.createBiquadFilter(),cg=ctx.createGain(),w=ctx.createOscillator(),wg=ctx.createGain();
-  c.type='sawtooth';c.frequency.setValueAtTime(240,t);c.frequency.linearRampToValueAtTime(170,t+.32);
-  w.frequency.value=23;wg.gain.value=14;w.connect(wg).connect(c.frequency);
-  cb.type='bandpass';cb.frequency.value=900;cb.Q.value=6;
-  cg.gain.setValueAtTime(0.0001,t);cg.gain.exponentialRampToValueAtTime(.035,t+.08);cg.gain.exponentialRampToValueAtTime(0.0001,t+.34);
-  c.connect(cb).connect(cg).connect(ctx.destination);c.start(t);w.start(t);c.stop(t+.36);w.stop(t+.36);
-  /* the door meeting its frame: a low wooden thump */
-  const th=t+.36,o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';
-  o.frequency.setValueAtTime(130,th);o.frequency.exponentialRampToValueAtTime(55,th+.18);
-  og.gain.setValueAtTime(0.0001,th);og.gain.exponentialRampToValueAtTime(.35,th+.006);og.gain.exponentialRampToValueAtTime(0.0001,th+.25);
-  o.connect(og).connect(ctx.destination);o.start(th);o.stop(th+.28);
-  const n=ctx.createBufferSource(),nl=ctx.createBiquadFilter(),ng=ctx.createGain();n.buffer=noiseBuffer(ctx,.08);
-  nl.type='lowpass';nl.frequency.value=700;ng.gain.setValueAtTime(.18,th);ng.gain.exponentialRampToValueAtTime(0.0001,th+.08);
-  n.connect(nl).connect(ng).connect(ctx.destination);n.start(th);
-  /* the latch: two small metal clicks */
-  [th+.03,th+.075].forEach((at,i)=>{const k=ctx.createBufferSource(),kh=ctx.createBiquadFilter(),kg=ctx.createGain();k.buffer=noiseBuffer(ctx,.02);
-    kh.type='bandpass';kh.frequency.value=3800-i*700;kh.Q.value=3;kg.gain.setValueAtTime(.16-i*.06,at);kg.gain.exponentialRampToValueAtTime(0.0001,at+.02);
-    k.connect(kh).connect(kg).connect(ctx.destination);k.start(at)})}
+/* A customer comes in: the shop door swings shut behind them, "kkiik... tak". The hinge creaks (a thin, rising and
+   falling squeak that judders as the hinge sticks and slips), then the door meets its frame with a short, crisp knock and
+   the latch clicks. */
+function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02,cr=.55;
+  /* the creak: a buzzy tone through two narrow bands, its pitch swinging up then down, juddered by a fast pulse */
+  const o=ctx.createOscillator(),b1=ctx.createBiquadFilter(),b2=ctx.createBiquadFilter(),mix=ctx.createGain(),j=ctx.createGain(),
+    lfo=ctx.createOscillator(),lg=ctx.createGain(),env=ctx.createGain();
+  o.type='sawtooth';o.frequency.setValueAtTime(420,t);o.frequency.linearRampToValueAtTime(560,t+cr*.45);o.frequency.linearRampToValueAtTime(470,t+cr);
+  b1.type='bandpass';b1.frequency.value=1400;b1.Q.value=5;b2.type='bandpass';b2.frequency.value=2600;b2.Q.value=6;
+  lfo.type='square';lfo.frequency.setValueAtTime(32,t);lfo.frequency.linearRampToValueAtTime(22,t+cr);lg.gain.value=.5;j.gain.value=.5;
+  lfo.connect(lg).connect(j.gain);
+  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.07,t+.07);env.gain.setValueAtTime(.07,t+cr*.7);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
+  o.connect(b1).connect(mix);o.connect(b2).connect(mix);mix.connect(j).connect(env).connect(ctx.destination);
+  o.start(t);lfo.start(t);o.stop(t+cr+.02);lfo.stop(t+cr+.02);
+  /* the "tak": a crisp wooden knock (a short bright burst and a quick woody tone), with only a little weight under it */
+  const k=t+cr+.03;
+  const n=ctx.createBufferSource(),nb=ctx.createBiquadFilter(),ng=ctx.createGain();n.buffer=noiseBuffer(ctx,.05);
+  nb.type='bandpass';nb.frequency.value=1700;nb.Q.value=1.3;ng.gain.setValueAtTime(.32,k);ng.gain.exponentialRampToValueAtTime(0.0001,k+.045);
+  n.connect(nb).connect(ng).connect(ctx.destination);n.start(k);
+  const w=ctx.createOscillator(),wg=ctx.createGain();w.type='triangle';w.frequency.setValueAtTime(520,k);w.frequency.exponentialRampToValueAtTime(300,k+.06);
+  wg.gain.setValueAtTime(0.0001,k);wg.gain.exponentialRampToValueAtTime(.22,k+.003);wg.gain.exponentialRampToValueAtTime(0.0001,k+.08);
+  w.connect(wg).connect(ctx.destination);w.start(k);w.stop(k+.1);
+  const lo=ctx.createOscillator(),log=ctx.createGain();lo.frequency.setValueAtTime(110,k);lo.frequency.exponentialRampToValueAtTime(70,k+.08);
+  log.gain.setValueAtTime(0.0001,k);log.gain.exponentialRampToValueAtTime(.09,k+.004);log.gain.exponentialRampToValueAtTime(0.0001,k+.1);
+  lo.connect(log).connect(ctx.destination);lo.start(k);lo.stop(k+.12);
+  /* the latch: one small metal click just after */
+  const l=k+.05,c=ctx.createBufferSource(),cb=ctx.createBiquadFilter(),cg=ctx.createGain();c.buffer=noiseBuffer(ctx,.015);
+  cb.type='bandpass';cb.frequency.value=4200;cb.Q.value=4;cg.gain.setValueAtTime(.12,l);cg.gain.exponentialRampToValueAtTime(0.0001,l+.015);
+  c.connect(cb).connect(cg).connect(ctx.destination);c.start(l)}
 /* Something new on the computer (an email, the night's reviews): the soft two-note "di-ring" of a notification, the second
    note higher. Round tones with a little sparkle on top. */
 function playNotify(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
