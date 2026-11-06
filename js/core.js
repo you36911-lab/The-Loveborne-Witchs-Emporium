@@ -19,7 +19,8 @@ function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
 /* Load the save; an older prototype save is picked up once and carried over. */
-try{S=JSON.parse(localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean))||fresh()}catch(e){S=fresh()}
+/* ("Ink" is now "Plain ink": an older save's notes and altar are renamed as they load.) */
+try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?raw.replace(/"Ink"/g,'"Plain ink"'):null)||fresh()}catch(e){S=fresh()}
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
   delete S.orders;  /* orders taken for later belong to older builds */

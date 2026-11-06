@@ -20,7 +20,7 @@ function markOpen(key){const [kind,n]=key.split(':'),i=+n;
   if(kind==='mail'){S.mail[i]=true}
   else if(kind==='start'&&!S.letters[i]){S.letters[i]=true;
     if(i===2){[[95,true],[153,true],[111,false]].forEach(([id,full])=>{const r=D.recipes[id],n=noteOf(id);
-      if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Ink','Raven feather'];n.candle='Purple'}})}}
+      if(full){n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName)}else{n.ing=['Ash wood','Plain ink','Raven feather'];n.candle='Purple'}})}}
   save();renderBadge();renderPCBar()}
 const avatarHTML=x=>`<i class="wm-av" style="background:${avatarOf(x.name)}" aria-hidden="true">${esc(x.name[0])}</i>`;
 function renderLetters(){
