@@ -753,7 +753,7 @@ button.small{font-size:12px;padding:2px 10px}
 /* the black candelabra (assets/candles/test-candles-N.png, 470×651) stands on the altar right of the tarot card,
    dimmed a little to the room's light, like the books and the candle stand */
 .testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:0;cursor:help;
-  filter:brightness(.84) saturate(.9) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
+  filter:brightness(.84) saturate(.9) drop-shadow(0 0 .25cqw rgba(255,214,240,.45)) drop-shadow(0 0 .7cqw rgba(244,173,207,.22)) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}  /* a faint pink aura, so the black candles stand out from the dark wall */
 .testcandles img{display:block;width:100%;height:100%}
 .tablebar{position:absolute;left:50%;top:91%;translate:-50% 0;z-index:2;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;white-space:nowrap;
   background:rgba(40,12,32,.78);border:1px solid rgba(255,214,240,.45);box-shadow:0 6px 18px rgba(0,0,0,.35)}
