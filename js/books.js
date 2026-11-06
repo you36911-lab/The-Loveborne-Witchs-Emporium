@@ -188,14 +188,11 @@ const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
  'Magic Hour':HOURS,'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
  'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Full Moon':ALMANAC[2][1],
  'Special':['Morning after a Full Moon',"The customer's birthday","The day of the customer's milestone",'A full week, starting on a Monday']};
-/* A blank in a recipe is a ruled line in the book: tapping it unfolds a short index of what could go there, in text, each
-   with the keywords the player has in the books for it (shown ones, and the words they have written into its blanks). */
-let pickOpen='',KWBYSK=null;
-function knownWords(sk){if(!KWBYSK){KWBYSK={};BOOKS.filter(b=>!['Book of Making','Recipe Book'].includes(b)).forEach(b=>entryList(b).forEach(e=>{if(e.sk)KWBYSK[e.sk]=e}))}
-  const e=KWBYSK[sk];if(!e)return[];return [...new Set([...shownOf(e),...(S.fills[sk]||[]).filter(Boolean)])]}
+/* A blank in a recipe is a ruled line in the book: tapping it unfolds a short index, in text, of what could go there
+   (names only: the keywords are for the player to look up in the books). */
+let pickOpen='';
 function wblank(key,label){return `<button class="wblank ${pickOpen===key?'open':''}" data-pick="${key}" aria-label="${esc(label)}: choose" aria-expanded="${pickOpen===key}"><span>${esc(label)}</span><i></i></button>`}
-function windex(key,opts,ns){return `<div class="windex" role="listbox">${opts.map(o=>{const k=knownWords(ns+o);
-  return `<button data-choose="${key}" data-val="${esc(o)}" role="option"><span>${esc(o)}</span>${k.length?`<i>${k.map(esc).join(', ')}</i>`:''}</button>`}).join('')}</div>`}
+function windex(key,opts){return `<div class="windex" role="listbox">${opts.map(o=>`<button data-choose="${key}" data-val="${esc(o)}" role="option"><span>${esc(o)}</span></button>`).join('')}</div>`}
 /* The open index sits right under the blank that was tapped (above it, if the page has no room below). */
 function placeIndex(){const bl=$('#books .wblank.open'),w=$('#books .windex');if(!bl||!w)return;const g=w.parentElement.getBoundingClientRect(),r=bl.getBoundingClientRect(),
   pg=bl.closest('.pg,.leaf')?.getBoundingClientRect()||g,ww=w.offsetWidth,wh=w.offsetHeight;
