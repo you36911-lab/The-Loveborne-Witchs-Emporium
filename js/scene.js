@@ -66,7 +66,7 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
    on to the next hour with someone (or something) in it, and if that is a customer, they come in. */
 function ringBell(){const bell=$('#bellBtn');
   S.parting=null;  /* the bell sends a lingering customer on their way */
-  if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Someone is already at the counter.');return}
+  if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');playBell();toast('Someone is already at the counter.');return}
   bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');playBell();
   if(someoneDue()){S.rung=true;S.result=null;render();return}
   if(S.h>=3){nextHour();return}

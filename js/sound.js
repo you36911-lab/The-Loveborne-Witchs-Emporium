@@ -23,3 +23,14 @@ function bellTone(ctx,at,freq,vol){[[1,1,1.6],[2.76,.45,.9],[5.4,.22,.5],[8.93,.
   o.connect(g).connect(ctx.destination);o.start(at);o.stop(at+dec+.05)})}
 function playBell(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
   bellTone(ctx,t,1320,.16);bellTone(ctx,t+.2,1324,.08)}
+/* The silver desk bell on the altar: one bright "ding!" as its button is struck, higher than the shop bell and ringing
+   on longer. A tiny click of the striker, then two tones a few Hz apart (they shimmer against each other) and a few
+   fainter metal tones above them. */
+function playAltarBell(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
+  const c=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),cg=ctx.createGain();c.buffer=noiseBuffer(ctx,.03);
+  hp.type='highpass';hp.frequency.value=4000;cg.gain.setValueAtTime(.12,t);cg.gain.exponentialRampToValueAtTime(0.0001,t+.03);
+  c.connect(hp).connect(cg).connect(ctx.destination);c.start(t);
+  [[2350,.13,2.4],[2357,.09,2.2],[2350*2.32,.04,.9],[2350*4.25,.02,.4]].forEach(([f,v,dec])=>{
+    const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.003);g.gain.exponentialRampToValueAtTime(0.0001,t+dec);
+    o.connect(g).connect(ctx.destination);o.start(t);o.stop(t+dec+.05)})}

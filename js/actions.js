@@ -114,8 +114,8 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
 let bellBusy=false;
 function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
   const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose the recipe you are making first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
-  if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');toast(why);return}
-  b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playBell();bellBusy=true;
+  if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
+  b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
   setTimeout(()=>{bellBusy=false;doCraft(false)},650)}
 /* Hand over what was made: the grade was settled when it was made. */
 function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
