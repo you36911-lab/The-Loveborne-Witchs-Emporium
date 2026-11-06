@@ -155,7 +155,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
   /* The inside of the glass takes the aura colour; the bottom fades out so the stand keeps its own colour. */
   background:var(--aura-glow,transparent);mix-blend-mode:color;opacity:0;transition:opacity .8s ease,background .8s ease;
-  -webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 88%);mask-image:linear-gradient(to bottom,#000 78%,transparent 88%)}
+  -webkit-mask-image:linear-gradient(to bottom,#000 90%,transparent 97%);mask-image:linear-gradient(to bottom,#000 90%,transparent 97%)}
 .scene .crystal.glowing::after{opacity:.7}
 /* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
