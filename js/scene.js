@@ -66,7 +66,7 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
 function ringBell(){const bell=$('#bellBtn');
   S.parting=null;  /* the bell sends a lingering customer on their way */
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Someone is already at the counter.');return}
-  bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');
+  bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');playBell();
   if(someoneDue()){S.rung=true;S.result=null;render();return}
   if(S.h>=3){nextHour();return}
   const mail0=Object.keys(S.mail||{}).length;
@@ -89,10 +89,11 @@ function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');retur
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
 /* Failed tests are five black candles on a candelabra on the altar, right of the card: each test craft that isn't
    perfect puts one out; when all five are out it costs a star and they are lit again. The fifth going out shows the
-   candelabra dark for a moment (ASSETS.testCandles[0]) before all five light again. */
+   candelabra dark for a moment (ASSETS.testCandles[0]) before all five light again. Each one going out is heard. */
 let candlesFails=null,candlesDark=0;
 function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),img=box.querySelector('img');
   const put=n=>{const src=ASSETS.testCandles[n];if(img.getAttribute('src')!==src)img.src=src};
+  if(candlesFails!==null&&f>candlesFails)playCandleOut();  /* a candle has just gone out: a whoosh and a snuff (sound.js) */
   if(candlesFails!==null&&f>candlesFails&&f%5===0){clearTimeout(candlesDark);put(0);candlesDark=setTimeout(()=>{candlesDark=0;put(5-(S.failTests||0)%5)},1600)}
   else if(!candlesDark)put(lit);
   candlesFails=f;
