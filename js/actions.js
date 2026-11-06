@@ -14,6 +14,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.tutskip){S.tutOff=true;render();return}
   switch(b.id){
     case 'craftBell':ringAltarBell();break;
+    case 'makingBtn':curBook='Recipe Book';if(S.target){(S.page||(S.page={}))['Recipe Book']='recipe:'+S.target}openBooks();break;
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
@@ -91,8 +92,6 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
 let partingAtClick=false;
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain');partingAtClick=!!S.parting},true);
-$('#target').addEventListener('change',e=>{S.target=e.target.value;render()});
-$('#ttype').addEventListener('change',e=>{S.ttype=e.target.value;S.target='';render()});
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
   const ev=evaluate(r,test);
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
@@ -113,7 +112,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
    up to the counter, so it is seen and heard. */
 let bellBusy=false;
 function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
-  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose the recipe you are making first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
+  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose what you are making in the Recipe Book first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
   if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
   setTimeout(()=>{bellBusy=false;doCraft(false)},650)}

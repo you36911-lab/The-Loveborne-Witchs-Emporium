@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- a plain round-bottomed spell bottle, flat, in the shop's three pinks (deep #B03A7E, mid #E27BB1, light #F6BED7) -->
-  <rect x="25" y="5" width="14" height="7" rx="2" fill="#B03A7E"/>
-  <path d="M27 12h10v12.5a19 19 0 1 1-10 0z" fill="#F6BED7" stroke="#B03A7E" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M15.2 42a17 17 0 0 0 33.6 0z" fill="#E27BB1"/>
-  <path d="M27 12h10v12.5a19 19 0 1 1-10 0z" fill="none" stroke="#B03A7E" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M21 36a12 12 0 0 1 6-7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" opacity=".85"/>
-  <circle cx="38" cy="47" r="2" fill="#F6BED7"/><circle cx="31" cy="51" r="1.4" fill="#F6BED7"/>
+  <!-- a plain round-bottomed spell bottle as a one-colour flat icon (the shop's deep pink): stopper, outline and liquid -->
+  <g fill="#B03A7E">
+    <rect x="25" y="4" width="14" height="7" rx="2"/>
+    <path d="M26 12h12v11.9a20 20 0 1 1-12 0z M30 15.5v10.9l-1.9.6a16.5 16.5 0 1 0 7.8 0l-1.9-.6V15.5z" fill-rule="evenodd"/>
+    <path d="M17.6 41h28.8a14.5 14.5 0 0 1-28.8 0z"/>
+  </g>
+  <path d="M22.5 36a10 10 0 0 1 4.5-5.5" fill="none" stroke="#B03A7E" stroke-width="2.4" stroke-linecap="round"/>
 </svg>

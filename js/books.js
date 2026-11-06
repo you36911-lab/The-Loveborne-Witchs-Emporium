@@ -211,15 +211,18 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   if(openFor('tarot'))ccList=windex(pickOpen,Object.keys(D.tarot),'tarot:');
   if(openFor('when'))whenList=windex(pickOpen,KINDOPTS[CONDKIND[r.conds[+open[2]].t]],'cond:');
   /* a slot: what is written there, or a ruled blank naming what kind of thing goes there */
+  /* the page's two actions, as small one-colour icons on the title line (the tutorial says what they do): the altar bell
+     chooses this recipe as the one being made and lays out what is written here; the bottle test crafts it */
+  const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" title="Make this: lay it out on the altar" aria-label="Make this: lay it out on the altar"><img src="${ASSETS.iconBell}" alt=""></button>${lk?'':`<button class="bookico" data-booktest="${r.id}" title="Test craft this" aria-label="Test craft this" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBottle}" alt=""></button>`}</span>`;
   const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
   const none='<span class="muted">none needed</span>';
-  return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
+  return `<div class="recipe ${lk?'locked':''}"><div class="rtitle"><h3>${esc(r.name)}${lk?' ✦':''}</h3>${acts}</div><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
   <div class="rbody"><div class="wrow"><b>Themes:</b><span class="wvals plain">${r.themes.map(t=>kw(t)).join(', ')}</span></div>
   <div class="wgroup"><div class="wrow"><b>Ingredients:</b><span class="wvals">${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</span></div>${ingList}</div>
   <div class="wgroup"><div class="wrow"><b>Candle:</b><span class="wvals">${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none}</span></div>${pickOpen.startsWith('candle|')?ccList:''}</div>
   <div class="wgroup"><div class="wrow"><b>Card:</b><span class="wvals">${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</span></div>${pickOpen.startsWith('tarot|')?ccList:''}</div>
   <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:.85em">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>
-  <div class="bookacts"><button class="bookact" data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}><img class="bkico" src="${ASSETS.iconBell}" alt="">Lay out on the altar</button>${lk?'':`<button class="bookact" data-booktest="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}><img class="bkico" src="${ASSETS.iconBottle}" alt="">Test craft this</button>`}</div></div>`}
+  </div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   /* a click anywhere else folds an open index away */
   if(pickOpen&&!(b&&(b.dataset.pick||b.dataset.choose))&&!e.target.closest('.windex')){pickOpen='';if(!b){renderBooks();return}}
@@ -233,9 +236,10 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.rmTarot){noteOf(b.dataset.rmTarot).tarot='';save();renderBooks();return}
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
   if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
-    S.target=String(id);S.altar=[...new Set(n.ing.filter(x=>x&&x!==BIRTHSTONE))];S.candle=n.candle||'';S.tarot=n.tarot||'';S.result=null;
+    S.target=String(id);S.result=null;
+    if(n.ing.some(Boolean)){S.altar=[...new Set(n.ing.filter(x=>x&&x!==BIRTHSTONE))];S.candle=n.candle||'';S.tarot=n.tarot||''}
     $('#books').classList.remove('open');goTo('altar');
-    if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
+    if(b.dataset.booktest)doCraft(true);else{render();toast(n.ing.some(Boolean)?`Laid out ${D.recipes[id].name} on the altar.`:`Making ${D.recipes[id].name}. Lay out what it needs from the cupboards.`)}
     return}
   if(b.id==='cover'){openTome();return}
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
