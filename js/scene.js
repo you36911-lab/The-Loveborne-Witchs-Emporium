@@ -55,7 +55,7 @@ const LIGHT={Dawn:[.88,.88,1.02],Sunrise:[1,.93,.91],Twilight:[.95,.85,.88],Nigh
    the same way: the tablecloth and shelves at each hour against that festival's Noon for the colour, and that festival's
    Noon against the everyday Noon for how bright the room is. Red, green, blue. */
 const FESTIVAL_LIGHT={
-  Samhain:   {Dawn:[.65,.59,.6], Sunrise:[.7,.64,.64], Noon:[.75,.75,.75],Twilight:[.66,.6,.63], Nightfall:[.57,.5,.55]},
+  Samhain:   {Dawn:[.65,.59,.6], Sunrise:[.7,.64,.64], Noon:[.75,.75,.75],Twilight:[.7,.64,.67], Nightfall:[.57,.5,.55]},
   Yule:      {Dawn:[.78,.77,.78],Sunrise:[.76,.73,.75],Noon:[.76,.76,.76],Twilight:[.75,.72,.77],Nightfall:[.53,.54,.62]},
   Imbolc:    {Dawn:[.85,.85,.83],Sunrise:[.99,.92,.69],Noon:[.73,.73,.73],Twilight:[.64,.67,.72],Nightfall:[.65,.64,.66]},
   Ostara:    {Dawn:[1.06,1,.99], Sunrise:[1.07,1.05,1.06],Noon:[1.09,1.09,1.09],Twilight:[.81,.77,.84],Nightfall:[.95,.87,.8]},
@@ -64,7 +64,7 @@ const FESTIVAL_LIGHT={
   Lughnasadh:{Dawn:[.9,.86,.89], Sunrise:[.9,.89,.99], Noon:[.93,.93,.93],Twilight:[.63,.64,.78],Nightfall:[.65,.65,.66]},
   Mabon:     {Dawn:[.74,.71,.72],Sunrise:[.75,.77,.81],Noon:[.71,.71,.71],Twilight:[.67,.63,.66],Nightfall:[.56,.53,.51]}};
 /* A picture shown a touch brighter than drawn, where it read too dark in play. */
-const BG_BRIGHTER={'Samhain|Nightfall':1.08};
+const BG_BRIGHTER={'Samhain|Twilight':1.06,'Samhain|Nightfall':1.08};
 function lightFor(key){const f=today()?.sabbat;return (FESTIVAL_LIGHT[f]||LIGHT)[key]||[1,1,1]}
 let lightNow=[1,1,1];
 function fadeLight(to){const from=lightNow,t0=performance.now();
