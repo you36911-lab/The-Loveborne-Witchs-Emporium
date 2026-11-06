@@ -912,7 +912,7 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .pg .rpick,.leaf .rpick,.rpick{all:unset;cursor:pointer;font:inherit;color:inherit}
 .rpick:hover,.rpick:focus-visible{color:var(--kw-text)}
 .recipe .tickword{white-space:nowrap}
-.recipe .tick{font-family:'Caveat',cursive;font-weight:700;font-size:1.25em;color:var(--kw);margin-left:.3em;display:inline-block;rotate:-8deg}
+.recipe .tick{width:1.05em;height:.95em;color:var(--kw);margin-left:.3em;vertical-align:-.05em;rotate:-4deg;overflow:visible}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
 .bookicons{flex:none;display:flex;gap:.35em;padding-top:.15em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:.15em;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
