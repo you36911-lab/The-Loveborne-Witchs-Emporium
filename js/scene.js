@@ -16,7 +16,7 @@ function buildScene(){
   const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
   $('#bookStack').innerHTML=$('#altarBooks').innerHTML=stack;
   /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
-  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom,ASSETS.cabinetInside].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
+  [...Object.values(ASSETS.backgrounds),...Object.values(ASSETS.characters),ASSETS.altarRoom,ASSETS.cabinetInside,...ASSETS.testCandles].forEach(src=>{const im=new Image();im.src=src;im.decode?.().catch(()=>{})});
 }
 /* Two full-screen views, one above the other: the shop counter, and the altar below it.
    The down arrow slides the world up to show the altar; the up arrow slides it back. */
@@ -87,15 +87,19 @@ function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.ch
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
-/* Failed tests are five candles: each test craft that isn't perfect puts one out; when all five are out it costs a
-   star and they are lit again. They stand in a little panel at the top left of the shop. The candle that has just gone
-   out gives a little puff (once, not on every redraw). */
-let candlesOut=null;
-function candlesHTML(){const out=S.failTests%5,puff=candlesOut!==null&&out>candlesOut;candlesOut=out;
-  return `<span class="tcandles" title="Every fifth test craft that isn't perfect costs a one-star review" aria-label="Failed tests: ${out} of 5">${
-    [0,1,2,3,4].map(i=>`<i class="tcandle${i>=5-out?' out':''}${i===5-out&&puff?' puff':''}"></i>`).join('')}</span>`}
+/* Failed tests are five black candles on a candelabra on the altar, right of the card: each test craft that isn't
+   perfect puts one out; when all five are out it costs a star and they are lit again. The fifth going out shows the
+   candelabra dark for a moment (ASSETS.testCandles[0]) before all five light again. */
+let candlesFails=null,candlesDark=0;
+function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),img=box.querySelector('img');
+  const put=n=>{const src=ASSETS.testCandles[n];if(img.getAttribute('src')!==src)img.src=src};
+  if(candlesFails!==null&&f>candlesFails&&f%5===0){clearTimeout(candlesDark);put(0);candlesDark=setTimeout(()=>{candlesDark=0;put(5-(S.failTests||0)%5)},1600)}
+  else if(!candlesDark)put(lit);
+  candlesFails=f;
+  box.title=`${lit} of 5 candles lit. Every test craft that isn't perfect puts one out; when all five are out, it costs a one-star review.`;
+  box.setAttribute('aria-label',`Test crafts: ${lit} of 5 candles lit`)}
 /* There is no top bar: the date is on the computer's taskbar and the rating in its Shop app. */
-function renderTop(){renderBadge();$('#testCandles').innerHTML=candlesHTML();if($('#pc').classList.contains('open'))renderPCBar()}
+function renderTop(){renderBadge();renderCandles();if($('#pc').classList.contains('open'))renderPCBar()}
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
    swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
    off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg) as first drawn at 1376×768; it is now 2752×1536, the same shape. The bottom row

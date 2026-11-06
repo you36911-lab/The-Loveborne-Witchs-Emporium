@@ -57,6 +57,7 @@ const ASSETS = {
   pcWallpaper: 'assets/scene/desktop-background.jpg',  /* the computer's desktop */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
+  testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
     'till':         'assets/scene/till.png',
