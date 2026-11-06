@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 56 61">
-  <!-- a plain round-bottomed spell bottle as a solid one-colour silhouette (the shop's deep pink): a big, slightly squat
-       round body, a short neck and a stopper. The view is cropped to the bottle so it shows at the bell icon's size. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 56 52.5">
+  <!-- a plain round-bottomed spell bottle as a solid one-colour silhouette (the shop's deep pink): a wide, low round body,
+       a short neck and a stopper. The view is cropped to the bottle so it shows at the bell icon's size. -->
   <g fill="#B03A7E">
     <rect x="24.5" y="2" width="15" height="7.5" rx="2"/>
-    <path d="M26 9h12v4.6A28 25 0 1 1 26 13.6z"/>
+    <path d="M26 9h12v4A28 21 0 1 1 26 13z"/>
   </g>
 </svg>
