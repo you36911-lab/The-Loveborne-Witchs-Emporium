@@ -34,7 +34,7 @@ function bgSrc(key){const f=today()?.sabbat;return ASSETS.festivals.includes(f)?
 function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
   /* a festival's first picture: load the other hours of it ahead too */
   if(!bgNow.includes(src.slice(0,src.lastIndexOf('-'))))HOURS.concat('Dawn').forEach(h=>{const im=new Image();im.src=bgSrc(h)});
-  bgNow=src;fadeLight(key);
+  bgNow=src;fadeLight(lightFor(key));
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
@@ -48,8 +48,21 @@ function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
 /* The light on the objects: red, green and blue for each hour (other hours are Noon's 1, 1, 1). It moves from the
    old hour's light to the new one over the same time the background takes to fade (1.2s in style.css). */
 const LIGHT={Dawn:[.88,.88,1.02],Sunrise:[1,.93,.91],Twilight:[.95,.85,.88],Nightfall:[.9,.8,.86]},LIGHT_FADE_MS=1200;
+/* The festival pictures are lit differently (most are darker and warmer, candlelit), so each has its own light, measured
+   the same way: the tablecloth and shelves at each hour against that festival's Noon for the colour, and that festival's
+   Noon against the everyday Noon for how bright the room is. Red, green, blue. */
+const FESTIVAL_LIGHT={
+  Samhain:   {Dawn:[.65,.59,.6], Sunrise:[.7,.64,.64], Noon:[.75,.75,.75],Twilight:[.66,.6,.63], Nightfall:[.51,.44,.49]},
+  Yule:      {Dawn:[.78,.77,.78],Sunrise:[.76,.73,.75],Noon:[.76,.76,.76],Twilight:[.75,.72,.77],Nightfall:[.53,.54,.62]},
+  Imbolc:    {Dawn:[.85,.85,.83],Sunrise:[.99,.92,.69],Noon:[.73,.73,.73],Twilight:[.64,.67,.72],Nightfall:[.65,.64,.66]},
+  Ostara:    {Dawn:[1.06,1,.99], Sunrise:[1.07,1.05,1.06],Noon:[1.09,1.09,1.09],Twilight:[.81,.77,.84],Nightfall:[.95,.87,.8]},
+  Beltane:   {Dawn:[.69,.76,.87],Sunrise:[.8,.79,.82], Noon:[.84,.84,.84],Twilight:[.68,.66,.78],Nightfall:[.63,.65,.79]},
+  Litha:     {Dawn:[.6,.7,.79],  Sunrise:[.97,.85,.7], Noon:[.83,.83,.83],Twilight:[.73,.69,.67],Nightfall:[.78,.7,.71]},
+  Lughnasadh:{Dawn:[.9,.86,.89], Sunrise:[.9,.89,.99], Noon:[.93,.93,.93],Twilight:[.63,.64,.78],Nightfall:[.65,.65,.66]},
+  Mabon:     {Dawn:[.74,.71,.72],Sunrise:[.75,.77,.81],Noon:[.71,.71,.71],Twilight:[.67,.63,.66],Nightfall:[.56,.53,.51]}};
+function lightFor(key){const f=today()?.sabbat;return (FESTIVAL_LIGHT[f]||LIGHT)[key]||[1,1,1]}
 let lightNow=[1,1,1];
-function fadeLight(key){const from=lightNow,to=LIGHT[key]||[1,1,1],t0=performance.now();
+function fadeLight(to){const from=lightNow,t0=performance.now();
   cancelAnimationFrame(fadeLight.raf);
   const step=t=>{const k=Math.min(1,(t-t0)/LIGHT_FADE_MS),e=k*k*(3-2*k);  /* eased like the background */
     lightNow=from.map((v,i)=>+(v+(to[i]-v)*e).toFixed(3));
