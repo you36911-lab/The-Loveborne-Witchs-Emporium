@@ -13,7 +13,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
   if(b.dataset.tutskip){S.tutOff=true;render();return}
   switch(b.id){
-    case 'clearBtn':S.altar=[];S.candle='';S.tarot='';S.result=null;render();break;
     case 'testBtn':doCraft(true);break;
     case 'giveBtn':doCraft(false);break;
     case 'madeBtn':giveMade();break;
