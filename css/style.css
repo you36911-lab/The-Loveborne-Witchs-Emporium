@@ -903,4 +903,5 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
   font-family:var(--font-title);font-style:italic;font-weight:600;font-size:1.15em;color:var(--kw-text);cursor:pointer}
 .bookact:hover,.bookact:focus-visible{background:none;box-shadow:none;transform:none;color:var(--kw-dark);border-bottom-style:solid}
 .bookact:active{transform:none}
+.bookact .bkico{height:1.25em;width:auto;vertical-align:-.25em;margin-right:.35em}
 .bookact:disabled{color:var(--ink-soft);opacity:.55;border-bottom-color:transparent;cursor:default}
