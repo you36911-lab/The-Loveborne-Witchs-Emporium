@@ -94,9 +94,10 @@ const ASSETS = {
     'My notes':                 {cover:'', open:'assets/books/diary-open.png', paper:'#F4F7E6', page:[2,3.7,3.2], flags:[[0,1.95,3.55],[0,1.95,3.65]]}
   },
   /* Customers who stand behind the counter, by the name used in story.js.
-     Anyone not listed here (most walk-ins, Hester, Sam Okafor for now) is not drawn. */
+     Anyone not listed here (most walk-ins for now) is not drawn. */
   characters: {
     'Dottie Plum':               'assets/characters/dottie-plum.png',
+    'Hester':                    'assets/characters/hester.png',
     'Edmund Thorne':             'assets/characters/edmund-thorne.png',
     'Felix Marlow':              'assets/characters/felix-marlow.png',
     'Ivy Delacroix':             'assets/characters/ivy-delacroix.png',
@@ -104,6 +105,7 @@ const ASSETS = {
     'Morwenna Hale':             'assets/characters/morwenna-hale.png',
     'Noor Haddad':               'assets/characters/noor-haddad.png',
     'Rosalind Larkin':           'assets/characters/rosalind-larkin.png',
+    'Sam Okafor':                'assets/characters/sam-okafor.png',
     'Rosalind Larkin with children': 'assets/characters/rosalind-larkin-children.png',  /* a visit with "pic" in story.js uses its own picture */
     /* walk-ins, by how story.js names them (only pictures whose file was named for the person) */
     'An exhausted bookshop owner':            'assets/characters/exhausted-bookshop-owner.png',
