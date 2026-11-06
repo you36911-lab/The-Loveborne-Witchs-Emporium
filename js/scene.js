@@ -288,10 +288,29 @@ function adviceThought(v){const c=v.ask.cat;
   if(c==='Crystals')return 'A crystal that does just that… I’ve read about one somewhere.';
   if(c==='Herbs & flowers')return 'There’s a herb for that… it was in one of the books, wasn’t it?';
   return `Something from ${c.toLowerCase()} for that… I’ve seen it somewhere.`}
+/* On a festival's days the shop has its own pictures, lit differently (mist, snow, candles), so the mood line
+   describes that picture instead of the everyday one. */
+const FESTIVAL_MOOD={
+  Samhain:{Sunrise:'Mist hangs over the fallen leaves; the candles are still lit.',Noon:'Autumn light lies across the cloth, and leaves drift past the glass.',
+    Twilight:'The candles burn brighter as the day goes dim.',Nightfall:'Lanterns glow in the dark garden. The veil is thin tonight.'},
+  Yule:{Sunrise:'A pink winter dawn over the snow.',Noon:'Snow light fills the shop, pale and quiet.',
+    Twilight:'The snow turns lilac as the day goes.',Nightfall:'Snow falls in the dark; the sconces glow by the door.'},
+  Imbolc:{Sunrise:'Low gold sun streams in across the cloth.',Noon:'The snow outside is bright; snowdrops stand in the vases.',
+    Twilight:'Blue snow light, and the first candles lit.',Nightfall:'A cold blue night. Candles burn for the returning light.'},
+  Ostara:{Sunrise:'Pink dawn through the blossom.',Noon:'A clear spring sky, and blossom at every window.',
+    Twilight:'The blossom glows pink in the evening light.',Nightfall:'Fairy lights twinkle over the door; the garden sleeps.'},
+  Beltane:{Sunrise:'Soft morning light through the roses round the windows.',Noon:'The garden is green and gold, and the roses are open.',
+    Twilight:'Candles flicker among the flowers as the sky turns blue.',Nightfall:'Candlelight and roses. The May night is warm.'},
+  Litha:{Sunrise:'The longest day begins in gold.',Noon:'Midsummer sun on a meadow full of flowers.',
+    Twilight:'The light lingers; it barely wants to go.',Nightfall:'Every candle in the shop is lit for the short night.'},
+  Lughnasadh:{Sunrise:'Sunrise warms the clouds over the fields.',Noon:'The fields shine gold, ready for the harvest.',
+    Twilight:'A purple evening; the candles are lit beside the bread.',Nightfall:'A dark harvest night, warm with candlelight.'},
+  Mabon:{Sunrise:'Peach light over the orchard.',Noon:'A golden afternoon; the apples are in.',
+    Twilight:'The lanterns are lit as the evening cools.',Nightfall:'Lantern light and apples. The year is turning.'}};
 function moodLine(){const T=today(),h=HOURS[S.h];
   if(T.named&&h==='Nightfall')return `The ${T.named} fills the window.`;
-  const W={Sunrise:'Sun spills across the counter.',Noon:'The shop is warm and bright.',Twilight:'The light goes gold, then grey.',Nightfall:'Stars are coming out over the lane.'}[h];
-  return W+(T.sabbat?` It is ${T.sabbat}; the village is busy elsewhere.`:'')}
+  if(FESTIVAL_MOOD[T.sabbat])return FESTIVAL_MOOD[T.sabbat][h];
+  return {Sunrise:'Sun spills across the counter.',Noon:'The shop is warm and bright.',Twilight:'The light goes gold, then grey.',Nightfall:'Stars are coming out over the lane.'}[h]}
 function autoTick(){return;clearTimeout(autoT);const bar=$('#autoBar'),msg=$('#autoMsg'),stay=$('#stayBtn'),move=$('#moveBtn');
   const busy=$('#books').classList.contains('open')||$('#dayEnd').classList.contains('open');
   if(busy||currentVisitor()){bar.hidden=true;return}
