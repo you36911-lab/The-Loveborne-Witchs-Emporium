@@ -754,7 +754,8 @@ button.small{font-size:12px;padding:2px 10px}
 @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.88,1.08)}}
 /* the silver bell on the altar (assets/scene/altar-bell.png, 328×318): ringing it makes what is laid out. It glows a little
    when everything is ready; it rings (rocks) when struck, and gives a little shake when it can't make anything yet. */
-.bellslot{flex:0 0 5cqw;align-self:flex-end;margin-bottom:.6cqw;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transform-origin:50% 100%;
+.bellslot{flex:0 0 5cqw;align-self:flex-end;margin-bottom:.6cqw;margin-right:2.2cqw;  /* room for the card, whose top leans left */
+  padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transform-origin:50% 100%;
   filter:brightness(.88) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45));transition:filter .15s}
 .bellslot:hover{background:none;box-shadow:none}
 .bellslot img{display:block;width:100%;height:auto}
