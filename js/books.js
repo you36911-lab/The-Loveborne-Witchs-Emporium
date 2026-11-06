@@ -201,6 +201,8 @@ function placeIndex(){const bl=$('#books .wblank.open'),w=$('#books .windex');if
   pg=bl.closest('.pg,.leaf')?.getBoundingClientRect()||g,ww=w.offsetWidth,wh=w.offsetHeight;
   w.style.left=Math.max(0,Math.min(r.left-g.left,g.width-ww))+'px';
   const below=r.bottom+4+wh<=pg.bottom-8;w.style.top=(below?r.bottom-g.top+4:r.top-g.top-wh-4)+'px'}
+/* short words that never end a line in a recipe title (see recipeHTML) */
+const SMALL_WORDS=new Set(['a','an','the','of','to','in','on','at','for','and','by','with','from','your','my']);
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
 function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>[...a].sort().join('|')===[...b].sort().join('|');
   return same(n.ing.filter(Boolean),r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
@@ -219,9 +221,11 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
      actions are small one-colour icons on the title line (the tutorial says what they do): the altar bell lays out what is
      written here on the altar, the bottle test crafts it */
   const mk=String(S.target)===String(r.id);
-  /* the last word and the tick (or the solved star) stay together, so the tick never drops to a line of its own */
-  const words=r.name.split(' '),last=words.pop(),after=(lk?' ✦':'')+(mk?'<svg class="tick" viewBox="0 0 36 32" role="img" aria-label="chosen"><path fill="currentColor" d="M2.4 16.6c1.9-.4 4.3.9 6.4 3.3 1 1.1 1.7 2.2 2.4 3.1 3.3-6.4 8.4-12.9 15.6-18.4 1.9-1.4 3.9-2.7 5.9-3.6.6-.3 1 .4.5.8-6.3 4.8-11.6 11.3-15.3 18.5-.9 1.8-1.7 3.7-2.4 5.6-.5 1.4-1.9 1.9-2.9.9-1.3-1.5-2.3-3.3-3.6-5-1.6-2-3.6-3.6-6.4-4.1-.9-.2-1-1-.2-1.1z"/></svg>':'');
-  const titleHTML=(words.length?esc(words.join(' '))+' ':'')+`<span class="tickword${mk?' on':''}">${esc(last)}${after}</span>`;
+  /* line breaks in a title: a short word (the, a, of, to…) never ends a line, it stays with the word after it (so "Another
+     Orbit Around the Sun" breaks before "the Sun"); the last group and the tick (or the solved star) stay together too */
+  const groups=r.name.split(' ').reduce((g,w,i,A)=>{const prev=A[i-1];if(i&&SMALL_WORDS.has(prev.toLowerCase()))g[g.length-1]+=' '+w;else g.push(w);return g},[]),last=groups.pop(),after=(lk?' ✦':'')+(mk?'<svg class="tick" viewBox="0 0 36 32" role="img" aria-label="chosen"><path fill="currentColor" d="M2.4 16.6c1.9-.4 4.3.9 6.4 3.3 1 1.1 1.7 2.2 2.4 3.1 3.3-6.4 8.4-12.9 15.6-18.4 1.9-1.4 3.9-2.7 5.9-3.6.6-.3 1 .4.5.8-6.3 4.8-11.6 11.3-15.3 18.5-.9 1.8-1.7 3.7-2.4 5.6-.5 1.4-1.9 1.9-2.9.9-1.3-1.5-2.3-3.3-3.6-5-1.6-2-3.6-3.6-6.4-4.1-.9-.2-1-1-.2-1.1z"/></svg>':'');
+  const nb=s=>esc(s).replace(/ /g,' ');
+  const titleHTML=(groups.length?groups.map(nb).join(' ')+' ':'')+`<span class="tickword${mk?' on':''}">${nb(last)}${after}</span>`;
   const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" title="Lay out on the altar" aria-label="Lay out on the altar" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBell}" alt=""></button>${lk?'':`<button class="bookico" data-booktest="${r.id}" title="Test craft this" aria-label="Test craft this" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBottle}" alt=""></button>`}</span>`;
   const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
   const none='<span class="muted">none needed</span>';
