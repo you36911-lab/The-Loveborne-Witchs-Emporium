@@ -64,11 +64,11 @@ function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTim
   b1.type='bandpass';b1.frequency.value=1250;b1.Q.value=7;b2.type='bandpass';b2.frequency.value=2300;b2.Q.value=9;
   lfo.type='square';lfo.frequency.setValueAtTime(62,t);lfo.frequency.linearRampToValueAtTime(40,t+cr);lg.gain.value=.35;j.gain.value=.65;
   lfo.connect(lg).connect(j.gain);
-  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.8,t+.25);env.gain.setValueAtTime(.8,t+cr*.8);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
+  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.32,t+.25);env.gain.setValueAtTime(.32,t+cr*.8);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
   o.connect(b1).connect(mix);o.connect(b2).connect(mix);mix.connect(j).connect(env).connect(ctx.destination);
   o.start(t);vib.start(t);lfo.start(t);o.stop(t+cr+.02);vib.stop(t+cr+.02);lfo.stop(t+cr+.02);
   const f=ctx.createBufferSource(),fb=ctx.createBiquadFilter(),fg=ctx.createGain();f.buffer=noiseBuffer(ctx,cr);fb.type='bandpass';fb.frequency.value=1600;fb.Q.value=1.5;
-  fg.gain.setValueAtTime(0.0001,t);fg.gain.exponentialRampToValueAtTime(.05,t+.25);fg.gain.exponentialRampToValueAtTime(0.0001,t+cr);
+  fg.gain.setValueAtTime(0.0001,t);fg.gain.exponentialRampToValueAtTime(.025,t+.25);fg.gain.exponentialRampToValueAtTime(0.0001,t+cr);
   f.connect(fb).connect(fg).connect(ctx.destination);f.start(t);f.stop(t+cr);
   /* the "tak": the heavy door meeting its frame, a woody knock with some weight under it */
   const k=t+cr+.05;

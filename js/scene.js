@@ -35,6 +35,8 @@ function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
   /* a festival's first picture: load the other hours of it ahead too */
   if(!bgNow.includes(src.slice(0,src.lastIndexOf('-'))))HOURS.concat('Dawn').forEach(h=>{const im=new Image();im.src=bgSrc(h)});
   bgNow=src;fadeLight(lightFor(key));
+  /* the talk at the counter is more see-through the darker the room is (see .dialogue in style.css) */
+  {const L=lightFor(key),lum=.3*L[0]+.59*L[1]+.11*L[2];$('#counter').style.setProperty('--dlg-a',Math.max(.55,Math.min(.86,.86-(1-lum)*1.1)).toFixed(2))}
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
