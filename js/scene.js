@@ -86,12 +86,15 @@ function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('
   ball.classList.toggle('glowing',!!a);ball.dataset.aura=a?cur.aura:'';if(a)ball.style.setProperty('--aura-glow',a[0])}
 /* The customer stands behind the counter. Only people with a picture in ASSETS.characters are drawn; a visit can name
    its own picture (pic in story.js), as when Rosalind brings her children. */
-/* When someone comes in (the picture appears where nobody stood), the door is heard closing behind them; not when the
-   game is opened with a customer already there. */
-let customerOn=null;
-function renderCustomer(){const cur=currentVisit()||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
+/* When someone comes in, the door is heard closing behind them: when a picture appears where nobody stood, and when a
+   new customer takes the place of one still lingering at the counter (or of someone else). Not when the game is opened
+   with a customer already there, and not when the customer at the counter only finishes and lingers. */
+let customerWas=null;  /* who stood at the counter at the last redraw: {id, parting}, or false for nobody */
+function renderCustomer(){const live=currentVisit(),cur=live||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src);
-  if(src&&customerOn===false)playDoorClose();customerOn=!!src}
+  const now=src?{id:(cur.pic||'')+'|'+cur.who,parting:!live}:false;
+  if(now&&customerWas!==null&&(!customerWas||(live&&(customerWas.parting||customerWas.id!==now.id))))playDoorClose();
+  customerWas=now}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}

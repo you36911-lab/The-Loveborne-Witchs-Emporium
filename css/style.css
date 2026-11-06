@@ -27,8 +27,8 @@
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
 /* Fonts: --font-text (Nunito, soft and round) for reading, and, set bolder, for buttons, tabs and labels (--font-deco);
    --font-title (Cormorant Garamond, an elegant serif) for titles and names; --font-script (Great Vibes) only for the
-   day's name at dawn. */
-:root{--font-text:'Nunito','Trebuchet MS',sans-serif;--font-title:'Cormorant Garamond',Georgia,serif;--font-script:'Great Vibes',cursive;--font-deco:var(--font-text)}
+   day's name at dawn; --font-shop (Fredoka, chunky and round) for the computer's My Shop app. */
+:root{--font-text:'Nunito','Trebuchet MS',sans-serif;--font-title:'Cormorant Garamond',Georgia,serif;--font-script:'Great Vibes',cursive;--font-deco:var(--font-text);--font-shop:'Fredoka',var(--font-text)}
 body{margin:0;min-height:100%;color:var(--ink);font-family:var(--font-text);font-size:15px;line-height:1.55;background-color:#9C97CF;
   /* tiny stars over the twilight sky */
   background-image:radial-gradient(1.2px 1.2px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 68% 9%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 32%,#fff8,transparent),
@@ -832,15 +832,15 @@ button.small{font-size:12px;padding:2px 10px}
 .sh-side{border-right:1px solid var(--line);background:var(--paper);padding:16px 12px;display:flex;flex-direction:column;min-height:0;overflow:hidden}  /* the logo and rating stay put; only the days scroll */
 .sh-brand{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--line)}
 .sh-brand img{width:64px;height:auto}
-.sh-brand b{font-family:var(--font-title);font-size:18px;line-height:1.15;color:var(--ink)}
+.sh-brand b{font-family:var(--font-shop);font-weight:600;font-size:18px;line-height:1.15;color:var(--ink)}
 .sh-rating{text-align:center;padding-bottom:14px;margin-bottom:10px;border-bottom:1px solid var(--line)}
-.sh-big{font-family:var(--font-title);font-size:46px;font-weight:700;line-height:1;color:var(--ink)}
+.sh-big{font-family:var(--font-shop);font-size:46px;font-weight:600;line-height:1;color:var(--ink)}
 .sh-stars{color:var(--pink);font-size:22px;letter-spacing:2px;margin:4px 0}
 .sh-days{display:flex;flex-direction:column;gap:3px;flex:1;min-height:0;overflow:auto}
 .sh-days button{display:flex;justify-content:space-between;border:0;border-radius:18px;background:none;box-shadow:none;text-align:left}
 .sh-days button[aria-pressed="true"]{background:var(--pink-soft);color:var(--kw-text);font-weight:700}
 .sh-list{overflow:auto;padding:6px 22px 22px}
-.sh-day{margin:18px 0 8px;font-family:var(--font-title)}
+.sh-day{margin:18px 0 8px;font-family:var(--font-shop);font-weight:600}
 .sh-day .muted{font-family:var(--font-text);font-size:14px;font-weight:400}
 .sh-empty{margin-top:40px;text-align:center}
 .rv{border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;background:var(--card);box-shadow:0 1px 4px rgba(51,33,58,.06)}
