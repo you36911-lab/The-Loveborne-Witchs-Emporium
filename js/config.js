@@ -46,6 +46,10 @@ const ASSETS = {
     Twilight:  'assets/scene/bg-twilight.jpg',   /* evening */
     Nightfall: 'assets/scene/bg-nightfall.jpg'   /* night, no moon */
   },
+  /* On a festival's days the shop is dressed for it: the same five pictures for each festival,
+     assets/scene/festivals/<festival>-<hour>.jpg, e.g. samhain-dawn.jpg, yule-nightfall.jpg. */
+  festivalBackground: (festival, hour) => `assets/scene/festivals/${festival.toLowerCase()}-${hour.toLowerCase()}.jpg`,
+  festivals: ['Samhain','Yule','Imbolc','Ostara','Beltane','Litha','Lughnasadh','Mabon'],
   /* The workroom below the counter: shelves either side (Kitchen left, Cabinet right) and the altar table in front. */
   altarRoom: 'assets/scene/altar-room.jpg',
   /* the walls past the picture on a wide window: the same room drawn empty, enlarged around its vanishing point (1376, 732 on the

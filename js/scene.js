@@ -27,12 +27,15 @@ function buildScene(){
 let view='shop';
 function goTo(v){view=v;$('#world').classList.toggle('down',v==='altar');$('#shopView').inert=v!=='shop';$('#altarView').inert=v!=='altar'}
 function setView(v){goTo(v);render()}
-/* Backgrounds: one picture per hour, plus dawn before the shop opens. Two layers cross-fade.
-   The workroom below has its own picture (ASSETS.altarRoom). */
+/* Backgrounds: one picture per hour, plus dawn before the shop opens; on a festival's days, that festival's own
+   pictures. Two layers cross-fade. The workroom below has its own picture (ASSETS.altarRoom). */
 let bgNow='',bgTop='bgA',dawnUntil=0;
-function setBackground(key){if(key===bgNow)return;bgNow=key;
-  fadeLight(key);
-  const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${ASSETS.backgrounds[key]}")`;
+function bgSrc(key){const f=today()?.sabbat;return ASSETS.festivals.includes(f)?ASSETS.festivalBackground(f,key):ASSETS.backgrounds[key]}
+function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
+  /* a festival's first picture: load the other hours of it ahead too */
+  if(!bgNow.includes(src.slice(0,src.lastIndexOf('-'))))HOURS.concat('Dawn').forEach(h=>{const im=new Image();im.src=bgSrc(h)});
+  bgNow=src;fadeLight(key);
+  const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
