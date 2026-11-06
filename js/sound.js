@@ -80,10 +80,15 @@ function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTim
   const l=k+.05,c=ctx.createBufferSource(),cb=ctx.createBiquadFilter(),cg=ctx.createGain();c.buffer=noiseBuffer(ctx,.015);
   cb.type='bandpass';cb.frequency.value=4200;cb.Q.value=4;cg.gain.setValueAtTime(.12,l);cg.gain.exponentialRampToValueAtTime(0.0001,l+.015);
   c.connect(cb).connect(cg).connect(ctx.destination);c.start(l)}
-/* Something new on the computer (an email, the night's reviews): the soft two-note "di-ring" of a notification, the second
-   note higher. Round tones with a little sparkle on top. */
+/* Something new on the computer (an email, the night's reviews): a bright, glassy "ti-ring!". A short high "ti", then a
+   higher "ring" that rings out, made of two tones a few Hz apart so it shimmers, with a faint sparkle above. */
+function chimeNote(ctx,at,f,dur,vol,shimmer){
+  [[1,1,dur],[2,.28,dur*.45],[3,.08,.12]].forEach(([r,v,dec])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f*r;
+    g.gain.setValueAtTime(0.0001,at);g.gain.exponentialRampToValueAtTime(vol*v,at+.004);g.gain.exponentialRampToValueAtTime(0.0001,at+dec);
+    o.connect(g).connect(ctx.destination);o.start(at);o.stop(at+dec+.05)});
+  if(shimmer){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=f+shimmer;
+    g.gain.setValueAtTime(0.0001,at);g.gain.exponentialRampToValueAtTime(vol*.45,at+.006);g.gain.exponentialRampToValueAtTime(0.0001,at+dur*.9);
+    o.connect(g).connect(ctx.destination);o.start(at);o.stop(at+dur)}}
 function playNotify(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
-  [[1318.5,0],[1975.5,.13]].forEach(([f,d])=>{const at=t+d;
-    [[1,'triangle',.11,.6],[2,'sine',.025,.25]].forEach(([r,type,v,dec])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=f*r;
-      g.gain.setValueAtTime(0.0001,at);g.gain.exponentialRampToValueAtTime(v,at+.008);g.gain.exponentialRampToValueAtTime(0.0001,at+dec);
-      o.connect(g).connect(ctx.destination);o.start(at);o.stop(at+dec+.05)})})}
+  chimeNote(ctx,t,1568,.32,.11,0);           /* ti (G6), short */
+  chimeNote(ctx,t+.1,2093,1.1,.11,4)}         /* ring (C7), ringing out */

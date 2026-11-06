@@ -110,15 +110,15 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene{--light:url(#light)}
 .scene .obj img,.scene .customer img{filter:var(--light)}
 .daycard{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);z-index:8;text-align:center;color:#fff;
-  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(36px,5.6vw,76px);line-height:1;letter-spacing:.01em;
+  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(42px,6.6vw,92px);line-height:1;letter-spacing:.01em;
   text-shadow:0 1px 2px rgba(40,10,50,.55),0 3px 18px rgba(40,10,50,.6);pointer-events:none;white-space:nowrap;
   opacity:0;transition:opacity .6s ease}
 /* the title between two thin pink rules, each ending in a small diamond toward the words */
 .daycard .dc-title{display:inline-flex;align-items:center;gap:.4em}
-.daycard .dc-rule{display:inline-block;width:1.6em;height:1px;background:linear-gradient(90deg,transparent,#F4ADCF);position:relative;box-shadow:0 1px 3px rgba(40,10,50,.5)}
+.daycard .dc-rule{display:inline-block;width:1.6em;height:2px;background:linear-gradient(90deg,transparent,#F4ADCF);position:relative;box-shadow:0 1px 3px rgba(40,10,50,.5)}
 .daycard .dc-rule:last-child{background:linear-gradient(90deg,#F4ADCF,transparent)}
-.daycard .dc-rule::after{content:'';position:absolute;top:-2.5px;width:6px;height:6px;background:#F4ADCF;transform:rotate(45deg);right:-3px}
-.daycard .dc-rule:last-child::after{right:auto;left:-3px}
+.daycard .dc-rule::after{content:'';position:absolute;top:-3px;width:8px;height:8px;background:#F4ADCF;transform:rotate(45deg);right:-4px}
+.daycard .dc-rule:last-child::after{right:auto;left:-4px}
 .daycard small{display:block;margin-top:.55em;font-family:var(--font-text);font-style:normal;font-weight:700;font-size:.24em;letter-spacing:.28em;text-transform:uppercase;opacity:.92}
 .daycard.on{opacity:1}
 /* The customer stands behind the counter: the box ends at the counter's top edge, so everything
