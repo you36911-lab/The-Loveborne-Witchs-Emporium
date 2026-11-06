@@ -214,10 +214,10 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
   const none='<span class="muted">none needed</span>';
   return `<div class="recipe ${lk?'locked':''}"><h3 style="margin-top:0">${esc(r.name)}${lk?' ✦':''}</h3><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
-  <div class="rbody"><div class="wrow"><b>Themes:</b> ${r.themes.map(t=>kw(t)).join(', ')}</div>
-  <div class="wgroup"><div class="wrow"><b>Ingredients:</b> ${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</div>${ingList}</div>
-  <div class="wgroup"><div class="wrow"><b>Candle:</b> ${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none} <b>Card:</b> ${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</div>${ccList}</div>
-  <div class="wgroup"><div class="wrow"><b>When:</b> ${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</div>${whenList}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:.85em">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>
+  <div class="rbody"><div class="wrow"><b>Themes:</b><span class="wvals plain">${r.themes.map(t=>kw(t)).join(', ')}</span></div>
+  <div class="wgroup"><div class="wrow"><b>Ingredients:</b><span class="wvals">${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</span></div>${ingList}</div>
+  <div class="wgroup"><div class="wrow"><b>Candle:</b><span class="wvals">${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none}<span class="wpair"><b class="inl">Card:</b> ${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</span></span></div>${ccList}</div>
+  <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:.85em">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>
   <div class="row" style="margin-top:6px"><button data-layout="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Lay out on altar</button>${lk?'':`<button class="main" data-booktest="${r.id}" ${n.ing.some(Boolean)?'':'disabled'}>Test craft this</button>`}</div></div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   /* a click anywhere else folds an open index away */

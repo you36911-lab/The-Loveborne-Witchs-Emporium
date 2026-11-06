@@ -248,8 +248,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* Recipe blanks are ruled lines in the book. Tapping one unfolds a short text index of what can go there, each with
    the keywords the player has for it in the books; what is chosen is written in by hand. */
 /* the headings of a recipe (Themes, Ingredients, Candle, Card, When) in the book's serif; what follows them in the reading font */
-.recipe .rbody{display:flex;flex-direction:column;gap:.55em}
-.recipe .wrow{display:flex;flex-wrap:wrap;align-items:baseline;gap:.25em .7em}
+.recipe .rbody{display:flex;flex-direction:column;gap:.4em}
+/* every row: a fixed column for its heading, then its slots, which wrap under the first slot (not under the heading) */
+.pbody .recipe .rbody,.pbody .recipe .rbody div{line-height:1.75}
+.recipe .wrow{display:grid;grid-template-columns:5.6em 1fr;align-items:baseline;column-gap:.4em}
+.recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
+.recipe .wvals{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1em .8em}
+.recipe .wvals.plain{display:block}
+.recipe .wrow b.inl{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink);margin-left:.6em}
 .recipe .wrow>b{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink)}
 .wblank{display:inline-flex;align-items:baseline;gap:6px;background:none;border:0;box-shadow:none;padding:2px 2px 0;border-radius:0;
   font-family:var(--font-text);font-style:italic;font-size:.9em;color:var(--ink-soft);cursor:pointer}
