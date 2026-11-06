@@ -56,7 +56,7 @@ A cozy witch-shop deduction game. Customers describe a need (never the recipe na
   - A missing ingredient is described by its shelf and **look** ("Picture it: green, jagged and a little hairy").
   - A theme is only called missing if nothing in the mix brings it.
   - A wrong or missing card gets the right card's blended feel, without naming keywords ("feels like a still mind that knows what is real without being told").
-- Waters (Moonwater, Rainwater, Snow Water and the rest) are ordinary ingredients, always on the shelf; nothing is gathered. Sea Water too: nothing is counted (Morwenna no longer brings a bottle).
+- Waters (Moonwater, Rainwater, Snow Water and the rest) are ordinary ingredients, always on the shelf; nothing is gathered. Sea Water too: nothing is counted. Morwenna no longer brings a bottle, and nothing says she does: Hester's letter now says every bottle stays full, the sea included, and Morwenna sets down her lantern instead.
 
 ## Books and words
 
