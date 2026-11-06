@@ -54,7 +54,7 @@ const ASSETS = {
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
   logo: 'assets/scene/logo.png',  /* the shop's winged heart: the tab icon */
-  logoFlat: 'assets/scene/logo-flat.svg',  /* the same winged heart redrawn flat in the game's pinks, for the My Shop app */
+  logoFlat: 'assets/scene/logo-flat.png',  /* the same picture, its shading flattened to three flat pinks (deep, mid, light), for the My Shop app */
   pcWallpaper: 'assets/scene/desktop-background.jpg',  /* the computer's desktop */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
