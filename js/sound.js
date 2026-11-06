@@ -51,40 +51,14 @@ function playReceiptPrint(n){const ctx=audio();if(!ctx)return;let t=ctx.currentT
     s.connect(bp).connect(sg).connect(ctx.destination);s.start(t);lfo.start(t);s.stop(t+len);lfo.stop(t+len);
     t+=len+.06+Math.random()*.04}
   breath(ctx,t+.12,.16,1800,5000,.9,.16,.3)}  /* the slip torn off: a quick rising rip */
-/* A customer comes in: the shop's old door swings shut behind them, "kkiiiiik... tak". The hinge lets out a long,
-   drawn-out squeal, like a chair dragged across a wooden floor, then the door meets its frame with a weighty wooden
-   knock and the latch clicks. */
-function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02,cr=1.25;
-  /* the squeal: a reedy tone whose pitch slides up and settles, wavering a little, roughened by fast stick-slip pulses
-     (the grain of wood dragging on wood), sung through two narrow resonances; a breath of scraping friction under it */
-  const o=ctx.createOscillator(),vib=ctx.createOscillator(),vg=ctx.createGain(),b1=ctx.createBiquadFilter(),b2=ctx.createBiquadFilter(),
-    mix=ctx.createGain(),j=ctx.createGain(),lfo=ctx.createOscillator(),lg=ctx.createGain(),env=ctx.createGain();
-  o.type='sawtooth';o.frequency.setValueAtTime(390,t);o.frequency.linearRampToValueAtTime(540,t+cr*.35);o.frequency.linearRampToValueAtTime(500,t+cr*.7);o.frequency.linearRampToValueAtTime(440,t+cr);
-  vib.frequency.value=5.5;vg.gain.value=14;vib.connect(vg).connect(o.frequency);
-  b1.type='bandpass';b1.frequency.value=1250;b1.Q.value=7;b2.type='bandpass';b2.frequency.value=2300;b2.Q.value=9;
-  lfo.type='square';lfo.frequency.setValueAtTime(62,t);lfo.frequency.linearRampToValueAtTime(40,t+cr);lg.gain.value=.35;j.gain.value=.65;
-  lfo.connect(lg).connect(j.gain);
-  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.32,t+.25);env.gain.setValueAtTime(.32,t+cr*.8);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
-  o.connect(b1).connect(mix);o.connect(b2).connect(mix);mix.connect(j).connect(env).connect(ctx.destination);
-  o.start(t);vib.start(t);lfo.start(t);o.stop(t+cr+.02);vib.stop(t+cr+.02);lfo.stop(t+cr+.02);
-  const f=ctx.createBufferSource(),fb=ctx.createBiquadFilter(),fg=ctx.createGain();f.buffer=noiseBuffer(ctx,cr);fb.type='bandpass';fb.frequency.value=1600;fb.Q.value=1.5;
-  fg.gain.setValueAtTime(0.0001,t);fg.gain.exponentialRampToValueAtTime(.025,t+.25);fg.gain.exponentialRampToValueAtTime(0.0001,t+cr);
-  f.connect(fb).connect(fg).connect(ctx.destination);f.start(t);f.stop(t+cr);
-  /* the "tak": the heavy door meeting its frame, a woody knock with some weight under it */
-  const k=t+cr+.05;
-  const n=ctx.createBufferSource(),nb=ctx.createBiquadFilter(),ng=ctx.createGain();n.buffer=noiseBuffer(ctx,.05);
-  nb.type='bandpass';nb.frequency.value=950;nb.Q.value=1.1;ng.gain.setValueAtTime(.3,k);ng.gain.exponentialRampToValueAtTime(0.0001,k+.045);
-  n.connect(nb).connect(ng).connect(ctx.destination);n.start(k);
-  const w=ctx.createOscillator(),wg=ctx.createGain();w.type='triangle';w.frequency.setValueAtTime(300,k);w.frequency.exponentialRampToValueAtTime(170,k+.08);
-  wg.gain.setValueAtTime(0.0001,k);wg.gain.exponentialRampToValueAtTime(.22,k+.003);wg.gain.exponentialRampToValueAtTime(0.0001,k+.08);
-  w.connect(wg).connect(ctx.destination);w.start(k);w.stop(k+.1);
-  const lo=ctx.createOscillator(),log=ctx.createGain();lo.frequency.setValueAtTime(85,k);lo.frequency.exponentialRampToValueAtTime(55,k+.12);
-  log.gain.setValueAtTime(0.0001,k);log.gain.exponentialRampToValueAtTime(.2,k+.005);log.gain.exponentialRampToValueAtTime(0.0001,k+.18);
-  lo.connect(log).connect(ctx.destination);lo.start(k);lo.stop(k+.12);
-  /* the latch: one small metal click just after */
-  const l=k+.05,c=ctx.createBufferSource(),cb=ctx.createBiquadFilter(),cg=ctx.createGain();c.buffer=noiseBuffer(ctx,.015);
-  cb.type='bandpass';cb.frequency.value=4200;cb.Q.value=4;cg.gain.setValueAtTime(.12,l);cg.gain.exponentialRampToValueAtTime(0.0001,l+.015);
-  c.connect(cb).connect(cg).connect(ctx.destination);c.start(l)}
+/* Recorded sounds (assets/sounds, from Pixabay under the Pixabay Content License). Played with plain audio elements, so
+   they also work when the game is opened straight from the file. Each is loaded once and copied to play, so two can
+   overlap. */
+const SFX_CACHE={};
+function sfx(name,vol){try{const base=SFX_CACHE[name]||(SFX_CACHE[name]=new Audio(ASSETS.sounds[name]));const a=base.cloneNode();a.volume=vol;a.play().catch(()=>{})}catch(e){}}
+/* A customer comes in: the shop's old door creaks open and swings shut behind them. "Creaking Door 03" (Universfield),
+   then "Close Door" (DRAGON-STUDIO) as the creak fades. Both turned down to sit with the bells. */
+function playDoorClose(){sfx('doorCreak',.6);setTimeout(()=>sfx('doorClose',.55),1150)}
 /* Something new on the computer (an email, the night's reviews): a soft, clear "ti-ring", like a small glass bell.
    Two pure tones a fifth apart (C6, then G6), each with only a whisper of its octave above, a gentle start rather than a
    click, and a lowpass to take off any edge. The second rings a little longer, with a faint twin a couple of Hz off so it

@@ -36,7 +36,7 @@ function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
   if(!bgNow.includes(src.slice(0,src.lastIndexOf('-'))))HOURS.concat('Dawn').forEach(h=>{const im=new Image();im.src=bgSrc(h)});
   bgNow=src;fadeLight(lightFor(key));
   /* the talk at the counter is more see-through the darker the room is (see .dialogue in style.css) */
-  {const L=lightFor(key),lum=.3*L[0]+.59*L[1]+.11*L[2];$('#counter').style.setProperty('--dlg-a',Math.max(.76,Math.min(.92,.92-(1-lum)*.6)).toFixed(2))}
+  {const L=lightFor(key),lum=.3*L[0]+.59*L[1]+.11*L[2];$('#counter').style.setProperty('--dlg-a',Math.max(.88,Math.min(.96,.96-(1-lum)*.3)).toFixed(2))}
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   {const br=BG_BRIGHTER[today()?.sabbat+'|'+key];$('#'+next).style.filter=br?`brightness(${br})`:''}
   const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;

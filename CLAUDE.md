@@ -27,7 +27,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/data/story.js`: customer visits, post letters, auras, starting stock.
 - `js/core.js`: save state, helpers, letters and post, calendar conditions.
 - `js/crafting.js`: comparing the altar with a recipe; clue lines.
-- `js/sound.js`: sounds, made in code with Web Audio (no sound files yet): a candle blown out, the shop bell, the altar's desk bell, the receipts printing, the door closing as a customer comes in, the computer's notification chime.
+- `js/sound.js`: sounds. Most are made in code with Web Audio (a candle blown out, the shop bell, the altar's desk bell, the receipts printing, the computer's notification chime); the door as a customer comes in is two recordings in `assets/sounds` (Pixabay, Pixabay Content License).
 - `js/visitors.js`: who is at the counter.
 - `js/scene.js`: rendering, the shop scene, hour backgrounds and the dawn card.
 - `js/actions.js`: clicks, the bell, giving orders, the end of the day.
@@ -38,7 +38,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/main.js`: starts the game.
 
 Scripts are plain (no modules) and load in the order listed in `index.html`, so the game
-also runs by opening `index.html` directly, without a server. Images live in `assets/` (scene, characters, items, books).
+also runs by opening `index.html` directly, without a server. Images live in `assets/` (scene, characters, items, books); recorded sounds in `assets/sounds`.
 
 ## Engine decision
 
