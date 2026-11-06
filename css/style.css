@@ -909,7 +909,7 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 
 /* The recipe's two actions sit on its title line, at the right: small one-colour icons (the altar bell: make this and lay
    it out; the bottle: test craft it). A long title wraps beside them rather than running under them. */
-.recipe .rtitle{display:flex;align-items:flex-start;gap:.6em}
+.recipe .rtitle{display:flex;align-items:flex-start;gap:.35em}
 .recipe .rtitle h3{flex:1;min-width:0;margin-top:0}
 /* the title is the switch for "what I am making": plain until hovered; a handwritten tick beside it once chosen */
 .pg .rpick,.leaf .rpick,.rpick{all:unset;cursor:pointer;font:inherit;color:inherit}
@@ -917,10 +917,10 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .recipe .tickword{white-space:nowrap;position:relative}
 /* the tick sits just after the last word, in a small space every title keeps at its end (chosen or not) plus the gap
    before the icons, so choosing a recipe never changes how its title wraps or moves the page */
-.recipe .rtitle h3{padding-right:.5em}
-.recipe .tick{position:absolute;left:calc(100% + .15em);bottom:.12em;width:1.05em;height:.95em;color:var(--kw);rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
-.bookicons{flex:none;display:flex;gap:.35em;padding-top:.15em}
-.pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:.15em;border-radius:6px;line-height:0;cursor:pointer}
+.recipe .rtitle h3{padding-right:.45em}
+.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:var(--kw);rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
+.bookicons{flex:none;display:flex;gap:.3em;padding-top:.3em}
+.pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:0;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
 .bookico:hover,.bookico:focus-visible{background:none;box-shadow:none}
 .bookico:hover img,.bookico:focus-visible img{transform:scale(1.12)}
