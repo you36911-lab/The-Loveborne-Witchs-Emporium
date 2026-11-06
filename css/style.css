@@ -909,7 +909,7 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 /* The counter's talk (balloon, the buttons under it, the advice box, the tutorial note) lets the room show through:
    --dlg-a is how solid it is, set from the room's light each hour (solid-ish at noon, more see-through at night and on
    the darker festival pictures), so it never glows brighter than the scene around it. */
-.dialogue{--dlg-a:.96}
+.dialogue{--dlg-a:1}
 .dialogue .balloon,.dialogue.plain{background:color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent)}
 .dialogue .balloon::after{border-color:transparent color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent) transparent transparent}
 .dialogue button:not(.main):not(.dclose):not(.tutskip):not(.kw),.dialogue input,.dialogue select{background:color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent)}
