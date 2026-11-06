@@ -14,6 +14,8 @@
 <!-- Lighting for the shop scene: red, green, blue multipliers, faded from hour to hour by fadeLight() in scene.js. See style.css. -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <filter id="light" color-interpolation-filters="sRGB"><feColorMatrix id="lightMatrix" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/></filter>
+  <!-- ink: roughens an edge a little and softens it, so a drawn mark looks written with a pen on paper (the Recipe Book tick) -->
+  <filter id="ink" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/><feGaussianBlur in="d" stdDeviation=".35"/></filter>
 </svg>
 <!-- Two full-screen views stacked like two floors: the shop counter on top, the altar (a cabinet either side) below.
      The arrows slide the whole world up or down. -->
