@@ -752,6 +752,18 @@ button.small{font-size:12px;padding:2px 10px}
   background:radial-gradient(circle at 50% 70%,#FFF8D6,#FFC24A 55%,rgba(255,140,40,0) 72%);transform-origin:50% 100%}
 @media (prefers-reduced-motion:no-preference){.candle::before{animation:flicker 1.6s ease-in-out infinite alternate}}
 @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.88,1.08)}}
+/* the silver bell on the altar (assets/scene/altar-bell.png, 328×318): ringing it makes what is laid out. It glows a little
+   when everything is ready; it rings (rocks) when struck, and gives a little shake when it can't make anything yet. */
+.bellslot{flex:0 0 5cqw;align-self:flex-end;margin-bottom:.6cqw;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;transform-origin:50% 100%;
+  filter:brightness(.88) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45));transition:filter .15s}
+.bellslot:hover{background:none;box-shadow:none}
+.bellslot img{display:block;width:100%;height:auto}
+.bellslot.ready{filter:brightness(.92) drop-shadow(0 0 .25cqw #FFD6F0) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
+.bellslot:hover,.bellslot:focus-visible{filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45));outline:none}
+.bellslot:active{transform:none}
+.bellslot.ring{animation:ring .65s ease-out}
+.bellslot.nope{animation:nope .4s}
+@media (prefers-reduced-motion: reduce){.bellslot.ring{animation:none}}
 /* the black candelabra (assets/candles/test-candles-N.png, 470×651) stands on the altar right of the tarot card,
    dimmed a little to the room's light, like the books and the candle stand */
 .testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:0;cursor:help;

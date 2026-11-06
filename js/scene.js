@@ -13,6 +13,7 @@ const STACK=[['Recipe Book','book-recipe-book',79,0,528],['Book of Making','book
   ['Crystal Almanac','book-crystal-almanac',19,431,637],['Herbiary','book-herbiary',32,509,614]];
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
+  $('#craftBell img').src=ASSETS.altarBell;
   const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
   $('#bookStack').innerHTML=$('#altarBooks').innerHTML=stack;
   /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
@@ -99,6 +100,8 @@ function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),
   candlesFails=f;
   box.title=`${lit} of 5 candles lit. Every test craft that isn't perfect puts one out; when all five are out, it costs a one-star review.`;
   box.setAttribute('aria-label',`Test crafts: ${lit} of 5 candles lit`)}
+/* the recipe the customer at the counter has asked for, while their order is open; otherwise null */
+function orderRecipe(){const q=currentVisitor();return q&&q.type==='new'&&S.activeNow===q.key?D.recipes[visitByKey(q.key).rid]:null}
 /* There is no top bar: the date is on the computer's taskbar and the rating in its Shop app. */
 function renderTop(){renderBadge();renderCandles();if($('#pc').classList.contains('open'))renderPCBar()}
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
@@ -160,8 +163,7 @@ function shelfItemsHTML(c){
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
-  const q=currentVisitor();let orderR=null;
-  if(q&&q.type==='new'&&S.activeNow===q.key)orderR=D.recipes[visitByKey(q.key).rid];
+  const orderR=orderRecipe();
   const sel=$('#target');const rs=knownRecipes();
   /* choose the spell type first, then a recipe of that type (names only, no numbers) */
   if(S.target&&D.recipes[S.target])S.ttype=D.recipes[S.target].type;
@@ -179,8 +181,7 @@ function renderAltar(){
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
     :'<button class="ontable laid" data-shelf="Tarot" title="Choose a tarot card" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
-  $('#testBtn').disabled=!S.altar.length||!S.target;$('#testBtn').textContent='Test craft';
-  $('#giveBtn').disabled=!orderR||!S.altar.length||!S.target;
+  $('#craftBell').classList.toggle('ready',!!(orderR&&S.altar.length&&S.target));
   const res=$('#result');
   if(S.result){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;
 }
@@ -189,7 +190,7 @@ function renderAltar(){
 function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
   return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
-  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft as often as you like. When it is right, press <b>Make it</b>.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
+  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>Take the arrow down to the altar. Choose the recipe, then lay out what it needs, its candle and its card.</li><li>Test craft from the Recipe Book as often as you like (<b>Test craft this</b>). When it is right, ring the <b>silver bell</b> on the altar to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};
 /* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
    Nobody is labelled: who they are comes out in what they say and do. */

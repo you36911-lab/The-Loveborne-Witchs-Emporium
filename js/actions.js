@@ -13,8 +13,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
   if(b.dataset.tutskip){S.tutOff=true;render();return}
   switch(b.id){
-    case 'testBtn':doCraft(true);break;
-    case 'giveBtn':doCraft(false);break;
+    case 'craftBell':ringAltarBell();break;
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
@@ -109,6 +108,15 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     S.altar=[];S.candle='';S.tarot='';setView('shop');return}
   if(!test){S.altar=[];S.candle='';S.tarot=''}  /* a test craft leaves the altar laid out */
   render()}
+/* The silver bell on the altar makes what is laid out, for the customer at the counter. (Test crafts are made from the
+   Recipe Book only.) If it can't be made yet, the bell gives a little shake and says why. It rings out before the view goes
+   up to the counter, so it is seen and heard. */
+let bellBusy=false;
+function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
+  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose the recipe you are making first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
+  if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');toast(why);return}
+  b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playBell();bellBusy=true;
+  setTimeout(()=>{bellBusy=false;doCraft(false)},650)}
 /* Hand over what was made: the grade was settled when it was made. */
 function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
   {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
