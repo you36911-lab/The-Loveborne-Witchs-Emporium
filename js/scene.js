@@ -55,7 +55,7 @@ const LIGHT={Dawn:[.88,.88,1.02],Sunrise:[1,.93,.91],Twilight:[.95,.85,.88],Nigh
    the same way: the tablecloth and shelves at each hour against that festival's Noon for the colour, and that festival's
    Noon against the everyday Noon for how bright the room is. Red, green, blue. */
 const FESTIVAL_LIGHT={
-  Samhain:   {Dawn:[.65,.59,.6], Sunrise:[.7,.64,.64], Noon:[.75,.75,.75],Twilight:[.74,.65,.63], Nightfall:[.62,.52,.5]},
+  Samhain:   {Dawn:[.7,.63,.64], Sunrise:[.75,.68,.68], Noon:[.8,.8,.8],   Twilight:[.79,.7,.67], Nightfall:[.66,.56,.54]},
   Yule:      {Dawn:[.78,.77,.78],Sunrise:[.76,.73,.75],Noon:[.76,.76,.76],Twilight:[.75,.72,.77],Nightfall:[.53,.54,.62]},
   Imbolc:    {Dawn:[.85,.85,.83],Sunrise:[.99,.92,.69],Noon:[.73,.73,.73],Twilight:[.64,.67,.72],Nightfall:[.65,.64,.66]},
   Ostara:    {Dawn:[1.06,1,.99], Sunrise:[1.07,1.05,1.06],Noon:[1.09,1.09,1.09],Twilight:[.81,.77,.84],Nightfall:[.95,.87,.8]},
