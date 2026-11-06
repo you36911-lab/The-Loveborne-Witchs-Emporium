@@ -72,6 +72,7 @@ const ASSETS = {
   testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
   objects: {
     'crystal-ball': 'assets/scene/crystal-ball.png',
+    'crystal-ball-swirl': 'assets/scene/crystal-ball-swirl.png',  /* the ball as drawn, swirl and all: shown while an aura colours it */
     'till':         'assets/scene/till.png',
     'notebook':     'assets/scene/notebook.png',
     'bell':         'assets/scene/bell.png',
