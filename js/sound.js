@@ -51,20 +51,25 @@ function playReceiptPrint(n){const ctx=audio();if(!ctx)return;let t=ctx.currentT
     s.connect(bp).connect(sg).connect(ctx.destination);s.start(t);lfo.start(t);s.stop(t+len);lfo.stop(t+len);
     t+=len+.06+Math.random()*.04}
   breath(ctx,t+.12,.16,1800,5000,.9,.16,.3)}  /* the slip torn off: a quick rising rip */
-/* A customer comes in: the shop's heavy old door swings shut behind them, "kkiiik... tak". The hinge groans low and
-   slow, then the door meets its frame with a weighty wooden knock and the latch clicks. */
-function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02,cr=1.05;
-  /* the creak of a heavy old door: a low, slow groan of the hinge, its pitch rising a little then sagging, made of slow
-     stick-slip pulses (a judder of about a dozen a second, slowing as it swings) */
-  const o=ctx.createOscillator(),b1=ctx.createBiquadFilter(),b2=ctx.createBiquadFilter(),mix=ctx.createGain(),j=ctx.createGain(),
-    lfo=ctx.createOscillator(),lg=ctx.createGain(),env=ctx.createGain(),lp=ctx.createBiquadFilter();
-  o.type='sawtooth';o.frequency.setValueAtTime(150,t);o.frequency.linearRampToValueAtTime(205,t+cr*.4);o.frequency.linearRampToValueAtTime(165,t+cr);
-  b1.type='bandpass';b1.frequency.value=620;b1.Q.value=4;b2.type='bandpass';b2.frequency.value=1150;b2.Q.value=5;lp.type='lowpass';lp.frequency.value=1800;
-  lfo.type='square';lfo.frequency.setValueAtTime(14,t);lfo.frequency.linearRampToValueAtTime(8,t+cr);lg.gain.value=.5;j.gain.value=.5;
+/* A customer comes in: the shop's old door swings shut behind them, "kkiiiiik... tak". The hinge lets out a long,
+   drawn-out squeal, like a chair dragged across a wooden floor, then the door meets its frame with a weighty wooden
+   knock and the latch clicks. */
+function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02,cr=1.25;
+  /* the squeal: a reedy tone whose pitch slides up and settles, wavering a little, roughened by fast stick-slip pulses
+     (the grain of wood dragging on wood), sung through two narrow resonances; a breath of scraping friction under it */
+  const o=ctx.createOscillator(),vib=ctx.createOscillator(),vg=ctx.createGain(),b1=ctx.createBiquadFilter(),b2=ctx.createBiquadFilter(),
+    mix=ctx.createGain(),j=ctx.createGain(),lfo=ctx.createOscillator(),lg=ctx.createGain(),env=ctx.createGain();
+  o.type='sawtooth';o.frequency.setValueAtTime(390,t);o.frequency.linearRampToValueAtTime(540,t+cr*.35);o.frequency.linearRampToValueAtTime(500,t+cr*.7);o.frequency.linearRampToValueAtTime(440,t+cr);
+  vib.frequency.value=5.5;vg.gain.value=14;vib.connect(vg).connect(o.frequency);
+  b1.type='bandpass';b1.frequency.value=1250;b1.Q.value=7;b2.type='bandpass';b2.frequency.value=2300;b2.Q.value=9;
+  lfo.type='square';lfo.frequency.setValueAtTime(62,t);lfo.frequency.linearRampToValueAtTime(40,t+cr);lg.gain.value=.35;j.gain.value=.65;
   lfo.connect(lg).connect(j.gain);
-  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.11,t+.18);env.gain.setValueAtTime(.11,t+cr*.75);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
-  o.connect(b1).connect(mix);o.connect(b2).connect(mix);mix.connect(j).connect(lp).connect(env).connect(ctx.destination);
-  o.start(t);lfo.start(t);o.stop(t+cr+.02);lfo.stop(t+cr+.02);
+  env.gain.setValueAtTime(0.0001,t);env.gain.exponentialRampToValueAtTime(.075,t+.25);env.gain.setValueAtTime(.075,t+cr*.8);env.gain.exponentialRampToValueAtTime(0.0001,t+cr);
+  o.connect(b1).connect(mix);o.connect(b2).connect(mix);mix.connect(j).connect(env).connect(ctx.destination);
+  o.start(t);vib.start(t);lfo.start(t);o.stop(t+cr+.02);vib.stop(t+cr+.02);lfo.stop(t+cr+.02);
+  const f=ctx.createBufferSource(),fb=ctx.createBiquadFilter(),fg=ctx.createGain();f.buffer=noiseBuffer(ctx,cr);fb.type='bandpass';fb.frequency.value=1600;fb.Q.value=1.5;
+  fg.gain.setValueAtTime(0.0001,t);fg.gain.exponentialRampToValueAtTime(.02,t+.25);fg.gain.exponentialRampToValueAtTime(0.0001,t+cr);
+  f.connect(fb).connect(fg).connect(ctx.destination);f.start(t);f.stop(t+cr);
   /* the "tak": the heavy door meeting its frame, a woody knock with some weight under it */
   const k=t+cr+.05;
   const n=ctx.createBufferSource(),nb=ctx.createBiquadFilter(),ng=ctx.createGain();n.buffer=noiseBuffer(ctx,.05);
