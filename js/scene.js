@@ -77,13 +77,13 @@ const NUM_WORDS=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight',
 const numWord=n=>n<20?NUM_WORDS[n]:n<100?TENS_WORDS[Math.floor(n/10)]+(n%10?'-'+NUM_WORDS[n%10]:''):String(n);
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`<span class="dc-title"><i class="dc-rule"></i>Day ${numWord(S.day)}<i class="dc-rule"></i></span><small>${esc(T.weekday)}${T.sabbat?' \u2726 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');
-  render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS)}
+  render();setTimeout(()=>{$('#dayCard').classList.remove('on');render()},DAWN_MS);setTimeout(render,DAWN_MS+AFTER_DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote'),av=v&&v.key&&(!(v.tales||[]).length||v.newsDone)?visitByKey(v.key):null;
   const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
-  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+AFTER_DAWN_MS||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer, and only the bell does: someone due this hour comes straight in; otherwise time moves

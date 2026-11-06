@@ -13,6 +13,7 @@ const PROTOTYPE_TOOLS = true;
 
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */
 const DAWN_MS = 1800;
+const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
 
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
