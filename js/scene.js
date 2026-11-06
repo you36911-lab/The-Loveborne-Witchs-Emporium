@@ -3,7 +3,10 @@
 /* Unread emails and new reviews show a badge on the computer. */
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
 const newReviews=()=>Math.max(0,S.reviews.length-S.reviewsSeen);
-function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer')}
+/* the computer's red badge counts what is new; when it goes up (not when the game opens), a notification chime is heard */
+let badgeWas=null;
+function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer');
+  if(badgeWas!==null&&n>badgeWas)playNotify();badgeWas=n}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
 /* The book stack: each book cut from the stack picture along its drawn outline (a watershed from points inside each book,

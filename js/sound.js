@@ -73,3 +73,10 @@ function playDoorClose(){const ctx=audio();if(!ctx)return;const t=ctx.currentTim
   [th+.03,th+.075].forEach((at,i)=>{const k=ctx.createBufferSource(),kh=ctx.createBiquadFilter(),kg=ctx.createGain();k.buffer=noiseBuffer(ctx,.02);
     kh.type='bandpass';kh.frequency.value=3800-i*700;kh.Q.value=3;kg.gain.setValueAtTime(.16-i*.06,at);kg.gain.exponentialRampToValueAtTime(0.0001,at+.02);
     k.connect(kh).connect(kg).connect(ctx.destination);k.start(at)})}
+/* Something new on the computer (an email, the night's reviews): the soft two-note "di-ring" of a notification, the second
+   note higher. Round tones with a little sparkle on top. */
+function playNotify(){const ctx=audio();if(!ctx)return;const t=ctx.currentTime+.02;
+  [[1318.5,0],[1975.5,.13]].forEach(([f,d])=>{const at=t+d;
+    [[1,'triangle',.11,.6],[2,'sine',.025,.25]].forEach(([r,type,v,dec])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.value=f*r;
+      g.gain.setValueAtTime(0.0001,at);g.gain.exponentialRampToValueAtTime(v,at+.008);g.gain.exponentialRampToValueAtTime(0.0001,at+dec);
+      o.connect(g).connect(ctx.destination);o.start(at);o.stop(at+dec+.05)})})}
