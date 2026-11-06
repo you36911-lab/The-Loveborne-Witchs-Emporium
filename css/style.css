@@ -914,8 +914,11 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 /* the title is the switch for "what I am making": plain until hovered; a handwritten tick beside it once chosen */
 .pg .rpick,.leaf .rpick,.rpick{all:unset;cursor:pointer;font:inherit;color:inherit}
 .rpick:hover,.rpick:focus-visible{color:var(--kw-text)}
-.recipe .tickword{white-space:nowrap}
-.recipe .tick{width:1.05em;height:.95em;color:var(--kw);margin-left:.3em;vertical-align:-.05em;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
+.recipe .tickword{white-space:nowrap;position:relative}
+/* the tick sits just after the last word, in a small space every title keeps at its end (chosen or not) plus the gap
+   before the icons, so choosing a recipe never changes how its title wraps or moves the page */
+.recipe .rtitle h3{padding-right:.5em}
+.recipe .tick{position:absolute;left:calc(100% + .15em);bottom:.12em;width:1.05em;height:.95em;color:var(--kw);rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
 .bookicons{flex:none;display:flex;gap:.35em;padding-top:.15em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:.15em;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
