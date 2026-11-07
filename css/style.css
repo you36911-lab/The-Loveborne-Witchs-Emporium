@@ -780,6 +780,10 @@ button.small{font-size:12px;padding:2px 10px}
 /* what is laid out floats a little above the altar, bobbing gently, each a little out of step; its shadow stays on the cloth
    and shrinks as it rises (the candle and the card stay put) */
 .plates .ontable{position:relative}
+/* two rows (five or more things): the back row stands further back on the table */
+.prow{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-evenly}  /* spread evenly, so the back row shows between the front row */
+.prow.back{z-index:0;translate:0 -2.8cqw;scale:.82;transform-origin:50% 100%;filter:brightness(.9)}
+.prow.front{z-index:1}
 .plates .ontable img,.plates .ontable .minijar{position:relative;z-index:1;translate:0 -1.1cqw;animation:hover 3.4s ease-in-out infinite}
 .plates .ontable::after{content:'';position:absolute;left:50%;bottom:.1cqw;width:5.5cqw;max-width:80%;height:.9cqw;translate:-50% 0;border-radius:50%;
   background:radial-gradient(closest-side,rgba(60,10,40,.45),rgba(60,10,40,0));animation:hovershadow 3.4s ease-in-out infinite;pointer-events:none}

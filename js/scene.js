@@ -217,7 +217,11 @@ function renderAltar(){
   const tr=D.recipes[S.target];
   $('#makingBtn').innerHTML=tr?esc(tr.name):'<span class="mk">Choose what to make in the Recipe Book</span>';
   /* what is laid out stands on the table; tap a thing to put it back */
-  $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'';
+  /* five or more stand in two rows: the later ones in front, the rest a step further back on the table (higher, a little
+     smaller, a little darker), so seven big things still fit between the candle stand and the bell */
+  const plate=n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
+  const A=S.altar,back=A.length>=5?A.slice(0,Math.floor(A.length/2)):[],front=A.slice(back.length);
+  $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
      of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
   const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img class="flamebase" src="${ASSETS.candles[S.candle]}" alt=""><img class="flamecopy" src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
