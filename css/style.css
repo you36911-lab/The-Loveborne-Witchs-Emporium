@@ -163,7 +163,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal.glowing::after{opacity:.7}
 /* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
-.scene .crystal.glowing[data-aura="pink"]::after{opacity:.78}  /* the soft pink, a warm milky pink like a rabbit's nose, tints the swirl a little more than the others */
+.scene .crystal.glowing[data-aura="pink"]::after{opacity:.85}  /* the soft pink is strawberry milk: light and bright, not dusty */
+.scene .crystal.glowing[data-aura="pink"] img{filter:var(--light) brightness(1.08) saturate(1.15) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
 @keyframes auraPulse{0%,100%{scale:1;opacity:.75}50%{scale:1.05;opacity:.95}}  /* a slow, gentle breath */
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}
@@ -477,7 +478,8 @@ button.small{font-size:12px;padding:2px 10px}
   background:repeating-linear-gradient(to bottom,transparent 0 191px,#8C5E46 191px 200px,rgba(0,0,0,.5) 200px 205px,transparent 205px 242px),#3B261C}
 /* bottles on the water and oil shelves: each row is as tall as what stands in it, feet on one line, and short wide things
    (butter, beeswax) come out at a size that reads, not at their tiny table height */
-.cabinside .chip.jar.vessel{min-width:calc(150px * var(--big));width:auto;height:auto;justify-content:flex-end;padding:0 6px 4px;border-radius:0}
+.cabinside .chip.jar{min-height:calc(112px * var(--big))}  /* a row of very short things (butter, soap) keeps a row's height, so it does not crowd the rows above and below */
+.cabinside .chip.jar.vessel{min-height:calc(140px * var(--big));min-width:calc(150px * var(--big));width:auto;height:auto;justify-content:flex-end;padding:0 6px 4px;border-radius:0}
 .cabinside .chip.jar.vessel .pic{display:flex;align-items:flex-end;justify-content:center;width:100%;flex:none;margin-bottom:calc(14px * var(--big))}
 .cabinside .chip.jar.vessel img{width:auto;height:calc(max(var(--h,.9),.62) * 222px * var(--big));max-width:calc(230px * var(--big));object-fit:contain;filter:drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}
 .cabinside .chip.jar.vessel.on img{filter:drop-shadow(0 0 5px #FFD6F0) drop-shadow(0 0 12px #F4ADCF) drop-shadow(-6px 4px 4px rgba(0,0,0,.45))}

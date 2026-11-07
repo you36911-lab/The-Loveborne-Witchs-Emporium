@@ -17,7 +17,8 @@ const DAWN_MS = 1800;
 const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
 
 /* How each ingredient's picture is drawn, so a cupboard stands like things together: 0 bottles and flasks, 1 cork-stoppered
-   jars, 2 jars with lids, 3 canisters, tins and pots, 4 packets, bags and cards, 5 bundles, 6 blocks. Within a kind, A to Z.
+   jars, 2 jars with lids, 3 canisters, tins and pots, 4 small packets and boxes (sachets of sugar, vanilla), 5 bags and
+   pouches, 6 hanging cards, 7 bundles, 8 blocks. Within a kind, A to Z.
    Things without a picture (and any not listed) come last, A to Z. */
 const ITEM_KIND = {
   "Moonwater":0,"Sunwater":0,"Rainwater":0,"Dawn dew":0,"Sea Water":0,"Spring water":0,"Rosewater":0,"New Moon Water":0,
@@ -38,10 +39,10 @@ const ITEM_KIND = {
   "Beeswax":2,"Angelica root":3,"Garden sage":3,"Lavender":3,"Lemon balm":3,"Lilac":3,"Lotus":3,"Peppermint":3,
   "Snowdrop":3,"Juniper":3,"Willow bark":3,"Sweet pea":3,"Black tea":3,"Shea butter":3,"Amber resin":3,"Copal":3,
   "Sandalwood":3,"Cocoa":3,"Coconut milk powder":3,"Oats":3,"Milk powder":3,"Peacock feather":3,"Dove feather":3,"Raisins":4,
-  "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":4,"Flour":4,"Rice flour":4,"Sugar":4,"Garden soil":4,
-  "Hearth ash":4,"Coin":4,"Owl feather":4,"Seashell":4,"White feather":4,"Brass button":4,"Bright buttons":4,"Gold button":4,
-  "Heart-shaped button":4,"Iron filings":4,"Iron nail":4,"Iron pin":4,"Ash branch":5,"Ash wood":5,"Birch branch":5,"Birch wood":5,
-  "Blackthorn branch":5,"Hazel branch":5,"Autumn leaf":5,"Butter":6,"Soap base":6,"Soap base (charcoal)":6
+  "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":5,"Flour":5,"Rice flour":5,"Sugar":4,"Garden soil":5,
+  "Hearth ash":5,"Coin":5,"Owl feather":5,"Seashell":5,"White feather":5,"Brass button":6,"Bright buttons":6,"Gold button":6,
+  "Heart-shaped button":6,"Iron filings":6,"Iron nail":6,"Iron pin":6,"Ash branch":7,"Ash wood":7,"Birch branch":7,"Birch wood":7,
+  "Blackthorn branch":7,"Hazel branch":7,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8
 };
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
@@ -63,7 +64,7 @@ const REAL_SIZE_BY_SHELF = {
 };
 const REAL_SIZE = {
   "Butter":0.28,"Shea butter":0.4,"Beeswax":0.45,"Almond oil":0.7,"Jojoba oil":0.7,"Olive oil":0.9,"Sunflower oil":0.9,
-  "Brown sugar":0.42,"Vanilla":0.4,"Raisins":0.45,"Sugar":0.45,"Baking soda":0.5,"Rice flour":0.7,"Flour":0.85,"Garden soil":0.9,
+  "Brown sugar":0.42,"Vanilla":0.4,"Raisins":0.45,"Sugar":0.48,"Baking soda":0.5,"Rice flour":0.7,"Flour":0.85,"Garden soil":0.9,
   "Epsom salt":0.6,"Milk":0.95,"Coconut milk powder":0.5,"Cocoa":0.5,"Milk powder":0.5,"Oats":0.55,"Chocolate chips":0.55,
   "Honey":0.45,"Gold sprinkles":0.4,"Pink sprinkles":0.45,"Rainbow sprinkles":0.45,"Gold mica":0.4,"Silver mica":0.4,
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
@@ -76,7 +77,7 @@ const ITEM_SIZE = {
   "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Brown sugar":0.6,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
   "Epsom salt":0.85,"Flour":0.95,"Gold sprinkles":0.55,"Honey":0.6,"Milk":0.95,"Milk powder":0.7,"Oats":0.75,
   "Pink salt":0.65,"Pink sprinkles":0.65,"Rainbow sprinkles":0.65,"Rice flour":0.9,"Rose clay":0.55,
-  "Sea salt":0.65,"Sugar":0.55,"Garden soil":1,"Hearth ash":0.6,"Eggshell":0.55,"Soap base":0.35,
+  "Sea salt":0.65,"Sugar":0.6,"Garden soil":1,"Hearth ash":0.6,"Eggshell":0.55,"Soap base":0.35,
   "Soap base (charcoal)":0.35,"Gold mica":0.5,"Silver mica":0.5,"Silver glitter":0.55,"Pink glitter":0.55,
   "Biodegradable glitter":0.55,"Black pepper":0.65,"Cinnamon":0.65,"Cinnamon stick":0.7,"Fennel seed":0.65,
   "Saffron":0.5,"Vanilla":0.55,"Apple":0.65,"Raisins":0.6,"Beetroot powder":0.75,"Copal":0.65,"Frankincense":0.65,
