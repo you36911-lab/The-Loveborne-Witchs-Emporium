@@ -59,11 +59,12 @@
     <div class="books" id="altarBooks" aria-label="The books"></div>  <!-- the same stack of books as on the counter, at the left end of the table -->
     <div class="tabletop" aria-label="The altar">
       <div class="slot candleslot" id="candleSlot"></div>
+      <div class="craftglow" id="craftGlow" aria-hidden="true"></div>  <!-- the light that rises behind what is laid out while it is crafted -->
       <div class="plates" id="plates"></div>
       <button class="bellslot" id="craftBell" title="Ring the bell to make it" aria-label="Ring the bell: make it"><img alt=""></button>  <!-- ringing it makes what is laid out -->
       <div class="slot cardslot" id="tarotSlot"></div>
     </div>
-    <button class="phone" id="phoneBtn" title="Your phone: test craft results" aria-label="Phone: test craft results"><img alt=""></button>  <!-- test craft results come to the phone -->
+    <button class="phone" id="phoneBtn" title="Your phone: test craft results" aria-label="Phone: test craft results"><img alt=""><span class="badge phbadge" id="phoneBadge" hidden></span></button>  <!-- test craft results come to the phone -->
     <div class="testcandles" id="testCandles" role="img"><img alt=""></div>  <!-- the black candelabra: test crafts left before a spoiled batch -->
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>
@@ -125,8 +126,13 @@
 <div class="modal receiptsview" id="receiptsView" aria-label="Today's receipts"></div>
 <!-- the phone's Test Craft app (phone.js): a window like the computer's apps -->
 <div class="modal phoneview" id="phoneView" role="dialog" aria-modal="true" aria-label="Phone: test craft result">
-  <div class="pcwin phonewin"><div class="pcbar"><span class="pctitle"><img class="pcico" id="phoneIco" alt="">Test Craft</span><span class="pcbtns"><button class="pcclose" id="phoneClose" aria-label="Close the phone">×</button></span></div>
-    <div class="phoneapp" id="phoneApp"></div></div>
+  <div class="phoneframe"><div class="phonescreen">
+    <div class="ph-status"><span id="phoneTime"></span><span class="ph-notch" aria-hidden="true"></span><span class="ph-sicons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.6" fill="currentColor"/></svg><svg viewBox="0 0 30 24"><rect x="1" y="6" width="24" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="8.5" width="16" height="7" rx="1.6" fill="currentColor"/><rect x="26.5" y="10" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
+    <div class="pcbar phonebar"><span class="pctitle"><img class="pcico" id="phoneIco" alt="">Test Craft</span><span class="pcbtns"><button class="pcclose" id="phoneClose" aria-label="Close the phone">×</button></span></div>
+    <div class="ph-proto" id="phoneProto" hidden></div>
+    <div class="phoneapp" id="phoneApp"></div>
+    <div class="ph-home" aria-hidden="true"></div>
+  </div></div>
 </div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>

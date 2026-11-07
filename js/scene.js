@@ -151,7 +151,7 @@ function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),
 /* the recipe the customer at the counter has asked for, while their order is open; otherwise null */
 function orderRecipe(){const q=currentVisitor();return q&&q.type==='new'&&S.activeNow===q.key?D.recipes[visitByKey(q.key).rid]:null}
 /* There is no top bar: the date is on the computer's taskbar and the rating in its Shop app. */
-function renderTop(){renderBadge();renderCandles();if($('#pc').classList.contains('open'))renderPCBar()}
+function renderTop(){renderBadge();renderCandles();renderPhoneBadge();if($('#pc').classList.contains('open'))renderPCBar()}
 /* The workroom cabinets. Behind every painted door is one kind of thing, named on the door's label. Clicking a door
    swings it open and what is inside comes out beside it (#shelfOpen); tapping a thing lays it on the table or takes it
    off again. Door places are in pixels of the room picture (assets/scene/altar-room.jpg) as first drawn at 1376×768; it is now 2752×1536, the same shape. The bottom row

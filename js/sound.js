@@ -21,3 +21,5 @@ function playDoorClose(){sfx('doorCreak',.6);setTimeout(()=>sfx('doorClose',.55)
 /* A test-craft candle going out: "wind magic (5)" (Yodguard), a soft magical whoosh. The file runs 8 seconds but the
    sound is over in about one; the rest is near silence, so it stops at 1.8s. */
 function playCandleOut(){sfx('candleOut',.3,1800)}
+/* A test craft's result comes to the phone on the altar: "New Notification 057" (Universfield). */
+function playPhone(){sfx('phoneNotify',.5)}

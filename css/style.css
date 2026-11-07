@@ -144,7 +144,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .books button:hover,.scene .books button:focus-visible,.room .books button:hover,.room .books button:focus-visible{transform:translateX(3%);filter:drop-shadow(0 0 5px #ffd6f0) drop-shadow(0 0 12px #ffd6f0);outline:none;z-index:5}
 .scene .crystal{left:17.5%;bottom:17.5%;width:8%;z-index:1}
 /* The aura: a soft glow of the customer's colour around the crystal ball. */
-.scene .crystal::before{content:"";position:absolute;left:50%;top:42%;width:230%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
+.scene .crystal::before{content:"";position:absolute;left:50%;top:42%;width:165%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
   background:radial-gradient(circle,color-mix(in srgb,var(--aura-glow,#fff) 95%,transparent) 0%,color-mix(in srgb,var(--aura-glow,#fff) 60%,transparent) 40%,transparent 70%);
   opacity:0;transition:opacity .8s ease,background .8s ease;pointer-events:none;z-index:0}
 .scene .crystal img{position:relative;z-index:1}
@@ -153,7 +153,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal img.swirl{position:absolute;left:0;top:0;width:100%;opacity:0;transition:opacity .8s ease}
 .scene .crystal.glowing img.swirl{opacity:1}
 .scene .crystal.glowing::before{opacity:1;animation:auraPulse 3.2s ease-in-out infinite}
-.scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 18px var(--aura-glow))}
+.scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 8px var(--aura-glow)) drop-shadow(0 0 12px var(--aura-glow))}
 /* The ball is only looked at, never clicked, so it has no hover. */
 .scene .crystal{cursor:default}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
@@ -938,7 +938,7 @@ img.flamecopy,.stand .ontable img.flamecopy{position:absolute;inset:0;width:100%
   .tb-fest{display:none}}
 
 /* While the day card shows at dawn nothing in the shop can be clicked: a clear sheet lies over everything. */
-body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:default}
+body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-index:9999;cursor:default}
 
 /* The recipe's two actions sit on its title line, at the right: small one-colour icons (the altar bell: make this and lay
    it out; the bottle: test craft it). A long title wraps beside them rather than running under them. */
@@ -981,10 +981,36 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .room .phone.new{filter:brightness(.98) drop-shadow(0 0 .35cqw #FFD6F0) drop-shadow(0 0 1cqw #F4ADCF) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45))}  /* a result not looked at yet */
 @media (prefers-reduced-motion:no-preference){.room .phone.buzz{animation:buzz .6s linear}}
 @keyframes buzz{0%,100%{translate:0 0;rotate:0deg}10%,50%,90%{translate:-1.5% 0;rotate:-1.2deg}30%,70%{translate:1.5% 0;rotate:1.2deg}}
+.phbadge{position:absolute;right:6%;top:2%;margin:0;box-shadow:0 1px 3px rgba(20,8,30,.45)}  /* results not looked at yet */
 .phoneview{align-items:center}
-.pcwin.phonewin{position:relative;left:auto;top:auto;width:min(460px,100%);height:auto;max-height:calc(100vh - 40px)}
-.phonewin img.pcico{object-fit:contain}
-.phoneapp{flex:1;min-height:0;overflow:auto;padding:16px 18px 18px;background:var(--paper)}
+/* the phone itself: a dark bezel with rounded corners like the monitor's, a real phone's shape (9 by 19.5), side buttons,
+   a notch over the status bar and a home bar at the bottom. Inside, the app scrolls with no scrollbar showing. */
+.phoneframe{position:relative;height:min(780px,calc(100vh - 32px));aspect-ratio:9/19.5;max-width:calc(100vw - 24px);padding:11px;border-radius:52px;
+  background:linear-gradient(#2B2230,#1C1520);box-shadow:0 0 0 1px #4A3A55,inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 2px #3A2E42,0 22px 60px rgba(10,5,20,.6)}
+.phoneframe::before,.phoneframe::after{content:"";position:absolute;width:4px;border-radius:2px;background:#3A2E42}
+.phoneframe::before{right:-4px;top:22%;height:11%}                       /* the side button */
+.phoneframe::after{left:-4px;top:17%;height:7%;box-shadow:0 calc(100% + 60px) 0 #3A2E42}  /* the volume buttons */
+.phonescreen{height:100%;display:flex;flex-direction:column;overflow:hidden;border-radius:42px;background:var(--paper)}
+.ph-status{flex:none;height:44px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;font-family:var(--font-shop);font-weight:600;font-size:14px;color:var(--ink);background:var(--paper2)}
+.ph-notch{width:96px;height:26px;border-radius:14px;background:#120D16}
+.ph-sicons{display:flex;justify-content:flex-end;gap:6px}
+.ph-sicons svg{height:14px;width:auto}
+.phonebar{height:40px;padding-left:16px}
+.phonebar img.pcico{object-fit:contain}
+.ph-proto{flex:none;display:flex;align-items:center;gap:4px;padding:4px 16px;font-size:12px;color:var(--ink-soft);background:var(--paper);border-bottom:1px dashed var(--line)}
+.ph-proto[hidden]{display:none}
+.ph-proto button{min-width:26px;padding:1px 6px;font-size:12px;border-radius:6px}
+.ph-proto button[aria-pressed="true"]{background:var(--kw);color:#fff}
+.phoneapp{flex:1;min-height:0;overflow:auto;padding:16px 16px 18px;background:var(--paper);scrollbar-width:none}
+.phoneapp::-webkit-scrollbar{display:none}
+.ph-home{flex:none;height:24px;display:grid;place-items:center;background:var(--paper)}
+.ph-home::after{content:"";width:120px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--ink) 35%,transparent)}
+/* crafting: a light rises behind what is laid out (craftAnim in actions.js) */
+.plates{position:relative;z-index:1}
+.craftglow{position:absolute;left:50%;bottom:-5%;width:48%;height:160%;translate:-50% 0;z-index:0;pointer-events:none;opacity:0;
+  background:radial-gradient(closest-side,rgba(255,244,250,.95),rgba(255,214,234,.7) 35%,rgba(244,173,207,.35) 60%,rgba(244,173,207,0));filter:blur(4px)}
+.craftglow.on{animation:craftglow 1.9s ease-in-out both}
+@keyframes craftglow{0%{opacity:0;scale:.5}40%{opacity:.75;scale:.95}58%{opacity:1;scale:1.08}75%{opacity:.8;scale:1.02}100%{opacity:0;scale:1.15}}
 .ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .ph-name{display:block;font-family:var(--font-shop);font-weight:600;font-size:20px;line-height:1.2;color:var(--ink)}
 .ph-head small{display:block;font-size:13px}
@@ -999,7 +1025,17 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .ph-sec{padding:10px 0;border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .ph-score+.ph-sec,.ph-sec:first-child{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
 .ph-card>.ph-sec:first-child{border-top:0}
-.ph-sec .tag{margin:0 0 4px}
+/* the label over each kind of clue, in four styles to choose from (the prototype switch on the phone) */
+.ph-lab{display:flex;align-items:center;gap:6px;margin:0 0 4px}
+.ph-lab svg{display:none;width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.lbl1 .ph-lab{font-family:var(--font-text);font-size:14px;font-weight:700;color:var(--ink)}
+.lbl1 .ph-lab svg{display:block;color:var(--kw)}
+.lbl2 .ph-lab{font-family:var(--font-shop);font-size:15px;font-weight:600;color:var(--kw-text)}
+.lbl3 .ph-sec{border-top:0;padding:8px 0 8px 12px;margin:8px 0;border-left:3px solid var(--sec,var(--pink))}
+.lbl3 .ph-lab{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.ph-sec[data-k="ing"]{--sec:#E070AE}.ph-sec[data-k="candle"]{--sec:#F2A65A}.ph-sec[data-k="card"]{--sec:#9B7FD1}
+.ph-sec[data-k="when"]{--sec:#6FA8DC}.ph-sec[data-k="came"]{--sec:#F4ADCF}.ph-sec[data-k="done"]{--sec:#6CC19A}
+.lbl4 .ph-lab{font-family:var(--font-title);font-style:italic;font-size:19px;font-weight:600;color:var(--kw-text)}
 .ph-line{margin:2px 0;line-height:1.5}
 .ph-empty{margin:24px 8px;text-align:center;line-height:1.6}
 /* little pink stars bursting from the name of what is being made when it is clicked (starBurst in actions.js) */

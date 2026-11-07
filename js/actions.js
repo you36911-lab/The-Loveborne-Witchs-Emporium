@@ -93,7 +93,14 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
 let partingAtClick=false;
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain');partingAtClick=!!S.parting},true);
+/* A test craft: what was written is laid out on the altar, it is crafted (craftAnim), and only then is it judged: a black
+   candle goes out if it isn't perfect, and the result comes to the phone (a buzz, a sound, and a badge; the phone shows it
+   when clicked). */
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
+  if(test){render();craftAnim(()=>judgeTest(r));return}
+  judge(r,false)}
+function judgeTest(r){const before=S.failTests||0;judge(r,true);phoneNotify((S.failTests||0)>before?1100:300)}
+function judge(r,test){
   const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect')tries[r.id]=(tries[r.id]||0)+1;
@@ -102,7 +109,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
       if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
-    S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};phoneNotify()}  /* the result comes to the phone (phone.js) */
+    S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total}}  /* the result goes to the phone (phone.js) */
   else{/* Made for real: it goes up to the counter, and is given when the player clicks it there (giveMade). */
     const q=S.queue;if(!q)return;
     S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;
@@ -117,7 +124,7 @@ function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
   const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose what you are making in the Recipe Book first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
   if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
-  setTimeout(()=>{bellBusy=false;doCraft(false)},650)}
+  setTimeout(()=>craftAnim(()=>{bellBusy=false;doCraft(false)}),450)}  /* it is crafted first (the same as a test craft), then goes up to the counter */
 /* Hand over what was made: the grade was settled when it was made. */
 function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
   {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
@@ -183,3 +190,18 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
     s.className='burst';s.textContent='✦';s.setAttribute('aria-hidden','true');
     s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.55}px;--sz:${12+Math.random()*10}px;animation-delay:${Math.random()*60}ms`;
     s.addEventListener('animationend',()=>s.remove());document.body.appendChild(s)}}
+/* Crafting what is laid out: the things on the altar drift in toward the middle and turn a little while a light rises
+   behind them, stars burst from the middle, and they settle back. Nothing can be clicked meanwhile. If the view is still
+   sliding down to the workroom, it waits for that first. */
+function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
+  if(calm()){setTimeout(done,moving?950:0);return}
+  document.body.classList.add('crafting');
+  setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
+    glow.style.left=(cx-glow.parentElement.getBoundingClientRect().left)+'px';  /* the light rises behind the middle of what is laid out */
+    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');
+    plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
+      el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-4%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
+        {transform:`translate(${dx}px,-10%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-12%) scale(.84) rotate(${-turn}deg)`,offset:.72},
+        {transform:'none'}],{duration:1900,easing:'ease-in-out'})});
+    setTimeout(()=>starBurst(plates),1050);
+    setTimeout(()=>{glow.classList.remove('on');document.body.classList.remove('crafting');done()},1950)},moving?1150:150)}
