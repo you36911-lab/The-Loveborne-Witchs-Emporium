@@ -282,8 +282,7 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
   /* the witch's thought at an advice question comes last: after the words, and after the name box has come up */
   const note=$('#sceneNote');if(note.dataset.thought&&!note.hidden)note.style.animation=`subIn .6s ease-out ${(wait+.7).toFixed(3)}s both`;
   b.onclick=()=>{typeFrom=0;b.querySelectorAll('.ch').forEach(s=>s.style.animation='none');if(after)after.style.animation='none';if(note.dataset.thought)note.style.animation=`subIn .6s ease-out .5s both`}}
-function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHTML=tip;
-  const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
+function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
   if(q&&q.type==='report'){const r=S.reports.find(r=>r.at===q.at&&r.who===q.who);
     el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(r.text))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
@@ -306,8 +305,6 @@ function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
   $('#madeTag').textContent=m.name;b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
-function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter and open <b>Moonpost</b>.';
-  return ''}
 function render(){if(Date.now()>=dawnUntil+MAIL_AFTER_DAWN_MS)checkMail();  /* post waits until the dawn card has gone, and a moment more */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
 let autoT=null;
