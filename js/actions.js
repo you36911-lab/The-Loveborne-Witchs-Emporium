@@ -3,7 +3,7 @@
 document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#receiptsView').classList.remove('open');return}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
-  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();render();return}
+  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();if($('#phoneView').classList.contains('open'))$('#phoneApp').innerHTML=phoneHTML();render();return}
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
@@ -194,11 +194,11 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
    behind them, stars burst from the middle, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
-  if(calm()){setTimeout(done,moving?950:0);return}
+  if(calm()){setTimeout(()=>{playCraft();done()},moving?950:0);return}
   document.body.classList.add('crafting');
   setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
     glow.style.left=(cx-glow.parentElement.getBoundingClientRect().left)+'px';  /* the light rises behind the middle of what is laid out */
-    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');
+    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');playCraft();
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
       el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-4%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
         {transform:`translate(${dx}px,-10%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-12%) scale(.84) rotate(${-turn}deg)`,offset:.72},
