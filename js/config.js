@@ -68,7 +68,7 @@ const ASSETS = {
   pcWallpaper: 'assets/scene/desktop-background.jpg',  /* the computer's desktop */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
-  altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: test craft results come to it (phone2, the designer's picture, cut out) */
+  altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: test craft results come to it (phone3, the designer's picture, cut out) */
   altarBell: 'assets/scene/altar-bell.png',  /* the silver bell on the altar: ringing it makes what is laid out (the designer's picture, cut out) */
   testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
   objects: {
