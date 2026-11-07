@@ -823,13 +823,13 @@ button.small{font-size:12px;padding:2px 10px}
 .testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:0;cursor:help;
   filter:brightness(.84) saturate(.9) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .testcandles img{display:block;width:100%;height:100%}
-/* "Making …" reads like a film subtitle: the same look and place as the shop's mood line (.scenenote), not a control */
-.tablebar{position:absolute;left:50%;bottom:calc(clamp(8px,2vh,22px) + 66px);translate:-50% 0;z-index:6;max-width:min(62%,900px);width:max-content}
-.tablebar .making{display:block;background:rgba(12,6,18,.42);border:0;box-shadow:none;border-radius:4px;padding:3px 14px;cursor:pointer;text-align:center;
-  color:#fff;font-weight:400;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
-.tablebar .making:hover{background:rgba(12,6,18,.55);box-shadow:none}
-.tablebar .making b{font-weight:700}
-.tablebar .making .mk{opacity:.85}
+/* The name of what is being made, low on the table: the dawn card's lettering (white italic serif) with a soft pink glow */
+.tablebar{position:absolute;left:50%;bottom:clamp(10px,2.5vh,26px);translate:-50% 0;z-index:6;max-width:min(70%,1000px);width:max-content}
+.tablebar .making{display:block;background:none;border:0;box-shadow:none;padding:2px 10px;cursor:pointer;text-align:center;
+  color:#fff;font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(20px,2.6vw,36px);line-height:1.15;letter-spacing:.01em;
+  text-shadow:0 1px 2px rgba(40,10,50,.55),0 0 8px rgba(244,173,207,.75),0 0 20px rgba(244,173,207,.45);transition:text-shadow .2s ease}
+.tablebar .making:hover{background:none;box-shadow:none;text-shadow:0 1px 2px rgba(40,10,50,.55),0 0 10px rgba(244,173,207,.95),0 0 26px rgba(244,173,207,.65)}
+.tablebar .making .mk{font-size:.7em;opacity:.8}
 
 /* a test result between the cabinets; the shop log in the corner of the window */
 .result{position:absolute;left:36%;right:36%;top:13%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;

@@ -204,7 +204,7 @@ function renderAltar(){
   /* what is being made is chosen in the Recipe Book (its kind in the index, then its name, then a tap on the name on its
      page); a subtitle on the table names it, and opens that page */
   const tr=D.recipes[S.target];
-  $('#makingBtn').innerHTML=tr?`<span class="mk">Making</span> <b>${esc(tr.name)}</b> <span class="mk">${esc(tr.type)}</span>`:'<span class="mk">Choose what to make in the Recipe Book</span>';
+  $('#makingBtn').innerHTML=tr?esc(tr.name):'<span class="mk">Choose what to make in the Recipe Book</span>';
   /* what is laid out stands on the table; tap a thing to put it back */
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'';
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
