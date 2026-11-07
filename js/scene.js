@@ -217,10 +217,11 @@ function renderAltar(){
   const tr=D.recipes[S.target];
   $('#makingBtn').innerHTML=tr?esc(tr.name):'<span class="mk">Choose what to make in the Recipe Book</span>';
   /* what is laid out stands on the table; tap a thing to put it back */
-  /* five or more stand in two rows: the later ones in front, the rest a step further back on the table (higher, a little
-     smaller, a little darker), so seven big things still fit between the candle stand and the bell */
+  /* five or more stand in two rows: the smaller things in front, the bigger ones a step further back on the table (higher,
+     a little smaller, a little darker), so seven big things still fit between the phone and the bell */
   const plate=n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
-  const A=S.altar,back=A.length>=5?A.slice(0,Math.floor(A.length/2)):[],front=A.slice(back.length);
+  const A=S.altar,two=A.length>=5,bySize=[...A].sort((a,b)=>sizeOf(a)-sizeOf(b)),nf=A.length-Math.floor(A.length/2),
+    front=two?A.filter(n=>bySize.indexOf(n)<nf):A,back=two?A.filter(n=>bySize.indexOf(n)>=nf):[];
   $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
      of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
