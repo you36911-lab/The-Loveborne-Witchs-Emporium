@@ -104,7 +104,7 @@ function judge(r,test){
   const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect')tries[r.id]=(tries[r.id]||0)+1;
-    if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost you a star tonight.')}}
+    if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost me a star tonight.')}}
     /* A perfect test says so plainly and writes the recipe into the book, so the player is never left guessing. */
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
@@ -121,7 +121,7 @@ function judge(r,test){
    up to the counter, so it is seen and heard. */
 let bellBusy=false;
 function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
-  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Choose what you are making in the Recipe Book first.':!S.altar.length?'Lay out what it needs on the altar first.':'';
+  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'I haven\u2019t chosen what I\u2019m making yet. The Recipe Book first.':!S.altar.length?'Nothing is laid out on the altar yet.':'';
   if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
   setTimeout(()=>craftAnim(()=>{bellBusy=false;doCraft(false)}),450)}  /* it is crafted first (the same as a test craft), then goes up to the counter */
@@ -194,11 +194,11 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
    behind them, stars burst from the middle, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
-  if(calm()){setTimeout(()=>{playCraft();done()},moving?950:0);return}
+  if(calm()){setTimeout(done,moving?950:0);return}
   document.body.classList.add('crafting');
   setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
     glow.style.left=(cx-glow.parentElement.getBoundingClientRect().left)+'px';  /* the light rises behind the middle of what is laid out */
-    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');playCraft();
+    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
       el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-4%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
         {transform:`translate(${dx}px,-10%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-12%) scale(.84) rotate(${-turn}deg)`,offset:.72},

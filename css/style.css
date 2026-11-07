@@ -144,8 +144,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .books button:hover,.scene .books button:focus-visible,.room .books button:hover,.room .books button:focus-visible{transform:translateX(3%);filter:drop-shadow(0 0 5px #ffd6f0) drop-shadow(0 0 12px #ffd6f0);outline:none;z-index:5}
 .scene .crystal{left:17.5%;bottom:17.5%;width:8%;z-index:1}
 /* The aura: a soft glow of the customer's colour around the crystal ball. */
-.scene .crystal::before{content:"";position:absolute;left:50%;top:42%;width:165%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
-  background:radial-gradient(circle,color-mix(in srgb,var(--aura-glow,#fff) 60%,transparent) 0%,color-mix(in srgb,var(--aura-glow,#fff) 32%,transparent) 40%,transparent 70%);
+.scene .crystal::before{content:"";position:absolute;left:50%;top:42%;width:190%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--aura-glow,#fff) 60%,transparent) 0%,color-mix(in srgb,var(--aura-glow,#fff) 30%,transparent) 30%,color-mix(in srgb,var(--aura-glow,#fff) 12%,transparent) 50%,transparent 72%);
   opacity:0;transition:opacity .8s ease,background .8s ease;pointer-events:none;z-index:0}
 .scene .crystal img{position:relative;z-index:1}
 /* At rest the swirl inside is nearly white (so it is not mistaken for an aura); while an aura colours the ball, the ball as
@@ -163,7 +163,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal.glowing::after{opacity:.7}
 /* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
-@keyframes auraPulse{0%,100%{scale:1;opacity:.85}50%{scale:1.08;opacity:1}}
+@keyframes auraPulse{0%,100%{scale:1;opacity:.75}50%{scale:1.05;opacity:.95}}  /* a slow, gentle breath */
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}
 .scene .notebook{left:54%;bottom:11%;width:13.5%;z-index:3}
@@ -980,11 +980,11 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .room .phone:hover,.room .phone:focus-visible{background:none;box-shadow:none;outline:none;filter:brightness(.95) drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45))}
 @media (prefers-reduced-motion:no-preference){.room .phone.buzz{animation:buzz .6s linear}}
 @keyframes buzz{0%,100%{translate:0 0;rotate:0deg}10%,50%,90%{translate:-1.5% 0;rotate:-1.2deg}30%,70%{translate:1.5% 0;rotate:1.2deg}}
-.room .phbadge{position:absolute;right:6%;top:2%;margin:0;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;padding:0 .35em;border-radius:1em}  /* the same as the computer's badge */  /* results not looked at yet */
+.room .phbadge{position:absolute;right:3%;top:2%;margin:0;font-size:clamp(10px,1.25vw,16px);min-width:1.55em;height:1.55em;line-height:1.55em;padding:0 .35em;border-radius:1em}  /* the same as the computer's badge */  /* results not looked at yet */
 .phoneview{align-items:center}
 /* the phone itself: a dark bezel with rounded corners like the monitor's, a real phone's shape (9 by 19.5), side buttons,
    a notch over the status bar and a home bar at the bottom. Inside, the app scrolls with no scrollbar showing. */
-.phoneframe{position:relative;height:min(780px,calc(100vh - 32px));aspect-ratio:9/19.5;max-width:calc(100vw - 24px);padding:11px;border-radius:52px;
+.phoneframe{position:relative;height:min(780px,calc(100vh - 32px));aspect-ratio:9/18;max-width:calc(100vw - 24px);padding:11px;border-radius:52px;
   background:linear-gradient(#2B2230,#1C1520);box-shadow:0 0 0 1px #4A3A55,inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 2px #3A2E42,0 22px 60px rgba(10,5,20,.6)}
 .phoneframe::before,.phoneframe::after{content:"";position:absolute;width:4px;border-radius:2px;background:#3A2E42}
 .phoneframe::before{right:-4px;top:22%;height:11%}                       /* the side button */

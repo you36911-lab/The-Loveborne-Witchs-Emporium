@@ -88,7 +88,7 @@ function diaryPages(){const n=memoWritten(),count=n+1+((n+1)%2);
   return Array.from({length:count},(_,i)=>({key:'diary:'+i,plain:true,html:()=>`${i?'':'<p class="dtitle">My notes</p>'}<textarea class="memo${i?'':' first'}" data-memo="${i}" aria-label="My notes, page ${i+1}" spellcheck="false">${esc(S.memo[i]||'')}</textarea>`}))}
 /* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
-  if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. Turn the page to write on.')}
+  if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. I\u2019ll write on the next one.')}
   S.memo[+t.dataset.memo]=t.value;save();
   const s=pageAt(diaryPages())>>1;$('#turnNext').disabled=$('#turnLast').disabled=2*s+2>=diaryPages().length})
 /* The page the reader is on (S.page keeps its key per book), and the spread that holds it. */
@@ -259,14 +259,14 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
-    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=5){toast('You can keep five bookmarks. Remove one first.');return}
+    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=5){toast('Only five bookmarks fit. I\u2019ll have to take one out first.');return}
     else{const used=S.marks.map(x=>x.color),p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL.find(c=>!used.includes(c))})}
     save();renderBooks();return}
   if(b.dataset.book){if(b.dataset.book!==curBook)showBook(b.dataset.book);return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
     if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}
-      if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),e&&entryLocked(e)?2300:0)}else if(f[i]){f[i]=undefined}else{toast('Pick a word from the word bank first.')}
+      if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),e&&entryLocked(e)?2300:0)}else if(f[i]){f[i]=undefined}else{toast('I need a word from the word bank first.')}
     save();renderBooks();return}
   if(b.dataset.rmIng){const[id,i]=b.dataset.rmIng.split('|');noteOf(id).ing[+i]='';save();renderBooks();return}
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
