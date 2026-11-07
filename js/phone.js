@@ -1,4 +1,4 @@
-/* The phone on the altar (left of the candle stand). A test craft's result comes to it: the phone buzzes with a
+/* The phone on the altar (right of the candle stand). A test craft's result comes to it: the phone buzzes with a
    notification, then opens on its Test Craft app, which looks like the computer's apps (a window with a title bar). The
    last result stays on the phone (S.lastTest); clicking the phone opens it again. */
 const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed'};

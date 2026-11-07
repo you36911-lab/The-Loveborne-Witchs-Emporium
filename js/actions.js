@@ -179,6 +179,6 @@ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsV
 /* A burst of little pink stars from the middle of an element, flying out in a ring and fading (none with reduced motion). */
 function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,n=8;
   for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.5,d=Math.max(r.width*.35,40)+Math.random()*30,s=document.createElement('span');
-    s.className='burst';s.textContent=i%2?'✦':'✧';s.setAttribute('aria-hidden','true');
+    s.className='burst';s.textContent='✦';s.setAttribute('aria-hidden','true');
     s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.55}px;--sz:${12+Math.random()*10}px;animation-delay:${Math.random()*60}ms`;
     s.addEventListener('animationend',()=>s.remove());document.body.appendChild(s)}}
