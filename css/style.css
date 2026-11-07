@@ -145,7 +145,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal{left:17.5%;bottom:17.5%;width:8%;z-index:1}
 /* The aura: a soft glow of the customer's colour around the crystal ball. */
 .scene .crystal::before{content:"";position:absolute;left:50%;top:42%;width:190%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
-  background:radial-gradient(circle,color-mix(in srgb,var(--aura-glow,#fff) 60%,transparent) 0%,color-mix(in srgb,var(--aura-glow,#fff) 30%,transparent) 30%,color-mix(in srgb,var(--aura-glow,#fff) 12%,transparent) 50%,transparent 72%);
+  background:radial-gradient(circle,color-mix(in srgb,var(--aura-glow,#fff) 48%,transparent) 0%,color-mix(in srgb,var(--aura-glow,#fff) 18%,transparent) 30%,color-mix(in srgb,var(--aura-glow,#fff) 6%,transparent) 50%,transparent 70%);
   opacity:0;transition:opacity .8s ease,background .8s ease;pointer-events:none;z-index:0}
 .scene .crystal img{position:relative;z-index:1}
 /* At rest the swirl inside is nearly white (so it is not mistaken for an aura); while an aura colours the ball, the ball as
@@ -153,7 +153,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal img.swirl{position:absolute;left:0;top:0;width:100%;opacity:0;transition:opacity .8s ease}
 .scene .crystal.glowing img.swirl{opacity:1}
 .scene .crystal.glowing::before{opacity:1;animation:auraPulse 3.2s ease-in-out infinite}
-.scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 6px var(--aura-glow)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 60%,transparent))}
+.scene .crystal.glowing img{filter:var(--light) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
 /* The ball is only looked at, never clicked, so it has no hover. */
 .scene .crystal{cursor:default}
 .scene .crystal::after{content:"";position:absolute;left:.5%;top:0;width:99%;aspect-ratio:1;border-radius:50%;z-index:2;pointer-events:none;
