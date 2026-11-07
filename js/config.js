@@ -73,7 +73,7 @@ const REAL_SIZE = {
   "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45
 };
 const ITEM_SIZE = {
-  "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.3,"Shea butter":0.45,
+  "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.27,"Shea butter":0.45,
   "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Brown sugar":0.6,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
   "Epsom salt":0.85,"Flour":0.95,"Gold sprinkles":0.55,"Honey":0.6,"Milk":0.95,"Milk powder":0.7,"Oats":0.75,
   "Pink salt":0.65,"Pink sprinkles":0.65,"Rainbow sprinkles":0.65,"Rice flour":0.9,"Rose clay":0.55,
