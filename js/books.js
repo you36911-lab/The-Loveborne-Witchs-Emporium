@@ -85,11 +85,12 @@ function allPages(book){if(book===DIARY)return diaryPages();
   if(book==='Recipe Book'){const pad=idx.length%2?[{key:'index:pad',index:true,html:()=>''}]:[];
     return [...idx,...pad,...entries.flatMap(e=>[e,{key:'art:'+e.key.slice(7),plain:true,html:()=>spellArtHTML(e.key.slice(7))}])]}
   return [...idx,...entries]}
-/* A spell's illustration: hidden until the spell has been made perfectly (a perfect test craft counts). Until the designer's
-   picture for it arrives, the frame stays empty but says it has been made. */
+/* A spell's illustration: only its outline until the spell has been made perfectly (a perfect test craft counts), then the
+   picture itself. No caption. */
 function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=ASSETS.spells[id];
-  if(!seen)return `<div class="artpage locked"><div class="artframe"><span class="artq">?</span></div><p class="artcap">Make it just right to see it.</p></div>`;
-  return `<div class="artpage"><div class="artframe">${pic?`<img src="${pic}" alt="${esc(r.name)}">`:'<span class="artsoon">✦</span>'}</div><p class="artcap">${esc(r.name)}</p></div>`}
+  /* locked: only the picture's outline, drawn on the page, with a question mark (an empty dashed frame until the picture exists) */
+  if(!seen)return `<div class="artpage locked"><div class="artframe${pic?' outlined':''}">${pic?`<img class="artline" src="${pic}" alt=""><span class="artfill" style="--pic:url(&quot;${new URL(pic,location.href).href}&quot;);background:${ASSETS.books['Recipe Book'].paper}"></span>`:''}<span class="artq">?</span></div></div>`;
+  return `<div class="artpage"><div class="artframe${pic?' shown':''}">${pic?`<img src="${pic}" alt="${esc(r.name)}">`:'<span class="artsoon">✦</span>'}</div></div>`}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
