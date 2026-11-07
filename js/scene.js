@@ -129,8 +129,18 @@ function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');retur
    perfect puts one out; when all five are out it costs a star and they are lit again. The fifth going out shows the
    candelabra dark for a moment (ASSETS.testCandles[0]) before all five light again. Each one going out is heard. */
 let candlesFails=null,candlesDark=0;
+/* where each candle's flame is in the candelabra pictures (centre, % of the picture), left to right; with n lit, the
+   last n burn. Each lit flame sways (see .flamecopy in style.css). */
+const TFLAMES=[[16.2,28.8],[32.4,21.6],[48.7,5.9],[64.4,21.7],[80.7,29]];
+function candelabraFlames(box,img,n){
+  box.querySelectorAll('.flamecopy').forEach(e=>e.remove());
+  const on=TFLAMES.slice(5-n),hole=([x,y])=>`radial-gradient(3.4% 6.2% at ${x}% ${y}%,transparent 99%,#000 100%)`;
+  img.style.webkitMask=img.style.mask=n?on.map(hole).join(','):'';
+  img.style.webkitMaskComposite=n?'source-in':'';img.style.maskComposite=n?'intersect':'';
+  on.forEach(([x,y],i)=>{const c=document.createElement('img');c.className='flamecopy';c.alt='';c.src=img.getAttribute('src');
+    c.style.cssText=`--fx:${x}%;--fy:${y}%;--rx:3.4%;--ry:6.2%;--fb:${y+4.5}%;--fd:${2.2+i*.37}s;--fdel:-${i*.9}s`;box.appendChild(c)})}
 function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),img=box.querySelector('img');
-  const put=n=>{const src=ASSETS.testCandles[n];if(img.getAttribute('src')!==src)img.src=src};
+  const put=n=>{const src=ASSETS.testCandles[n];if(img.getAttribute('src')!==src){img.src=src;candelabraFlames(box,img,n)}};
   if(candlesFails!==null&&f>candlesFails)playCandleOut();  /* a candle has just gone out: a whoosh and a snuff (sound.js) */
   if(candlesFails!==null&&f>candlesFails&&f%5===0){clearTimeout(candlesDark);put(0);candlesDark=setTimeout(()=>{candlesDark=0;put(5-(S.failTests||0)%5)},1600)}
   else if(!candlesDark)put(lit);
@@ -209,7 +219,7 @@ function renderAltar(){
   $('#plates').innerHTML=S.altar.length?S.altar.map(n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`).join(''):'';
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
      of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
-  const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
+  const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img class="flamebase" src="${ASSETS.candles[S.candle]}" alt=""><img class="flamecopy" src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
   $('#candleSlot').innerHTML=`<div class="stand">${S.candle?'':'<button class="standbtn" data-shelf="Candles" title="Choose a candle" aria-label="Choose a candle"></button>'}<img class="standpic" src="${ASSETS.candleStand}" alt="">${lit}<img class="standfront" src="${ASSETS.candleStand}" alt=""></div>`;
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`

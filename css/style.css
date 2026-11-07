@@ -805,6 +805,23 @@ button.small{font-size:12px;padding:2px 10px}
   background:radial-gradient(circle at 50% 70%,#FFF8D6,#FFC24A 55%,rgba(255,140,40,0) 72%);transform-origin:50% 100%}
 @media (prefers-reduced-motion:no-preference){.candle::before{animation:flicker 1.6s ease-in-out infinite alternate}}
 @keyframes flicker{from{transform:scale(1,1)}to{transform:scale(.88,1.08)}}
+/* Flames in the candle pictures sway a little. The picture itself is untouched: an oval round the flame is hidden in it
+   (.flamebase) and a copy of the picture showing only that oval (.flamecopy) lies on top and sways from the flame's foot.
+   --fx/--fy: the oval's centre, --rx/--ry: its size, --fb: the flame's foot (where it sways from), all in % of the picture.
+   The single candles all share one drawing, so one oval fits them all. */
+.stand .ontable{--fx:49.5%;--fy:10%;--rx:15%;--ry:11%;--fb:19%}
+.flamebase{-webkit-mask:radial-gradient(var(--rx) var(--ry) at var(--fx) var(--fy),transparent 99%,#000 100%);
+  mask:radial-gradient(var(--rx) var(--ry) at var(--fx) var(--fy),transparent 99%,#000 100%)}
+img.flamecopy,.stand .ontable img.flamecopy{position:absolute;inset:0;width:100%;height:100%;max-width:none;pointer-events:none;filter:none;
+  -webkit-mask:radial-gradient(var(--rx) var(--ry) at var(--fx) var(--fy),#000 100%,transparent 102%);
+  mask:radial-gradient(var(--rx) var(--ry) at var(--fx) var(--fy),#000 100%,transparent 102%);transform-origin:var(--fx) var(--fb)}
+@media (prefers-reduced-motion:no-preference){img.flamecopy{animation:sway var(--fd,2.6s) ease-in-out var(--fdel,0s) infinite}}
+@keyframes sway{
+  0%,100%{transform:skewX(0) scale(1,1);filter:brightness(1)}
+  20%{transform:skewX(-2.5deg) scale(.97,1.04);filter:brightness(1.06)}
+  45%{transform:skewX(1.5deg) scale(1.02,.97);filter:brightness(.96)}
+  70%{transform:skewX(3deg) scale(.98,1.05);filter:brightness(1.08)}
+  85%{transform:skewX(-1deg) scale(1,.99);filter:brightness(1)}}
 /* the silver bell on the altar (assets/scene/altar-bell.png, 328×318): ringing it makes what is laid out. It glows a little
    when everything is ready; it rings (rocks) when struck, and gives a little shake when it can't make anything yet. */
 .bellslot{flex:0 0 5cqw;align-self:flex-end;margin-bottom:.6cqw;margin-right:2.2cqw;  /* room for the card, whose top leans left */
