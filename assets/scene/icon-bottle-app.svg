@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="8 2 48 52.4">
+  <!-- the phone's Test Craft app: the Recipe Book's spell bottle (icon-bottle.svg) with a four-pointed sparkle inside -->
+  <g fill="#B03A7E">
+    <rect x="24.5" y="2" width="15" height="7.5" rx="2"/>
+    <path d="M26 9h12v4A24 21 0 1 1 26 13z"/>
+  </g>
+  <path d="M32 26.5Q33.2 34.8 41 36Q33.2 37.2 32 45.5Q30.8 37.2 23 36Q30.8 34.8 32 26.5z" fill="#FFE3F0"/>
+</svg>

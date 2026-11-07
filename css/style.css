@@ -991,10 +991,16 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .ph-grade{flex:none;padding:2px 12px;border-radius:999px;font-family:var(--font-shop);font-weight:600;font-size:14px;background:var(--pink-soft);color:var(--kw-text)}
 .ph-grade.g-Perfect{background:var(--kw);color:#fff}
 .ph-grade.g-Clumsy,.ph-grade.g-Failed{background:var(--paper2);color:var(--ink-soft)}
-.ph-first{margin:10px 0 0;font-style:italic;color:var(--ink-soft)}
-.ph-card{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:var(--card);box-shadow:0 1px 4px rgba(51,33,58,.06)}
-.ph-line{margin:4px 0;line-height:1.5}
-.ph-line.cont{padding-left:14px}
+.ph-card{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:4px 16px;background:var(--card);box-shadow:0 1px 4px rgba(51,33,58,.06)}
+/* how many ingredients are right, then one section per kind of clue: its label on top, the lines under it, all on one left edge */
+.ph-score{padding:10px 0;font-family:var(--font-shop);font-size:15px;color:var(--ink-soft)}
+.ph-score b{font-size:26px;font-weight:600;color:var(--ink)}
+.ph-score small{font-family:var(--font-text);font-size:13px;margin-left:4px}
+.ph-sec{padding:10px 0;border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.ph-score+.ph-sec,.ph-sec:first-child{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+.ph-card>.ph-sec:first-child{border-top:0}
+.ph-sec .tag{margin:0 0 4px}
+.ph-line{margin:2px 0;line-height:1.5}
 .ph-empty{margin:24px 8px;text-align:center;line-height:1.6}
 /* little pink stars bursting from the name of what is being made when it is clicked (starBurst in actions.js) */
 .burst{position:fixed;z-index:60;pointer-events:none;translate:-50% -50%;font-size:var(--sz,16px);line-height:1;color:#FFD6EA;

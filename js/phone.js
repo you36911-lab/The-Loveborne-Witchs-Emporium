@@ -4,11 +4,15 @@
 const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed'};
 function phoneHTML(){const R=S.lastTest;
   if(!R)return `<p class="ph-empty muted">No test crafts yet.<br>Test craft a recipe from the Recipe Book (the little bottle) and the result comes here.</p>`;
-  const rows=R.lines.map((l,i,A)=>typeof l==='string'?`<p class="ph-line">${kw(l)}</p>`
-    :`<p class="ph-line${i&&A[i-1].k===l.k?' cont':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('');
+  /* the clue lines grouped by what they are about (ingredients, candle, card...), each group under its label; plain text
+     (no word-bank words to collect here) */
+  const groups=[];R.lines.forEach(l=>{if(typeof l==='string')l={k:'',t:l};const g=groups[groups.length-1];
+    if(g&&g.k===l.k)g.t.push(l.t);else groups.push({k:l.k,t:[l.t]})});
+  const rows=groups.map(g=>`<section class="ph-sec">${g.k&&CLUETAG[g.k]?`<span class="tag">${CLUETAG[g.k]}</span>`:''}${g.t.map(t=>`<p class="ph-line">${esc(t)}</p>`).join('')}</section>`).join('');
+  const score=R.total?`<div class="ph-score" title="Ingredients right"><b>${R.ok}</b>/${R.total} <small>ingredients</small></div>`:'';
   return `<div class="ph-head"><div><b class="ph-name">${esc(R.name||'Test craft')}</b>${R.type?`<small class="muted">${esc(R.type)}</small>`:''}</div>
     <span class="ph-grade g-${R.grade}">${GRADE_NOTE[R.grade]||esc(R.grade)}</span></div>
-    ${R.first?`<p class="ph-first">${esc(R.first)}</p>`:''}<div class="ph-card">${rows}</div>`}
+    <div class="ph-card">${score}${rows}</div>`}
 function openPhone(){$('#phoneApp').innerHTML=phoneHTML();$('#phoneBtn').classList.remove('new');$('#phoneView').classList.add('open')}
 function closePhone(){$('#phoneView').classList.remove('open')}
 /* A new result: the phone buzzes on the table (after the slide down to the workroom, if there is one), then opens. */
@@ -16,6 +20,6 @@ let phoneTimer=0;
 function phoneNotify(){clearTimeout(phoneTimer);const ph=$('#phoneBtn'),moving=$('#world').getAnimations?.().length>0;
   phoneTimer=setTimeout(()=>{ph.classList.add('new');ph.classList.remove('buzz');void ph.offsetWidth;ph.classList.add('buzz');playNotify();
     phoneTimer=setTimeout(openPhone,calm()?0:750)},moving?950:150)}
-$('#phoneIco').src=ASSETS.iconBottle;
+$('#phoneIco').src=ASSETS.iconPhoneApp;
 $('#phoneView').addEventListener('click',e=>{if(e.target.id==='phoneView'||e.target.closest('#phoneClose'))closePhone()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#phoneView').classList.contains('open'))closePhone()});

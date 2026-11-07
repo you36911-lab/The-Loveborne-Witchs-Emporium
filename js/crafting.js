@@ -40,7 +40,9 @@ function ingLine(sw){const g=`The one from ${shelfOf(sw.got)}`,k=sw.kw;
   if(sw.kind==='lacks')return `${g}: it brings ${k}, but nothing in the mix brings ${sw.lacks[0]}. The right one would.`;
   if(sw.kind==='notes')return `${g}: it brings ${k}, but also ${sw.off}. The right one brings ${sw.wantP} instead.`;
   return `${g} isn\u2019t right. Picture the right one: ${ITEM[sw.want]?.look||'something else'}.`}
-function evaluate(r,test){
+/* level: how many test crafts of this recipe have already gone wrong. The first time the clues only say which shelves are
+   short or over (2 more from Herbs & flowers); from the second, each missing one is pictured and each wrong one explained. */
+function evaluate(r,test,level=1){
   const used=[...new Set(S.altar)],need=recipeNeeds(r,used,currentVisit()?.born);
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
   /* someone else's birthstone in place of theirs: one problem, said plainly */
@@ -55,23 +57,26 @@ function evaluate(r,test){
   /* Ingredients: say how many are off, then one plain clue per problem, naming the ingredient that is wrong. */
   const ingProbs=swaps.length+loneMissing.length+loneWrong.length;
   if(other)L('ing',`The ${other.toLowerCase()} is a birthstone, but not theirs. Theirs is the stone of the month they were born in.`);
-  if(ingProbs){const nw=swaps.length+loneWrong.length,nm=loneMissing.length,parts=[];
-    if(nw)parts.push(`${nw} wrong`);if(nm)parts.push(`${nm} missing`);
-    L('ing',nw&&nm?`${ingProbs} ingredients are off: ${parts.join(', ')}.`:`${ingProbs} ingredient${ingProbs>1?'s are':' is'} ${nw?'wrong':'missing'}.`);
+  const isStone=m=>m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m);
+  if(ingProbs&&!level){const by=(list,f)=>{const n={};list.forEach(x=>{const k=f(x);n[k]=(n[k]||0)+1});return Object.entries(n)};
+    const miss=[...loneMissing,...swaps.map(s=>s.want)],over=[...loneWrong,...swaps.map(s=>s.got)];
+    if(miss.some(isStone))L('ing','It needs their birthstone: the stone of the month they were born in.');
+    by(miss.filter(m=>!isStone(m)),shelfOf).forEach(([sh,n])=>L('ing',`${n} more from ${sh}.`));
+    by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
+  else if(ingProbs){
     swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
-    loneMissing.forEach(m=>(m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m))?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
+    loneMissing.forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
   if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
   else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
-  if(r.tarot&&!S.tarot){probs++;L('card',`It feels unguided, as if waiting for a card. The card it wants feels like ${CARDFEEL[r.tarot]||'something'}.`)}
-  else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card. The card it wants feels like ${CARDFEEL[r.tarot]||'something else'}.`)}
+  if(r.tarot&&!S.tarot){probs++;L('card',`It feels unguided, as if waiting for a card.${level?` The card it wants feels like ${CARDFEEL[r.tarot]||'something'}.`:''}`)}
+  else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card.${level?` The card it wants feels like ${CARDFEEL[r.tarot]||'something else'}.`:''}`)}
   else if(!r.tarot&&S.tarot){probs++;L('card','The card stayed silent.')}
   const unmet=r.conds.filter(c=>!met(c));probs+=unmet.length;
   if(unmet.length){const[t,g]=condClue(unmet[0],r.themes);L('when',t);if(test)gained.push(...g)}
-  if(probs)lines.unshift({k:'sum',t:probs===1?'One thing is off.':`${probs} things are off in all.`});
   const grade=probs===0?'Perfect':probs===1?'Good':probs<=3?'Clumsy':'Failed';
   if(test){const came=new Set();
     need.filter(x=>used.includes(x)&&!isBaseFor(x,r.type)).forEach(x=>(ITEM[x]?.props||[]).forEach(p=>r.themes.includes(p)&&came.add(p)));
@@ -79,7 +84,7 @@ function evaluate(r,test){
     if(r.tarot&&S.tarot===r.tarot)(D.tarot[r.tarot]||[]).forEach(p=>r.themes.includes(p)&&came.add(p));
     swaps.forEach(s=>r.themes.includes(s.kw)&&came.add(s.kw));
     const c=[...came].slice(0,3);if(c.length){L('came',`You can feel ${c.join(', ').replace(/, ([^,]*)$/,' and $1')} in it.`);gained.push(...c)}}
-  return{grade,lines,gained,probs,swaps}}
+  return{grade,lines,gained,probs,swaps,ok:need.filter(x=>used.includes(x)).length,total:need.length}}
 /* Which reaction a customer reports: by grade, and for Good by the kind of miss. */
 function missKind(ev){if(ev.grade!=='Good')return null;const s=ev.swaps&&ev.swaps[0];
   if(s&&s.kind!=='same'&&s.kind!=='lacks')return s.kind;return 'weak'}
