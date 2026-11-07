@@ -123,7 +123,12 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 
 ## Open items
 
-- **To do: a splash screen** when the game starts (title, before the first day card).
+- **To do: the title screen, the menu and settings** (planned, not built yet). One new script, `js/menu.js`, and a menu section in `css/style.css`; each screen is an overlay `<div>` in `index.html` shown or hidden with a class, in the game's own paper-and-ink look.
+  - **Title screen** (first thing shown, before the day card): the game's title over a background picture, with buttons **Continue** (only when a save exists), **New Game** (asks to confirm if it would overwrite a save), **Settings**, **Quit** (only in the Steam build). The first click here also lets the browser start sound, which it blocks until the player clicks. An optional short logo card before it, skipped by a click. New Game goes on to the day card as now; Continue goes back to the saved day and hour.
+  - **Menu in play**: Esc or a small gear in a corner opens it; the shop is paused and cannot be clicked behind it. Buttons: **Resume**, **Settings**, **Restart** (asks to confirm; the Restart button now on the screen moves here), **Back to title**, **Quit** (Steam build only).
+  - **Settings**: sound volume (one slider now; music and effects apart once there is music), fullscreen, subtitle size, maybe the speed of the dawn card. Kept under their own save key, so a restart does not reset them; `sfx()` multiplies by the volume.
+  - **Art needed from the designer**: a title logo and a title background (perhaps the shop front at dusk), and a button style. Until then plain text buttons on the shop scene.
+  - Later: more than one save slot.
 - The regulars' Day 8+ visits were re-planned for this (the design document's schedule and the tracker's Learning Check). Hand-placed, with beats adjusted: Noor's exam-focus order on Day 19 ("Exams have started"); Goldie says hello on Day 19, then wants to be noticed (Day 28), feels like her own favourite person on Day 35, and has the first-date mirror on Day 42 (the only Friday full moon); Edmund's anniversary on Day 25 (no rain) and Company of the Moon on Day 28; Sam finishes the song (Day 43) before recording (Day 47); Dottie's jester on Day 58. Check that these still read well when the Day 8+ dialogue is written.
 - Subtitles are the shopkeeper's own narration or thoughts, so they never say "you" ("That will cost me a star tonight.").
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.
