@@ -1,4 +1,4 @@
-/* The phone on the altar (right of the candle stand). A test craft's result comes to it: the phone buzzes with a
+/* The phone on the altar (right of the candle stand). A test craft's result comes to it: the phone chimes with a
    notification sound and shows a badge; clicking it opens the phone, drawn as a real phone (bezel, notch, status bar), on
    its Test Craft app, whose title bar is like the computer's apps. The last result stays on it (S.lastTest). */
 const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed'};
@@ -24,10 +24,9 @@ function renderPhoneBadge(){const n=S.phoneNew||0,b=$('#phoneBadge');b.hidden=!n
 function openPhone(){phoneAt=0;$('#phoneTime').textContent='Day '+S.day;$('#phoneApp').innerHTML=phoneHTML();renderPhoneHist();$('#phoneApp').scrollTop=0;
   S.phoneNew=0;save();renderPhoneBadge();$('#phoneView').classList.add('open')}
 function closePhone(){$('#phoneView').classList.remove('open')}
-/* A new result: after a moment (a black candle going out first, if one does) the phone buzzes on the table, chimes, and
+/* A new result: after a moment (a black candle going out first, if one does) the phone chimes and
    its badge counts the results not looked at yet. */
-function phoneNotify(wait){setTimeout(()=>{const ph=$('#phoneBtn');S.phoneNew=(S.phoneNew||0)+1;save();renderPhoneBadge();
-  ph.classList.remove('buzz');void ph.offsetWidth;ph.classList.add('buzz');playPhone()},wait||0)}
+function phoneNotify(wait){setTimeout(()=>{S.phoneNew=(S.phoneNew||0)+1;save();renderPhoneBadge();playPhone()},wait||0)}  /* no shake: the sound and the badge say it */
 $('#phoneBtn').addEventListener('click',openPhone);
 
 $('#phoneIco').src=ASSETS.iconPhoneApp;

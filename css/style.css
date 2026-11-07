@@ -981,14 +981,12 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 
 /* ---------- the phone (phone.js): lying on the altar right of the candle stand (assets/scene/altar-phone.png, 800×638,
    phone2, the designer's picture cut out), dimmed a little to the room's light like the stand. Test craft results come to it:
-   it buzzes, then its Test Craft app opens, a window like the computer's apps. */
+   it chimes and shows a badge; clicking it opens the phone. */
 .room .phone{position:absolute;left:26.6%;bottom:12.3%;width:7.2%;  /* sized to the things around it: about 15 cm long, two apples end to end */
   aspect-ratio:800/638;z-index:3;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;
   filter:brightness(.86) saturate(.95) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45));transition:filter .15s}
 .room .phone img{display:block;width:100%;height:100%;pointer-events:none}
 .room .phone:hover,.room .phone:focus-visible{background:none;box-shadow:none;outline:none;filter:brightness(.95) drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45))}
-@media (prefers-reduced-motion:no-preference){.room .phone.buzz{animation:buzz .6s linear}}
-@keyframes buzz{0%,100%{translate:0 0;rotate:0deg}10%,50%,90%{translate:-1.5% 0;rotate:-1.2deg}30%,70%{translate:1.5% 0;rotate:1.2deg}}
 .room .phbadge{position:absolute;right:3%;top:2%;margin:0;font-size:clamp(10px,1.25vw,16px);min-width:1.55em;height:1.55em;line-height:1.55em;padding:0 .35em;border-radius:1em}  /* the same as the computer's badge */  /* results not looked at yet */
 .phoneview{align-items:center}
 /* the phone itself: a dark bezel with rounded corners like the monitor's, a real phone's shape (9 by 19.5), side buttons,

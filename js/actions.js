@@ -94,7 +94,7 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
 let partingAtClick=false;
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain');partingAtClick=!!S.parting},true);
 /* A test craft: what was written is laid out on the altar, it is crafted (craftAnim), and only then is it judged: a black
-   candle goes out if it isn't perfect, and the result comes to the phone (a buzz, a sound, and a badge; the phone shows it
+   candle goes out if it isn't perfect, and the result comes to the phone (a sound and a badge; the phone shows it
    when clicked). */
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
   if(test){render();craftAnim(()=>judgeTest(r));return}
