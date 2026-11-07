@@ -190,23 +190,23 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
     s.className='burst';s.textContent='✦';s.setAttribute('aria-hidden','true');
     s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.55}px;--sz:${12+Math.random()*10}px;animation-delay:${Math.random()*60}ms`;
     s.addEventListener('animationend',()=>s.remove());document.body.appendChild(s)}}
-/* Crafting what is laid out: the things on the altar take on a pink rim of light and drift in toward the middle, turning a
-   little, while tiny motes of light rise off the cloth and gather over them; at the peak a small soft flash and a burst of
-   stars, and they settle back. Nothing can be clicked meanwhile. If the view is still
+/* Crafting what is laid out: a magic circle draws itself on the cloth under it and slowly turns, a soft light rises on the
+   wall behind, the things take on a pink rim of light and drift in toward the middle, turning a little, while tiny motes
+   of light rise off the cloth and gather over them; at the peak a burst of stars, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
   if(calm()){setTimeout(done,moving?950:0);return}
   document.body.classList.add('crafting');
   setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
-    glow.style.left=(cx-glow.parentElement.getBoundingClientRect().left)+'px';  /* the light rises behind the middle of what is laid out */
-    glow.classList.remove('on');void glow.offsetWidth;glow.classList.add('on');plates.classList.add('charging');craftMotes(pr,cx);
+    const mc=$('#magicCircle'),x=(cx-glow.parentElement.getBoundingClientRect().left)+'px';glow.style.left=mc.style.left=x;  /* both centred on what is laid out */
+    [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});plates.classList.add('charging');craftMotes(pr,cx);
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
       el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-4%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
         {transform:`translate(${dx}px,-10%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-12%) scale(.84) rotate(${-turn}deg)`,offset:.72},
         {transform:'none'}],{duration:1900,easing:'ease-in-out'})});
     setTimeout(()=>starBurst(plates),1050);
     setTimeout(()=>plates.classList.remove('charging'),1500);
-    setTimeout(()=>{glow.classList.remove('on');document.body.classList.remove('crafting');done()},1950)},moving?1150:150)}
+    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},1950)},moving?1150:150)}
 /* motes of light rising off the cloth around what is laid out and drifting in over its middle, each at its own pace */
 function craftMotes(pr,cx){const top=pr.top+pr.height*.25;
   for(let i=0;i<34;i++){const m=document.createElement('span');m.className='mote';m.setAttribute('aria-hidden','true');
