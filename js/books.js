@@ -183,10 +183,10 @@ function renderBooks(){
   $('#turnPrev').disabled=$('#turnFirst').disabled=s===0;$('#turnNext').disabled=$('#turnLast').disabled=2*s+2>=pages.length}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
 const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
-const CONDKIND={day:'Weekday',full:'Full Moon',time:'Magic Hour',starry:'Sky Event',sabbat:'Festival',named:'Full Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
+const CONDKIND={day:'Weekday',full:'Moon',time:'Magic Hour',starry:'Sky Event',sabbat:'Festival',named:'Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
 const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
  'Magic Hour':HOURS,'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),
- 'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Full Moon':ALMANAC[2][1],
+ 'Festival':[...D.sabbats.map(s=>s[0]),'Any equinox','Any equinox or solstice'],'Moon':ALMANAC[2][1],
  'Special':['Morning after a Full Moon',"The customer's birthday","The day of the customer's milestone",'A full week, starting on a Monday']};
 /* A blank in a recipe is a ruled line in the book: tapping it unfolds a short index, in text, of what could go there
    (names only: the keywords are for the player to look up in the books). */
@@ -231,7 +231,7 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div class="wgroup"><div class="wrow"><b>Ingredients:</b><span class="wvals">${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</span></div>${ingList}</div>
   <div class="wgroup"><div class="wrow"><b>Candle:</b><span class="wvals">${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none}</span></div>${pickOpen.startsWith('candle|')?ccList:''}</div>
   <div class="wgroup"><div class="wrow"><b>Card:</b><span class="wvals">${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</span></div>${pickOpen.startsWith('tarot|')?ccList:''}</div>
-  <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div>${r.conds.some(c=>c.t==='named')?'<div class="muted" style="font-size:.85em">Needs one particular full moon, chosen by name. A plain Full Moon won\u2019t do.</div>':''}</div>
+  <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div></div>
   </div>`}
 $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   /* a click anywhere else folds an open index away */

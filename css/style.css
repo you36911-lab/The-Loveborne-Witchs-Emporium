@@ -260,6 +260,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
 .recipe .wvals{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1em .8em}
 .recipe .wvals.plain{display:block}
+.recipe .wvals.plain,.recipe .wvals>.muted{padding-left:.5em}  /* plain values start where the written blanks do */
 .recipe .wrow b.inl{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink);margin-left:.6em}
 .recipe .wrow>b{font-family:var(--font-title);font-weight:700;font-size:1.12em;color:var(--ink)}
 .wblank{display:inline-block;gap:6px;background:none;border:0;box-shadow:none;padding:2px 2px 0;border-radius:0;
