@@ -258,6 +258,15 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .recipe .rbody{display:flex;flex-direction:column;gap:.4em;font-size:1.18em}
 /* every row: a fixed column for its heading, then its slots, which wrap under the first slot (not under the heading) */
 .pbody .recipe .rbody,.pbody .recipe .rbody div{line-height:1.75}
+/* the illustration page facing a recipe: a frame, the picture once the spell has been made just right */
+.artpage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em}
+.artframe{width:78%;aspect-ratio:3/4;display:grid;place-items:center;border:.12em solid #C9A8B8;border-radius:.4em;background:rgba(255,255,255,.35);box-shadow:inset 0 0 1.2em rgba(176,58,126,.08)}
+.artframe img{width:100%;height:100%;object-fit:contain}
+.artpage.locked .artframe{border-style:dashed;background:rgba(201,168,184,.08)}
+.artq{font-family:var(--font-title);font-size:4em;color:#C9A8B8;opacity:.7}
+.artsoon{font-size:3em;color:#E070AE;opacity:.6}
+.artcap{margin:0;font-family:'Caveat',cursive;font-size:1.5em;color:#3D2A5C}
+.artpage.locked .artcap{color:var(--ink-soft)}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
 .recipe .wvals{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1em .8em}
@@ -784,6 +793,11 @@ button.small{font-size:12px;padding:2px 10px}
 /* what is laid out floats a little above the altar, bobbing gently, each a little out of step; its shadow stays on the cloth
    and shrinks as it rises (the candle and the card stay put) */
 .plates .ontable{position:relative}
+/* the finished spell, standing where the ingredients were: it rises into view as the crafting ends */
+.ontable.spellmade{animation:spellIn .7s cubic-bezier(.2,.8,.3,1) both}
+.ontable.spellmade img.nopic{filter:drop-shadow(0 0 .4cqw #FFE3F0) drop-shadow(0 0 1cqw rgba(244,173,207,.8))}
+@keyframes spellIn{from{opacity:0;transform:translateY(8%) scale(.7)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.ontable.spellmade{animation:none}}
 /* two rows (five or more things): the back row stands further back on the table */
 .prow{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-evenly}  /* spread evenly, so the back row shows between the front row */
 .prow.back{z-index:0;translate:0 -2.8cqw;transform-origin:50% 100%;filter:brightness(.9)}

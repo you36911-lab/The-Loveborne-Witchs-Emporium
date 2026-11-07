@@ -80,7 +80,16 @@ function allPages(book){if(book===DIARY)return diaryPages();
     (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
     (rows.length?rows.map(({p,head})=>{const m=marks.find(x=>x.book===book&&x.key===p.key);
       return (head?`<h3 class="cat">${esc(p.cat)}</h3>`:'')+`<button class="idxrow" data-go="${esc(p.key)}"><span class="t">${esc(p.title)}</span>${m?`<i class="dot" style="background:var(--kw)"></i>`:''}<span class="muted">${p.done?' ✦':p.started?' •':''}</span></button>`}).join(''):'<p class="muted">Nothing matches.</p>')}));
+  /* the Recipe Book gives each recipe a spread: the recipe on the left page, the spell's illustration on the right (a
+     blank page after the index, if needed, so every recipe starts on a left page) */
+  if(book==='Recipe Book'){const pad=idx.length%2?[{key:'index:pad',index:true,html:()=>''}]:[];
+    return [...idx,...pad,...entries.flatMap(e=>[e,{key:'art:'+e.key.slice(7),plain:true,html:()=>spellArtHTML(e.key.slice(7))}])]}
   return [...idx,...entries]}
+/* A spell's illustration: hidden until the spell has been made perfectly (a perfect test craft counts). Until the designer's
+   picture for it arrives, the frame stays empty but says it has been made. */
+function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=ASSETS.spells[id];
+  if(!seen)return `<div class="artpage locked"><div class="artframe"><span class="artq">?</span></div><p class="artcap">Make it just right to see it.</p></div>`;
+  return `<div class="artpage"><div class="artframe">${pic?`<img src="${pic}" alt="${esc(r.name)}">`:'<span class="artsoon">✦</span>'}</div><p class="artcap">${esc(r.name)}</p></div>`}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};

@@ -227,7 +227,10 @@ function renderAltar(){
   const plate=n=>`<button class="ontable" data-item="${esc(n)}" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${realOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
   const A=S.altar,two=A.length>=5,bySize=[...A].sort((a,b)=>realOf(a)-realOf(b)),nf=A.length-Math.floor(A.length/2),
     front=two?A.filter(n=>bySize.indexOf(n)<nf):A,back=two?A.filter(n=>bySize.indexOf(n)>=nf):[];
-  $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
+  if(S.altar.length&&S.spell)S.spell=null;  /* laying things out again clears a finished spell away */
+  if(S.spell){const sp=S.spell,pic=ASSETS.spells[sp.rid];
+    $('#plates').innerHTML=`<button class="ontable spellmade" id="spellBtn" aria-label="${esc(sp.name)}: ${sp.give?'take it up to the counter':'clear it away'}"><img src="${pic||ASSETS.iconPhoneApp}" alt="" class="${pic?'':'nopic'}" style="--h:.62">${pic?'':`<span class="nm">${esc(sp.name)}</span>`}</button>`}
+  else $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
      of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
   const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img class="flamebase" src="${ASSETS.candles[S.candle]}" alt=""><img class="flamecopy" src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
