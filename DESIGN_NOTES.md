@@ -123,6 +123,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 
 ## Open items
 
+- **To do: a splash screen** when the game starts (title, before the first day card).
 - The regulars' Day 8+ visits were re-planned for this (the design document's schedule and the tracker's Learning Check). Hand-placed, with beats adjusted: Noor's exam-focus order on Day 19 ("Exams have started"); Goldie says hello on Day 19, then wants to be noticed (Day 28), feels like her own favourite person on Day 35, and has the first-date mirror on Day 42 (the only Friday full moon); Edmund's anniversary on Day 25 (no rain) and Company of the Moon on Day 28; Sam finishes the song (Day 43) before recording (Day 47); Dottie's jester on Day 58. Check that these still read well when the Day 8+ dialogue is written.
 - Subtitles are the shopkeeper's own narration or thoughts, so they never say "you" ("That will cost me a star tonight.").
 - Write Day 8+ dialogue for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Deferred: polishing the prototype comes first.

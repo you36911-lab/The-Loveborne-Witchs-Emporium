@@ -3,10 +3,11 @@
 /* Unread emails and new reviews show a badge on the computer. */
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
 const newReviews=()=>Math.max(0,S.reviews.length-S.reviewsSeen);
-/* the computer's red badge counts what is new; when it goes up (not when the game opens), a notification chime is heard */
-let badgeWas=null;
+/* the computer's red badge counts what is new; when it goes up (not when the game opens), a notification chime is heard,
+   once for things that arrive together (several emails at once ring once) */
+let badgeWas=null,chimedAt=0;
 function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer');
-  if(badgeWas!==null&&n>badgeWas)playNotify();badgeWas=n}
+  if(badgeWas!==null&&n>badgeWas&&Date.now()-chimedAt>3000){chimedAt=Date.now();playNotify()}badgeWas=n}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
 /* The book stack: each book cut from the stack picture along its drawn outline (a watershed from points inside each book,
@@ -84,7 +85,7 @@ const NUM_WORDS=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight',
 const numWord=n=>n<20?NUM_WORDS[n]:n<100?TENS_WORDS[Math.floor(n/10)]+(n%10?'-'+NUM_WORDS[n%10]:''):String(n);
 function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
   $('#dayCard').innerHTML=`<span class="dc-title"><i class="dc-rule"></i>Day ${numWord(S.day)}<i class="dc-rule"></i></span><small>${esc(T.weekday)}${T.sabbat?' \u2726 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');document.body.classList.add('dawning');
-  render();setTimeout(()=>{$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');render()},DAWN_MS);setTimeout(render,DAWN_MS+AFTER_DAWN_MS)}
+  render();setTimeout(()=>{$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');render()},DAWN_MS);setTimeout(render,DAWN_MS+AFTER_DAWN_MS);setTimeout(render,DAWN_MS+MAIL_AFTER_DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
@@ -307,7 +308,7 @@ function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter and open <b>Moonpost</b>.';
   return ''}
-function render(){if(Date.now()>=dawnUntil)checkMail();  /* post waits until the dawn card has gone */
+function render(){if(Date.now()>=dawnUntil+MAIL_AFTER_DAWN_MS)checkMail();  /* post waits until the dawn card has gone, and a moment more */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
 let autoT=null;
 function hourDone(){return !currentVisitor()&&!S.altar.length&&!S.candle&&!S.tarot}

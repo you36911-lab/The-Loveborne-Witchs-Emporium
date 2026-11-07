@@ -15,6 +15,7 @@ const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */
 const DAWN_MS = 1800;
 const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
+const MAIL_AFTER_DAWN_MS = 1800;  /* after the day card fades, the pause before the morning's new email pops up */
 
 /* How each ingredient's picture is drawn, so a cupboard stands like things together: 0 bottles and flasks, 1 cork-stoppered
    jars, 2 jars with lids, 3 canisters, tins and pots, 4 small packets and boxes (sachets of sugar, vanilla), 5 bags and
