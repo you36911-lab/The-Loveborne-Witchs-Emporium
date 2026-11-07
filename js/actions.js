@@ -4,7 +4,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
   if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();if($('#phoneView').classList.contains('open'))$('#phoneApp').innerHTML=phoneHTML();render();return}
-  if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else S.altar.push(n);render();return}
+  if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else if(S.altar.length>=ALTAR_MAX){toast('The altar is full. Seven things are all it holds.');return}else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */

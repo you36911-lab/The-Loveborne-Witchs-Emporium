@@ -757,6 +757,7 @@ button.small{font-size:12px;padding:2px 10px}
    right (about 77% across). The bar sits on the cloth hanging in front. */
 .tabletop{position:absolute;z-index:1;left:21.5%;right:15%;top:64%;height:22.5%;display:flex;align-items:flex-end;justify-content:space-between;gap:2%}
 .tabletop .slot{flex:0 0 12%;display:flex;justify-content:center;align-items:flex-end;height:100%}
+.tabletop .candleslot{translate:-1.2cqw 0}  /* the candle stand a little to the left, nearer the books */
 /* the candle stand (assets/candles/candle-stand.png, 403×600, the designer's cut-out): always there; a candle stands in its cup. The front copy is cut
    along the rim's inner edge (the line behind its front edge), traced from the picture, so the candle's foot tucks behind the lip and meets its line exactly. */
 .stand{position:relative;height:52.44%;aspect-ratio:403/600;margin-bottom:1.545cqw;  /* 92% of its old size, set higher so the cup's rim (where the candle stands) stays where it was */
@@ -974,7 +975,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 /* ---------- the phone (phone.js): lying on the altar right of the candle stand (assets/scene/altar-phone.png, 800×638,
    phone2, the designer's picture cut out), dimmed a little to the room's light like the stand. Test craft results come to it:
    it buzzes, then its Test Craft app opens, a window like the computer's apps. */
-.room .phone{position:absolute;left:28.3%;bottom:12.3%;width:7.2%;  /* sized to the things around it: about 15 cm long, two apples end to end */
+.room .phone{position:absolute;left:27.1%;bottom:12.3%;width:7.2%;  /* sized to the things around it: about 15 cm long, two apples end to end */
   aspect-ratio:800/638;z-index:3;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;
   filter:brightness(.86) saturate(.95) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45));transition:filter .15s}
 .room .phone img{display:block;width:100%;height:100%;pointer-events:none}

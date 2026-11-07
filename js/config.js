@@ -10,6 +10,7 @@ const LAST_PLAYABLE_DAY = 7;
 
 /* Prototype controls under the title bar: jump to any week, day, hour or customer. Set to false to hide them. */
 const PROTOTYPE_TOOLS = true;
+const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has seven ingredients) */
 
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */
 const DAWN_MS = 1800;
