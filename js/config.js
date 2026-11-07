@@ -16,6 +16,33 @@ const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has
 const DAWN_MS = 1800;
 const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
 
+/* How each ingredient's picture is drawn, so a cupboard stands like things together: 0 bottles and flasks, 1 cork-stoppered
+   jars, 2 jars with lids, 3 canisters, tins and pots, 4 packets, bags and cards, 5 bundles, 6 blocks. Within a kind, A to Z.
+   Things without a picture (and any not listed) come last, A to Z. */
+const ITEM_KIND = {
+  "Moonwater":0,"Sunwater":0,"Rainwater":0,"Dawn dew":0,"Sea Water":0,"Spring water":0,"Rosewater":0,"New Moon Water":0,
+  "Web Dew":0,"Snow Water":0,"Storm Water":0,"Almond oil":0,"Jojoba oil":0,"Olive oil":0,"Sunflower oil":0,"Milk":0,
+  "Patchouli":0,"Myrrh":0,"Frankincense":0,"Basil":0,"Fern":0,"Four-leaf clover":0,"Hibiscus":0,"Hops":0,
+  "Orange blossom":0,"Thyme":0,"Seaweed":0,"Violet":0,"Apple":0,"Cherry":0,"Beetroot powder":0,"Ginger":0,
+  "Star anise":0,"Black salt":0,"Nest twig":0,"Shed cat whisker":0,"Shed snake skin":0,"Glass bead":0,"Bay leaf":1,"Calendula":1,
+  "Chamomile":1,"Clover":1,"Comfrey leaf":1,"Daisy":1,"Elderflower":1,"Eucalyptus":1,"Jasmine":1,"Lemongrass":1,
+  "Mint":1,"Nettle":1,"Oak moss":1,"Rosemary":1,"Cedar":1,"Pine":1,"Licorice root":1,"Rosebud":1,
+  "Wormwood":1,"Orris root":1,"Strawberry":1,"Clove":1,"Fennel seed":1,"Chili":1,"Saffron":1,"Cinnamon":1,
+  "Raven feather":1,"Moth wing dust":1,"Swan down":1,"Hedgehog quill":1,"Magpie feather":1,"Eggshell":1,"Dandelion":2,"Dandelion root":2,
+  "Cornflower":2,"Mugwort":2,"Rose":2,"Rose petals":2,"Rose thorns":2,"Rue":2,"Sunflower petals":2,"Valerian":2,
+  "White lily":2,"Pressed moon petals":2,"Cedar chips":2,"Wheat":2,"Cypress":2,"Apple peel":2,"Grapes":2,"Lemon":2,
+  "Lemon peel":2,"Lime peel":2,"Orange":2,"Orange peel":2,"Peach":2,"Pomegranate seeds":2,"Rose hips":2,"Allspice":2,
+  "Bergamot":2,"Black pepper":2,"Cardamom":2,"Nutmeg":2,"Poppy seeds":2,"Cinnamon stick":2,"Chocolate chips":2,"Gold sprinkles":2,
+  "Honey":2,"Pink salt":2,"Pink sprinkles":2,"Rainbow sprinkles":2,"Rose clay":2,"Sea salt":2,"Gold mica":2,"Silver mica":2,
+  "Silver glitter":2,"Pink glitter":2,"Biodegradable glitter":2,"Bee pollen":2,"Honeycomb":2,"Snail shell":2,"Acorn":2,"Mismatched button":2,"Vintage button":1,"Small key":2,
+  "Beeswax":2,"Angelica root":3,"Garden sage":3,"Lavender":3,"Lemon balm":3,"Lilac":3,"Lotus":3,"Peppermint":3,
+  "Snowdrop":3,"Juniper":3,"Willow bark":3,"Sweet pea":3,"Black tea":3,"Shea butter":3,"Amber resin":3,"Copal":3,
+  "Sandalwood":3,"Cocoa":3,"Coconut milk powder":3,"Oats":3,"Milk powder":3,"Peacock feather":3,"Dove feather":3,"Raisins":4,
+  "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":4,"Flour":4,"Rice flour":4,"Sugar":4,"Garden soil":4,
+  "Hearth ash":4,"Coin":4,"Owl feather":4,"Seashell":4,"White feather":4,"Brass button":4,"Bright buttons":4,"Gold button":4,
+  "Heart-shaped button":4,"Iron filings":4,"Iron nail":4,"Iron pin":4,"Ash branch":5,"Ash wood":5,"Birch branch":5,"Birch wood":5,
+  "Blackthorn branch":5,"Hazel branch":5,"Autumn leaf":5,"Butter":6,"Soap base":6,"Soap base (charcoal)":6
+};
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
    as a water bottle. Nothing goes below 0.3, so the smallest things stay easy to see. An item not listed in ITEM_SIZE

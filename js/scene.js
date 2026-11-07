@@ -203,7 +203,8 @@ function shelfItemsHTML(c){
     :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
   if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
-  return D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
+  const kind=n=>ASSETS.items[n]?ITEM_KIND[n]??7:8;  /* like with like (ITEM_KIND in config.js), then A to Z */
+  return D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).sort((a,b)=>kind(a.n)-kind(b.n)||a.n.localeCompare(b.n)).map(i=>{  /* the birthstone is one of the crystals, by month */
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const pi=pic?`<span class="bot"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}"></span>`:'';
     const img=!pic?'':bottle?`<span class="pic">${pi}</span>`:pi;
