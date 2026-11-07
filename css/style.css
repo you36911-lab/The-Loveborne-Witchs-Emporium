@@ -189,8 +189,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @keyframes ring{0%{translate:0 0;rotate:0deg}30%{translate:0 -10%;rotate:-15deg}60%{translate:0 -10%;rotate:-12deg}100%{translate:0 0;rotate:0deg}}
 @media (prefers-reduced-motion: reduce){.scene .bell.ring{animation:none}}
 @keyframes nope{0%,100%{transform:translateX(0)}25%{transform:translateX(-4%)}75%{transform:translateX(4%)}}
-/* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. */
-.scenenote{position:absolute;left:50%;bottom:calc(clamp(8px,2vh,22px) + 78px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
+/* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. Every subtitle, at the
+   counter and at the altar, sits at the same height: just clear above the altar's name of what is being made. */
+.scenenote{position:absolute;left:50%;bottom:calc(clamp(15px,3.5vh,38px) + clamp(20px,2.6vw,36px) * 1.15 + 34px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
   color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
 .scenenote[hidden]{display:none}
@@ -346,11 +347,9 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .bookline.months{display:grid;grid-template-columns:auto 1fr;gap:0 1.2em;margin-top:.6em;font-style:normal;font-size:.9em;line-height:1.45;color:var(--ink)}
 .bookline.months b{font-weight:600;color:var(--kw-text)}
 /* Short notices ("Someone is already at the counter.") read like a film subtitle, the same as the scene's mood line. */
-.toast{position:fixed;left:50%;bottom:calc(clamp(8px,2vh,22px) + 78px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:30;pointer-events:none;
+.toast{position:fixed;left:50%;bottom:calc(clamp(15px,3.5vh,38px) + clamp(20px,2.6vw,36px) * 1.15 + 34px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:30;pointer-events:none;
   color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5);display:none}
-/* at the altar the subtitle sits higher, clear of the name of what is being made (and its pink haze) */
-body:has(#world.down) .toast{bottom:calc(clamp(15px,3.5vh,38px) + clamp(20px,2.6vw,36px) * 1.15 + 34px)}
 .toast.in{animation:subIn .6s ease-out both}
 .toast.thought{font-style:italic}
 .toast.out{transition:opacity .4s ease;opacity:0}
