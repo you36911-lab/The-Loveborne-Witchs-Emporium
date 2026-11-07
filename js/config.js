@@ -22,7 +22,8 @@ const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before t
    takes its shelf's size. Used in the cupboards and on the table. */
 const ITEM_SIZE_BY_SHELF = {
   "Base waters":0.95,"Oils, butters & waxes":0.85,"Herbs & flowers":0.6,"Fruits":0.7,"Spices":0.6,
-  "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.42,"Animal gifts":0.7
+  "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.42,"Animal gifts":0.7,
+  "Wood & branches":0.6,"Buttons":0.3,"Findings & tools":0.4
 };
 const ITEM_SIZE = {
   "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.3,"Shea butter":0.45,
@@ -37,7 +38,7 @@ const ITEM_SIZE = {
   "White feather":0.75,"Nest twig":0.6,"Shed cat whisker":0.6,"Shed snake skin":0.65,"Moth wing dust":0.65,
   "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.3,"River stone":0.35,"Selenite":0.5,"Clear quartz":0.48,
   "Black tourmaline":0.48,"Smoky quartz":0.48,"Rose quartz":0.48,"Hematite":0.46,"Rhodonite":0.46,"Pyrite":0.46,
-  "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46
+  "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46,"Acorn":0.32,"Coin":0.3,"Glass bead":0.3,"Iron pin":0.35,"Small key":0.35
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
@@ -355,6 +356,26 @@ const ASSETS = {
     "Sandalwood":           "assets/items/sandalwood.png",
     /* spices */
     "Cinnamon":             "assets/items/cinnamon.png",
+    /* wood & branches, buttons, findings & tools (the designer's "symbols" pictures) */
+    "Acorn":               "assets/items/acorn.png",
+    "Ash branch":          "assets/items/ash-branch.png",
+    "Ash wood":            "assets/items/ash-wood.png",
+    "Birch branch":        "assets/items/birch-branch.png",
+    "Birch wood":          "assets/items/birch-wood.png",
+    "Blackthorn branch":   "assets/items/blackthorn-branch.png",
+    "Hazel branch":        "assets/items/hazel-branch.png",
+    "Brass button":        "assets/items/brass-button.png",
+    "Bright buttons":      "assets/items/bright-buttons.png",
+    "Gold button":         "assets/items/gold-button.png",
+    "Heart-shaped button": "assets/items/heart-shaped-button.png",
+    "Mismatched button":   "assets/items/mismatched-button.png",
+    "Vintage button":      "assets/items/vintage-button.png",
+    "Coin":                "assets/items/coin.png",
+    "Glass bead":          "assets/items/glass-bead.png",
+    "Iron filings":        "assets/items/iron-filings.png",
+    "Iron nail":           "assets/items/iron-nail.png",
+    "Iron pin":            "assets/items/iron-pin.png",
+    "Small key":           "assets/items/small-key.png",
     /* fruits */
     "Beetroot powder":      "assets/items/beetroot-powder.png",
     /* spices */

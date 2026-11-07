@@ -3,7 +3,7 @@
 document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#receiptsView').classList.remove('open');return}
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
-  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();if($('#phoneView').classList.contains('open'))$('#phoneApp').innerHTML=phoneHTML();render();return}
+  if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();if($('#phoneView').classList.contains('open'))$('#phoneApp').innerHTML=phoneHTML();  /* the phone keeps the result it shows */render();return}
   if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else if(S.altar.length>=ALTAR_MAX){toast('The altar is full. Seven things are all it holds.');return}else S.altar.push(n);render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
@@ -109,7 +109,7 @@ function judge(r,test){
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
       if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
-    S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total}}  /* the result goes to the phone (phone.js) */
+    S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10)}  /* the result goes to the phone (phone.js) */
   else{/* Made for real: it goes up to the counter, and is given when the player clicks it there (giveMade). */
     const q=S.queue;if(!q)return;
     S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;

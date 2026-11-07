@@ -805,7 +805,8 @@ button.small{font-size:12px;padding:2px 10px}
 .cardbed.empty{border:.16cqw dashed rgba(255,236,246,.8);box-shadow:none;background:rgba(255,230,245,.06)}
 /* the empty outline stays put; its inside fills in a little and it glows pink like the other things (a box-shadow: the outline is too faint for a drop-shadow) */
 .ontable.laid:hover .cardbed.empty{background:rgba(255,230,245,.22);box-shadow:0 0 .5cqw .15cqw rgba(255,214,240,.95),0 0 1.4cqw .4cqw rgba(244,173,207,.75),inset 0 0 .6cqw rgba(255,214,240,.6)}
-#tarotSlot .ontable:active{transform:none}  /* the card's place does not press in on a click: it lies on the table */
+#tarotSlot .ontable:active{transform:none}
+#tarotSlot .ontable{pointer-events:none}#tarotSlot .cardbed{pointer-events:auto}  /* only the card or its dashed outline is hovered and clicked, not the space around it */  /* the card's place does not press in on a click: it lies on the table */
 .ontable .slotcard{height:100%;border-radius:.3cqw;box-shadow:0 .3cqw .6cqw rgba(0,0,0,.45);margin:0}
 .candle{position:relative;display:block;width:1.6cqw;height:5.2cqw;border-radius:3px 3px 2px 2px;background:var(--cc);box-shadow:inset -.3cqw 0 0 rgba(0,0,0,.18),0 .3cqw .4cqw rgba(0,0,0,.4)}
 .candle::before{content:"";position:absolute;left:50%;top:-1.5cqw;width:.8cqw;height:1.4cqw;translate:-50% 0;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
@@ -844,7 +845,8 @@ img.flamecopy,.stand .ontable img.flamecopy{position:absolute;inset:0;width:100%
 @media (prefers-reduced-motion: reduce){.bellslot.ring{animation:none}}
 /* the black candelabra (assets/candles/test-candles-N.png, 470×651) stands on the altar right of the tarot card,
    dimmed a little to the room's light, like the books and the candle stand */
-.testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:0;cursor:help;
+.testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:3;  /* above an open cupboard door */
+  cursor:help;
   filter:brightness(.84) saturate(.9) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .testcandles img{display:block;width:100%;height:100%}
 /* The name of what is being made, low on the table: the dawn card's lettering (white italic serif) with a soft pink glow */
@@ -1003,6 +1005,12 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ph-sicons svg{height:14px;width:auto}
 .phonebar{height:40px;padding-left:16px}
 .phonebar img.pcico{object-fit:contain}
+/* the history button where a close button would be: a turn-back arrow with the number of the result shown inside */
+.ph-hist{position:relative;width:34px;height:34px;margin-right:10px;padding:0;border:0;border-radius:50%;background:none;box-shadow:none;color:var(--kw-text)}
+.ph-hist[hidden]{display:none}
+.ph-hist:hover{background:var(--pink-soft);box-shadow:none}
+.ph-hist svg{position:absolute;inset:2px;width:30px;height:30px}
+.ph-hist b{position:relative;font-family:var(--font-shop);font-size:12px;font-weight:600;line-height:34px}
 .phoneapp{flex:1;min-height:0;overflow:auto;padding:16px 16px 18px;background:var(--paper);scrollbar-width:none}
 .phoneapp::-webkit-scrollbar{display:none}
 .ph-home{flex:none;height:24px;display:grid;place-items:center;background:var(--paper)}
@@ -1017,7 +1025,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .craftglow.on{animation:craftglow 1.9s ease-in-out both}
 @keyframes craftglow{0%{opacity:0;scale:.85}35%{opacity:.7}56%{opacity:1;scale:1.05}80%{opacity:.5}100%{opacity:0;scale:1.1}}
 /* the magic circle lies flat on the cloth under what is laid out: it draws itself in, turns slowly, glows, and fades */
-.magiccircle{position:absolute;left:50%;bottom:4%;width:32%;aspect-ratio:1;translate:-50% 50%;z-index:0;pointer-events:none;opacity:0;overflow:visible;
+.magiccircle{position:absolute;left:50%;bottom:16%;width:27%;aspect-ratio:1;translate:-50% 50%;z-index:0;pointer-events:none;opacity:0;overflow:visible;
   transform:perspective(60cqw) rotateX(74deg);fill:none;stroke:#FFE0EE;stroke-width:1.1;stroke-linecap:round;
   filter:drop-shadow(0 0 2px #FFD6EA) drop-shadow(0 0 6px rgba(244,173,207,.9))}
 .magiccircle .mc-dots{fill:#FFE0EE;stroke:none}
