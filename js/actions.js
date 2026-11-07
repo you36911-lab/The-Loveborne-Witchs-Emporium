@@ -195,18 +195,25 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
    of light rise off the cloth and gather over them; at the peak a burst of stars, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
-  if(calm()){setTimeout(done,moving?950:0);return}
+  if(calm()){setTimeout(()=>{playCraft();done()},moving?950:0);return}
   document.body.classList.add('crafting');
   setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
     const mc=$('#magicCircle'),x=(cx-glow.parentElement.getBoundingClientRect().left)+'px';glow.style.left=mc.style.left=x;  /* both centred on what is laid out */
-    [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});plates.classList.add('charging');craftMotes(pr,cx);
+    [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});playCraft();plates.classList.add('charging');craftMotes(pr,cx);
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
-      el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-4%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
-        {transform:`translate(${dx}px,-10%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-12%) scale(.84) rotate(${-turn}deg)`,offset:.72},
+      el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-9%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
+        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`,offset:.72},
         {transform:'none'}],{duration:1900,easing:'ease-in-out'})});
-    setTimeout(()=>starBurst(plates),1050);
+    setTimeout(()=>craftBurst(plates),1000);
     setTimeout(()=>plates.classList.remove('charging'),1500);
     setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},1950)},moving?1150:150)}
+/* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
+function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
+  const wave=(n,dmin,dmax,smin,smax,dur,delay)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.4,d=dmin+Math.random()*(dmax-dmin),s=document.createElement('span');
+    s.className='burst';s.textContent='\u2726';s.setAttribute('aria-hidden','true');
+    s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.7-20}px;--sz:${smin+Math.random()*(smax-smin)}px;animation-duration:${dur}ms;animation-delay:${delay+Math.random()*80}ms`;
+    s.addEventListener('animationend',()=>s.remove());document.body.appendChild(s)}};
+  wave(18,r.width*.3,r.width*.62,16,34,1150,0);wave(12,r.width*.12,r.width*.32,10,20,900,220)}
 /* motes of light rising off the cloth around what is laid out and drifting in over its middle, each at its own pace */
 function craftMotes(pr,cx){const top=pr.top+pr.height*.25;
   for(let i=0;i<34;i++){const m=document.createElement('span');m.className='mote';m.setAttribute('aria-hidden','true');

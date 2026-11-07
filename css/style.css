@@ -777,13 +777,13 @@ button.small{font-size:12px;padding:2px 10px}
 .ontable:hover{background:none;box-shadow:none}  /* no box: the thing itself glows */
 .ontable:hover img{filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .ontable:hover .minijar{filter:drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF)}
-.ontable img{height:calc(var(--h,.7) * 92%);width:auto;max-width:9cqw;object-fit:contain;object-position:bottom;filter:drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
+.ontable img{height:calc(var(--h,.7) * 92%);width:auto;max-width:none;object-fit:contain;object-position:bottom;filter:drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 /* what is laid out floats a little above the altar, bobbing gently, each a little out of step; its shadow stays on the cloth
    and shrinks as it rises (the candle and the card stay put) */
 .plates .ontable{position:relative}
 /* two rows (five or more things): the back row stands further back on the table */
 .prow{position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:space-evenly}  /* spread evenly, so the back row shows between the front row */
-.prow.back{z-index:0;translate:0 -2.8cqw;scale:.82;transform-origin:50% 100%;filter:brightness(.9)}
+.prow.back{z-index:0;translate:0 -2.8cqw;transform-origin:50% 100%;filter:brightness(.9)}
 .prow.front{z-index:1}
 .plates .ontable img,.plates .ontable .minijar{position:relative;z-index:1;translate:0 -1.1cqw;animation:hover 3.4s ease-in-out infinite}
 .plates .ontable::after{content:'';position:absolute;left:50%;bottom:.1cqw;width:5.5cqw;max-width:80%;height:.9cqw;translate:-50% 0;border-radius:50%;
@@ -846,7 +846,7 @@ img.flamecopy,.stand .ontable img.flamecopy{position:absolute;inset:0;width:100%
 /* the black candelabra (assets/candles/test-candles-N.png, 470×651) stands on the altar right of the tarot card,
    dimmed a little to the room's light, like the books and the candle stand */
 .testcandles{position:absolute;left:80.5%;bottom:17.5%;width:10.5%;aspect-ratio:470/651;z-index:3;  /* above an open cupboard door */
-  cursor:help;
+  pointer-events:none;  /* clicks go through to the Findings cupboard behind it */
   filter:brightness(.84) saturate(.9) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.45))}
 .testcandles img{display:block;width:100%;height:100%}
 /* The name of what is being made, low on the table: the dawn card's lettering (white italic serif) with a soft pink glow */
@@ -960,7 +960,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 /* the tick sits just after the last word, in a small space every title keeps at its end (chosen or not) plus the gap
    before the icons, so choosing a recipe never changes how its title wraps or moves the page */
 .recipe .rtitle h3{padding-right:.45em}
-.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:var(--kw);rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
+.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:#3D2A5C;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
 .bookicons{flex:none;display:flex;gap:.6em;padding-top:.3em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:0;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
@@ -1004,11 +1004,11 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .phonebar{height:40px;padding-left:16px}
 .phonebar img.pcico{object-fit:contain}
 /* the history button where a close button would be: a turn-back arrow with the number of the result shown inside */
-.ph-hist{position:relative;width:34px;height:34px;margin-right:10px;padding:0;border:0;border-radius:50%;background:none;box-shadow:none;color:var(--kw-text)}
+.ph-hist{position:relative;display:grid;place-items:center;width:34px;height:34px;margin-right:10px;padding:0;border:0;border-radius:50%;background:none;box-shadow:none;color:var(--kw-text)}
 .ph-hist[hidden]{display:none}
 .ph-hist:hover{background:var(--pink-soft);box-shadow:none}
-.ph-hist svg{position:absolute;inset:2px;width:30px;height:30px}
-.ph-hist b{position:relative;font-family:var(--font-shop);font-size:12px;font-weight:600;line-height:34px}
+.ph-hist svg{position:absolute;left:50%;top:50%;width:30px;height:30px;translate:-50% -50%}
+.ph-hist b{position:relative;font-family:var(--font-shop);font-size:11px;font-weight:600;line-height:1}
 .phoneapp{flex:1;min-height:0;overflow:auto;padding:16px 16px 18px;background:var(--paper);scrollbar-width:none}
 .phoneapp::-webkit-scrollbar{display:none}
 .ph-home{flex:none;height:24px;display:grid;place-items:center;background:var(--paper)}
@@ -1042,7 +1042,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .mote{position:fixed;z-index:6;pointer-events:none;border-radius:50%;background:#FFF2F8;box-shadow:0 0 4px 1px #FFD6EA,0 0 10px 2px rgba(244,173,207,.7)}
 .ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .ph-name{display:block;font-family:var(--font-shop);font-weight:600;font-size:20px;line-height:1.2;color:var(--ink)}
-.ph-head small{display:block;font-size:13px}
+.ph-head small{display:block;margin-top:3px;font-size:13px}
 .ph-grade{flex:none;padding:2px 12px;border-radius:999px;font-family:var(--font-shop);font-weight:600;font-size:14px;background:var(--pink-soft);color:var(--kw-text)}
 .ph-grade.g-Perfect{background:var(--kw);color:#fff}
 .ph-grade.g-Clumsy,.ph-grade.g-Failed{background:var(--paper2);color:var(--ink-soft)}

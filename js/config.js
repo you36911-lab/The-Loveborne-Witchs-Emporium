@@ -38,7 +38,11 @@ const ITEM_SIZE = {
   "White feather":0.75,"Nest twig":0.6,"Shed cat whisker":0.6,"Shed snake skin":0.65,"Moth wing dust":0.65,
   "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.3,"River stone":0.35,"Selenite":0.5,"Clear quartz":0.48,
   "Black tourmaline":0.48,"Smoky quartz":0.48,"Rose quartz":0.48,"Hematite":0.46,"Rhodonite":0.46,"Pyrite":0.46,
-  "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46,"Acorn":0.32,"Coin":0.3,"Glass bead":0.3,"Iron pin":0.35,"Small key":0.35
+  "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46,
+  /* the "symbols" pictures: a jar of acorns, branch bundles (about 30 cm), wood bundles, buttons on hanging cards, a pouch of coins, jars and cards of findings */
+  "Acorn":0.62,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
+  "Brass button":0.55,"Bright buttons":0.55,"Gold button":0.55,"Heart-shaped button":0.55,"Mismatched button":0.55,"Vintage button":0.55,
+  "Coin":0.55,"Glass bead":0.55,"Iron filings":0.6,"Iron nail":0.6,"Iron pin":0.55,"Small key":0.68
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
@@ -64,7 +68,7 @@ const ASSETS = {
   logoFlat: 'assets/scene/logo-flat.png',
   sounds: {  /* recorded sounds (see js/sound.js) */
     shopBell:'assets/sounds/shop-bell.mp3', altarBell:'assets/sounds/altar-bell.mp3', notify:'assets/sounds/notify.mp3',
-    receipt:'assets/sounds/receipt.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3'},
+    receipt:'assets/sounds/receipt.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3'},
   iconBottle: 'assets/scene/icon-bottle.svg',  /* a plain round-bottomed spell bottle, flat in the shop's pinks: the Recipe Book's Test craft this */
   iconPhoneApp: 'assets/scene/icon-bottle-app.svg',  /* the phone's Test Craft app: the same bottle with a sparkle inside */
   iconBell: 'assets/scene/icon-bell.png',  /* the altar's desk bell, the same drawing flattened to three pinks: the Recipe Book's Lay out on the altar */  /* the same picture, its shading flattened to three flat pinks (deep, mid, light), for the My Shop app */

@@ -23,3 +23,5 @@ function playDoorClose(){sfx('doorCreak',.6);setTimeout(()=>sfx('doorClose',.55)
 function playCandleOut(){sfx('candleOut',.3,1800)}
 /* A test craft's result comes to the phone on the altar: "New Notification 057" (Universfield). */
 function playPhone(){sfx('phoneNotify',.5)}
+/* Crafting on the altar (a test craft or the real thing): "Magic Spell" (Soumages), chosen by the designer. */
+function playCraft(){sfx('craft',.6)}
