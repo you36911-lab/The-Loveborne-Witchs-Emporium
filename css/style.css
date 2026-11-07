@@ -961,7 +961,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 /* the tick sits just after the last word, in a small space every title keeps at its end (chosen or not) plus the gap
    before the icons, so choosing a recipe never changes how its title wraps or moves the page */
 .recipe .rtitle h3{padding-right:.45em}
-.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:#3D2A5C;fill:currentColor;stroke:currentColor;stroke-width:.35;stroke-linejoin:round;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
+.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:#3D2A5C;fill:currentColor;stroke:currentColor;stroke-width:1;stroke-linejoin:round;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
 .bookicons{flex:none;display:flex;gap:.6em;padding-top:.3em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:0;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
