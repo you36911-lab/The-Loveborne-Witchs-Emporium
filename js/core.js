@@ -42,7 +42,7 @@ function toast(t,opts={}){const el=$('#toast'),note=$('#sceneNote');el.textConte
 /* Keywords not yet collected show a dotted underline; tapping one adds it to the word bank and picks it. Collected ones read as plain text. */
 const KWRE=new RegExp('\\b('+[...D.vocab].sort((a,b)=>b.length-a.length).map(w=>w.replace('-','\\-')).join('|')+')\\b','gi');
 function kw(text){const s=String(text);let out='',last=0;s.replace(KWRE,(m0,w,i)=>{out+=esc(s.slice(last,i))+(S.bank.includes(w.toLowerCase())?esc(m0):`<button class="kw" data-collect="${esc(w.toLowerCase())}">${esc(m0)}</button>`);  /* already collected: plain text */last=i+m0.length;return m0});return out+esc(s.slice(last))}
-function collect(w){if(!S.bank.includes(w)){S.bank.push(w);toast(`Collected \u201C${w}\u201D`)}selWord=w;save()}
+function collect(w){if(!S.bank.includes(w))S.bank.push(w);selWord=w;save()}  /* no subtitle: the word simply appears in the word bank */
 function addWords(ws){const n=[];ws.forEach(w=>{if(w&&!S.bank.includes(w)){S.bank.push(w);n.push(w)}});if(n.length)toast('New words: '+n.join(', '));return n}
 const today=()=>D.cal[S.day-1];
 /* Post: a letter turns up at a set hour, some time before the order it helps with. It arrives as an email on the computer. */
