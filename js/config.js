@@ -72,6 +72,12 @@ const REAL_SIZE = {
   "Selenite":0.5,"Pearl":0.36,"River stone":0.38,"Beetroot powder":0.55,"Apple":0.55,
   "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45
 };
+/* How tall a finished spell stands on the altar, by its kind (1 = a 20 cm potion bottle): a wand is long, a rune stone small. */
+const SPELL_SIZE = {
+  "Wand":0.95,"Witch's Ladder":0.9,"Water":0.85,"Potion":0.8,"Powder":0.7,"Oil":0.7,"Tonic":0.7,"Spell Bottle":0.65,"Incense":0.65,"Glamour":0.65,
+  "Bath Salt":0.6,"Tea":0.55,"Hand Mirror":0.55,"Witch Salt":0.55,"Cookies":0.5,"Butter":0.45,"Balm":0.45,"Sachet":0.45,"Sigil":0.45,
+  "Amulet":0.45,"Charm":0.45,"Talisman":0.45,"Soap":0.4,"Rune":0.35
+};
 const ITEM_SIZE = {
   "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.27,"Shea butter":0.45,
   "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Brown sugar":0.6,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
@@ -124,7 +130,7 @@ const ASSETS = {
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
   /* a picture of each finished spell, by recipe number (the designer is drawing them): it stands on the altar once
      crafted. Until a spell has one, the shop's bottle stands in, with the spell's name under it. */
-  spells: {},
+  spells: Object.fromEntries([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39].map(n=>[n,'assets/spells/'+n+'.png'])),  /* the designer's pictures so far (recipes 1 to 39) */
   altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: test craft results come to it (phone2, the designer's picture, cut out) */
   altarBell: 'assets/scene/altar-bell.png',  /* the silver bell on the altar: ringing it makes what is laid out (the designer's picture, cut out) */
   testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
