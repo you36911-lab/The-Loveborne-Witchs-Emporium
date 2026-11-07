@@ -89,7 +89,7 @@ function allPages(book){if(book===DIARY)return diaryPages();
    picture itself. No caption. */
 function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=ASSETS.spells[id];
   /* locked: only the picture's outline, drawn on the page, with a question mark (an empty dashed frame until the picture exists) */
-  if(!seen)return `<div class="artpage locked"><div class="artframe${pic?' outlined':''}">${pic?`<img class="artline" src="${pic}" alt=""><span class="artfill" style="--pic:url(&quot;${new URL(pic,location.href).href}&quot;);background:${ASSETS.books['Recipe Book'].paper}"></span>`:''}<span class="artq">?</span></div></div>`;
+  if(!seen)return `<div class="artpage locked"><div class="artframe${pic?' outlined':''}">${pic?`<img class="artline" src="${pic}" alt=""><span class="artfill" style="--pic:url(&quot;${new URL(pic,location.href).href}&quot;);background:color-mix(in srgb,#8A7262 10%,${ASSETS.books['Recipe Book'].paper})"></span>`:''}<span class="artq">?</span></div></div>`;
   return `<div class="artpage"><div class="artframe${pic?' shown':''}">${pic?`<img src="${pic}" alt="${esc(r.name)}">`:'<span class="artsoon">✦</span>'}</div></div>`}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */

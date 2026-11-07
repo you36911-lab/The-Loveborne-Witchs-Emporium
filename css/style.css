@@ -269,7 +269,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .artframe.outlined,.artframe.shown,.artpage.locked .artframe.outlined{position:relative;border:0;background:none;box-shadow:none}
 .artframe.outlined :is(img,.artfill){position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
 .artframe.outlined .artline{filter:brightness(0) drop-shadow(1.3px 0 0 #8A7262) drop-shadow(-1.3px 0 0 #8A7262) drop-shadow(0 1.3px 0 #8A7262) drop-shadow(0 -1.3px 0 #8A7262);opacity:.85}  /* a faded sepia ink line, like the other books' old prints */
-.artframe.outlined .artfill{background:var(--paper,#FBF4E8);-webkit-mask:var(--pic) center/contain no-repeat;mask:var(--pic) center/contain no-repeat}  /* the shape filled with the book's paper colour (ASSETS.books), so only the edge shows */
+.artframe.outlined .artfill{background:var(--paper,#FBF4E8);-webkit-mask:var(--pic) center/contain no-repeat;mask:var(--pic) center/contain no-repeat}  /* the shape filled with the book's paper, faintly washed with the sepia ink (10%) */
 .artsoon{font-size:3em;color:#E070AE;opacity:.6}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
