@@ -1009,10 +1009,17 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ph-home::after{content:"";width:120px;height:5px;border-radius:3px;background:color-mix(in srgb,var(--ink) 35%,transparent)}
 /* crafting: a light rises behind what is laid out (craftAnim in actions.js) */
 .plates{position:relative;z-index:1}
-.craftglow{position:absolute;left:50%;bottom:-5%;width:48%;height:160%;translate:-50% 0;z-index:0;pointer-events:none;opacity:0;
-  background:radial-gradient(closest-side,rgba(255,244,250,.95),rgba(255,214,234,.7) 35%,rgba(244,173,207,.35) 60%,rgba(244,173,207,0));filter:blur(4px)}
+/* only a small, soft flash at the peak behind the middle of what is laid out (the light is mostly the things' own rims and
+   the motes) */
+.craftglow{position:absolute;left:50%;bottom:30%;width:14%;aspect-ratio:1;translate:-50% 0;z-index:0;pointer-events:none;opacity:0;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(255,248,252,.9),rgba(255,214,234,.45) 45%,rgba(244,173,207,0))}
 .craftglow.on{animation:craftglow 1.9s ease-in-out both}
-@keyframes craftglow{0%{opacity:0;scale:.5}40%{opacity:.75;scale:.95}58%{opacity:1;scale:1.08}75%{opacity:.8;scale:1.02}100%{opacity:0;scale:1.15}}
+@keyframes craftglow{0%,42%{opacity:0;scale:.4}56%{opacity:.85;scale:1.1}75%{opacity:.25;scale:1.5}100%{opacity:0;scale:1.7}}
+/* while it is crafted, each thing takes on a pink rim of light */
+.plates .ontable img{transition:filter .5s ease}
+.plates.charging .ontable img{filter:drop-shadow(0 0 .25cqw #FFE3F0) drop-shadow(0 0 .7cqw rgba(244,173,207,.85)) drop-shadow(0 .4cqw .3cqw rgba(60,10,40,.35))}
+/* the motes of light that rise and gather (craftMotes in actions.js) */
+.mote{position:fixed;z-index:6;pointer-events:none;border-radius:50%;background:#FFF2F8;box-shadow:0 0 4px 1px #FFD6EA,0 0 10px 2px rgba(244,173,207,.7)}
 .ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .ph-name{display:block;font-family:var(--font-shop);font-weight:600;font-size:20px;line-height:1.2;color:var(--ink)}
 .ph-head small{display:block;font-size:13px}
