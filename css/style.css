@@ -163,7 +163,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal.glowing::after{opacity:.7}
 /* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
-.scene .crystal.glowing[data-aura="pink"]::after{opacity:.88}  /* the soft pink tints the swirl fully, so it reads as a bright flutter of pink, not a dull wash */
+.scene .crystal.glowing[data-aura="pink"]::after{opacity:.78}  /* the soft pink, a warm milky pink like a rabbit's nose, tints the swirl a little more than the others */
 @keyframes auraPulse{0%,100%{scale:1;opacity:.75}50%{scale:1.05;opacity:.95}}  /* a slow, gentle breath */
 @media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}

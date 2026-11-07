@@ -64,7 +64,7 @@ const X = {
  "A woman who keeps dating the same man":"Kasia Moretti",
  "A young poet":"Theo Linden",
  "A first-year student":"Emi Laurent"},
-"auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FFB0D0","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
+"auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FFB3C1","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
 
 "letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home","intuition","transformation","truth"]]
 }
