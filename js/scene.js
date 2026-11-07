@@ -196,7 +196,8 @@ function renderShelves(){
   const edges=()=>{const more=ins.scrollHeight-ins.clientHeight-ins.scrollTop;box.classList.toggle('moreup',ins.scrollTop>2);box.classList.toggle('moredown',more>2)};
   ins.addEventListener('scroll',edges,{passive:true});ins.addEventListener('load',edges,true);edges()}
 /* how tall an ingredient stands (ITEM_SIZE in config.js) */
-const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;
+const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;  /* in the cupboards */
+const realOf=n=>REAL_SIZE[n]??REAL_SIZE_BY_SHELF[ITEM[n]?.c]??.6;  /* on the altar: true to life */
 function shelfItemsHTML(c){
   if(c==='Candles')return Object.keys(D.colours).map(k=>ASSETS.candles[k]?`<button class="chip jar ${S.candle===k?'on':''}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"><span class="bot"><img src="${ASSETS.candles[k]}" alt="" loading="lazy" style="--h:.8"></span></button>`
     :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
@@ -219,8 +220,8 @@ function renderAltar(){
   /* what is laid out stands on the table; tap a thing to put it back */
   /* five or more stand in two rows: the smaller things in front, the bigger ones a step further back on the table (higher,
      a little smaller, a little darker), so seven big things still fit between the phone and the bell */
-  const plate=n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${sizeOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
-  const A=S.altar,two=A.length>=5,bySize=[...A].sort((a,b)=>sizeOf(a)-sizeOf(b)),nf=A.length-Math.floor(A.length/2),
+  const plate=n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${realOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
+  const A=S.altar,two=A.length>=5,bySize=[...A].sort((a,b)=>realOf(a)-realOf(b)),nf=A.length-Math.floor(A.length/2),
     front=two?A.filter(n=>bySize.indexOf(n)<nf):A,back=two?A.filter(n=>bySize.indexOf(n)>=nf):[];
   $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy

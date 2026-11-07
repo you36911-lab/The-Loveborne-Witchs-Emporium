@@ -25,6 +25,25 @@ const ITEM_SIZE_BY_SHELF = {
   "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.42,"Animal gifts":0.7,
   "Wood & branches":0.6,"Buttons":0.3,"Findings & tools":0.4
 };
+/* How tall each thing really is, for the altar, where things stand side by side and must look true to life (1 = a 20 cm
+   potion bottle): a sachet of sugar is small beside a bottle, a jar of herbs is about a hand tall, a bag of flour is big.
+   Gems never go below 0.3 so they can still be seen. A thing not listed takes its shelf's size. The cupboards do not use
+   this: there everything is drawn large enough to tell apart (ITEM_SIZE below). */
+const REAL_SIZE_BY_SHELF = {
+  "Base waters":0.9,"Oils, butters & waxes":0.7,"Herbs & flowers":0.62,"Fruits":0.6,"Spices":0.5,
+  "Pantry: salts, sugars & baking":0.5,"Resins & incense":0.5,"Crystals":0.3,"Animal gifts":0.6,
+  "Wood & branches":0.9,"Buttons":0.45,"Findings & tools":0.5
+};
+const REAL_SIZE = {
+  "Butter":0.28,"Shea butter":0.4,"Beeswax":0.45,"Almond oil":0.7,"Jojoba oil":0.7,"Olive oil":0.9,"Sunflower oil":0.9,
+  "Brown sugar":0.42,"Vanilla":0.4,"Raisins":0.45,"Sugar":0.45,"Baking soda":0.5,"Rice flour":0.7,"Flour":0.85,"Garden soil":0.9,
+  "Epsom salt":0.6,"Milk":0.95,"Coconut milk powder":0.5,"Cocoa":0.5,"Milk powder":0.5,"Oats":0.55,"Chocolate chips":0.55,
+  "Honey":0.45,"Gold sprinkles":0.4,"Pink sprinkles":0.45,"Rainbow sprinkles":0.45,"Gold mica":0.4,"Silver mica":0.4,
+  "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
+  "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
+  "Selenite":0.38,"Beetroot powder":0.55,"Apple":0.55,
+  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45
+};
 const ITEM_SIZE = {
   "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.3,"Shea butter":0.45,
   "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Brown sugar":0.6,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
@@ -39,10 +58,10 @@ const ITEM_SIZE = {
   "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.3,"River stone":0.35,"Selenite":0.5,"Clear quartz":0.48,
   "Black tourmaline":0.48,"Smoky quartz":0.48,"Rose quartz":0.48,"Hematite":0.46,"Rhodonite":0.46,"Pyrite":0.46,
   "Sunstone":0.48,"Malachite":0.46,"Obsidian":0.46,
-  /* the "symbols" pictures: a jar of acorns, branch bundles (about 30 cm), wood bundles, buttons on hanging cards, a pouch of coins, jars and cards of findings */
-  "Acorn":0.62,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
-  "Brass button":0.55,"Bright buttons":0.55,"Gold button":0.55,"Heart-shaped button":0.55,"Mismatched button":0.55,"Vintage button":0.55,
-  "Coin":0.55,"Glass bead":0.55,"Iron filings":0.6,"Iron nail":0.6,"Iron pin":0.55,"Small key":0.68
+  /* the "symbols" pictures, sized to read easily in their cupboards */
+  "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
+  "Brass button":0.7,"Bright buttons":0.7,"Gold button":0.7,"Heart-shaped button":0.7,"Mismatched button":0.7,"Vintage button":0.7,
+  "Coin":0.7,"Glass bead":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small key":0.75
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
