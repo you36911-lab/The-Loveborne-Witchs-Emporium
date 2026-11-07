@@ -50,7 +50,7 @@ const ITEM_KIND = {
    takes its shelf's size. Used in the cupboards and on the table. */
 const ITEM_SIZE_BY_SHELF = {
   "Base waters":0.95,"Oils, butters & waxes":0.85,"Herbs & flowers":0.6,"Fruits":0.7,"Spices":0.6,
-  "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.46,"Animal gifts":0.7,
+  "Pantry: salts, sugars & baking":0.65,"Resins & incense":0.6,"Crystals":0.53,"Animal gifts":0.7,
   "Wood & branches":0.6,"Buttons":0.3,"Findings & tools":0.4
 };
 /* How tall each thing really is, for the altar, where things stand side by side and must look true to life (1 = a 20 cm
@@ -83,9 +83,9 @@ const ITEM_SIZE = {
   "Saffron":0.5,"Vanilla":0.55,"Apple":0.65,"Raisins":0.6,"Beetroot powder":0.75,"Copal":0.65,"Frankincense":0.65,
   "Patchouli":0.55,"Sandalwood":0.55,"Peacock feather":0.8,"Seashell":0.75,"Owl feather":0.75,
   "White feather":0.75,"Nest twig":0.6,"Shed cat whisker":0.6,"Shed snake skin":0.65,"Moth wing dust":0.65,
-  "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.33,"River stone":0.39,"Selenite":0.55,"Clear quartz":0.53,
-  "Black tourmaline":0.53,"Smoky quartz":0.53,"Rose quartz":0.53,"Hematite":0.51,"Rhodonite":0.51,"Pyrite":0.51,
-  "Sunstone":0.53,"Malachite":0.51,"Obsidian":0.51,
+  "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.38,"River stone":0.45,"Selenite":0.63,"Clear quartz":0.61,
+  "Black tourmaline":0.61,"Smoky quartz":0.61,"Rose quartz":0.61,"Hematite":0.59,"Rhodonite":0.59,"Pyrite":0.59,
+  "Sunstone":0.61,"Malachite":0.59,"Obsidian":0.59,
   /* the "symbols" pictures, sized to read easily in their cupboards */
   "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
   "Brass button":0.7,"Bright buttons":0.7,"Gold button":0.7,"Heart-shaped button":0.7,"Mismatched button":0.7,"Vintage button":0.7,
