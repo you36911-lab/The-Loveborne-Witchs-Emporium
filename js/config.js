@@ -27,11 +27,11 @@ const ITEM_SIZE_BY_SHELF = {
 };
 /* How tall each thing really is, for the altar, where things stand side by side and must look true to life (1 = a 20 cm
    potion bottle): a sachet of sugar is small beside a bottle, a jar of herbs is about a hand tall, a bag of flour is big.
-   Gems never go below 0.3 so they can still be seen. A thing not listed takes its shelf's size. The cupboards do not use
+   Gems are drawn larger than life (0.42) so they can be seen and told apart. A thing not listed takes its shelf's size. The cupboards do not use
    this: there everything is drawn large enough to tell apart (ITEM_SIZE below). */
 const REAL_SIZE_BY_SHELF = {
   "Base waters":0.9,"Oils, butters & waxes":0.7,"Herbs & flowers":0.62,"Fruits":0.6,"Spices":0.5,
-  "Pantry: salts, sugars & baking":0.5,"Resins & incense":0.5,"Crystals":0.3,"Animal gifts":0.6,
+  "Pantry: salts, sugars & baking":0.5,"Resins & incense":0.5,"Crystals":0.42,"Animal gifts":0.6,
   "Wood & branches":0.9,"Buttons":0.45,"Findings & tools":0.5
 };
 const REAL_SIZE = {
@@ -41,7 +41,7 @@ const REAL_SIZE = {
   "Honey":0.45,"Gold sprinkles":0.4,"Pink sprinkles":0.45,"Rainbow sprinkles":0.45,"Gold mica":0.4,"Silver mica":0.4,
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
   "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
-  "Selenite":0.38,"Beetroot powder":0.55,"Apple":0.55,
+  "Selenite":0.5,"Pearl":0.36,"River stone":0.38,"Beetroot powder":0.55,"Apple":0.55,
   "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45
 };
 const ITEM_SIZE = {

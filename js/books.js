@@ -49,7 +49,7 @@ function entryHTML(e){
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
     if(e.k===BIRTHSTONE)return `<span class="bookline months">${Object.entries(BIRTHSTONES).map(([m,s])=>`<span>${m}</span><b>${esc(s)}</b>`).join('')}</span>`;
     if(pic)return `<img class="entrypic ${e.sk.startsWith('tarot:')?'card':''}" src="${pic}" alt="">`;
-    const lk=e.sk.startsWith('item:')?ITEM[e.k]?.look:e.sk.startsWith('tarot:')?CARDLOOK[e.k]:'';return lk?`<span class="look" title="Stands in for the picture">\u{1F5BC} ${esc(lk)}</span>`:''})()}</div>`}
+    const lk=e.sk.startsWith('item:')?ITEM[e.k]?.look:e.sk.startsWith('tarot:')?CARDLOOK[e.k]:'';return lk?`<span class="look">\u{1F5BC} ${esc(lk)}</span>`:''})()}</div>`}
 /* Every page of a book, in reading order: key, title, category, status and how to draw it. */
 function bookPages(book){
   if(book==='Recipe Book')return Object.values(D.recipes).sort((a,b)=>a.type.localeCompare(b.type)||a.name.localeCompare(b.name)).map(r=>{const n=noteOf(r.id);
@@ -95,7 +95,7 @@ $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===un
 function pageAt(pages){const i=pages.findIndex(p=>p.key===pageOf());return i<0?0:i}
 function pageHTML(pages,i){const p=pages[i];if(!p)return '';
   const m=!p.index&&(S.marks||[]).find(x=>x.book===curBook&&x.key===p.key);
-  return (p.index||p.plain?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" title="${m?'Remove the bookmark':'Bookmark this page'}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
+  return (p.index||p.plain?'':`<button class="ribbon ${m?'on':''}" data-bm="${esc(p.key)}" aria-label="${m?'Remove the bookmark':'Bookmark this page'}"></button>${p.cat?`<div class="pcat">${esc(p.cat)}</div>`:''}`)+
     `<div class="pbody">${p.html()}</div><div class="pnum">${i+1}</div>`}
 /* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
 function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
@@ -174,7 +174,7 @@ function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(p
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}" title="${esc(m.book)}: ${esc(m.title)}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
@@ -205,7 +205,7 @@ function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false
   return same(n.ing.filter(Boolean),r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
 function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
   /* a written-in value: in handwriting, tap to rub it out (once the recipe is solved it stays) */
-  const written=(v,rm)=>lk?`<span class="chip hand on">${esc(v)}</span>`:`<button class="chip hand" ${rm} title="Rub out">${esc(v)} \u00D7</button>`;
+  const written=(v,rm)=>lk?`<span class="chip hand on">${esc(v)}</span>`:`<button class="chip hand" ${rm}>${esc(v)} \u00D7</button>`;
   /* the open index, if it belongs to this row: [key, options, keyword namespace] */
   const open=pickOpen.split('|'),openFor=row=>open[0]===row&&open[1]===String(r.id);
   let ingList='',ccList='',whenList='';
@@ -220,13 +220,13 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   const mk=String(S.target)===String(r.id);
   /* line breaks in a title: a short word (the, a, of, to…) never ends a line, it stays with the word after it (so "Another
      Orbit Around the Sun" breaks before "the Sun"); the last group and the tick (or the solved star) stay together too */
-  const groups=r.name.split(' ').reduce((g,w,i,A)=>{const prev=A[i-1];if(i&&SMALL_WORDS.has(prev.toLowerCase()))g[g.length-1]+=' '+w;else g.push(w);return g},[]),last=groups.pop(),after=(lk?' ✦':'')+(mk?'<svg class="tick" viewBox="0 0 36 32" role="img" aria-label="chosen"><path d="M4 17.5c2.3.6 4.4 2.8 6.3 7.3.4.9.9 1 1.3.1C15.6 15.7 22.6 8 32.5 3.4"/></svg>':'');
+  const groups=r.name.split(' ').reduce((g,w,i,A)=>{const prev=A[i-1];if(i&&SMALL_WORDS.has(prev.toLowerCase()))g[g.length-1]+=' '+w;else g.push(w);return g},[]),last=groups.pop(),after=(lk?' ✦':'')+(mk?'<svg class="tick" viewBox="0 0 36 32" role="img" aria-label="chosen"><path d="M2.93 16.08L3.43 16.55L4.00 16.98L4.51 17.61L5.10 18.24L5.72 18.96L6.32 19.81L7.01 20.68L7.71 21.66L8.41 22.75L9.24 23.84L10.00 25.10L12.04 27.05L13.84 24.85L14.35 23.64L14.83 22.41L15.38 21.21L16.02 20.06L16.60 18.86L17.35 17.76L18.06 16.62L18.84 15.51L19.72 14.48L20.59 13.41L21.54 12.38L22.56 11.41L23.56 10.38L24.69 9.48L25.81 8.53L26.99 7.62L28.27 6.80L29.54 5.94L30.88 5.13L32.29 4.39L33.69 3.57L33.51 3.23L32.03 3.91L30.64 4.72L29.28 5.50L27.93 6.29L26.68 7.16L25.41 7.99L24.18 8.84L23.05 9.79L21.87 10.65L20.81 11.63L19.76 12.59L18.72 13.57L17.78 14.62L16.82 15.65L15.89 16.71L15.08 17.85L14.20 18.94L13.46 20.13L12.71 21.32L11.99 22.53L11.38 23.81L12.16 24.15L12.45 23.45L11.52 22.25L10.70 21.05L9.80 20.03L8.95 19.07L8.13 18.19L7.27 17.47L6.48 16.78L5.71 16.19L4.89 15.77L4.19 15.34L3.47 15.12Z"/></svg>':'');
   const nb=s=>esc(s).replace(/ /g,' ');
   const titleHTML=(groups.length?groups.map(nb).join(' ')+' ':'')+`<span class="tickword${mk?' on':''}">${nb(last)}${after}</span>`;
-  const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" title="Lay out on the altar" aria-label="Lay out on the altar" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBell}" alt=""></button>${lk?'':`<button class="bookico" data-booktest="${r.id}" title="Test craft this" aria-label="Test craft this" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBottle}" alt=""></button>`}</span>`;
+  const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" aria-label="Lay out on the altar" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBell}" alt=""></button>${lk?'':`<button class="bookico" data-booktest="${r.id}" aria-label="Test craft this" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBottle}" alt=""></button>`}</span>`;
   const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
   const none='<span class="muted">none needed</span>';
-  return `<div class="recipe ${lk?'locked':''}"><div class="rtitle"><h3><button class="rpick" data-choose-recipe="${r.id}" title="${mk?'Making this. Tap to unchoose':'Tap to choose this as what you are making'}">${titleHTML}</button></h3>${acts}</div><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
+  return `<div class="recipe ${lk?'locked':''}"><div class="rtitle"><h3><button class="rpick" data-choose-recipe="${r.id}">${titleHTML}</button></h3>${acts}</div><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
   <div class="rbody"><div class="wrow"><b>Themes:</b><span class="wvals plain">${r.themes.map(t=>kw(t)).join(', ')}</span></div>
   <div class="wgroup"><div class="wrow"><b>Ingredients:</b><span class="wvals">${r.ing.map((want,i)=>{const cat=ITEM[want].c;return slot(CATLABEL[cat]||cat,n.ing[i],`data-rm-ing="${r.id}|${i}"`,`ing|${r.id}|${i}`)}).join(' ')}</span></div>${ingList}</div>
   <div class="wgroup"><div class="wrow"><b>Candle:</b><span class="wvals">${r.candle?slot('Candle',n.candle,`data-rm-candle="${r.id}"`,`candle|${r.id}`):none}</span></div>${pickOpen.startsWith('candle|')?ccList:''}</div>

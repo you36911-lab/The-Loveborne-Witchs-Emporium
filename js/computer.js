@@ -42,8 +42,7 @@ const dayLabel=d=>{const c=D.cal[d-1];return c?`Day ${d} · ${c.weekday} · ${c.
 /* The taskbar: the open apps only (pressed: the one in front), and the date in the corner. */
 function renderPCBar(){const T=today(),fest=[T.sabbat,T.named,T.event].filter(Boolean).join(', '),top=topApp();
   $('#pcDate').innerHTML=`<b>Day ${S.day}</b><span class="tb-sep" aria-hidden="true">·</span><small>${esc(T.weekday)}${fest?` · <span class="tb-fest">${esc(fest)}</span>`:''}</small>`;
-  $('#pcDate').title=`Day ${S.day}, ${T.weekday}${fest?', '+fest:''}`;
-  $('#tbApps').innerHTML=pcOpen.map(a=>`<button class="tb-app" data-tb="${a}" aria-pressed="${a===top}" title="${PC_NAMES[a]}" aria-label="${PC_NAMES[a]}">${PC_ICONS[a]}</button>`).join('');
+  $('#tbApps').innerHTML=pcOpen.map(a=>`<button class="tb-app" data-tb="${a}" aria-pressed="${a===top}" aria-label="${PC_NAMES[a]}">${PC_ICONS[a]}</button>`).join('');
   [['#mailIconBadge',unreadLetters()],['#shopIconBadge',newReviews()]].forEach(([id,n])=>{const b=$(id);b.hidden=!n;b.textContent=n})}
 /* Windows move by their title bar, and a double-click on it maximises them. */
 let drag=null;

@@ -146,7 +146,6 @@ function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),
   if(candlesFails!==null&&f>candlesFails&&f%5===0){clearTimeout(candlesDark);put(0);candlesDark=setTimeout(()=>{candlesDark=0;put(5-(S.failTests||0)%5)},1600)}
   else if(!candlesDark)put(lit);
   candlesFails=f;
-  box.title=`${lit} of 5 candles lit. Every test craft that isn't perfect puts one out; when all five are out, it costs a one-star review.`;
   box.setAttribute('aria-label',`Test crafts: ${lit} of 5 candles lit`)}
 /* the recipe the customer at the counter has asked for, while their order is open; otherwise null */
 function orderRecipe(){const q=currentVisitor();return q&&q.type==='new'&&S.activeNow===q.key?D.recipes[visitByKey(q.key).rid]:null}
@@ -176,7 +175,7 @@ function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')ret
 /* The doors are made once (so they can swing); after that only their open state and counts change. */
 function buildDoors(){const pc=(v,of)=>(v/of*100).toFixed(3);
   $('#cubbies').innerHTML=SHELVES.map((row,r)=>row.map((c,k)=>{const [x,w,hinge,px]=DOOR_COLS[k],[y,h,py]=DOOR_ROWS[r];
-    return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" title="${esc(SHELFNAME[c]||c)}" `+
+    return `<button class="cubby hinge-${hinge}" data-shelf="${esc(c)}" data-side="${k<2?'L':'R'}" aria-label="${esc(SHELFNAME[c]||c)}" `+
       `style="left:${pc(x,ROOM_W)}%;top:${pc(y,ROOM_H)}%;width:${pc(w,ROOM_W)}%;height:${pc(h,ROOM_H)}%;--x:${pc(x,ROOM_W)};--y:${pc(y,ROOM_H)}">`+
       `<span class="door"><span class="face"><span class="plate" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%">${esc(PLATE[c])}</span><b class="count" style="left:${pc(px-x,w)}%;top:${pc(py-y,h)}%" hidden></b></span><span class="edge"></span></span></button>`}).join('')).join('')}
 function renderShelves(){
@@ -199,16 +198,16 @@ function renderShelves(){
 const sizeOf=n=>ITEM_SIZE[n]??ITEM_SIZE_BY_SHELF[ITEM[n]?.c]??.7;  /* in the cupboards */
 const realOf=n=>REAL_SIZE[n]??REAL_SIZE_BY_SHELF[ITEM[n]?.c]??.6;  /* on the altar: true to life */
 function shelfItemsHTML(c){
-  if(c==='Candles')return Object.keys(D.colours).map(k=>ASSETS.candles[k]?`<button class="chip jar ${S.candle===k?'on':''}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"><span class="bot"><img src="${ASSETS.candles[k]}" alt="" loading="lazy" style="--h:.8"></span></button>`
-    :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" title="${esc(k)} candle" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
-  if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" title="${esc(t)}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
+  if(c==='Candles')return Object.keys(D.colours).map(k=>ASSETS.candles[k]?`<button class="chip jar ${S.candle===k?'on':''}" data-candle="${esc(k)}" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"><span class="bot"><img src="${ASSETS.candles[k]}" alt="" loading="lazy" style="--h:.8"></span></button>`
+    :`<button class="swatch ${S.candle===k?'on':''}" style="background:${COLOURHEX[k]}" data-candle="${esc(k)}" aria-label="${esc(k)} candle" aria-pressed="${S.candle===k}"></button>`).join('');
+  if(c==='Tarot')return Object.keys(D.tarot).map(t=>`<button class="chip ${ASSETS.tarot[t]?'card':''} ${S.tarot===t?'on':''}" data-tarot="${esc(t)}" aria-pressed="${S.tarot===t}" aria-label="${esc(t)}">${ASSETS.tarot[t]?`<img src="${ASSETS.tarot[t]}" alt="" loading="lazy">`:`<span class="nm">${esc(t)}</span>`}</button>`).join('');  /* a card's picture has its name printed on it */
   const shelf=SHELF_CATEGORIES.includes(c);  /* bottles and jars stand on a plank */
   return D.items.filter(i=>i.c===c&&i.n!==BIRTHSTONE).map(i=>{  /* the birthstone is one of the crystals, by month */
     const pic=ASSETS.items[i.n],bottle=shelf&&pic;
     const pi=pic?`<span class="bot"><img src="${pic}" alt="" loading="lazy" style="--h:${sizeOf(i.n)}"></span>`:'';
     const img=!pic?'':bottle?`<span class="pic">${pi}</span>`:pi;
       /* a picture names itself (most have their name on the label), so only things without one show their name; hover shows it either way */
-    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" title="${esc(i.n)}" aria-label="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}${pic?'':`<span class="nm">${esc(i.n)}</span>`}</button>`}).join('')}
+    return `<button class="chip ${pic?'jar':''} ${bottle?'vessel':''} ${S.altar.includes(i.n)?'on':''}" data-item="${esc(i.n)}" aria-label="${esc(i.n)}" aria-pressed="${S.altar.includes(i.n)}">${img}${pic?'':`<span class="nm">${esc(i.n)}</span>`}</button>`}).join('')}
 function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test craft':'Given'}</div>${R.first?`<p style="margin:4px 0">${esc(R.first)}</p>`:''}${R.lines.map((l,i,A)=>typeof l==='string'?`<p style="margin:2px 0">${kw(l)}</p>`:`<p style="margin:2px 0${i&&A[i-1].k===l.k?';padding-left:14px':''}">${i&&A[i-1].k===l.k?'':`<span class="tag">${CLUETAG[l.k]}</span> `}${kw(l.t)}</p>`).join('')}`}
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
@@ -220,17 +219,17 @@ function renderAltar(){
   /* what is laid out stands on the table; tap a thing to put it back */
   /* five or more stand in two rows: the smaller things in front, the bigger ones a step further back on the table (higher,
      a little smaller, a little darker), so seven big things still fit between the phone and the bell */
-  const plate=n=>`<button class="ontable" data-item="${esc(n)}" title="${esc(n)}: put it back" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${realOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
+  const plate=n=>`<button class="ontable" data-item="${esc(n)}" aria-label="Put ${esc(n)} back">${ASSETS.items[n]?`<img src="${ASSETS.items[n]}" alt="" style="--h:${realOf(n)}">`:`<i class="minijar"></i><span class="nm">${esc(n)}</span>`}</button>`;
   const A=S.altar,two=A.length>=5,bySize=[...A].sort((a,b)=>realOf(a)-realOf(b)),nf=A.length-Math.floor(A.length/2),
     front=two?A.filter(n=>bySize.indexOf(n)<nf):A,back=two?A.filter(n=>bySize.indexOf(n)>=nf):[];
   $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
      of the stand, cut to just its front, laid over the candle). An empty stand opens the Candles cupboard. */
-  const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" title="${esc(S.candle)} candle: put it back" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img class="flamebase" src="${ASSETS.candles[S.candle]}" alt=""><img class="flamecopy" src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
-  $('#candleSlot').innerHTML=`<div class="stand">${S.candle?'':'<button class="standbtn" data-shelf="Candles" title="Choose a candle" aria-label="Choose a candle"></button>'}<img class="standpic" src="${ASSETS.candleStand}" alt="">${lit}<img class="standfront" src="${ASSETS.candleStand}" alt=""></div>`;
+  const lit=S.candle?`<button class="ontable" data-candle="${esc(S.candle)}" aria-label="Put the ${esc(S.candle)} candle back">${ASSETS.candles[S.candle]?`<img class="flamebase" src="${ASSETS.candles[S.candle]}" alt=""><img class="flamecopy" src="${ASSETS.candles[S.candle]}" alt="">`:`<i class="candle" style="--cc:${COLOURHEX[S.candle]}"></i>`}</button>`:'';
+  $('#candleSlot').innerHTML=`<div class="stand">${S.candle?'':'<button class="standbtn" data-shelf="Candles" aria-label="Choose a candle"></button>'}<img class="standpic" src="${ASSETS.candleStand}" alt="">${lit}<img class="standfront" src="${ASSETS.candleStand}" alt=""></div>`;
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
-  $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" title="Put ${esc(S.tarot)} back" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
-    :'<button class="ontable laid" data-shelf="Tarot" title="Choose a tarot card" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
+  $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
+    :'<button class="ontable laid" data-shelf="Tarot" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
   $('#craftBell').classList.toggle('ready',!!(orderR&&S.altar.length&&S.target));
   const res=$('#result');
   if(S.result&&!S.result.test){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;  /* test crafts go to the phone */
@@ -238,7 +237,7 @@ function renderAltar(){
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
    "Skip tutorials" turns them all off (S.tutOff). */
 function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
-  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial" title="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
+  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
 const TUTORIAL={
   order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>In the Recipe Book, find its kind in the index, then its name. Tap the name on its page to choose it as what you are making (a tick appears). The little <b>bell</b> lays out what you have written on the altar.</li><li>The little <b>bottle</b> test crafts it, as often as you like. When it is right, go down to the altar and ring the <b>silver bell</b> to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};
@@ -292,11 +291,11 @@ function fillCounter(){const tip=dayTip(),tp=$('#tip');tp.hidden=!tip;tp.innerHT
     const inp=$('#adviceIn');inp.value=adviceDraft.text;fillSuggest();if(focused){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn" title="Let them go. They leave empty-handed.">I don’t know how to make this</button></div>`}`}
+  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
-  $('#madeTag').textContent=m.name;b.title=b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
+  $('#madeTag').textContent=m.name;b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
 function dayTip(){if(S.day===1&&S.h===0&&!S.tutOff&&!S.letters.every(Boolean))return 'There are three emails waiting. Click the <b>computer</b> on the counter and open <b>Moonpost</b>.';
   return ''}

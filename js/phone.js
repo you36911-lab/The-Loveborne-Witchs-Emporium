@@ -12,14 +12,13 @@ function phoneHTML(){const R=phoneLog()[phoneAt];
   const groups=[];R.lines.forEach(l=>{if(typeof l==='string')l={k:'',t:l};const g=groups[groups.length-1];
     if(g&&g.k===l.k)g.t.push(l.t);else groups.push({k:l.k,t:[l.t]})});
   const rows=groups.map(g=>`<section class="ph-sec" data-k="${g.k}">${g.k&&CLUETAG[g.k]?`<h4 class="ph-lab">${CLUETAG[g.k]}</h4>`:''}${g.t.map(t=>`<p class="ph-line">${kw(t)}</p>`).join('')}</section>`).join('');
-  const score=R.total?`<div class="ph-score" title="Ingredients right"><b>${R.ok}</b>/${R.total} <small>ingredients</small></div>`:'';
+  const score=R.total?`<div class="ph-score"><b>${R.ok}</b>/${R.total} <small>ingredients</small></div>`:'';
   return `<div class="ph-head"><div><b class="ph-name">${phoneTitle(R.name||'Test craft')}</b>${R.type?`<small class="muted">${esc(R.type)}</small>`:''}</div>
     <span class="ph-grade g-${R.grade}">${GRADE_NOTE[R.grade]||esc(R.grade)}</span></div>
     <div class="ph-card">${score}${rows}</div>`}
 /* a title breaks like the Recipe Book's: a short word (the, a, of...) never ends a line ("Another Orbit Around / the Sun") */
 function phoneTitle(name){return name.split(' ').reduce((g,w,i,A)=>{if(i&&SMALL_WORDS.has(A[i-1].toLowerCase()))g[g.length-1]+=' '+w;else g.push(w);return g},[]).map(s=>esc(s).replace(/ /g,'\u00a0')).join(' ')}
-function renderPhoneHist(){const n=phoneLog().length,b=$('#phoneHist');b.hidden=n<2;$('#phoneHistN').textContent=phoneAt+1;
-  b.title=phoneAt?'Result '+(phoneAt+1)+' (earlier). Again for an earlier one':'An earlier result'}
+function renderPhoneHist(){const n=phoneLog().length,b=$('#phoneHist');b.hidden=n<2;$('#phoneHistN').textContent=phoneAt+1;}
 function renderPhoneBadge(){const n=S.phoneNew||0,b=$('#phoneBadge');b.hidden=!n;b.textContent=n}
 function openPhone(){phoneAt=0;$('#phoneTime').textContent='Day '+S.day;$('#phoneApp').innerHTML=phoneHTML();renderPhoneHist();$('#phoneApp').scrollTop=0;
   S.phoneNew=0;save();renderPhoneBadge();$('#phoneView').classList.add('open')}

@@ -97,7 +97,7 @@ let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#c
    candle goes out if it isn't perfect, and the result comes to the phone (a sound and a badge; the phone shows it
    when clicked). */
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
-  if(test){render();craftAnim(()=>judgeTest(r));return}
+  if(test){render();craftAnim(()=>setTimeout(()=>judgeTest(r),600));return}  /* a moment after it settles, then judged */
   judge(r,false)}
 function judgeTest(r){const before=S.failTests||0;judge(r,true);phoneNotify((S.failTests||0)>before?1100:300)}
 function judge(r,test){
@@ -202,11 +202,11 @@ function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
     [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});playCraft();plates.classList.add('charging');craftMotes(pr,cx);
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
       el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-9%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
-        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`,offset:.72},
-        {transform:'none'}],{duration:1900,easing:'ease-in-out'})});
+        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`,offset:.6},
+        {transform:'none'}],{duration:2500,easing:'ease-in-out'})});  /* a long, gentle settle back to where they stood */
     setTimeout(()=>craftBurst(plates),1000);
     setTimeout(()=>plates.classList.remove('charging'),1500);
-    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},1950)},moving?1150:150)}
+    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},2600)},moving?1150:150)}
 /* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
 function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
   const wave=(n,dmin,dmax,smin,smax,dur,delay)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.4,d=dmin+Math.random()*(dmax-dmin),s=document.createElement('span');

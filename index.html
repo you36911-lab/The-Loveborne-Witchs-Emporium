@@ -36,12 +36,12 @@
   <div class="daycard" id="dayCard" aria-live="polite"></div>
   <div class="hud">
     <div class="proto row" id="proto" hidden aria-label="Prototype: jump to">
-      <button type="button" class="protofold" id="protoFold" aria-expanded="true" aria-controls="protoBody" title="Fold the prototype bar away (or press the ` key)"><b>Prototype</b><span class="chev" aria-hidden="true">◂</span></button>
+      <button type="button" class="protofold" id="protoFold" aria-expanded="true" aria-controls="protoBody"><b>Prototype</b><span class="chev" aria-hidden="true">◂</span></button>
       <span class="protobody" id="protoBody">
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
-      <button id="protoGo" class="main">Go</button><button id="protoDawn" title="Start the chosen day from the dawn card">From dawn</button>
-      <button id="restartBtn" title="Start a new game from Day 1">Restart</button>
+      <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button>
+      <button id="restartBtn">Restart</button>
       </span>
     </div>
     <p class="tip" id="tip" hidden></p>
@@ -62,16 +62,16 @@
       <div class="craftglow" id="craftGlow" aria-hidden="true"></div>  <!-- the soft light that rises behind what is laid out while it is crafted -->
       <svg class="magiccircle" id="magicCircle" viewBox="0 0 200 200" aria-hidden="true"><g class="mc-spin"><circle cx="100" cy="100" r="95"/><circle cx="100" cy="100" r="82"/><path d="M182.0 100.0L191.0 100.0M180.8 114.2L185.7 115.1M177.1 128.0L181.8 129.8M171.0 141.0L178.8 145.5M162.8 152.7L166.6 155.9M152.7 162.8L155.9 166.6M141.0 171.0L145.5 178.8M128.0 177.1L129.8 181.8M114.2 180.8L115.1 185.7M100.0 182.0L100.0 191.0M85.8 180.8L84.9 185.7M72.0 177.1L70.2 181.8M59.0 171.0L54.5 178.8M47.3 162.8L44.1 166.6M37.2 152.7L33.4 155.9M29.0 141.0L21.2 145.5M22.9 128.0L18.2 129.8M19.2 114.2L14.3 115.1M18.0 100.0L9.0 100.0M19.2 85.8L14.3 84.9M22.9 72.0L18.2 70.2M29.0 59.0L21.2 54.5M37.2 47.3L33.4 44.1M47.3 37.2L44.1 33.4M59.0 29.0L54.5 21.2M72.0 22.9L70.2 18.2M85.8 19.2L84.9 14.3M100.0 18.0L100.0 9.0M114.2 19.2L115.1 14.3M128.0 22.9L129.8 18.2M141.0 29.0L145.5 21.2M152.7 37.2L155.9 33.4M162.8 47.3L166.6 44.1M171.0 59.0L178.8 54.5M177.1 72.0L181.8 70.2M180.8 85.8L185.7 84.9"/><circle cx="100" cy="100" r="44"/><polygon points="100.0,24.0 165.8,138.0 34.2,138.0"/><polygon points="165.8,62.0 100.0,176.0 34.2,62.0"/><g class="mc-dots"><circle cx="100.0" cy="34.0" r="2.2"/><circle cx="157.2" cy="67.0" r="2.2"/><circle cx="157.2" cy="133.0" r="2.2"/><circle cx="100.0" cy="166.0" r="2.2"/><circle cx="42.8" cy="133.0" r="2.2"/><circle cx="42.8" cy="67.0" r="2.2"/></g></g></svg>  <!-- the magic circle that draws itself on the cloth under it -->
       <div class="plates" id="plates"></div>
-      <button class="bellslot" id="craftBell" title="Ring the bell to make it" aria-label="Ring the bell: make it"><img alt=""></button>  <!-- ringing it makes what is laid out -->
+      <button class="bellslot" id="craftBell" aria-label="Ring the bell: make it"><img alt=""></button>  <!-- ringing it makes what is laid out -->
       <div class="slot cardslot" id="tarotSlot"></div>
     </div>
-    <button class="phone" id="phoneBtn" title="Your phone: test craft results" aria-label="Phone: test craft results"><img alt=""><span class="badge phbadge" id="phoneBadge" hidden></span></button>  <!-- test craft results come to the phone -->
+    <button class="phone" id="phoneBtn" aria-label="Phone: test craft results"><img alt=""><span class="badge phbadge" id="phoneBadge" hidden></span></button>  <!-- test craft results come to the phone -->
     <div class="testcandles" id="testCandles" role="img"><img alt=""></div>  <!-- the black candelabra: test crafts left before a spoiled batch -->
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>
   </div>
   <div class="tablebar">  <!-- placed like the shop's mood line: low in the view, a film subtitle -->
-    <button class="making" id="makingBtn" title="Open it in the Recipe Book"></button>
+    <button class="making" id="makingBtn"></button>
   </div>
   <button class="arrow arrowup" id="toShop" aria-label="Up to the counter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
 </section>
@@ -85,8 +85,8 @@
       <button class="turn prev" id="turnPrev" aria-label="Previous page">‹</button>
       <div class="tome closed" id="tome">
         <!-- sticky page flags on the outer edges: high on the left page to the first page (the index), low on the right page to the last -->
-        <button class="jumptab first" id="turnFirst" title="To the first page" aria-label="To the first page"></button>
-        <button class="jumptab last" id="turnLast" title="To the last page" aria-label="To the last page"></button>
+        <button class="jumptab first" id="turnFirst" aria-label="To the first page"></button>
+        <button class="jumptab last" id="turnLast" aria-label="To the last page"></button>
         <img class="spread" id="spreadImg" alt="">
         <div class="pg left" id="pgL"></div>
         <div class="pg right" id="pgR"></div>
@@ -110,7 +110,7 @@
       <div class="webmail" id="webmail">
         <header class="wm-top"><div class="wm-logo"><span class="wm-logoico" data-icon="mail"></span>Moonpost</div>
           <input id="wmSearch" type="search" placeholder="Search mail" aria-label="Search mail">
-          <span class="wm-me" title="Your address"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span></header>
+          <span class="wm-me"><i aria-hidden="true">L</i><span>shop@loveborne.owl</span></span></header>
         <div class="wm-body"><nav class="wm-side" id="wmSide" aria-label="Folders"></nav><div class="wm-list" id="letterList"></div><article class="wm-read" id="letterRead"></article></div>
       </div>
     </div>
@@ -129,7 +129,7 @@
 <div class="modal phoneview" id="phoneView" role="dialog" aria-modal="true" aria-label="Phone: test craft result">
   <div class="phoneframe"><div class="phonescreen">
     <div class="ph-status"><span id="phoneTime"></span><span class="ph-notch" aria-hidden="true"></span><span class="ph-sicons" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="19.5" r="1.6" fill="currentColor"/></svg><svg viewBox="0 0 30 24"><rect x="1" y="6" width="24" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="8.5" width="16" height="7" rx="1.6" fill="currentColor"/><rect x="26.5" y="10" width="2" height="4" rx="1" fill="currentColor"/></svg></span></div>
-    <div class="pcbar phonebar"><span class="pctitle"><img class="pcico" id="phoneIco" alt="">Test Craft</span><button class="ph-hist" id="phoneHist" hidden title="An earlier result" aria-label="Show an earlier result"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6.13 12.41A10.5 10.5 0 1 1 6.13 19.59" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 9.3l2.9 3.1 3.5-2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b id="phoneHistN">1</b></button></div>
+    <div class="pcbar phonebar"><span class="pctitle"><img class="pcico" id="phoneIco" alt="">Test Craft</span><button class="ph-hist" id="phoneHist" hidden aria-label="Show an earlier result"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6.13 12.41A10.5 10.5 0 1 1 6.13 19.59" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 9.3l2.9 3.1 3.5-2.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b id="phoneHistN">1</b></button></div>
     <div class="phoneapp" id="phoneApp"></div>
     <div class="ph-home" aria-hidden="true"></div>
   </div></div>

@@ -29,7 +29,7 @@ if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();
   $('#protoGo').onclick=()=>jumpTo(+$('#protoDay').value,+$('#protoHour').value);
   $('#protoDawn').onclick=()=>{jumpTo(+$('#protoDay').value,0);showDawn()};
   /* fold the bar away to its label (remembered in this browser); the ` key does it too */
-  const fold=on=>{$('#proto').classList.toggle('folded',on);$('#protoFold').setAttribute('aria-expanded',String(!on));$('#protoFold').title=on?'Show the prototype bar (or press the ` key)':'Fold the prototype bar away (or press the ` key)';try{localStorage.setItem('protoFolded',on?'1':'')}catch(e){}};
+  const fold=on=>{$('#proto').classList.toggle('folded',on);$('#protoFold').setAttribute('aria-expanded',String(!on));try{localStorage.setItem('protoFolded',on?'1':'')}catch(e){}};
   let was='';try{was=localStorage.getItem('protoFolded')||''}catch(e){}fold(!!was);
   $('#protoFold').onclick=()=>fold(!$('#proto').classList.contains('folded'));
   document.addEventListener('keydown',e=>{if(e.key==='`'&&!e.target.closest('input,textarea,select,[contenteditable]'))fold(!$('#proto').classList.contains('folded'))})}
