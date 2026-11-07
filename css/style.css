@@ -259,17 +259,18 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* every row: a fixed column for its heading, then its slots, which wrap under the first slot (not under the heading) */
 .pbody .recipe .rbody,.pbody .recipe .rbody div{line-height:1.75}
 /* the illustration page facing a recipe: a frame, the picture once the spell has been made just right */
-.artpage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em}
+.pbody:has(>.artpage){height:100%}
+.artpage{box-sizing:border-box;height:calc(100% + 6em);margin:-3.4em -2em -2.6em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em}
+.pg.left .artpage,.pcopy.left .artpage{margin-right:-2.6em}
+.pg.right .artpage,.pcopy.right .artpage{margin-left:-2.6em}  /* the page's padding is taken back, so the picture sits in the middle of the paper */
 .artframe{width:78%;aspect-ratio:3/4;display:grid;place-items:center;border:.12em solid #C9A8B8;border-radius:.4em;background:rgba(255,255,255,.35);box-shadow:inset 0 0 1.2em rgba(176,58,126,.08)}
 .artframe img{width:100%;height:100%;object-fit:contain}
 .artframe.shown img{filter:grayscale(1) sepia(.4) contrast(1.1)}  /* an unlocked illustration is an old print, like the pictures in the other books */
 .artpage.locked .artframe{border-style:dashed;background:rgba(201,168,184,.08)}
 .artq{position:relative;font-family:var(--font-title);font-size:4em;color:#8A7262;opacity:.55}
-/* the outline of a locked picture: the picture as a solid shape edged in the page's pink line, filled with the paper */
+/* a locked picture: its outline (assets/spells/outline, its shape in the paper colour edged with a sepia ink line) */
 .artframe.outlined,.artframe.shown,.artpage.locked .artframe.outlined{position:relative;border:0;background:none;box-shadow:none}
-.artframe.outlined :is(img,.artfill){position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
-.artframe.outlined .artline{filter:brightness(0) drop-shadow(1.3px 0 0 #8A7262) drop-shadow(-1.3px 0 0 #8A7262) drop-shadow(0 1.3px 0 #8A7262) drop-shadow(0 -1.3px 0 #8A7262);opacity:.85}  /* a faded sepia ink line, like the other books' old prints */
-.artframe.outlined .artfill{background:var(--paper,#FBF4E8);-webkit-mask:var(--pic) center/contain no-repeat;mask:var(--pic) center/contain no-repeat}  /* the shape filled with the book's paper, faintly washed with the sepia ink (10%) */
+.artframe.outlined img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
 .artsoon{font-size:3em;color:#E070AE;opacity:.6}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
