@@ -994,3 +994,8 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .ph-line{margin:4px 0;line-height:1.5}
 .ph-line.cont{padding-left:14px}
 .ph-empty{margin:24px 8px;text-align:center;line-height:1.6}
+/* little pink stars bursting from the name of what is being made when it is clicked (starBurst in actions.js) */
+.burst{position:fixed;z-index:60;pointer-events:none;translate:-50% -50%;font-size:var(--sz,16px);line-height:1;color:#FFD6EA;
+  text-shadow:0 0 4px #F4ADCF,0 0 10px #F4ADCF,0 0 16px rgba(244,173,207,.7);animation:burst .7s cubic-bezier(.2,.8,.3,1) both}
+@keyframes burst{0%{transform:translate(0,0) scale(.2) rotate(0deg);opacity:0}15%{opacity:1}
+  70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(90deg);opacity:0}}

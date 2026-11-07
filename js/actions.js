@@ -14,7 +14,8 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.tutskip){S.tutOff=true;render();return}
   switch(b.id){
     case 'craftBell':ringAltarBell();break;
-    case 'makingBtn':curBook='Recipe Book';if(S.target){(S.page||(S.page={}))['Recipe Book']='recipe:'+S.target}openBooks();break;
+    /* the name of what is being made: little pink stars burst from it, then the Recipe Book opens on its page */
+    case 'makingBtn':starBurst(b);setTimeout(()=>{curBook='Recipe Book';if(S.target){(S.page||(S.page={}))['Recipe Book']='recipe:'+S.target}openBooks()},calm()?0:420);break;
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
@@ -175,3 +176,9 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');$('#info').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});
+/* A burst of little pink stars from the middle of an element, flying out in a ring and fading (none with reduced motion). */
+function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,n=8;
+  for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.5,d=Math.max(r.width*.35,40)+Math.random()*30,s=document.createElement('span');
+    s.className='burst';s.textContent=i%2?'✦':'✧';s.setAttribute('aria-hidden','true');
+    s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.55}px;--sz:${12+Math.random()*10}px;animation-delay:${Math.random()*60}ms`;
+    s.addEventListener('animationend',()=>s.remove());document.body.appendChild(s)}}
