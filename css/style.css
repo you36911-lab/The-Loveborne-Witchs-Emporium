@@ -262,6 +262,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .artpage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em}
 .artframe{width:78%;aspect-ratio:3/4;display:grid;place-items:center;border:.12em solid #C9A8B8;border-radius:.4em;background:rgba(255,255,255,.35);box-shadow:inset 0 0 1.2em rgba(176,58,126,.08)}
 .artframe img{width:100%;height:100%;object-fit:contain}
+.artframe.shown img{filter:grayscale(1) sepia(.4) contrast(1.1)}  /* an unlocked illustration is an old print, like the pictures in the other books */
 .artpage.locked .artframe{border-style:dashed;background:rgba(201,168,184,.08)}
 .artq{position:relative;font-family:var(--font-title);font-size:4em;color:#8A7262;opacity:.55}
 /* the outline of a locked picture: the picture as a solid shape edged in the page's pink line, filled with the paper */
