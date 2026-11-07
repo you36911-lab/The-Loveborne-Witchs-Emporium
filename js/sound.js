@@ -25,3 +25,6 @@ function playCandleOut(){sfx('candleOut',.3,1800)}
 function playPhone(){sfx('phoneNotify',.5)}
 /* Crafting on the altar (a test craft or the real thing): "Magic Spell" (Soumages), chosen by the designer. */
 function playCraft(){sfx('craft',.6)}
+/* A cupboard door in the workroom swinging open, and shut: "Cabinet Door Open" and "Cabinet Door Close" (freesound_community). */
+function playCabinetOpen(){sfx('cabinetOpen',.5)}
+function playCabinetClose(){sfx('cabinetClose',.5)}

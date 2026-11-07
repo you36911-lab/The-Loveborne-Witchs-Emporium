@@ -168,7 +168,7 @@ const PLATE={'Herbs & flowers':'Herbs','Spices':'Spices','Fruits':'Fruits','Pant
   'Oils, butters & waxes':'Oils','Resins & incense':'Resins','Inks & paints':'Inks','Candles':'Candles','Tarot':'Tarot',
   'Crystals':'Crystals','Animal gifts':'Critters','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
 const SHELFNAME={'Base waters':'Waters & bottles','Tarot':'Tarot cards'};
-let openShelf='',shownShelf='';
+let openShelf='',shownShelf='',heardShelf='';
 /* how many things from this cupboard are on the table now */
 function shelfOnTable(c){if(c==='Candles')return S.candle?1:0;if(c==='Tarot')return S.tarot?1:0;
   return D.items.filter(i=>i.c===c&&S.altar.includes(i.n)).length}
@@ -183,6 +183,7 @@ function renderShelves(){
   let side='L';
   document.querySelectorAll('#cubbies .cubby').forEach(d=>{const c=d.dataset.shelf,n=shelfOnTable(c),on=openShelf===c,b=d.querySelector('b');
     d.classList.toggle('open',on);d.setAttribute('aria-expanded',on);b.hidden=!n;d.setAttribute('aria-label',(SHELFNAME[c]||c)+(n?`, ${n} on the table`:''));if(on)side=d.dataset.side});
+  if(openShelf!==heardShelf){if(openShelf)playCabinetOpen();else playCabinetClose();heardShelf=openShelf}
   const box=$('#shelfOpen');if(!openShelf){box.hidden=true;box.innerHTML='';shownShelf='';return}
   box.hidden=false;box.className='shelfopen from'+side+(openShelf==='Tarot'?' wide':'');
   /* a newly opened cupboard plays its coming-out again */
