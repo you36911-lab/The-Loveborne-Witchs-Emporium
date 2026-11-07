@@ -100,7 +100,7 @@ function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
       if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
-    S.result={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,test:true}}
+    S.lastTest={grade:ev.grade,first:pickLine(ev.grade),lines:ev.lines,name:r.name,type:r.type};phoneNotify()}  /* the result comes to the phone (phone.js) */
   else{/* Made for real: it goes up to the counter, and is given when the player clicks it there (giveMade). */
     const q=S.queue;if(!q)return;
     S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;

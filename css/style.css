@@ -968,3 +968,29 @@ body.dawning::after{content:'';position:fixed;inset:0;z-index:9999;cursor:defaul
 .dialogue .balloon::after{border-color:transparent color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent) transparent transparent}
 .dialogue button:not(.main):not(.dclose):not(.tutskip):not(.kw),.dialogue input,.dialogue select{background:color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent)}
 .dialogue .coach{background:color-mix(in srgb,var(--butter) calc((var(--dlg-a) + .06)*100%),transparent)}
+
+/* ---------- the phone (phone.js): lying on the altar left of the candle stand (assets/scene/altar-phone.png, 818×700,
+   phone1, the designer's picture cut out), dimmed a little to the room's light like the stand. Test craft results come to it:
+   it buzzes, then its Test Craft app opens, a window like the computer's apps. */
+.room .phone{position:absolute;left:19.3%;bottom:13.4%;width:5.4%;aspect-ratio:818/700;z-index:3;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;
+  filter:brightness(.86) saturate(.95) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45));transition:filter .15s}
+.room .phone img{display:block;width:100%;height:100%;pointer-events:none}
+.room .phone:hover,.room .phone:focus-visible{background:none;box-shadow:none;outline:none;filter:brightness(.95) drop-shadow(0 0 .3cqw #FFD6F0) drop-shadow(0 0 .8cqw #F4ADCF) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45))}
+.room .phone.new{filter:brightness(.98) drop-shadow(0 0 .35cqw #FFD6F0) drop-shadow(0 0 1cqw #F4ADCF) drop-shadow(0 .3cqw .25cqw rgba(60,10,40,.45))}  /* a result not looked at yet */
+@media (prefers-reduced-motion:no-preference){.room .phone.buzz{animation:buzz .6s linear}}
+@keyframes buzz{0%,100%{translate:0 0;rotate:0deg}10%,50%,90%{translate:-1.5% 0;rotate:-1.2deg}30%,70%{translate:1.5% 0;rotate:1.2deg}}
+.phoneview{align-items:center}
+.pcwin.phonewin{position:relative;left:auto;top:auto;width:min(460px,100%);height:auto;max-height:calc(100vh - 40px)}
+.phonewin img.pcico{object-fit:contain}
+.phoneapp{flex:1;min-height:0;overflow:auto;padding:16px 18px 18px;background:var(--paper)}
+.ph-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.ph-name{display:block;font-family:var(--font-shop);font-weight:600;font-size:20px;line-height:1.2;color:var(--ink)}
+.ph-head small{display:block;font-size:13px}
+.ph-grade{flex:none;padding:2px 12px;border-radius:999px;font-family:var(--font-shop);font-weight:600;font-size:14px;background:var(--pink-soft);color:var(--kw-text)}
+.ph-grade.g-Perfect{background:var(--kw);color:#fff}
+.ph-grade.g-Clumsy,.ph-grade.g-Failed{background:var(--paper2);color:var(--ink-soft)}
+.ph-first{margin:10px 0 0;font-style:italic;color:var(--ink-soft)}
+.ph-card{margin-top:12px;border:1px solid var(--line);border-radius:14px;padding:10px 14px;background:var(--card);box-shadow:0 1px 4px rgba(51,33,58,.06)}
+.ph-line{margin:4px 0;line-height:1.5}
+.ph-line.cont{padding-left:14px}
+.ph-empty{margin:24px 8px;text-align:center;line-height:1.6}

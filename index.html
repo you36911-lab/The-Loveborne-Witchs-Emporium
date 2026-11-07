@@ -63,6 +63,7 @@
       <button class="bellslot" id="craftBell" title="Ring the bell to make it" aria-label="Ring the bell: make it"><img alt=""></button>  <!-- ringing it makes what is laid out -->
       <div class="slot cardslot" id="tarotSlot"></div>
     </div>
+    <button class="phone" id="phoneBtn" title="Your phone: test craft results" aria-label="Phone: test craft results"><img alt=""></button>  <!-- test craft results come to the phone -->
     <div class="testcandles" id="testCandles" role="img"><img alt=""></div>  <!-- the black candelabra: test crafts left before a spoiled batch -->
     <div class="result" id="result" hidden></div>
     <div class="shelfopen" id="shelfOpen" hidden></div>
@@ -122,6 +123,11 @@
  </div></div>
 </div>
 <div class="modal receiptsview" id="receiptsView" aria-label="Today's receipts"></div>
+<!-- the phone's Test Craft app (phone.js): a window like the computer's apps -->
+<div class="modal phoneview" id="phoneView" role="dialog" aria-modal="true" aria-label="Phone: test craft result">
+  <div class="pcwin phonewin"><div class="pcbar"><span class="pctitle"><img class="pcico" id="phoneIco" alt="">Test Craft</span><span class="pcbtns"><button class="pcclose" id="phoneClose" aria-label="Close the phone">×</button></span></div>
+    <div class="phoneapp" id="phoneApp"></div></div>
+</div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
 <div class="toast" id="toast"></div>
@@ -139,6 +145,7 @@
 <script src="js/books.js"></script>
 <script src="js/email.js"></script>
 <script src="js/computer.js"></script>
+<script src="js/phone.js"></script>
 <script src="js/prototype.js"></script>
 <script src="js/main.js"></script>
 </body>

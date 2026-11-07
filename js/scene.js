@@ -17,6 +17,7 @@ const STACK=[['Recipe Book','book-recipe-book',79,0,528],['Book of Making','book
 function buildScene(){
   document.querySelectorAll('#scene img[data-img]').forEach(i=>i.src=ASSETS.objects[i.dataset.img]);
   $('#craftBell img').src=ASSETS.altarBell;
+  $('#phoneBtn img').src=ASSETS.altarPhone;
   const stack=STACK.map(([b,img,x,y,w])=>`<button data-openbook="${esc(b)}" aria-label="Open the ${esc(b)}" style="left:${x/659*100}%;top:${y/672*100}%;width:${w/659*100}%"><img src="${ASSETS.objects[img]}" alt=""></button>`).join('');
   $('#bookStack').innerHTML=$('#altarBooks').innerHTML=stack;
   /* preload and decode ahead, so the fades and the slide down to the workroom don't stall on a big picture */
@@ -226,7 +227,7 @@ function renderAltar(){
     :'<button class="ontable laid" data-shelf="Tarot" title="Choose a tarot card" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
   $('#craftBell').classList.toggle('ready',!!(orderR&&S.altar.length&&S.target));
   const res=$('#result');
-  if(S.result){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;
+  if(S.result&&!S.result.test){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;  /* test crafts go to the phone */
 }
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
    "Skip tutorials" turns them all off (S.tutOff). */
