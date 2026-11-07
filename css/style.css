@@ -830,6 +830,12 @@ button.small{font-size:12px;padding:2px 10px}
   text-shadow:0 1px 2px rgba(40,10,50,.55),0 0 6px rgba(244,173,207,.95),0 0 16px rgba(244,173,207,.85),0 0 32px rgba(244,173,207,.65),0 0 56px rgba(244,173,207,.45);transition:text-shadow .2s ease}
 .tablebar .making:hover{background:none;box-shadow:none;text-shadow:0 1px 2px rgba(40,10,50,.55),0 0 7px #F4ADCF,0 0 18px rgba(244,173,207,.95),0 0 38px rgba(244,173,207,.8),0 0 66px rgba(244,173,207,.55)}
 .tablebar .making .mk{font-size:.7em;opacity:.8}
+/* a pink haze behind the words, like a background colour that fades out at its edges (it spills past the words, so the
+   name does not move) */
+.tablebar .making{position:relative;isolation:isolate}
+.tablebar .making::before{content:'';position:absolute;inset:-22px -70px;z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(244,173,207,.55),rgba(244,173,207,.3) 55%,rgba(244,173,207,0));transition:opacity .2s ease;opacity:.9}
+.tablebar .making:hover::before{opacity:1}
 
 /* a test result between the cabinets; the shop log in the corner of the window */
 .result{position:absolute;left:36%;right:36%;top:13%;max-height:56%;overflow:auto;z-index:3;margin:0;padding:10px 14px;
