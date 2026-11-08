@@ -33,47 +33,56 @@ const HESTER_NOTES={
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
    A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
    wait (ms: done after this long), note (one of Hester's notes, shown when the step is reached, done when it is closed),
-   allow (while it waits, only these, and the star's thing, can be clicked; a step without allow blocks nothing). */
+   allow (while it waits, only the star's thing and these can be clicked: selectors, or tests of the clicked element;
+   a step without allow blocks nothing). */
+const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
-    {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:['#pcBtn','#mailFx .mailcard']},
-    {glow:'[data-lsel="start:0"]',say:'From H.… She kept this shop before me.',done:()=>S.letters[0],allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
-    {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
+    {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[]},
+    {glow:'[data-lsel="start:0"]',say:'From H.… She kept this shop before me.',done:()=>S.letters[0],allow:[]},
+    {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:[]},
     /* the word bank: the apothecary's email has the first dotted word (Hester's have none) */
     {glow:()=>letterSel==='mail:0'?'#letterRead .kw':'[data-lsel="mail:0"]',say:()=>letterSel==='mail:0'?'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.':'And one from the apothecary.',
-      done:()=>S.bank.length>0,allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
-    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:['#pc']}  /* the computer closes at a click outside it, like every popup */,
+      done:()=>S.bank.length>0,allow:[]},
+    /* the computer closes at a click outside it, like every popup: only that click works here */
+    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[t=>t.id==='pc']},
     {note:'aura'},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
-    {glow:'#crystalBtn',say:'A charm for her pocket… and the ball’s pale blue. She’s worried, then.',wait:7500},
-    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:['#counter']},
-    {glow:()=>{const h=[...document.querySelectorAll('#books .pg h3.cat')].find(x=>x.textContent==='Charm');return h?h:'#turnNext'},say:'The index first. She wants a charm.',done:()=>pageOf().startsWith('recipe:')||!!S.target,allow:['#tome','#turnPrev','#turnNext','#bookStack [data-openbook="Recipe Book"]']},
-    {glow:'#books .pg .rpick',say:'If this is the one, I’ll tap its name to mark it.',done:()=>!!S.target,allow:['#tome','#turnPrev','#turnNext','#bookStack [data-openbook="Recipe Book"]']},
-    {glow:'#books .pg .wblank',say:'Blanks for what goes in, each with its shelf. The themes say what each must do.',done:()=>S.target&&noteOf(S.target).ing.some(Boolean),allow:['#tome','#turnPrev','#turnNext','#bookStack [data-openbook="Recipe Book"]']},
+    /* listening: only the balloon (a click shows the rest of the words at once) */
+    {glow:'#crystalBtn',say:'A charm for her pocket… and the ball’s pale blue. She’s worried, then.',wait:7500,allow:['#counter .balloon']},
+    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
+    /* the index: its rows and the page turns, to find a charm */
+    {glow:()=>{const h=[...document.querySelectorAll('#books .pg h3.cat')].find(x=>x.textContent==='Charm');return h?h:'#turnNext'},say:'The index first. She wants a charm.',done:()=>pageOf().startsWith('recipe:')||!!S.target,allow:[...TURNS,'#books .idxrow']},
+    {glow:'#books .pg .rpick',say:'If this is the one, I’ll tap its name to mark it.',done:()=>!!S.target,allow:[...TURNS,'#books .idxrow']},
+    /* a blank opens a list of names to choose from */
+    {glow:'#books .pg .wblank',say:'Blanks for what goes in, each with its shelf. The themes say what each must do.',done:()=>S.target&&noteOf(S.target).ing.some(Boolean),allow:['#books .windex']},
+    /* working it out is the player's own: the books, the counter, the crystal ball are all free here */
     {say:'Not sure what does what? The other books on the counter say: the Herbiary for herbs.',done:()=>S.target&&allWritten(S.target),allow:['#books','#bookStack','#counter','#crystalBtn']},
-    {glow:'#books .pg [data-layout]',say:'Written. The little bell lays it all out downstairs.',done:()=>S.altar.length>0&&view==='altar',allow:['#tome','#turnPrev','#turnNext','#bookStack [data-openbook="Recipe Book"]']},
+    {glow:'#books .pg [data-layout]',say:'Written. The little bell lays it all out downstairs.',done:()=>S.altar.length>0&&view==='altar',allow:[]},
     {glow:'#craftBell',say:'Everything’s on the table. The silver bell makes it.',done:()=>!!S.spell||!!S.made,allow:[]},
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
-    {say:'',wait:9000},
-    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book')&&pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:['#counter','#bookStack [data-openbook="Recipe Book"]','#tome','#turnPrev','#turnNext']},
-    {glow:()=>pageOf()==='recipe:111'?'#books .pg [data-booktest="111"]':'[data-go="recipe:111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:['#tome','#turnPrev','#turnNext','#bookStack [data-openbook="Recipe Book"]']},
+    {say:'',wait:9000,allow:['#counter .balloon']},
+    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
+    {glow:()=>seen('[data-go="recipe:111"]')?'[data-go="recipe:111"]':'#turnFirst',say:'The Language of Ravens.',done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[...TURNS]},
+    {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
     {glow:'#phoneBtn',say:'The phone. That’s where a test tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
-    {say:'',done:()=>!isOpen('phoneView')},
+    /* the phone closes at a click outside it */
+    {say:'',done:()=>!isOpen('phoneView'),allow:[t=>t.id==='phoneView']},
     {note:'tests'},
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>S.seen[HESTER_DAY1]}]},
   {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000}]},
   {id:'close1',at:'2-Sunrise-',when:()=>S.day===1&&isOpen('dayEnd'),until:()=>S.day>1||!isOpen('dayEnd'),steps:[
     {glow:'#dayEnd .receipts',say:'The day’s receipts. Everyone who came, and their stars.',done:()=>!isOpen('dayEnd')}]},
   {id:'reviews',at:'2-Sunrise-',when:()=>S.day===2&&S.h===0&&afterDawn()&&(S.reviews||[]).length>0,until:()=>S.h>0||!!S.queue,steps:[
-    {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'Reviews came in overnight.',done:()=>pcApp('shop'),allow:['#pcBtn','#desk','#pc .taskbar']},
-    {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. Things they let slip tend to matter later.',wait:8000}]},
+    {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'Reviews came in overnight.',done:()=>pcApp('shop'),allow:[]},
+    {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. Things they let slip tend to matter later.',wait:8000,allow:[]}]},
   {id:'advice1',at:FIRST_ADVICE,when:()=>atCounter(FIRST_ADVICE),until:()=>S.seen[FIRST_ADVICE],steps:[
-    {say:'She only wants to know which herb. Nothing to make.',wait:8000},
-    {glow:'#bookStack [data-openbook="Herbiary"]',say:'The Herbiary. Something for love, for the mind, and strong.',done:()=>bookOpen('Herbiary'),allow:['#counter']},
+    {say:'She only wants to know which herb. Nothing to make.',wait:8000,allow:['#counter .balloon']},
+    {glow:'#bookStack [data-openbook="Herbiary"]',say:'The Herbiary. Something for love, for the mind, and strong.',done:()=>bookOpen('Herbiary'),allow:[]},
     {glow:()=>isOpen('books')?'':'#adviceIn',say:'Then I tell her its name.',done:()=>S.seen[FIRST_ADVICE]}]},
   {id:'report',when:()=>S.queue&&S.queue.type==='report',until:()=>!S.queue||S.queue.type!=='report',steps:[
     {say:'Back to tell me how it went.',done:()=>!S.queue||S.queue.type!=='report'}]},
@@ -149,17 +158,24 @@ function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected
 (function follow(){placeRing();requestAnimationFrame(follow)})();
 setInterval(guideTick,250);  /* the tutorial looks at where things stand four times a second */
 
-/* (A step inside the computer or a book also allows its way back in, as Esc can close them.)
-   While a step waits for something to be done, only that can be clicked (allow: the step's own list of what may be
-   clicked; its star's thing always may). Everything else does nothing but bring the thought back up, so the tutorial
-   is never left behind. The menu (Esc), the prototype bar and Hester's note stay free. */
-const ALWAYS_FREE='#guideLine, #hNote, #proto, #title, #gameMenu, #settings, #mailFx';  /* and a new email, which always comes first */
-function stepAllows(t){const st=ringStep;if(!st||!st.allow||S.tutOff)return true;
+/* While a step waits for something to be done, only that works: the star's thing, and what the step's allow list names.
+   Any other click does nothing but bring the thought back up, and Esc does not close what is open. Always free: the menu,
+   the prototype bar, Hester's note, and a new email that arrives meanwhile (post comes first). It can never get stuck:
+   if the star's thing is not on screen, or something lies over it, nothing is blocked until it can be reached. */
+const ALWAYS_FREE='#guideLine, #hNote, #proto, #title, #gameMenu, #settings';
+function reachable(el){if(!el)return false;const r=el.getBoundingClientRect(),top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return !!top&&(el.contains(top)||top.contains(el))}
+function locked(){const st=ringStep;if(!st||!st.allow||S.tutOff||titleOpen()||menuOpen()||isOpen('hNote'))return false;
+  if(st.glow&&!reachable(ringEl))return false;
+  return true}
+function stepAllows(t){if(!locked())return true;
   if(t.closest(ALWAYS_FREE))return true;
+  if(t.closest('#mailFx')&&!(ringEl&&ringEl.closest('#mailFx')))return true;
   if(ringEl&&ringEl.contains(t))return true;
-  return st.allow.some(sel=>t.closest(sel))}
+  return ringStep.allow.some(a=>typeof a==='function'?a(t):t.closest(a))}
 document.addEventListener('click',e=>{if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();
   const line=$('#guideLine');if(!line.hidden){line.classList.remove('in');void line.offsetWidth;line.classList.add('in')}},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&locked()&&somethingOpen()){e.stopImmediatePropagation();e.preventDefault()}},true);
+
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */
 function openNote(id){const n=HESTER_NOTES[id];$('#hNoteBody').innerHTML=`<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="hsig">— H.</p>`;
   $('#hNote').dataset.note=id;$('#hNote').classList.add('open')}
