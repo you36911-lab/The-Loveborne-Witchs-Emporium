@@ -65,7 +65,7 @@ const LESSONS=[
     /* the rest of the notebook is the player's own: they may write in it, and a click beside it closes it */
     {glow:()=>memoTyped?'':'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',  /* the star goes once something is written */done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
-  {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
+  {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER]&&!S.parting,end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
     {glow:()=>wordsDone()?'#crystalBtn':'',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
@@ -83,7 +83,9 @@ const LESSONS=[
     {glow:'#books .pg [data-layout]',say:'Written. Next time I’ll work it out from the books myself. The little bell lays it all out downstairs.',done:()=>S.altar.length>0&&view==='altar',allow:[]},
     {glow:'#craftBell',say:'Everything’s on the table. The silver bell makes it.',done:()=>!!S.spell||!!S.made,allow:[]},
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
-    {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]}]},
+    {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]},
+    /* what she lets slip as she goes (the hint): it comes back in her review on the computer, after closing */
+    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll read it again in her review on my computer, once the shop closes.':'',done:()=>!S.parting,allow:[]}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
@@ -132,9 +134,7 @@ function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.spli
 let slipSeen=false;$('#books').addEventListener('pointerover',e=>{if(e.target.closest('.hslip'))slipSeen=true});
 let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset.memo!==undefined)memoTyped=true});
 /* Whether the customer has finished speaking: their words type out letter by letter (typeBalloon in scene.js), or all at
-   once when the balloon is clicked. spokenFor(ms): they finished at least this long ago (counted within the current step). */
-function wordsDone(){const b=$('#counter .balloon');if(!b)return false;if(!typeFrom||matchMedia('(prefers-reduced-motion: reduce)').matches)return true;
-  return Date.now()>=typeFrom+b.textContent.length*TYPE_STEP*1000}
+   once when the balloon is clicked (wordsDone, in scene.js). spokenFor(ms): they finished at least this long ago (counted within the current step). */
 let spokeAt=0;
 function spokenFor(ms){if(!wordsDone()){spokeAt=0;return false}if(!spokeAt)spokeAt=Date.now();return Date.now()-spokeAt>=ms}
 /* ---------- running it ---------- */

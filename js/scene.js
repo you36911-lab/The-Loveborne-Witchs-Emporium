@@ -97,6 +97,14 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
   if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+(mailWaiting?MAIL_AFTER_DAWN_MS:AFTER_DAWN_MS)||!$('#mailFx').hidden||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
+/* A customer who got just what they needed says their goodbye (the hint) in their own balloon, stays long enough to
+   read it (PARTING_MS after the words have finished), and then leaves by themselves. */
+function wordsDone(){const b=$('#counter .balloon');if(!b)return false;if(!typeFrom||matchMedia('(prefers-reduced-motion: reduce)').matches)return true;
+  return Date.now()>=typeFrom+b.textContent.length*TYPE_STEP*1000}
+let partingDoneAt=0;
+setInterval(()=>{if(!S.parting||$('#title').hidden===false){partingDoneAt=0;return}
+  if(!wordsDone()){partingDoneAt=0;return}if(!partingDoneAt)partingDoneAt=Date.now();
+  if(Date.now()-partingDoneAt>=PARTING_MS){partingDoneAt=0;S.parting=null;render()}},300);
 /* The bell brings the next customer, and only the bell does: someone due this hour comes in; otherwise time moves
    on to the next hour with someone (or something) in it, and if that is a customer, they come in.
    The bell rings first; a moment later (BELL_TO_DOOR_MS) the door opens and the customer appears. The bell does nothing
@@ -104,7 +112,8 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
 let bellWait=0;
 function letIn(){bellWait=setTimeout(()=>{bellWait=0;S.rung=true;render()},BELL_TO_DOOR_MS)}
 function ringBell(){const bell=$('#bellBtn');if(bellWait)return;
-  S.parting=null;  /* the bell sends a lingering customer on their way */
+  /* a customer still saying their goodbye is not hurried: the bell only gives a little shake */
+  if(S.parting){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Let them finish first.',{thought:true});return}
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');playBell();toast('Someone is already at the counter.');return}
   bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');playBell();
   if(someoneDue()){S.result=null;render();letIn();return}
@@ -129,7 +138,13 @@ function renderCustomer(){const live=currentVisit(),cur=live||S.parting,src=cur&
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src);
   const now=src?{id:(cur.pic||'')+'|'+cur.who,parting:!live}:false;
   if(now&&customerWas!==null&&(!customerWas||(live&&(customerWas.parting||customerWas.id!==now.id))))playDoorClose();
-  customerWas=now}
+  customerWas=now;
+  /* someone has just left the counter: time moves on by itself */
+  const here=!!(live||S.parting);if(hereWas===true&&!here)afterLeaving();hereWas=here}
+/* Once a customer has gone and nobody else is due this hour, the hour passes by itself (AFTER_LEAVE_MS later): the light
+   outside changes, and the bell then calls whoever comes next. Not at Nightfall: there the bell closes the night. */
+let hereWas=null,leaveT=0;
+function afterLeaving(){clearTimeout(leaveT);leaveT=setTimeout(()=>{if(S.queue||S.parting||bellWait||S.h>=3||someoneDue()||!$('#title').hidden)return;nextHour(true)},AFTER_LEAVE_MS)}
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}

@@ -86,12 +86,9 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
   const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard')){fx.hidden=true;render()}
   if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
   /* a result read at the counter (nobody there) */
-  /* a lingering customer leaves at a click elsewhere (the click that gave the order does not count) */
-  if(partingAtClick&&S.parting&&!inside('counter')&&!t.closest('.modal')){S.parting=null;render()}
   if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
-let partingAtClick=false;
-let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain');partingAtClick=!!S.parting},true);
+let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
 /* A test craft: what was written is laid out on the altar, it is crafted (craftAnim), and only then is it judged: a black
    candle goes out if it isn't perfect, and the result comes to the phone (a sound and a badge; the phone shows it
    when clicked). Either way what was laid out is used up and the finished spell stands on the altar (S.spell):

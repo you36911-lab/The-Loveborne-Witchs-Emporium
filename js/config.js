@@ -21,6 +21,8 @@ const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */
 const DAWN_MS = 1800;
 const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
+const PARTING_MS = 4500;  
+const AFTER_LEAVE_MS = 1500;  /* after a customer has left (and nobody else is due this hour), the pause before the light moves on to the next hour */  /* a customer who got just what they needed stays this long after their parting words, then leaves */
 const BELL_TO_DOOR_MS = 1400;  /* after the shop bell rings, the pause before the door opens and the customer comes in */
 const TITLE_FADE_MS = 700;  /* the title screen fading away as the game starts (keep in step with .titlescreen in style.css) */
 const MAIL_AFTER_DAWN_MS = 1800;  /* after the day card fades, the pause before the morning's new email pops up */
