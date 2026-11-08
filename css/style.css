@@ -1192,16 +1192,13 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guideline[hidden]{display:none}
 .guideline.in{animation:subIn .6s ease-out both}
 .scenenote.guided{visibility:hidden}
-/* Hester's notes taped onto the notebook's first page (hesterPageHTML in books.js): slips of cream paper in her hand,
-   each a little crooked, with a strip of tape across the top; a click opens one large */
-.tome.diary .hslip{display:block;position:relative;width:88%;margin:1.6cqw auto 2.4cqw;padding:1.8cqw 2.2cqw 1.4cqw;text-align:left;
-  font-family:'Caveat',cursive;font-size:1.8cqw;line-height:1.2;color:#3A2A3A;background:#FFF8EC;border:0;border-radius:2px;
-  box-shadow:0 1px 2px rgba(40,20,30,.25),0 4px 10px rgba(40,20,30,.18);rotate:var(--tilt,-1deg);cursor:pointer}
-.tome.diary .hslip:hover{background:#FFFDF7;box-shadow:0 2px 3px rgba(40,20,30,.25),0 8px 16px rgba(40,20,30,.22)}
-.tome.diary .hslip b{display:block;font-weight:500;font-size:1.25em;color:#7A2E5E;margin-bottom:.2em}
-.tome.diary .hslip span{display:block;margin-bottom:.25em}
-.tome.diary .hslip em{display:block;text-align:right;font-style:normal}
-.tome.diary .hslip .tape{position:absolute;left:50%;top:-1cqw;width:7cqw;height:1.8cqw;translate:-50% 0;rotate:-3deg;background:rgba(242,214,224,.75);box-shadow:0 1px 1px rgba(0,0,0,.08)}
+/* Hester's notes taped onto the notebook's first page (hesterPageHTML in books.js): the very note, the same paper, size
+   and hand as when it was given (.hpaper), with a strip of tape across the top; a click opens it large */
+.tome.diary .hslip{display:block;position:relative;width:min(420px,100%);margin:14px auto 22px;padding:0;background:none;border:0;border-radius:0;box-shadow:none;text-align:left;cursor:pointer}
+.tome.diary .hslip:hover,.tome.diary .hslip:active{background:none;box-shadow:none;transform:none}
+.tome.diary .hslip .hpaper{width:100%}
+.tome.diary .hslip:hover .hpaper{box-shadow:0 2px 4px rgba(40,20,30,.25),0 16px 36px rgba(20,8,24,.45)}
+.tome.diary .hslip .tape{position:absolute;left:50%;top:-9px;z-index:1;width:84px;height:22px;translate:-50% 0;rotate:-4deg;background:rgba(242,214,224,.78);box-shadow:0 1px 1px rgba(0,0,0,.08)}
 .tome.diary .leaf .hslip{pointer-events:none}
 /* Hester's note: a small paper note in her hand */
 .hnote{z-index:63}

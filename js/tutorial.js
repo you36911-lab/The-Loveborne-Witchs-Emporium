@@ -54,8 +54,10 @@ const LESSONS=[
     {note:'aura'},
     /* where Hester's notes are kept: beside the notebook, as slips, to read again */
     {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
-    {glow:'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',done:()=>!isOpen('books'),allow:[{self:'#books'},{self:'#books .bookmain'}],
-      ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},  /* a click beside the notebook closes it */,
+    {glow:'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',wait:4500,allow:[],
+      ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
+    /* the rest of the notebook is the player's own: they may write in it, and a click beside it closes it */
+    {glow:'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
@@ -131,6 +133,7 @@ function guideTick(){
     if(g[L.id]===undefined){g[L.id]=0;save()}
     if(L.until()){finish(L);L=current();continue}
     let i=g[L.id],st=L.steps[i];const key=L.id+':'+i;
+    if(!st){finish(L);L=current();continue}  /* never stall on a step that is not there (an older save, a hole) */
     if(guideNow!==key){guideNow=key;guideStepAt=Date.now()}
     const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(st.wait&&Date.now()-guideStepAt>=st.wait);
     if(passed){g[L.id]=i+1;save();if(g[L.id]>=L.steps.length){finish(L);L=current()}continue}
@@ -208,7 +211,9 @@ function markLock(){const on=locked();document.body.classList.toggle('guide-lock
 /* (Esc during a step opens the menu over everything, see menu.js; it does not close what is open) */
 
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */
-function openNote(id){const n=HESTER_NOTES[id];$('#hNoteBody').innerHTML=`<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="hsig">— H.</p>`;
+/* a note's words, the same in the popup and taped into the notebook */
+function noteHTML(id){const n=HESTER_NOTES[id];return `<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="hsig">— H.</p>`}
+function openNote(id){$('#hNoteBody').innerHTML=noteHTML(id);
   $('#hNote').dataset.note=id;$('#hNote').classList.add('open')}
 function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return;(S.guideNotes||(S.guideNotes={}))[m.dataset.note]=true;save();m.classList.remove('open')}
 $('#hNote').addEventListener('click',e=>{if(e.target.id==='hNote')closeNote()});
