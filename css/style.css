@@ -1193,11 +1193,9 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guideline.in{animation:subIn .6s ease-out both}
 .scenenote.guided{visibility:hidden}
 /* Hester's notes taped onto the notebook's first page (hesterPageHTML in books.js): the very note, the same paper, size
-   and hand as when it was given (.hpaper), with a strip of tape across the top; a click opens it large */
-.tome.diary .hslip{display:block;position:relative;width:min(420px,100%);margin:14px auto 22px;padding:0;background:none;border:0;border-radius:0;box-shadow:none;text-align:left;cursor:pointer}
-.tome.diary .hslip:hover,.tome.diary .hslip:active{background:none;box-shadow:none;transform:none}
+   and hand as when it was given (.hpaper), with a strip of tape across the top; it is only paper (nothing happens at a click) */
+.tome.diary .hslip{display:block;position:relative;width:min(420px,100%);margin:14px auto 22px}
 .tome.diary .hslip .hpaper{width:100%}
-.tome.diary .hslip:hover .hpaper{box-shadow:0 2px 4px rgba(40,20,30,.25),0 16px 36px rgba(20,8,24,.45)}
 .tome.diary .hslip .tape{position:absolute;left:50%;top:-9px;z-index:1;width:84px;height:22px;translate:-50% 0;rotate:-4deg;background:rgba(242,214,224,.78);box-shadow:0 1px 1px rgba(0,0,0,.08)}
 .tome.diary .leaf .hslip{pointer-events:none}
 /* Hester's note: a small paper note in her hand */

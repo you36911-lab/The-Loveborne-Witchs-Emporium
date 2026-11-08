@@ -94,15 +94,15 @@ function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=AS
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
-/* The first page is Hester's: her notes are taped onto it as slips of paper, whole, to read again (a click opens one
-   large). The player's own pages follow it. */
+/* The first page is Hester's: her notes are taped onto it, whole, just as she gave them, to read again. The player's
+   own pages follow it. */
 function diaryPages(){const n=memoWritten(),count=1+Math.max(1,n+1);
   const pages=[{key:'diary:0',plain:true,html:hesterPageHTML},
     ...Array.from({length:count-1},(_,m)=>({key:'diary:'+(m+1),plain:true,html:()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`}))];
   if(pages.length%2)pages.push({key:'diary:'+pages.length,plain:true,html:()=>`<textarea class="memo" data-memo="${count-1}" aria-label="My notes, page ${count}" spellcheck="false">${esc(S.memo[count-1]||'')}</textarea>`});
   return pages}
 function hesterPageHTML(){const notes=Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);
-  return `<p class="dtitle">My notes</p>`+(notes.length?notes.map(k=>`<button class="hslip" data-hnote="${k}" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></button>`).join(''):'')}
+  return `<p class="dtitle">My notes</p>`+(notes.length?notes.map(k=>`<div class="hslip" role="note" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></div>`).join(''):'')}
 /* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
   if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. I\u2019ll write on the next one.')}
@@ -269,7 +269,6 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
     $('#books').classList.remove('open');goTo('altar');
     if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
     return}
-  if(b.dataset.hnote){openNote(b.dataset.hnote);return}  /* one of Hester's notes, read again */
   if(b.id==='cover'){openTome();return}
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
   if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}

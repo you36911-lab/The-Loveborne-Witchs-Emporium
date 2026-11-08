@@ -59,7 +59,8 @@ const LESSONS=[
     {note:'aura'},
     /* where Hester's notes are kept: beside the notebook, as slips, to read again */
     {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
-    {glow:'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',wait:4500,allow:[],
+    /* the star on the slip goes once the pointer has been over it */
+    {glow:()=>slipSeen?'':'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',wait:4500,allow:[],
       ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
     /* the rest of the notebook is the player's own: they may write in it, and a click beside it closes it */
     {glow:()=>memoTyped?'':'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',  /* the star goes once something is written */done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
@@ -126,7 +127,9 @@ const LESSONS=[
    one at or after it starts again. (close1's "2-Sunrise-" means it is over once Day 2 has begun.) */
 function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.split('-');return +d*4+HOURS.indexOf(hr)};
   LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]})}
-/* the notebook step: once the player writes something, its star has done its job and goes */
+/* the notebook steps: once the player has looked at the slip (the pointer over it), or written something, the star has
+   done its job and goes */
+let slipSeen=false;$('#books').addEventListener('pointerover',e=>{if(e.target.closest('.hslip'))slipSeen=true});
 let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset.memo!==undefined)memoTyped=true});
 /* Whether the customer has finished speaking: their words type out letter by letter (typeBalloon in scene.js), or all at
    once when the balloon is clicked. spokenFor(ms): they finished at least this long ago (counted within the current step). */
