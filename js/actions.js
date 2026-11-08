@@ -11,7 +11,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
   /* tutorials: close this one for good, or skip them all */
   if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
-  if(b.dataset.tutskip){S.tutOff=true;render();return}
   switch(b.id){
     case 'craftBell':ringAltarBell();break;
     case 'spellBtn':takeSpell();break;

@@ -15,7 +15,10 @@ function fillSettings(){$('#setVol').value=Math.round(SET.volume*100);$('#setVol
   $('#setSub').querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.sub===SET.sub));
   $('#setFull').checked=!!document.fullscreenElement}
 function openSettings(){fillSettings();$('#settings').classList.add('open');$('#setDone').focus()}
-function closeSettings(){$('#settings').classList.remove('open')}
+/* a side panel slides back out, then closes (see .modal.side in style.css) */
+function closePanel(m,then){if(!m.classList.contains('open')||m.classList.contains('closing'))return;m.classList.add('closing');
+  setTimeout(()=>{m.classList.remove('open','closing');if(then)then()},220)}
+function closeSettings(){closePanel($('#settings'))}
 $('#setVol').oninput=e=>{SET.volume=e.target.value/100;$('#setVolN').textContent=e.target.value+'%';saveSettings()};
 $('#setVol').onchange=()=>playBell();  /* let go of the slider: the shop bell rings at the new volume */
 $('#setSub').onclick=e=>{const b=e.target.closest('[data-sub]');if(!b)return;SET.sub=+b.dataset.sub;saveSettings();applySettings();fillSettings()};
@@ -39,10 +42,6 @@ function makeMotes(){const box=$('#tsMotes');if(box.childElementCount)return;
   for(let i=0;i<22;i++){const m=document.createElement('i');
     m.style.cssText=`left:${(Math.random()*100).toFixed(1)}%;--d:${(14+Math.random()*14).toFixed(1)}s;--w:${(-30-Math.random()*30).toFixed(1)}s;--z:${(2+Math.random()*4).toFixed(1)}px;--x:${(Math.random()*60-30).toFixed(0)}px`;
     box.appendChild(m)}}
-/* Prototype: three button styles to compare (see .titlescreen[data-bs] in style.css), remembered in this browser. */
-function setButtonStyle(bs){$('#title').dataset.bs=bs;$('#tsStyles').querySelectorAll('[data-bs]').forEach(b=>b.classList.toggle('on',b.dataset.bs===bs));try{localStorage.setItem('titleButtons',bs)}catch(e){}}
-{let bs='plaque';try{bs=localStorage.getItem('titleButtons')||bs}catch(e){}setButtonStyle(bs);$('#tsStyles').hidden=!PROTOTYPE_TOOLS;
-  $('#tsStyles').onclick=e=>{const b=e.target.closest('[data-bs]');if(b)setButtonStyle(b.dataset.bs)}}
 function showTitle(){const t=$('#title'),saved=hasSave();
   $('#tsBg').style.backgroundImage=`url("${ASSETS.backgrounds.Twilight}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
   clearTimeout(glintT);glintT=setTimeout(glint,1200);
@@ -60,7 +59,7 @@ function leaveTitle(start){const t=$('#title'),scene=$('#scene');
     void scene.offsetWidth;scene.classList.remove('nofade');$('#world').inert=false;t.classList.add('gone');
     setTimeout(()=>{t.hidden=true;clearTimeout(glintT)},TITLE_FADE_MS)}))}
 /* a new game opens like the first one: the dawn picture behind the fading title, then the day card, then the post */
-function newGame(){leaveTitle(()=>{S=fresh();sanitize();showDawn(TITLE_FADE_MS+150)})}
+function newGame(){leaveTitle(()=>{newState();showDawn(TITLE_FADE_MS+150)})}
 $('#tsContinue').onclick=()=>leaveTitle(()=>{if(S.day===1&&S.h===0&&!S.hist.length)showDawn(TITLE_FADE_MS+150);else render()});
 $('#tsNew').onclick=()=>{if(!hasSave())return newGame();$('#tsMenu').hidden=true;$('#tsConfirm').hidden=false};
 $('#tsYes').onclick=newGame;
@@ -75,15 +74,15 @@ const menuOpen=()=>$('#gameMenu').classList.contains('open');
 function somethingOpen(){return ['books','pc','phoneView','receiptsView','info'].some(id=>$('#'+id).classList.contains('open'))||!$('#mailFx').hidden||!!openShelf}
 function openMenu(){$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
   $('#gameMenu').classList.add('open');$('#world').inert=true;$('#gmResume').focus()}
-function closeMenu(){$('#gameMenu').classList.remove('open');if(!titleOpen())$('#world').inert=false}
+function closeMenu(){closePanel($('#gameMenu'),()=>{if(!titleOpen())$('#world').inert=false})}
 $('#gmResume').onclick=closeMenu;
 $('#gmSettings').onclick=openSettings;
 $('#gmRestart').onclick=()=>{$('#gmList').hidden=true;$('#gmConfirm').hidden=false;$('#gmNo').focus()};
 $('#gmNo').onclick=()=>{$('#gmConfirm').hidden=true;$('#gmList').hidden=false;$('#gmRestart').focus()};
-$('#gmYes').onclick=()=>{closeMenu();S=fresh();sanitize();showDawn()};  /* a new game opens like the first one: the day card, then the post */
+$('#gmYes').onclick=()=>{closeMenu();newState();showDawn()};  /* a new game opens like the first one: the day card, then the post */
 $('#gmTitle').onclick=()=>{save();$('#gameMenu').classList.remove('open');showTitle()};
 $('#gmQuit').onclick=()=>{save();window.close()};
-$('#gameMenu').onclick=e=>{if(e.target.id==='gameMenu')closeMenu()};  /* a click outside the menu resumes */
+$('#gameMenu').onclick=e=>{if(e.target.id==='gameMenu')closeMenu()};  /* a click beside the panel resumes */
 
 /* Esc: Settings first, then the title screen, then the menu; anything else open handles its own Esc. */
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;

@@ -248,9 +248,9 @@ function renderAltar(){
   if(S.result&&!S.result.test){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;  /* test crafts go to the phone */
 }
 /* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
-   "Skip tutorials" turns them all off (S.tutOff). */
+   A replay (a new game after one that got past the tutorial days) has none (S.tutOff, see newState in core.js). */
 function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
-  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}<button class="tutskip" data-tutskip="1">Skip tutorials</button></div>`}
+  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}</div>`}
 const TUTORIAL={
   order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>In the Recipe Book, find its kind in the index, then its name. Tap the name on its page to choose it as what you are making (a tick appears). The little <b>bell</b> lays out what you have written on the altar.</li><li>The little <b>bottle</b> test crafts it, as often as you like. When it is right, go down to the altar and ring the <b>silver bell</b> to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
   advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};

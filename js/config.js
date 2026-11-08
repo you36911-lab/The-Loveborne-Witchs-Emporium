@@ -4,6 +4,10 @@
 const SAVE_KEY = 'loveborne-emporium-save-v1';
 /* The player's settings (volume, subtitle size) are kept apart, so a new game does not reset them. */
 const SETTINGS_KEY = 'loveborne-emporium-settings';
+/* What this player has done in any game (the furthest day reached), kept apart from the save: a new game after one that
+   got past the tutorial (TUTORIAL_LAST_DAY) has no tutorial. */
+const PROFILE_KEY = 'loveborne-emporium-profile';
+const TUTORIAL_LAST_DAY = 2;
 /* Saves from the old single-file prototype; picked up once so progress isn't lost. */
 const OLD_SAVE_KEYS = ['altar-shop-proto-v9'];
 

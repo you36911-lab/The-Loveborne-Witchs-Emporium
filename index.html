@@ -140,10 +140,10 @@
   <div class="ts-main">
     <div class="ts-splash"><img id="tsSplash" alt="The Loveborne Witch’s Emporium"><span class="ts-glints" id="tsGlints" aria-hidden="true"></span></div>
     <nav class="ts-menu" id="tsMenu">
-      <button id="tsNew">New Game</button>
-      <button id="tsContinue" hidden>Continue<small id="tsWhere"></small></button>
-      <button id="tsSettings">Settings</button>
-      <button id="tsQuit" hidden>Quit</button>
+      <button id="tsNew"><span class="sh"></span>New Game</button>
+      <button id="tsContinue" hidden><span class="sh"></span>Continue<small id="tsWhere"></small></button>
+      <button id="tsSettings"><span class="sh"></span>Settings</button>
+      <button id="tsQuit" hidden><span class="sh"></span>Quit</button>
     </nav>
     <div class="ts-confirm" id="tsConfirm" hidden>
       <p>Start a new game? The saved one will be lost.</p>
@@ -151,10 +151,9 @@
     </div>
   </div>
   <div class="ts-motes" id="tsMotes" aria-hidden="true"></div>
-  <div class="ts-styles" id="tsStyles" hidden aria-label="Prototype: button style"><span>Buttons</span><button data-bs="plaque">1</button><button data-bs="ribbon">2</button><button data-bs="card">3</button></div>
 </div>
 <!-- Settings: from the title screen (and later the menu in play). Kept under SETTINGS_KEY, apart from the save. -->
-<div class="modal" id="settings" role="dialog" aria-modal="true" aria-label="Settings"><div class="sheet setsheet">
+<div class="modal side" id="settings" role="dialog" aria-modal="true" aria-label="Settings"><div class="sheet setsheet">
   <div class="row"><h2>Settings</h2></div>
   <label class="setrow"><span>Sound volume</span><input type="range" id="setVol" min="0" max="100" step="5"><b id="setVolN"></b></label>
   <div class="setrow"><span>Subtitle size</span><span class="seg" id="setSub"><button data-sub="0.85">Small</button><button data-sub="1">Medium</button><button data-sub="1.2">Large</button></span></div>
@@ -162,7 +161,7 @@
   <div class="row setfoot"><button class="main" id="setDone">Done</button></div>
 </div></div>
 <!-- The menu in play: Esc opens it (when nothing else is open) and closes it again. The shop waits behind it. -->
-<div class="modal" id="gameMenu" role="dialog" aria-modal="true" aria-label="Menu"><div class="sheet menusheet">
+<div class="modal side" id="gameMenu" role="dialog" aria-modal="true" aria-label="Menu"><div class="sheet menusheet">
   <div class="row"><h2>Paused</h2></div>
   <nav class="gm-list" id="gmList">
     <button class="main" id="gmResume">Resume</button>

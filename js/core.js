@@ -34,7 +34,11 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   delete S.hints;S.reviewsSeen=S.reviewsSeen||0;S.memo=S.memo||[];
 }
 sanitize();
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  if(S.day>profile().furthestDay)try{localStorage.setItem(PROFILE_KEY,JSON.stringify({...profile(),furthestDay:S.day}))}catch(e){}}
+function profile(){try{return {furthestDay:0,...JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')}}catch(e){return {furthestDay:0}}}
+/* A new game: fresh, and without the tutorial if this player has played past it before (a replay). */
+function newState(){S=fresh();if(profile().furthestDay>TUTORIAL_LAST_DAY)S.tutOff=true;sanitize()}
 /* A short notice in the subtitle spot, styled like the scene's mood line: it floats in, stays a moment, then fades.
    The mood line steps aside while it shows, so the two never sit on top of each other. */
 /* opts.thought: the witch's own thought, set in italics; opts.ms: how long it stays (2.2s by default). */
