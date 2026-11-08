@@ -659,12 +659,8 @@ button.small{font-size:12px;padding:2px 10px}
 .tome .pg,.tome .cover{z-index:1}
 /* The diary (the notebook on the counter): handwriting that sits on the picture's ruled lines. All sizes are in cqw (1% of the
    book's width), measured on diary-open.png (968px wide): 15 rules, 37.25px apart, the first 8.05cqw below the page's top. */
-.bookview.diary .bank{display:none}  /* the notebook has no word bank; its left column holds Hester's notes */
-.bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}.bookview.diary .bookmain>.tomewrap{grid-column:1}.bookview.diary .tome{width:min(calc(100% - 500px),calc((100dvh - 200px) * var(--ar)))}
-/* Hester's notes stand at the left of the notebook (the notebook leaves room for them) */
-.bookview.diary .bookmain{position:relative}
-.bookview.diary .markside{position:absolute;left:0;top:50%;translate:0 -50%;width:220px;height:auto;max-height:80%}
-@media (max-width:860px){.bookview.diary .tome{width:min(calc(100% - 40px),calc((100dvh - 200px) * var(--ar)))}.bookview.diary .markside{position:static;translate:none;width:auto}}
+.bookview.diary :is(.markside,.bank){display:none}
+.bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}.bookview.diary .bookmain>.tomewrap{grid-column:1}.bookview.diary .tome{width:min(calc(100% - 132px),calc((100dvh - 200px) * var(--ar)))}
 .tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3D2A5C;overflow:hidden;
   padding:5.2cqw 3.5cqw 3.7cqw 2.9cqw}
 .tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}
@@ -1196,11 +1192,17 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guideline[hidden]{display:none}
 .guideline.in{animation:subIn .6s ease-out both}
 .scenenote.guided{visibility:hidden}
-/* Hester's notes beside the notebook: slips of paper with their titles in her hand; a click reads one again */
-.markside .hslip{display:block;width:100%;margin:0 0 10px;text-align:left;font-family:'Caveat',cursive;font-size:22px;font-weight:500;line-height:1.1;
-  color:#3A2A3A;background:#FFF8EC;border:0;border-radius:2px;padding:8px 12px;box-shadow:0 2px 6px rgba(20,8,24,.35);rotate:-1deg}
-.markside .hslip:nth-child(even){rotate:.8deg}
-.markside .hslip:hover{background:#FFFDF7;color:#7A2E5E;box-shadow:0 3px 10px rgba(20,8,24,.45)}
+/* Hester's notes taped onto the notebook's first page (hesterPageHTML in books.js): slips of cream paper in her hand,
+   each a little crooked, with a strip of tape across the top; a click opens one large */
+.tome.diary .hslip{display:block;position:relative;width:88%;margin:1.6cqw auto 2.4cqw;padding:1.8cqw 2.2cqw 1.4cqw;text-align:left;
+  font-family:'Caveat',cursive;font-size:1.8cqw;line-height:1.2;color:#3A2A3A;background:#FFF8EC;border:0;border-radius:2px;
+  box-shadow:0 1px 2px rgba(40,20,30,.25),0 4px 10px rgba(40,20,30,.18);rotate:var(--tilt,-1deg);cursor:pointer}
+.tome.diary .hslip:hover{background:#FFFDF7;box-shadow:0 2px 3px rgba(40,20,30,.25),0 8px 16px rgba(40,20,30,.22)}
+.tome.diary .hslip b{display:block;font-weight:500;font-size:1.25em;color:#7A2E5E;margin-bottom:.2em}
+.tome.diary .hslip span{display:block;margin-bottom:.25em}
+.tome.diary .hslip em{display:block;text-align:right;font-style:normal}
+.tome.diary .hslip .tape{position:absolute;left:50%;top:-1cqw;width:7cqw;height:1.8cqw;translate:-50% 0;rotate:-3deg;background:rgba(242,214,224,.75);box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.tome.diary .leaf .hslip{pointer-events:none}
 /* Hester's note: a small paper note in her hand */
 .hnote{z-index:63}
 .hpaper{width:min(420px,90vw);background:#FFF8EC;color:#3A2A3A;padding:22px 26px 18px;border-radius:3px;rotate:-1.2deg;
@@ -1236,3 +1238,11 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guidering.nudge{animation:starNudge .45s ease-out}
 @keyframes starNudge{40%{transform:scale(1.35)}}
 @media (prefers-reduced-motion: reduce){.guidering svg{animation:none;filter:drop-shadow(0 0 8px rgba(255,214,90,.9))}}
+
+/* the tutorial's lock (markLock in tutorial.js): while a step waits, only the starred thing and what the step allows take
+   the mouse, so nothing else lights up under the pointer or can be clicked. guide-ok: that and all inside it;
+   guide-ok-self: that element alone (a popup's backdrop), not what is inside it. */
+body.guide-locked{pointer-events:none}
+body.guide-locked .guide-ok,body.guide-locked .guide-ok *{pointer-events:auto}
+body.guide-locked .guide-ok-self{pointer-events:auto}
+body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none}

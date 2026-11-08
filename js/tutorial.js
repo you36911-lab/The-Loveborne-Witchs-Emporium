@@ -33,7 +33,8 @@ const HESTER_NOTES={
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
    ensure: run while the step is current, to put back what it needs. A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
    wait (ms: done after this long), note (one of Hester's notes, shown when the step is reached, done when it is closed),
-   allow (while it waits, only the star's thing and these can be clicked: selectors, or tests of the clicked element;
+   allow (while it waits, only the star's thing and these can be clicked or even hovered: a selector (that and all inside
+   it), or {self: selector} (that element alone, e.g. a popup's backdrop, whose click closes it);
    a step without allow blocks nothing). */
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const LESSONS=[
@@ -49,8 +50,12 @@ const LESSONS=[
     {glow:()=>!S.letters[0]?'[data-lsel="start:0"]':!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'She kept this shop before me. Best read all she left.',done:()=>S.letters.every(Boolean),allow:[]},
     {glow:'[data-lsel="mail:0"]',say:'And the one that just came, from the apothecary.',done:()=>S.mail&&S.mail[0]===true,allow:[]},
     /* the computer closes at a click outside it, like every popup: only that click works here */
-    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[t=>t.id==='pc']},
+    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[{self:'#pc'}]},
     {note:'aura'},
+    /* where Hester's notes are kept: beside the notebook, as slips, to read again */
+    {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
+    {glow:'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',done:()=>!isOpen('books'),allow:[{self:'#books'},{self:'#books .bookmain'}],
+      ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},  /* a click beside the notebook closes it */,
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
@@ -75,8 +80,9 @@ const LESSONS=[
     {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
     {glow:'#phoneBtn',say:'The phone. That’s where a test tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
     /* the phone closes at a click outside it */
-    {say:'',done:()=>!isOpen('phoneView'),allow:[t=>t.id==='phoneView']},
+    {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'}]},
     {note:'tests'},
+    {say:'That one goes in my notebook too.',wait:3500},
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>S.seen[HESTER_DAY1]}]},
   {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000}]},
   {id:'close1',at:'2-Sunrise-',when:()=>S.day===1&&isOpen('dayEnd'),until:()=>S.day>1||!isOpen('dayEnd'),steps:[
@@ -165,7 +171,7 @@ function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected
   if(wide){Object.assign(ring.style,{left:left-size*.45+'px',top:(top+r.bottom)/2-size/2+'px',width:size+'px',height:size+'px'});return}
   Object.assign(ring.style,{left:(left+r.right)/2-size/2+'px',top:(below?r.bottom-size*.5:top-size*.5)+'px',width:size+'px',height:size+'px'})}
 /* the star follows its thing as views slide and books open */
-(function follow(){placeRing();requestAnimationFrame(follow)})();
+function follow(){placeRing();markLock();requestAnimationFrame(follow)}  /* started at the end of this file */
 setInterval(guideTick,250);  /* the tutorial looks at where things stand four times a second */
 
 /* While a step waits for something to be done, only that works: the star's thing, and what the step's allow list names.
@@ -173,7 +179,10 @@ setInterval(guideTick,250);  /* the tutorial looks at where things stand four ti
    the prototype bar, Hester's note, and a new email that arrives meanwhile (post comes first). It can never get stuck:
    if the star's thing is not on screen, or something lies over it, nothing is blocked until it can be reached. */
 const ALWAYS_FREE='#guideLine, #hNote, #proto, #title, #gameMenu, #settings';
-function reachable(el){if(!el)return false;const r=el.getBoundingClientRect(),top=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return !!top&&(el.contains(top)||top.contains(el))}
+/* the star's thing can be reached: it is on screen, and no open popup lies over it (it is inside the topmost one) */
+const OVERLAYS=['#hNote','#mailFx','#dayEnd','#phoneView','#receiptsView','#info','#pc','#books'];
+function reachable(el){if(!el||!el.isConnected)return false;const r=el.getBoundingClientRect();if(!r.width||!r.height)return false;
+  const over=OVERLAYS.map(q=>$(q)).find(m=>m&&(m.id==='mailFx'?!m.hidden:m.classList.contains('open')));return !over||over.contains(el)}
 function locked(){const st=ringStep;if(!st||!st.allow||S.tutOff||titleOpen()||menuOpen()||isOpen('hNote'))return false;
   if(st.glow&&!reachable(ringEl))return false;
   return true}
@@ -181,10 +190,21 @@ function stepAllows(t){if(!locked())return true;
   if(t.closest(ALWAYS_FREE))return true;
   if(t.closest('#mailFx')&&!(ringEl&&ringEl.closest('#mailFx')))return true;
   if(ringEl&&ringEl.contains(t))return true;
-  return ringStep.allow.some(a=>typeof a==='function'?a(t):t.closest(a))}
+  return ringStep.allow.some(a=>typeof a==='string'?t.closest(a):t.matches(a.self))}
 /* a blocked click: the subtitle stays as it is, and the star gives one small pulse to show where to click */
 document.addEventListener('click',e=>{if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();
   const ring=$('#guideRing');ring.classList.remove('nudge');void ring.offsetWidth;ring.classList.add('nudge')},true);
+/* Hover too: while locked, everything but the star's thing and what the step allows ignores the mouse (body.guide-locked
+   in style.css), so nothing else even lights up under the pointer. The allowed things are marked each frame. */
+let okMarked=new Set();
+function markLock(){const on=locked();document.body.classList.toggle('guide-locked',on);const want=new Map();
+  if(on){const add=(el,cls)=>{if(el)want.set(el,cls)};
+    document.querySelectorAll(ALWAYS_FREE).forEach(el=>add(el,'guide-ok'));
+    if(!$('#mailFx').hidden&&!(ringEl&&ringEl.closest('#mailFx')))add($('#mailFx'),'guide-ok');
+    ringStep.allow.forEach(a=>document.querySelectorAll(typeof a==='string'?a:a.self).forEach(el=>add(el,typeof a==='string'?'guide-ok':'guide-ok-self')));
+    add(ringEl,'guide-ok')}
+  okMarked.forEach(el=>{if(!want.has(el))el.classList.remove('guide-ok','guide-ok-self')});
+  want.forEach((cls,el)=>{if(!el.classList.contains(cls))el.classList.add(cls)});okMarked=new Set(want.keys())}
 /* (Esc during a step opens the menu over everything, see menu.js; it does not close what is open) */
 
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */
@@ -193,3 +213,5 @@ function openNote(id){const n=HESTER_NOTES[id];$('#hNoteBody').innerHTML=`<h3>${
 function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return;(S.guideNotes||(S.guideNotes={}))[m.dataset.note]=true;save();m.classList.remove('open')}
 $('#hNote').addEventListener('click',e=>{if(e.target.id==='hNote')closeNote()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isOpen('hNote')){closeNote();e.stopImmediatePropagation()}},true);
+
+follow();  /* the star and the lock follow every frame (started last, once everything above is defined) */

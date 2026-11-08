@@ -8,7 +8,8 @@ Changes made while building it:
   things up ("Not sure what does what? The other books on the counter say: the Herbiary for herbs.").
 - Hester's note on the crystal ball uses the game's aura meanings: gold joy, grey sadness, pale blue worry, red anger,
   pink longing, bright pink embarrassment.
-- Hester's notes are kept beside the notebook as paper slips (left of its pages), to read again.
+- Hester's notes are taped onto the notebook's first page as paper slips, to read again; after the first, the tutorial
+  points to the notebook and then to the slip.
 - The mark is a small pink star on the thing (chosen over a glow, a spotlight and hand-drawn marks). A step blocks every other
   click until it is done.
 - The closing thought after a lesson is used for the first order only.

@@ -94,8 +94,15 @@ function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=AS
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
-function diaryPages(){const n=memoWritten(),count=n+1+((n+1)%2);
-  return Array.from({length:count},(_,i)=>({key:'diary:'+i,plain:true,html:()=>`${i?'':'<p class="dtitle">My notes</p>'}<textarea class="memo${i?'':' first'}" data-memo="${i}" aria-label="My notes, page ${i+1}" spellcheck="false">${esc(S.memo[i]||'')}</textarea>`}))}
+/* The first page is Hester's: her notes are taped onto it as slips of paper, whole, to read again (a click opens one
+   large). The player's own pages follow it. */
+function diaryPages(){const n=memoWritten(),count=1+Math.max(1,n+1);
+  const pages=[{key:'diary:0',plain:true,html:hesterPageHTML},
+    ...Array.from({length:count-1},(_,m)=>({key:'diary:'+(m+1),plain:true,html:()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`}))];
+  if(pages.length%2)pages.push({key:'diary:'+pages.length,plain:true,html:()=>`<textarea class="memo" data-memo="${count-1}" aria-label="My notes, page ${count}" spellcheck="false">${esc(S.memo[count-1]||'')}</textarea>`});
+  return pages}
+function hesterPageHTML(){const notes=Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);
+  return `<p class="dtitle">My notes</p>`+(notes.length?notes.map((k,i)=>`<button class="hslip" data-hnote="${k}" style="--tilt:${i%2?1.2:-1.4}deg" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><b>${esc(HESTER_NOTES[k].title)}</b>${HESTER_NOTES[k].lines.map(t=>`<span>${esc(t)}</span>`).join('')}<em>— H.</em></button>`).join(''):'')}
 /* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
   if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. I\u2019ll write on the next one.')}
@@ -146,7 +153,7 @@ function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))
 function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick();
   setTimeout(()=>BOOKS.forEach(decodeBook),1500)}  /* the other books get ready in the background, for quick switching */
 /* The notebook opens on the last page written on. */
-function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+Math.max(0,memoWritten()-1);renderBooks();autoTick()}
+function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+memoWritten();renderBooks();autoTick()}  /* the last page written on (page 0 is Hester's) */
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
    hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
 const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */
@@ -184,11 +191,7 @@ function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(p
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
   const marks=S.marks||(S.marks=[]);
-  /* the notebook keeps Hester's notes beside it, as slips of paper; a book keeps its bookmarks there */
-  if(curBook===DIARY){const notes=Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);$('#marksHead').textContent='Hester’s notes';
-    $('#marks').innerHTML=notes.length?notes.map(k=>`<button class="hslip" data-hnote="${k}">${esc(HESTER_NOTES[k].title)}</button>`).join(''):'<span class="muted" style="font-size:13px">Nothing from Hester yet.</span>'}
-  else{$('#marksHead').textContent='Bookmarks';
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>'}
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
