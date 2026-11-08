@@ -67,7 +67,7 @@ const LESSONS=[
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
-    {glow:'#crystalBtn',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
+    {glow:()=>wordsDone()?'#crystalBtn':'',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* The first order is shown whole: the star goes to the right recipe in the index, then to each blank and the right
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
@@ -169,12 +169,12 @@ function postFirst(){const fx=$('#mailFx'),waiting=mailIn().some(m=>!(m.i in (S.
 function finish(L){guideState()[L.id]='done';save();const t=L.end&&L.end();if(t)toast(t,{thought:true,ms:4200})}
 
 /* ---------- on screen ---------- */
-let ringEl=null,ringSel='',ringStep=null;
+let ringEl=null,ringSel='',ringStep=null,ringWanted=false;
 function show(st){const line=$('#guideLine');ringStep=st;
   const say=(st&&(typeof st.say==='function'?st.say():st.say))||'',toastUp=$('#toast').style.display==='block';
   if(line.dataset.say!==say){line.dataset.say=say;line.textContent=say;line.classList.remove('in');if(say){void line.offsetWidth;line.classList.add('in')}}
   let sel=st&&st.glow;if(typeof sel=='function')sel=sel();
-  ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringSel=typeof sel==='string'?sel:'';
+  ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringSel=typeof sel==='string'?sel:'';ringWanted=!!sel;  /* (a step's glow can be empty for a while: no star yet, but the lock holds) */
   /* inside a book, the star waits until the book has opened and while a page turns, so it lands straight on its thing */
   if(ringEl&&ringEl.closest('#books')&&(!$('#tome').classList.contains('opened')||turning)){ringEl=null}
   /* post comes first: while a new email's card is up, the thought waits, unless it is about that email */
@@ -209,7 +209,7 @@ const OVERLAYS=['#hNote','#mailFx','#dayEnd','#phoneView','#receiptsView','#info
 function reachable(el){if(!el||!el.isConnected)return false;const r=el.getBoundingClientRect();if(!r.width||!r.height)return false;
   const over=OVERLAYS.map(q=>$(q)).find(m=>m&&(m.id==='mailFx'?!m.hidden:m.classList.contains('open')));return !over||over.contains(el)}
 function locked(){const st=ringStep;if(!st||!st.allow||S.tutOff||titleOpen()||menuOpen()||isOpen('hNote'))return false;
-  if(st.glow&&!reachable(ringEl))return false;
+  if(ringWanted&&!reachable(ringEl))return false;
   return true}
 function stepAllows(t){if(!locked())return true;
   if(t.closest(ALWAYS_FREE))return true;
