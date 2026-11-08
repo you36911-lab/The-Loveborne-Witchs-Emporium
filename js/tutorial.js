@@ -1,6 +1,6 @@
 /* The tutorial (see TUTORIAL_PLAN.md). Each lesson is taught once, when it first matters, in three ways:
    - the shopkeeper's own thought, as a subtitle at the bottom (#guideLine), never saying "you";
-   - a soft breathing glow round the next thing to click (#guideRing, laid over it);
+   - a circle drawn by hand in the books' dark ink round the next thing to click (#guideRing, laid over it);
    - Hester's handwritten notes (#hNote) for rules worth keeping.
    A step is done when the player does the thing, never by a Next button; steps already done (the player got ahead)
    are passed over. Nothing is blocked: the thought and the glow simply wait.
@@ -124,10 +124,23 @@ function show(st){const line=$('#guideLine'),ring=$('#guideRing');
   line.hidden=!say||toastUp;
   $('#sceneNote').classList.toggle('guided',!line.hidden);  /* the mood line steps aside */
   let sel=st&&st.glow;if(typeof sel==='function')sel=sel();
-  ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;placeRing()}
+  ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringFor=ringEl?String(st.glow)+'|'+guideNow:'';placeRing()}
+/* The mark is a circle drawn by hand in the books' dark ink round the thing: a loop that goes a little past where it began, a touch
+   uneven, drawn in with the pen (stroke) when it appears, roughened like the Recipe Book's tick (the #ink filter). It is
+   drawn again only when it moves to something new or that thing changes size. */
+let ringFor='',ringDrawn='';
+function loopPath(w,h){const cx=w/2,cy=h/2,rx=w/2-6,ry=h/2-6,n=72,turn=2*Math.PI*1.1,start=-1.9;let d='';
+  for(let i=0;i<=n;i++){const t=i/n,a=start+turn*t,wob=1+.035*Math.sin(3*a+1)+.02*Math.sin(5*a),
+    sp=1-.06*t;  /* the pen drifts inward a little as it comes round, so the end passes inside the start */
+    d+=(i?'L':'M')+(cx+Math.cos(a)*rx*wob*sp).toFixed(1)+' '+(cy+Math.sin(a)*ry*wob*sp).toFixed(1)}
+  return d}
 function placeRing(){const ring=$('#guideRing');const r=ringEl&&ringEl.isConnected&&ringEl.getBoundingClientRect();
-  if(!r||!r.width){ring.hidden=true;return}
-  const pad=6;ring.hidden=false;ring.style.left=r.left-pad+'px';ring.style.top=r.top-pad+'px';ring.style.width=r.width+pad*2+'px';ring.style.height=r.height+pad*2+'px'}
+  if(!r||!r.width){ring.hidden=true;ringDrawn='';return}
+  /* an oval a little larger than the thing, so the ink goes round it and not over it */
+  const px=Math.min(40,Math.max(12,r.width*.08)),py=Math.min(32,Math.max(10,r.height*.12)),w=Math.round(r.width+px*2),h=Math.round(r.height+py*2);
+  ring.hidden=false;ring.style.left=r.left-px+'px';ring.style.top=r.top-py+'px';ring.style.width=w+'px';ring.style.height=h+'px';
+  const key=ringFor+'|'+Math.round(w/8)+'x'+Math.round(h/8);if(key===ringDrawn)return;ringDrawn=key;
+  ring.innerHTML=`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path class="gr-ink" d="${loopPath(w,h)}" pathLength="1"/></svg>`}
 /* the ring follows its thing as views slide and books open */
 (function follow(){placeRing();requestAnimationFrame(follow)})();
 setInterval(guideTick,250);

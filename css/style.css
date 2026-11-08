@@ -1192,12 +1192,18 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guideline[hidden]{display:none}
 .guideline.in{animation:subIn .6s ease-out both}
 .scenenote.guided{visibility:hidden}
-/* the glow round the next thing to click: a soft pink ring that breathes; it never takes the click */
-.guidering{position:fixed;z-index:62;pointer-events:none;border-radius:14px;
-  box-shadow:0 0 0 2px rgba(255,190,225,.85),0 0 18px 6px rgba(247,140,200,.55);animation:guideBreathe 1.8s ease-in-out infinite}
+/* the hand-drawn circle round the next thing to click (placeRing in tutorial.js): the books' dark plum ink, drawn in with the pen when it
+   appears, then left to rest with a faint breath; it never takes the click */
+.guidering{position:fixed;z-index:62;pointer-events:none}
 .guidering[hidden]{display:none}
-@keyframes guideBreathe{50%{box-shadow:0 0 0 2px rgba(255,190,225,.45),0 0 28px 10px rgba(247,140,200,.3)}}
-@media (prefers-reduced-motion: reduce){.guidering{animation:none}}
+.guidering svg{display:block;overflow:visible}
+.guidering .gr-ink{fill:none;stroke:#3D2A5C;stroke-width:4.5;  /* the books' handwriting ink */
+  stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:1;stroke-dashoffset:1;filter:url(#ink) drop-shadow(0 0 1.5px rgba(255,248,240,.95)) drop-shadow(0 0 5px rgba(255,240,235,.6));  /* a pale halo, so the dark ink reads on the dark shop too */
+  animation:grDraw .75s cubic-bezier(.45,.05,.4,1) .1s forwards,grRest 2.6s ease-in-out .9s infinite}
+@keyframes grDraw{to{stroke-dashoffset:0}}
+@keyframes grRest{0%,100%{opacity:1}50%{opacity:.72}}
+@media (prefers-reduced-motion: reduce){.guidering .gr-ink{animation:none;stroke-dashoffset:0}}
 /* Hester's note: a small paper note in her hand */
 .hnote{z-index:63}
 .hpaper{width:min(420px,90vw);background:#FFF8EC;color:#3A2A3A;padding:22px 26px 18px;border-radius:3px;rotate:-1.2deg;

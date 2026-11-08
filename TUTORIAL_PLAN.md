@@ -17,9 +17,9 @@ Three tools, no numbered instruction boxes.
 
 1. **The shopkeeper's own thoughts**, as the subtitle at the bottom (the mood line's style, in italics). Her narration
    never says "you". One short line at a time; it stays until the step is done, then the next one floats in.
-2. **A soft glow on the next thing to click** (the bell, the computer, a book, a cupboard door, the bell on the altar…).
-   A slow pink pulse round the object, like the hover glow but breathing. Nothing else is dimmed or blocked: the
-   player can still click around; the thought and glow simply wait.
+2. **A circle drawn by hand round the next thing to click**, in the books' handwriting ink (dark plum, with a pale halo so it
+   reads on the dark shop), drawn in with the pen as it appears, a little uneven, its end passing its start. Nothing else is
+   dimmed or blocked: the player can still click around; the thought and the circle simply wait.
 3. **Hester's handwritten notes** for rules worth keeping (what the aura colours mean, how test crafts work). A small
    paper note in her hand (Caveat), shown once in the middle of the screen; it closes on a click outside, like every
    popup. Each one is also kept in the notebook, so it can be read again.
