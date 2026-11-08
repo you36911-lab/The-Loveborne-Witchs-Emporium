@@ -5,8 +5,9 @@
 /* Played with plain audio elements, so they also work when the game is opened straight from the file. Each is loaded
    once and copied to play, so two can overlap. The volumes even them out: the recordings came at very different levels. */
 const SFX_CACHE={};
-function sfx(name,vol,ms,from){try{const base=SFX_CACHE[name]||(SFX_CACHE[name]=new Audio(ASSETS.sounds[name]));const a=base.cloneNode();a.volume=Math.min(1,vol*SET.volume);  /* SET.volume: the Settings slider (menu.js) */if(from)a.currentTime=from;a.play().catch(()=>{});
-  if(ms)setTimeout(()=>a.pause(),ms)}catch(e){}}  /* ms: stop it after this long (for a recording with a long quiet tail); from: skip a quiet start */
+function sfx(name,vol,ms,from,fade){try{const base=SFX_CACHE[name]||(SFX_CACHE[name]=new Audio(ASSETS.sounds[name]));const a=base.cloneNode();const v=Math.min(1,vol*SET.volume);a.volume=v;  /* SET.volume: the Settings slider (menu.js) */if(from)a.currentTime=from;a.play().catch(()=>{});
+  if(ms&&fade){setTimeout(()=>{const t0=Date.now(),f=setInterval(()=>{const k=1-(Date.now()-t0)/fade;if(k<=0){clearInterval(f);a.pause()}else a.volume=v*k},25)},ms-fade)}
+  else if(ms)setTimeout(()=>a.pause(),ms)}catch(e){}}  /* ms: stop it after this long (for a recording with a long quiet tail); fade: the last this-many ms of that fade out softly; from: skip a quiet start */
 /* every recording is loaded as the game starts, so the first time one plays it is not late */
 Object.entries(ASSETS.sounds).forEach(([n,src])=>{try{const a=SFX_CACHE[n]=new Audio(src);a.preload='auto'}catch(e){}});
 /* The shop's hand bell, rung to call the next customer: "Bell Ring" (Universfield). */
@@ -30,3 +31,6 @@ function playCraft(){sfx('craft',.6,0,.3)}  /* its first 0.35s is quiet */
 /* A cupboard door in the workroom swinging open, and shut: "Cabinet Door Open" and "Cabinet Door Close" (freesound_community). */
 function playCabinetOpen(){sfx('cabinetOpen',.5,0,.52)}  /* the recordings start with a pause (0.58s, 0.8s): skip it, so the sound comes with the door */
 function playCabinetClose(){sfx('cabinetClose',.5,0,.74)}
+/* A button on the title screen: a clear little ding, "Ding" (freesound_community). The recording rings on for 2.7s;
+   its first 0.45s plays as it is, then it fades out over 0.35s. */
+function playDing(){sfx('ding',.45,800,0,350)}

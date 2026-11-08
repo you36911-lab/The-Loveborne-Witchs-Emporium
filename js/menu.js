@@ -67,6 +67,8 @@ $('#tsYes').onclick=newGame;
 $('#tsNo').onclick=()=>{$('#tsConfirm').hidden=true;$('#tsMenu').hidden=false};
 $('#tsSettings').onclick=openSettings;
 $('#tsQuit').onclick=()=>window.close();
+/* every button on the title screen dings as it is pressed */
+$('#title').addEventListener('click',e=>{if(e.target.closest('button'))playDing()},true);
 
 /* ---------- the menu in play ---------- */
 /* Esc opens it when nothing else is open (a book, the computer, the phone, the receipts, an open cupboard, a new email);
@@ -85,11 +87,13 @@ $('#gmTitle').onclick=()=>{save();$('#gameMenu').classList.remove('open');showTi
 $('#gmQuit').onclick=()=>{save();window.close()};
 $('#gameMenu').onclick=e=>{if(e.target.id==='gameMenu')closeMenu()};  /* a click beside the panel resumes */
 
-/* Esc: Settings first, then the title screen, then the menu; anything else open handles its own Esc. */
+/* Esc: Settings first, then the title screen, then the menu; anything else open handles its own Esc (but the menu is always
+   reachable: during a tutorial step, Esc opens it over whatever is open). */
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;
   const stop=()=>{e.stopImmediatePropagation();e.preventDefault()};
   if($('#settings').classList.contains('open')){closeSettings();return stop()}
   if(titleOpen()){if(!$('#tsConfirm').hidden)$('#tsNo').click();return stop()}
   if(menuOpen()){if(!$('#gmConfirm').hidden)$('#gmNo').click();else closeMenu();return stop()}
-  if(somethingOpen())return;
+  /* something open closes first, except while the tutorial holds the player to a step: then the menu opens over it */
+  if(somethingOpen()&&!(typeof locked==='function'&&locked()))return;
   openMenu();stop()},true);

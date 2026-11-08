@@ -174,7 +174,7 @@ function stepAllows(t){if(!locked())return true;
   return ringStep.allow.some(a=>typeof a==='function'?a(t):t.closest(a))}
 document.addEventListener('click',e=>{if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();
   const line=$('#guideLine');if(!line.hidden){line.classList.remove('in');void line.offsetWidth;line.classList.add('in')}},true);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&locked()&&somethingOpen()){e.stopImmediatePropagation();e.preventDefault()}},true);
+/* (Esc during a step opens the menu over everything, see menu.js; it does not close what is open) */
 
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */
 function openNote(id){const n=HESTER_NOTES[id];$('#hNoteBody').innerHTML=`<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="hsig">— H.</p>`;
