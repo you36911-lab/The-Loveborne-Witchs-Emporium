@@ -12,6 +12,11 @@ const FIRST_ORDER=vkey(X.visits.find(v=>v.kind!=='advice'));
 const HESTER_DAY1='1-Twilight-Hester';
 const NURSE='1-Nightfall-A night-shift nurse';
 const FIRST_ADVICE=vkey(X.visits.find(v=>v.kind==='advice'));
+const R1=visitByKey(FIRST_ORDER).rid;  /* the first order's recipe, which the tutorial shows whole */
+/* the first of its ingredient blanks still empty (-1 when all are written) */
+const firstBlank=()=>{const n=noteOf(R1);return D.recipes[R1].ing.findIndex((_,i)=>!n.ing[i])};
+/* why an ingredient fits a recipe: what it does that the recipe asks for ("calm and comfort") */
+function whyFits(item,rid){const w=ITEM[item].props.filter(p=>D.recipes[rid].themes.includes(p));return w.length>1?w.slice(0,-1).join(', ')+' and '+w[w.length-1]:w[0]||'this'}
 
 /* small helpers the lessons read */
 const isOpen=id=>$('#'+id).classList.contains('open');
@@ -63,14 +68,18 @@ const LESSONS=[
     /* listening: only the balloon (a click shows the rest of the words at once) */
     {glow:'#crystalBtn',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
-    /* the index: its rows and the page turns, to find a charm */
-    {glow:()=>{const h=[...document.querySelectorAll('#books .pg h3.cat')].find(x=>x.textContent==='Charm');return h?h:'#turnNext'},say:'The index first. She wants a charm.',done:()=>pageOf().startsWith('recipe:')||!!S.target,allow:[...TURNS,'#books .idxrow']},
-    {glow:'#books .pg .rpick',say:'If this is the one, I’ll tap its name to mark it.',done:()=>!!S.target,allow:[...TURNS,'#books .idxrow']},
-    /* a blank opens a list of names to choose from */
-    {glow:'#books .pg .wblank',say:'Blanks for what goes in, each with its shelf. The themes say what each must do.',done:()=>S.target&&noteOf(S.target).ing.some(Boolean),allow:['#books .windex']},
-    /* working it out is the player's own: the books, the counter, the crystal ball are all free here */
-    {say:'Not sure what does what? The other books on the counter say: the Herbiary for herbs.',done:()=>S.target&&allWritten(S.target),allow:['#books','#bookStack','#counter','#crystalBtn']},
-    {glow:'#books .pg [data-layout]',say:'Written. The little bell lays it all out downstairs.',done:()=>S.altar.length>0&&view==='altar',allow:[]},
+    /* The first order is shown whole: the star goes to the right recipe in the index, then to each blank and the right
+       name in its list, with why it fits. Working it out from the books is for the orders after this one. */
+    {glow:()=>seen(`[data-go="recipe:${R1}"]`)?`[data-go="recipe:${R1}"]`:'#turnNext',say:()=>`The index first. A charm, for an easier day: ${D.recipes[R1].name}.`,done:()=>pageOf()==='recipe:'+R1,allow:[...TURNS]},
+    {glow:`#books .pg [data-choose-recipe="${R1}"]`,say:'That’s the one. I’ll tap its name to mark it as what I’m making.',done:()=>String(S.target)===String(R1),allow:[]},
+    /* each blank in turn: the star on the blank, then on the right name in the list it opens */
+    {glow:()=>{const i=firstBlank();if(i<0)return '';const key=`ing|${R1}|${i}`;
+        return pickOpen===key?`#books .windex [data-choose="${key}"][data-val="${D.recipes[R1].ing[i]}"]`:`#books .pg [data-pick="${key}"]`},
+      say:()=>{const i=firstBlank();if(i<0)return '';const want=D.recipes[R1].ing[i],c=ITEM[want].c;
+        return `${CATLABEL[c]||c}: ${want}, for ${whyFits(want,R1)}.`},
+      done:()=>allWritten(R1),allow:[],
+      ensure:()=>{const o=seen('#books .windex [data-choose][data-val]')&&ringEl&&ringEl.closest('.windex');if(o&&!ringEl.dataset.shown){ringEl.dataset.shown=1;ringEl.scrollIntoView({block:'nearest'})}}},
+    {glow:'#books .pg [data-layout]',say:'Written. Next time I’ll work it out from the books myself. The little bell lays it all out downstairs.',done:()=>S.altar.length>0&&view==='altar',allow:[]},
     {glow:'#craftBell',say:'Everything’s on the table. The silver bell makes it.',done:()=>!!S.spell||!!S.made,allow:[]},
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]}]},
@@ -163,6 +172,8 @@ function show(st){const line=$('#guideLine');ringStep=st;
   if(line.dataset.say!==say){line.dataset.say=say;line.textContent=say;line.classList.remove('in');if(say){void line.offsetWidth;line.classList.add('in')}}
   let sel=st&&st.glow;if(typeof sel=='function')sel=sel();
   ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringSel=typeof sel==='string'?sel:'';
+  /* inside a book, the star waits until the book has opened and while a page turns, so it lands straight on its thing */
+  if(ringEl&&ringEl.closest('#books')&&(!$('#tome').classList.contains('opened')||turning)){ringEl=null}
   /* post comes first: while a new email's card is up, the thought waits, unless it is about that email */
   const mailUp=!$('#mailFx').hidden&&!(ringEl&&ringEl.closest('#mailFx'));
   line.hidden=!say||toastUp||mailUp;

@@ -4,8 +4,9 @@ Built in `js/tutorial.js` (2026-11-08). Agreed: what is taught and in what order
 and a replay (a new game after one that got past Day 2) has no tutorial. Saving is not mentioned: a small save icon shows instead.
 
 Changes made while building it:
-- The Recipe Book's recipes have blanks the player fills in, so the first order also teaches the blanks and where to look
-  things up ("Not sure what does what? The other books on the counter say: the Herbiary for herbs.").
+- The first order is shown whole (decided 2026-11-08): the star goes to the right recipe in the index, its name, then
+  each ingredient blank and the right name in its list, with why it fits ("Herb or flower: Chamomile, for calm and
+  comfort."). "Next time I'll work it out from the books myself."
 - Hester's note on the crystal ball uses the game's aura meanings: gold joy, grey sadness, pale blue worry, red anger,
   pink longing, bright pink embarrassment.
 - Hester's notes are taped onto the notebook's first page as paper slips, to read again; after the first, the tutorial
