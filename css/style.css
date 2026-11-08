@@ -1221,13 +1221,15 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 @keyframes saveSpin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion: reduce){.savemark.on .sm-ring{animation:none}}
 
-/* the tutorial's star on the next thing to click (placeRing in tutorial.js): a small pink star on its top edge, bobbing;
-   it never takes the click */
+/* the tutorial's star on the next thing to click (placeRing in tutorial.js): bright gold with a white edge, so it stands
+   out against the pinks and plums of the shop, bobbing, its glow swelling at each bob; it never takes the click */
 .guidering{position:fixed;z-index:62;pointer-events:none}
 .guidering[hidden]{display:none}
-.guidering svg{width:100%;height:100%;display:block;overflow:visible;fill:#F7A8CF;stroke:#fff;stroke-width:1.4;stroke-linejoin:round;
-  filter:drop-shadow(0 0 6px rgba(247,150,205,.85)) drop-shadow(0 2px 3px rgba(30,8,30,.5));animation:starBob 1.3s ease-in-out infinite}
-.guidering.below svg{animation-name:starBobUp}
-@keyframes starBob{50%{transform:translateY(-7px) rotate(8deg)}}
-@keyframes starBobUp{50%{transform:translateY(7px) rotate(8deg)}}
-@media (prefers-reduced-motion: reduce){.guidering svg{animation:none}}
+.guidering svg{width:100%;height:100%;display:block;overflow:visible;fill:#FFD23F;stroke:#fff;stroke-width:1.8;stroke-linejoin:round;
+  animation:starBob 1.2s ease-in-out infinite,starGlow 1.2s ease-in-out infinite}
+.guidering.below svg{animation-name:starBobUp,starGlow}
+@keyframes starBob{50%{transform:translateY(-8px) rotate(10deg) scale(1.08)}}
+@keyframes starBobUp{50%{transform:translateY(8px) rotate(10deg) scale(1.08)}}
+@keyframes starGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(255,214,90,.9)) drop-shadow(0 2px 3px rgba(30,8,30,.6))}
+  50%{filter:drop-shadow(0 0 12px rgba(255,220,110,1)) drop-shadow(0 0 22px rgba(255,200,80,.6)) drop-shadow(0 2px 3px rgba(30,8,30,.6))}}
+@media (prefers-reduced-motion: reduce){.guidering svg{animation:none;filter:drop-shadow(0 0 8px rgba(255,214,90,.9))}}

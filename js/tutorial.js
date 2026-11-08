@@ -39,6 +39,9 @@ const LESSONS=[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:['#pcBtn','#mailFx .mailcard']},
     {glow:'[data-lsel="start:0"]',say:'From H.… She kept this shop before me.',done:()=>S.letters[0],allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
     {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
+    /* the word bank: the apothecary's email has the first dotted word (Hester's have none) */
+    {glow:()=>letterSel==='mail:0'?'#letterRead .kw':'[data-lsel="mail:0"]',say:()=>letterSel==='mail:0'?'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.':'And one from the apothecary.',
+      done:()=>S.bank.length>0,allow:['#pc .pcwin','#pc .taskbar','#desk','#pcBtn']},
     {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:['#pc']}  /* the computer closes at a click outside it, like every popup */,
     {note:'aura'},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
@@ -120,7 +123,7 @@ function finish(L){guideState()[L.id]='done';save();const t=L.end&&L.end();if(t)
 /* ---------- on screen ---------- */
 let ringEl=null,ringSel='',ringStep=null;
 function show(st){const line=$('#guideLine');ringStep=st;
-  const say=st&&st.say||'',toastUp=$('#toast').style.display==='block';
+  const say=(st&&(typeof st.say==='function'?st.say():st.say))||'',toastUp=$('#toast').style.display==='block';
   if(line.dataset.say!==say){line.dataset.say=say;line.textContent=say;line.classList.remove('in');if(say){void line.offsetWidth;line.classList.add('in')}}
   let sel=st&&st.glow;if(typeof sel=='function')sel=sel();
   ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringSel=typeof sel==='string'?sel:'';
@@ -130,13 +133,13 @@ function show(st){const line=$('#guideLine');ringStep=st;
   $('#sceneNote').classList.toggle('guided',!line.hidden);  /* the mood line steps aside */
   placeRing()}
 
-/* The mark: a small pink star that sits on the top edge of the next thing to click, bobbing gently (on its bottom edge
+/* The mark: a bright gold star that sits on the top edge of the next thing to click, bobbing gently (on its bottom edge
    when the thing is at the very top of the screen; at the left end of a row or a line). DRAWN_INSET: how far in from its box a picture really starts (left,
    top, as parts of the box), so the star sits over the picture and not over empty space. */
 const DRAWN_INSET={'#pcBtn':[.16,0]};
 function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected&&ringEl.getBoundingClientRect();
   if(!r||!r.width){ring.hidden=true;return}
-  const [ix,iy]=DRAWN_INSET[ringSel]||[0,0],left=r.left+r.width*ix,top=r.top+r.height*iy,size=34,below=top<50;
+  const [ix,iy]=DRAWN_INSET[ringSel]||[0,0],left=r.left+r.width*ix,top=r.top+r.height*iy,size=r.height<36?30:44,  /* smaller over a word or a short line */below=top<50;
   /* something wide and low (a row in a list, a line of text) gets its star at its left end instead, so it does not sit on the row above */
   const wide=r.width>r.height*2.6&&r.height<90;
   ring.hidden=false;ring.classList.toggle('below',below&&!wide);
