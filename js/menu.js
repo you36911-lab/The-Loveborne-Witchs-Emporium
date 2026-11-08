@@ -43,7 +43,8 @@ function makeMotes(){const box=$('#tsMotes');if(box.childElementCount)return;
     m.style.cssText=`left:${(Math.random()*100).toFixed(1)}%;--d:${(14+Math.random()*14).toFixed(1)}s;--w:${(-30-Math.random()*30).toFixed(1)}s;--z:${(2+Math.random()*4).toFixed(1)}px;--x:${(Math.random()*60-30).toFixed(0)}px`;
     box.appendChild(m)}}
 function showTitle(){const t=$('#title'),saved=hasSave();
-  $('#tsBg').style.backgroundImage=`url("${ASSETS.backgrounds.Twilight}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
+  /* the shop as the player left it: the saved day's hour (a festival's own picture on its days); twilight before any game */
+  $('#tsBg').style.backgroundImage=`url("${saved?bgSrc(HOURS[S.h]):ASSETS.backgrounds.Twilight}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
   clearTimeout(glintT);glintT=setTimeout(glint,1200);
   $('#tsContinue').hidden=!saved;
   if(saved)$('#tsWhere').textContent=`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;

@@ -41,6 +41,7 @@
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
       <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button>
+      <select id="protoMark" aria-label="Tutorial mark"></select>
       </span>
     </div>
   </div>
@@ -174,7 +175,8 @@
     <div class="row"><button class="main" id="gmYes">Start over</button><button id="gmNo">Keep playing</button></div></div>
 </div></div>
 <div class="toast guideline" id="guideLine" hidden></div>  <!-- the tutorial: the shopkeeper's thought (tutorial.js) -->
-<div class="guidering" id="guideRing" hidden aria-hidden="true"></div>  <!-- the tutorial: the glow round the next thing to click -->
+<div class="guidering" id="guideRing" hidden aria-hidden="true"></div>  <!-- the tutorial: the mark on the next thing to click -->
+<div class="guidespot" id="guideSpot" hidden aria-hidden="true"></div>  <!-- the tutorial: the spotlight way of marking it -->
 <div class="modal hnote" id="hNote" role="dialog" aria-modal="true" aria-label="A note from Hester"><div class="hpaper" id="hNoteBody"></div></div>
 <div class="savemark" id="saveMark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="sm-ring" cx="12" cy="12" r="9.5"/><path class="sm-heart" d="M12 16.6s-4.3-2.6-4.3-5.4c0-1.4 1-2.4 2.3-2.4.9 0 1.6.5 2 1.1.4-.6 1.1-1.1 2-1.1 1.3 0 2.3 1 2.3 2.4 0 2.8-4.3 5.4-4.3 5.4z"/></svg></div>  <!-- the save icon (save() in core.js) -->
 <div class="toast" id="toast"></div>
