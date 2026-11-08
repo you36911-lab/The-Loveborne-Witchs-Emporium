@@ -18,6 +18,8 @@ function fresh(){return{day:1,h:0,hist:[],pend:[],tales:[],failTests:0,altar:[],
   seen:{},letters:[false,false,false],mail:{},archive:[],reviews:[],reviewsSeen:0,memo:[],reports:[],result:null,queue:null,
   tut:{},stats:{perfect:0,good:0,clumsy:0,failed:0,advice:0,missed:0}}}
 let S;
+/* Whether a game was saved before this visit (the title screen offers Continue only then). Read before anything saves. */
+const HAD_SAVE=(()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getItem(k))}catch(e){return false}})();
 /* Load the save; an older prototype save is picked up once and carried over. */
 /* ("Ink" is now "Plain ink": an older save's notes and altar are renamed as they load.) */
 try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?raw.replace(/"Ink"/g,'"Plain ink"'):null)||fresh()}catch(e){S=fresh()}

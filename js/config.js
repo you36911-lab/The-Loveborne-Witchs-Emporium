@@ -2,6 +2,8 @@
 
 /* Where the game is saved in the browser. Changing this starts everyone from a fresh save. */
 const SAVE_KEY = 'loveborne-emporium-save-v1';
+/* The player's settings (volume, subtitle size) are kept apart, so a new game does not reset them. */
+const SETTINGS_KEY = 'loveborne-emporium-settings';
 /* Saves from the old single-file prototype; picked up once so progress isn't lost. */
 const OLD_SAVE_KEYS = ['altar-shop-proto-v9'];
 

@@ -135,6 +135,33 @@
 </div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
+<!-- The title screen: the first thing shown when the game opens (menu.js). -->
+<div class="titlescreen" id="title" role="dialog" aria-modal="true" aria-label="The Loveborne Witch’s Emporium">
+  <div class="ts-bg" id="tsBg" aria-hidden="true"></div>
+  <div class="ts-main">
+    <img class="ts-logo" id="tsLogo" alt="">
+    <h1 class="ts-name"><span class="ts-the">The</span>Loveborne Witch’s Emporium</h1>
+    <nav class="ts-menu" id="tsMenu">
+      <button id="tsContinue" hidden>Continue<small id="tsWhere"></small></button>
+      <button id="tsNew">New Game</button>
+      <button id="tsSettings">Settings</button>
+      <button id="tsQuit" hidden>Quit</button>
+    </nav>
+    <div class="ts-confirm" id="tsConfirm" hidden>
+      <p>Start a new game? The saved one will be lost.</p>
+      <div class="row"><button class="main" id="tsYes">Start over</button><button id="tsNo">Keep it</button></div>
+    </div>
+  </div>
+  <p class="ts-foot">Prototype · week one</p>
+</div>
+<!-- Settings: from the title screen (and later the menu in play). Kept under SETTINGS_KEY, apart from the save. -->
+<div class="modal" id="settings" role="dialog" aria-modal="true" aria-label="Settings"><div class="sheet setsheet">
+  <div class="row"><h2>Settings</h2></div>
+  <label class="setrow"><span>Sound volume</span><input type="range" id="setVol" min="0" max="100" step="5"><b id="setVolN"></b></label>
+  <div class="setrow"><span>Subtitle size</span><span class="seg" id="setSub"><button data-sub="0.85">Small</button><button data-sub="1">Medium</button><button data-sub="1.2">Large</button></span></div>
+  <label class="setrow"><span>Full screen</span><input type="checkbox" id="setFull" class="switch"></label>
+  <div class="row setfoot"><button class="main" id="setDone">Done</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 <div class="mailfx" id="mailFx" hidden role="dialog" aria-label="New email"><div class="mailcard"><div class="env" aria-hidden="true"><div class="flap"></div><div class="seal">♥</div></div><p><b>New email</b><br><small class="muted" id="mailFrom"></small></p><div class="row" style="justify-content:center"><button class="main" id="mailRead">Read it now</button><button id="mailLater">Later</button></div></div></div>
 
@@ -152,6 +179,7 @@
 <script src="js/computer.js"></script>
 <script src="js/phone.js"></script>
 <script src="js/prototype.js"></script>
+<script src="js/menu.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>

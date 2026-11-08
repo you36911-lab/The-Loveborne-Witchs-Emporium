@@ -194,7 +194,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* Mood lines read like film subtitles: white text with a dark edge on a faint band, low in the scene. Every subtitle, at the
    counter and at the altar, sits at the same height: just clear above the altar's name of what is being made. */
 .scenenote{position:absolute;left:50%;bottom:calc(clamp(15px,3.5vh,38px) + clamp(20px,2.6vw,36px) * 1.15 + 16px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:6;pointer-events:none;
-  color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
+  color:#fff;font-size:calc(clamp(13px,1.7vw,21px) * var(--sub,1));line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5)}
 .scenenote[hidden]{display:none}
 .scenenote.in{animation:subIn .6s ease-out both}
@@ -365,7 +365,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .bookline.months b{font-weight:600;color:var(--kw-text)}
 /* Short notices ("Someone is already at the counter.") read like a film subtitle, the same as the scene's mood line. */
 .toast{position:fixed;left:50%;bottom:calc(clamp(15px,3.5vh,38px) + clamp(20px,2.6vw,36px) * 1.15 + 16px);transform:translateX(-50%);max-width:min(62%,900px);width:max-content;text-align:center;z-index:30;pointer-events:none;
-  color:#fff;font-size:clamp(13px,1.7vw,21px);line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
+  color:#fff;font-size:calc(clamp(13px,1.7vw,21px) * var(--sub,1));line-height:1.35;letter-spacing:.01em;padding:3px 14px;border-radius:4px;background:rgba(12,6,18,.42);
   text-shadow:0 0 2px #000,0 1px 3px #000,0 0 10px rgba(0,0,0,.5);display:none}
 .toast.in{animation:subIn .6s ease-out both}
 .toast.thought{font-style:italic}
@@ -420,7 +420,7 @@ button.small{font-size:12px;padding:2px 10px}
 /* buttons under the balloon wait for the words: hidden (so they cannot be clicked) until they fade in, see typeBalloon in scene.js */
 @keyframes afterWords{from{opacity:0;transform:translateY(6px);visibility:hidden}to{opacity:1;transform:none;visibility:visible}}
 .balloon .cue{margin:0 0 6px;color:var(--ink-soft);font-size:14px}
-.balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:16px;line-height:1.45}
+.balloon{position:relative;background:color-mix(in srgb,var(--card) 95%,transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:var(--ink);border:2px solid var(--line);border-radius:22px;padding:12px 16px;box-shadow:var(--glow);font-size:calc(16px * var(--sub,1));line-height:1.45}
 .balloon p{margin:0 0 6px}.balloon p:last-child{margin-bottom:0}
 .balloon .asked{font-size:14px;color:var(--ink-soft)}
 .balloon .tale{background:none;padding:0}
@@ -1084,3 +1084,48 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   text-shadow:0 0 4px #F4ADCF,0 0 10px #F4ADCF,0 0 16px rgba(244,173,207,.7);animation:burst .7s cubic-bezier(.2,.8,.3,1) both}
 @keyframes burst{0%{transform:translate(0,0) scale(.2) rotate(0deg);opacity:0}15%{opacity:1}
   70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(90deg);opacity:0}}
+
+/* ---------- Title screen and Settings (menu.js) ---------- */
+/* The title: the shop at twilight, softened and darkened at the edges, the winged heart, the name in the dawn card's
+   italic serif, and the buttons stacked under it. It fades away when the game starts. */
+.titlescreen{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
+  color:#fff;background:#2C2652;transition:opacity .7s ease}
+.titlescreen[hidden]{display:none}
+.titlescreen.gone{opacity:0;pointer-events:none}
+.ts-bg{position:absolute;inset:-20px;background:center/cover no-repeat;filter:blur(3px) brightness(.72) saturate(1.1);transform:scale(1.04);animation:tsDrift 30s ease-in-out infinite alternate}
+.ts-bg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(40,20,60,.05) 0%,rgba(30,14,46,.55) 70%,rgba(20,8,32,.85) 100%)}
+@keyframes tsDrift{to{transform:scale(1.09) translateY(-1%)}}
+.ts-main{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 16px;text-align:center;animation:tsIn 1.4s ease-out both}
+@keyframes tsIn{from{opacity:0;transform:translateY(14px)}}
+.ts-logo{width:clamp(90px,13vh,160px);height:auto;filter:drop-shadow(0 2px 10px rgba(255,190,225,.45)) drop-shadow(0 2px 3px rgba(40,10,50,.5))}
+.ts-name{margin:.25em 0 .9em;color:#fff;font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(34px,5.6vw,80px);line-height:1;
+  text-shadow:0 1px 2px rgba(40,10,50,.55),0 3px 18px rgba(40,10,50,.6)}
+.ts-the{display:block;font-size:.42em;letter-spacing:.3em;text-transform:uppercase;font-style:normal;font-family:var(--font-text);font-weight:700;margin-bottom:.35em;opacity:.9}
+.ts-menu{display:flex;flex-direction:column;gap:10px;width:min(280px,80vw)}
+.ts-menu[hidden],.ts-confirm[hidden]{display:none}
+.ts-menu button{font-family:var(--font-title);font-size:clamp(20px,2.2vw,26px);font-weight:700;padding:6px 18px;border-radius:999px;
+  color:#fff;background:rgba(255,240,248,.10);border:1px solid rgba(255,220,238,.45);box-shadow:none;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.ts-menu button:hover,.ts-menu button:focus-visible{background:rgba(242,169,201,.32);border-color:#F4ADCF;color:#fff;box-shadow:0 0 18px rgba(244,173,207,.4)}
+.ts-menu button small{display:block;font-family:var(--font-text);font-size:12px;font-weight:600;opacity:.8;margin-top:-2px}
+.ts-confirm{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px;max-width:min(340px,90vw)}
+.ts-confirm p{margin:0 0 10px}
+.ts-confirm .row{justify-content:center}
+.ts-foot{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);margin:0;font-size:12px;letter-spacing:.12em;opacity:.6}
+@media (prefers-reduced-motion: reduce){.ts-bg,.ts-main{animation:none}}
+/* Settings sits above the title screen. */
+#settings{z-index:45}
+.setsheet{width:min(440px,100%);padding:16px 20px}
+.setsheet h2{margin:0}
+.setrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px dotted var(--line)}
+.setrow>span:first-child{flex:1;font-weight:600}
+.setrow input[type=range]{width:150px;accent-color:var(--kw);padding:0;box-shadow:none;border:0;background:none}
+.setrow b{width:3em;text-align:right;font-size:13px;color:var(--ink-soft)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;border-radius:0;box-shadow:none;padding:4px 12px;font-size:13px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--kw);color:#fff}
+.switch{appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:999px;padding:0;background:var(--paper2);border:1px solid var(--line);position:relative;cursor:pointer;transition:background .2s}
+.switch::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--lift);transition:left .2s}
+.switch:checked{background:var(--kw)}
+.switch:checked::after{left:20px}
+.setfoot{justify-content:flex-end;margin-top:14px}

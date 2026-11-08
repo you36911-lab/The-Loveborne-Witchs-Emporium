@@ -1,3 +1,3 @@
 /* Start the game. */
 buildScene();
-if(S.day===1&&S.h===0)showDawn();else render();
+showTitle();  /* the title screen first (menu.js); Continue or New Game starts the day */

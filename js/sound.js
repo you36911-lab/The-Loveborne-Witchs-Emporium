@@ -5,7 +5,7 @@
 /* Played with plain audio elements, so they also work when the game is opened straight from the file. Each is loaded
    once and copied to play, so two can overlap. The volumes even them out: the recordings came at very different levels. */
 const SFX_CACHE={};
-function sfx(name,vol,ms,from){try{const base=SFX_CACHE[name]||(SFX_CACHE[name]=new Audio(ASSETS.sounds[name]));const a=base.cloneNode();a.volume=vol;if(from)a.currentTime=from;a.play().catch(()=>{});
+function sfx(name,vol,ms,from){try{const base=SFX_CACHE[name]||(SFX_CACHE[name]=new Audio(ASSETS.sounds[name]));const a=base.cloneNode();a.volume=Math.min(1,vol*SET.volume);  /* SET.volume: the Settings slider (menu.js) */if(from)a.currentTime=from;a.play().catch(()=>{});
   if(ms)setTimeout(()=>a.pause(),ms)}catch(e){}}  /* ms: stop it after this long (for a recording with a long quiet tail); from: skip a quiet start */
 /* every recording is loaded as the game starts, so the first time one plays it is not late */
 Object.entries(ASSETS.sounds).forEach(([n,src])=>{try{const a=SFX_CACHE[n]=new Audio(src);a.preload='auto'}catch(e){}});
