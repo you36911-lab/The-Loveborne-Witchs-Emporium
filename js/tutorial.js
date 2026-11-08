@@ -159,7 +159,7 @@ function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected
 setInterval(guideTick,250);  /* the tutorial looks at where things stand four times a second */
 
 /* While a step waits for something to be done, only that works: the star's thing, and what the step's allow list names.
-   Any other click does nothing but bring the thought back up, and Esc does not close what is open. Always free: the menu,
+   Any other click does nothing (the star gives a small pulse), and Esc does not close what is open. Always free: the menu,
    the prototype bar, Hester's note, and a new email that arrives meanwhile (post comes first). It can never get stuck:
    if the star's thing is not on screen, or something lies over it, nothing is blocked until it can be reached. */
 const ALWAYS_FREE='#guideLine, #hNote, #proto, #title, #gameMenu, #settings';
@@ -172,8 +172,9 @@ function stepAllows(t){if(!locked())return true;
   if(t.closest('#mailFx')&&!(ringEl&&ringEl.closest('#mailFx')))return true;
   if(ringEl&&ringEl.contains(t))return true;
   return ringStep.allow.some(a=>typeof a==='function'?a(t):t.closest(a))}
+/* a blocked click: the subtitle stays as it is, and the star gives one small pulse to show where to click */
 document.addEventListener('click',e=>{if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();
-  const line=$('#guideLine');if(!line.hidden){line.classList.remove('in');void line.offsetWidth;line.classList.add('in')}},true);
+  const ring=$('#guideRing');ring.classList.remove('nudge');void ring.offsetWidth;ring.classList.add('nudge')},true);
 /* (Esc during a step opens the menu over everything, see menu.js; it does not close what is open) */
 
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */

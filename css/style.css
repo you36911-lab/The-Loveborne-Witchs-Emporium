@@ -1232,4 +1232,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 @keyframes starBobUp{50%{transform:translateY(4px) rotate(5deg) scale(1.04)}}
 @keyframes starGlow{0%,100%{filter:drop-shadow(0 0 4px rgba(255,214,90,.9)) drop-shadow(0 2px 3px rgba(30,8,30,.6))}
   50%{filter:drop-shadow(0 0 12px rgba(255,220,110,1)) drop-shadow(0 0 22px rgba(255,200,80,.6)) drop-shadow(0 2px 3px rgba(30,8,30,.6))}}
+/* a click somewhere it cannot go: the star pulses once */
+.guidering.nudge{animation:starNudge .45s ease-out}
+@keyframes starNudge{40%{transform:scale(1.35)}}
 @media (prefers-reduced-motion: reduce){.guidering svg{animation:none;filter:drop-shadow(0 0 8px rgba(255,214,90,.9))}}
