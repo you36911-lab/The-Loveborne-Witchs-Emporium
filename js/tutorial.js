@@ -31,14 +31,16 @@ const HESTER_NOTES={
   tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']}};
 
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
-   A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
+   ensure: run while the step is current, to put back what it needs. A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
    wait (ms: done after this long), note (one of Hester's notes, shown when the step is reached, done when it is closed),
    allow (while it waits, only the star's thing and these can be clicked: selectors, or tests of the clicked element;
    a step without allow blocks nothing). */
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
-    {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[]},
+    {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
+      /* came back to it (a reload) with the email still unread: its card comes up again, as it was */
+      ensure:()=>{if(isOpen('pc')||!$('#mailFx').hidden)return;const m=mailIn().find(m=>S.mail&&S.mail[m.i]===false);if(m)showMailFx(m)}},
     {glow:'[data-lsel="start:0"]',say:'From H.… She kept this shop before me.',done:()=>S.letters[0],allow:[]},
     {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:[]},
     /* the word bank: the apothecary's email has the first dotted word (Hester's have none) */
@@ -124,9 +126,15 @@ function guideTick(){
     if(guideNow!==key){guideNow=key;guideStepAt=Date.now()}
     const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(st.wait&&Date.now()-guideStepAt>=st.wait);
     if(passed){g[L.id]=i+1;save();if(g[L.id]>=L.steps.length){finish(L);L=current()}continue}
+    if(st.ensure)st.ensure();  /* a step can put back what it needs on screen (after a reload, say) */
+    if(postFirst()){show(null);return}
     if(st.note){if(!isOpen('hNote'))openNote(st.note);show(null);return}
     show(st);return}
   show(null)}
+/* Post comes first: nothing from the tutorial shows while an email is about to arrive at dawn, or while a new email's
+   card is still dropping in (until its buttons appear). */
+function postFirst(){const fx=$('#mailFx'),waiting=mailIn().some(m=>!(m.i in (S.mail||{})));
+  return (waiting&&Date.now()<dawnUntil+MAIL_AFTER_DAWN_MS+300)||(!fx.hidden&&Date.now()-(+fx.dataset.at||0)<500)}  /* the card's words and buttons fade in from 0.5s (style.css): the star comes with them */
 function finish(L){guideState()[L.id]='done';save();const t=L.end&&L.end();if(t)toast(t,{thought:true,ms:4200})}
 
 /* ---------- on screen ---------- */
@@ -145,7 +153,7 @@ function show(st){const line=$('#guideLine');ringStep=st;
 /* The mark: a bright gold star that sits on the top edge of the next thing to click, bobbing gently (on its bottom edge
    when the thing is at the very top of the screen; at the left end of a row or a line). DRAWN_INSET: how far in from its box a picture really starts (left,
    top, as parts of the box), so the star sits over the picture and not over empty space. */
-const DRAWN_INSET={'#pcBtn':[.16,0]};
+const DRAWN_INSET={'#pcBtn':[.16,.03]};  /* the monitor's top edge slants down a little toward its left */
 function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected&&ringEl.getBoundingClientRect();
   if(!r||!r.width){ring.hidden=true;return}
   const [ix,iy]=DRAWN_INSET[ringSel]||[0,0],left=r.left+r.width*ix,top=r.top+r.height*iy,size=r.height<36?30:44,  /* smaller over a word or a short line */below=top<50;
@@ -153,7 +161,7 @@ function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected
   const wide=r.width>r.height*2.6&&r.height<90;
   ring.hidden=false;ring.classList.toggle('below',below&&!wide);
   if(wide){Object.assign(ring.style,{left:left-size*.45+'px',top:(top+r.bottom)/2-size/2+'px',width:size+'px',height:size+'px'});return}
-  Object.assign(ring.style,{left:(left+r.right)/2-size/2+'px',top:(below?r.bottom-size*.35:top-size*.65)+'px',width:size+'px',height:size+'px'})}
+  Object.assign(ring.style,{left:(left+r.right)/2-size/2+'px',top:(below?r.bottom-size*.5:top-size*.5)+'px',width:size+'px',height:size+'px'})}
 /* the star follows its thing as views slide and books open */
 (function follow(){placeRing();requestAnimationFrame(follow)})();
 setInterval(guideTick,250);  /* the tutorial looks at where things stand four times a second */
