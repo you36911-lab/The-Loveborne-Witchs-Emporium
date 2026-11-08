@@ -709,12 +709,15 @@ button.small{font-size:12px;padding:2px 10px}
    the plain wall from lower down (rows 845 to 1160 of 2752×1536), stretched up over it (the wood runs up and down, so it
    stretches without showing), a little darker to match the wall up there, with soft edges. The new decoration
    (ASSETS.wallDecor) hangs over it, centred where the old one was. */
-.wallpatch{position:absolute;left:39.8%;top:13.5%;width:20.5%;height:40.9%;pointer-events:none;
-  background-image:var(--room-img);background-repeat:no-repeat;background-size:100cqw calc(100cqh * 1.994);background-position:-39.8cqw -109.7cqh;
+.wallpatch{position:absolute;left:39.8%;top:13.5%;width:20.5%;height:43%;pointer-events:none;
+  background-image:var(--room-img);background-repeat:no-repeat;background-size:100cqw calc(100cqh * 2.098);background-position:-39.8cqw -115.4cqh;
   filter:brightness(.78);
   -webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;
   mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-composite:intersect}
-.walldecor{position:absolute;left:50%;top:34.6%;width:22%;translate:-50% -50%;pointer-events:none;filter:brightness(.86) saturate(.95) drop-shadow(0 .4cqw .6cqw rgba(10,4,12,.55))}
+/* 17% wide, so it hangs between the two wall lamps. Lit like the room: darker, a little warm and less saturated, a soft pink
+   light from the lamps on its edges and a shadow on the wall. */
+.walldecor{position:absolute;left:50%;top:34.6%;width:17%;translate:-50% -50%;pointer-events:none;
+  filter:brightness(.7) contrast(.96) saturate(.82) sepia(.14) drop-shadow(0 0 .9cqw rgba(255,140,200,.22)) drop-shadow(0 .5cqw .7cqw rgba(10,4,12,.6))}
 /* inside a cupboard: the picture of an empty cupboard (ASSETS.cabinetInside), stretched to the door */
 .cubby{--inside:var(--inside-img,none) center/100% 100% no-repeat,#120A0D}
 .cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
@@ -1109,12 +1112,23 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 @keyframes tsDrift{to{transform:scale(1.09) translateY(-1%)}}
 .ts-main{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 16px;text-align:center;animation:tsIn 1.4s ease-out both}
 @keyframes tsIn{from{opacity:0;transform:translateY(14px)}}
-.ts-menu{display:flex;flex-direction:column;gap:10px;width:min(280px,80vw)}
+/* The title's buttons are words, not boxes: the serif italic of the day card, light on the dark room. The one under the
+   pointer brightens, glows pink and gains a small star either side. No focus ring here (keyboard focus looks like hover). */
+.ts-menu{display:flex;flex-direction:column;align-items:center;gap:2px}
 .ts-menu[hidden],.ts-confirm[hidden]{display:none}
-.ts-menu button{font-family:var(--font-title);font-size:clamp(20px,2.2vw,26px);font-weight:700;padding:6px 18px;border-radius:999px;
-  color:#fff;background:rgba(255,240,248,.10);border:1px solid rgba(255,220,238,.45);box-shadow:none;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
-.ts-menu button:hover,.ts-menu button:focus-visible{background:rgba(242,169,201,.32);border-color:#F4ADCF;color:#fff;box-shadow:0 0 18px rgba(244,173,207,.4)}
-.ts-menu button small{display:block;font-family:var(--font-text);font-size:12px;font-weight:600;opacity:.8;margin-top:-2px}
+.ts-menu button{background:none;border:0;border-radius:0;box-shadow:none;padding:3px 10px;
+  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(22px,2.5vw,32px);line-height:1.2;letter-spacing:.01em;
+  color:rgba(255,240,247,.86);text-shadow:0 1px 2px rgba(40,10,50,.75),0 2px 14px rgba(40,10,50,.6);transition:color .25s,text-shadow .25s}
+.ts-menu button{position:relative}
+.ts-menu button::before,.ts-menu button::after{content:'✦';position:absolute;top:.62em;font-style:normal;font-size:.45em;line-height:1;color:#F7B8D6;
+  opacity:0;transition:opacity .25s,transform .25s}
+.ts-menu button::before{right:100%;transform:translateX(8px)}
+.ts-menu button::after{left:100%;transform:translateX(-8px)}
+.ts-menu button:hover,.ts-menu button:focus-visible{background:none;border:0;box-shadow:none;outline:none;color:#fff;
+  text-shadow:0 1px 2px rgba(40,10,50,.75),0 0 16px rgba(247,160,205,.85),0 0 30px rgba(247,160,205,.45)}
+.ts-menu button:hover::before,.ts-menu button:hover::after,.ts-menu button:focus-visible::before,.ts-menu button:focus-visible::after{opacity:1;transform:none}
+.ts-menu button:focus{outline:none}
+.ts-menu button small{display:block;font-family:var(--font-text);font-style:normal;font-size:12px;font-weight:600;letter-spacing:.08em;opacity:.75;margin-top:-1px}
 .ts-confirm{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px;max-width:min(340px,90vw)}
 .ts-confirm p{margin:0 0 10px}
 .ts-confirm .row{justify-content:center}

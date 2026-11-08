@@ -122,7 +122,8 @@ const ASSETS = {
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
-  logo: 'assets/scene/logo.png',  /* the shop's logo: the winged heart in its silver frame (the tab icon, assets/scene/favicon.png, is the same, squared and 128px) */
+  logo: 'assets/scene/logo.png',  /* the shop's logo as drawn: the winged heart in its silver frame */
+  logoFlat: 'assets/scene/logo-flat.png',  /* the same drawing in flat pinks of one hue, for My Shop (the tab icon, assets/scene/favicon.png, is this, squared and 128px) */
   splash: 'assets/scene/splash.png',  /* the title screen: the logo with the game's name on the heart */
   wallDecor: 'assets/scene/wall-decor.png',  /* on the workroom wall above the altar */
   sounds: {  /* recorded sounds (see js/sound.js) */

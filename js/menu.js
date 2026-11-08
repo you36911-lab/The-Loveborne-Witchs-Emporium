@@ -46,8 +46,7 @@ function showTitle(){const t=$('#title'),saved=hasSave();
   if(saved)$('#tsWhere').textContent=`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;
   $('#tsQuit').hidden=!DESKTOP_BUILD;
   $('#tsMenu').hidden=false;$('#tsConfirm').hidden=true;
-  $('#world').inert=true;t.hidden=false;t.classList.remove('gone');
-  ($('#tsContinue').hidden?$('#tsNew'):$('#tsContinue')).focus()}
+  $('#world').inert=true;t.hidden=false;t.classList.remove('gone')}
 /* Leaving the title: the shop is drawn behind it first, its background shown at once (no fade) once the picture has
    loaded, and only then does the title fade away, so the counter is never seen half-built. */
 function leaveTitle(start){const t=$('#title'),scene=$('#scene');
@@ -59,9 +58,9 @@ function leaveTitle(start){const t=$('#title'),scene=$('#scene');
 /* a new game opens like the first one: the dawn picture behind the fading title, then the day card, then the post */
 function newGame(){leaveTitle(()=>{S=fresh();sanitize();showDawn(TITLE_FADE_MS+150)})}
 $('#tsContinue').onclick=()=>leaveTitle(()=>{if(S.day===1&&S.h===0&&!S.hist.length)showDawn(TITLE_FADE_MS+150);else render()});
-$('#tsNew').onclick=()=>{if(!hasSave())return newGame();$('#tsMenu').hidden=true;$('#tsConfirm').hidden=false;$('#tsNo').focus()};
+$('#tsNew').onclick=()=>{if(!hasSave())return newGame();$('#tsMenu').hidden=true;$('#tsConfirm').hidden=false};
 $('#tsYes').onclick=newGame;
-$('#tsNo').onclick=()=>{$('#tsConfirm').hidden=true;$('#tsMenu').hidden=false;$('#tsNew').focus()};
+$('#tsNo').onclick=()=>{$('#tsConfirm').hidden=true;$('#tsMenu').hidden=false};
 $('#tsSettings').onclick=openSettings;
 $('#tsQuit').onclick=()=>window.close();
 
