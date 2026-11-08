@@ -41,7 +41,7 @@ function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
   {const L=lightFor(key),lum=.3*L[0]+.59*L[1]+.11*L[2];$('#counter').style.setProperty('--dlg-a',Math.max(.98,Math.min(.99,.99-(1-lum)*.03)).toFixed(2))}
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   {const br=BG_BRIGHTER[today()?.sabbat+'|'+key];$('#'+next).style.filter=br?`brightness(${br})`:''}
-  const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;if(!$('#wallDecor').src)$('#wallDecor').src=ASSETS.wallDecor;
+  const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
   room.style.setProperty('--wall-l',`url("${new URL(ASSETS.altarWallL,location.href).href}")`);

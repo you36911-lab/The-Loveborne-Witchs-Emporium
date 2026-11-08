@@ -705,19 +705,6 @@ button.small{font-size:12px;padding:2px 10px}
    over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack onto the dark
    inside; the open cupboard's door swings wide on its hinge. */
 .cubbies{display:contents}
-/* The workroom wall above the altar. The old decoration drawn into the room picture is covered by a patch of the same picture:
-   the plain wall from lower down (rows 845 to 1160 of 2752×1536), stretched up over it (the wood runs up and down, so it
-   stretches without showing), a little darker to match the wall up there, with soft edges. The new decoration
-   (ASSETS.wallDecor) hangs over it, centred where the old one was. */
-.wallpatch{position:absolute;left:39.8%;top:13.5%;width:20.5%;height:43%;pointer-events:none;
-  background-image:var(--room-img);background-repeat:no-repeat;background-size:100cqw calc(100cqh * 2.098);background-position:-39.8cqw -115.4cqh;
-  filter:brightness(.78);
-  -webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;
-  mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-composite:intersect}
-/* 17% wide, so it hangs between the two wall lamps. Lit like the room: darker, a little warm and less saturated, a soft pink
-   light from the lamps on its edges and a shadow on the wall. */
-.walldecor{position:absolute;left:50%;top:34.6%;width:17%;translate:-50% -50%;pointer-events:none;
-  filter:brightness(.7) contrast(.96) saturate(.82) sepia(.14) drop-shadow(0 0 .9cqw rgba(255,140,200,.22)) drop-shadow(0 .5cqw .7cqw rgba(10,4,12,.6))}
 /* inside a cupboard: the picture of an empty cupboard (ASSETS.cabinetInside), stretched to the door */
 .cubby{--inside:var(--inside-img,none) center/100% 100% no-repeat,#120A0D}
 .cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
@@ -1117,7 +1104,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ts-menu{display:flex;flex-direction:column;align-items:center;gap:2px}
 .ts-menu[hidden],.ts-confirm[hidden]{display:none}
 .ts-menu button{background:none;border:0;border-radius:0;box-shadow:none;padding:3px 10px;
-  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(22px,2.5vw,32px);line-height:1.2;letter-spacing:.01em;
+  font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(25px,2.8vw,36px);line-height:1.2;letter-spacing:.01em;
   color:rgba(255,240,247,.86);text-shadow:0 1px 2px rgba(40,10,50,.75),0 2px 14px rgba(40,10,50,.6);transition:color .25s,text-shadow .25s}
 .ts-menu button{position:relative}
 .ts-menu button::before,.ts-menu button::after{content:'✦';position:absolute;top:.62em;font-style:normal;font-size:.45em;line-height:1;color:#F7B8D6;
@@ -1128,6 +1115,30 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   text-shadow:0 1px 2px rgba(40,10,50,.75),0 0 16px rgba(247,160,205,.85),0 0 30px rgba(247,160,205,.45)}
 .ts-menu button:hover::before,.ts-menu button:hover::after,.ts-menu button:focus-visible::before,.ts-menu button:focus-visible::after{opacity:1;transform:none}
 .ts-menu button:focus{outline:none}
+/* Button styles to compare (prototype: the switch at the bottom right of the title; menu.js). Each keeps the hover glow and stars.
+   1 plaque: each word on a dark plum plaque with a thin silver double edge, like the splash's frame.
+   2 ribbon: each word on a pink ribbon with notched ends.
+   3 card: all of them on one frosted card, with fine lines between. */
+.titlescreen[data-bs] .ts-menu button{width:min(290px,78vw);padding:7px 18px}
+.titlescreen[data-bs="plaque"] .ts-menu{gap:12px}
+.titlescreen[data-bs="plaque"] .ts-menu button{border-radius:999px;background:linear-gradient(180deg,rgba(74,40,82,.78),rgba(44,22,52,.84));
+  border:1.5px solid rgba(232,232,242,.85);box-shadow:inset 0 0 0 3px rgba(44,22,52,.85),inset 0 0 0 4px rgba(232,232,242,.45),0 3px 12px rgba(20,6,26,.45)}
+.titlescreen[data-bs="plaque"] .ts-menu button:hover,.titlescreen[data-bs="plaque"] .ts-menu button:focus-visible{background:linear-gradient(180deg,rgba(96,48,104,.85),rgba(58,28,66,.9));
+  border:1.5px solid #fff;box-shadow:inset 0 0 0 3px rgba(58,28,66,.9),inset 0 0 0 4px rgba(255,214,234,.6),0 0 22px rgba(247,160,205,.45)}
+.titlescreen[data-bs="ribbon"] .ts-menu{gap:12px}
+.titlescreen[data-bs="ribbon"] .ts-menu button{border-radius:0;padding:7px 34px;background:linear-gradient(180deg,#E99CC2,#C9649A);
+  clip-path:polygon(0 0,100% 0,calc(100% - 16px) 50%,100% 100%,0 100%,16px 50%);filter:drop-shadow(0 3px 6px rgba(20,6,26,.5))}
+.titlescreen[data-bs="ribbon"] .ts-menu button:hover,.titlescreen[data-bs="ribbon"] .ts-menu button:focus-visible{background:linear-gradient(180deg,#F4B3D3,#D9559E);border:0}
+.titlescreen[data-bs="ribbon"] .ts-menu button::before{right:auto;left:22px}.titlescreen[data-bs="ribbon"] .ts-menu button::after{left:auto;right:22px}
+.titlescreen[data-bs="card"] .ts-menu{gap:0;padding:8px 6px;border-radius:20px;background:rgba(255,240,248,.12);border:1px solid rgba(255,225,240,.4);
+  box-shadow:0 8px 30px rgba(20,6,26,.45);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.titlescreen[data-bs="card"] .ts-menu button{border-radius:14px}
+.titlescreen[data-bs="card"] .ts-menu button:not([hidden])~button:not([hidden]){border-top:1px solid rgba(255,225,240,.22);border-radius:0}
+.titlescreen[data-bs="card"] .ts-menu button:hover,.titlescreen[data-bs="card"] .ts-menu button:focus-visible{background:rgba(242,169,201,.16)}
+.ts-styles{position:absolute;right:12px;bottom:10px;display:flex;align-items:center;gap:4px;font-size:12px;opacity:.75}
+.ts-styles[hidden]{display:none}
+.ts-styles button{padding:1px 8px;font-size:12px;background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.35);box-shadow:none}
+.ts-styles button.on{background:var(--kw);border-color:var(--kw)}
 .ts-menu button small{display:block;font-family:var(--font-text);font-style:normal;font-size:12px;font-weight:600;letter-spacing:.08em;opacity:.75;margin-top:-1px}
 .ts-confirm{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px;max-width:min(340px,90vw)}
 .ts-confirm p{margin:0 0 10px}

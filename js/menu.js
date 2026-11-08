@@ -39,6 +39,10 @@ function makeMotes(){const box=$('#tsMotes');if(box.childElementCount)return;
   for(let i=0;i<22;i++){const m=document.createElement('i');
     m.style.cssText=`left:${(Math.random()*100).toFixed(1)}%;--d:${(14+Math.random()*14).toFixed(1)}s;--w:${(-30-Math.random()*30).toFixed(1)}s;--z:${(2+Math.random()*4).toFixed(1)}px;--x:${(Math.random()*60-30).toFixed(0)}px`;
     box.appendChild(m)}}
+/* Prototype: three button styles to compare (see .titlescreen[data-bs] in style.css), remembered in this browser. */
+function setButtonStyle(bs){$('#title').dataset.bs=bs;$('#tsStyles').querySelectorAll('[data-bs]').forEach(b=>b.classList.toggle('on',b.dataset.bs===bs));try{localStorage.setItem('titleButtons',bs)}catch(e){}}
+{let bs='plaque';try{bs=localStorage.getItem('titleButtons')||bs}catch(e){}setButtonStyle(bs);$('#tsStyles').hidden=!PROTOTYPE_TOOLS;
+  $('#tsStyles').onclick=e=>{const b=e.target.closest('[data-bs]');if(b)setButtonStyle(b.dataset.bs)}}
 function showTitle(){const t=$('#title'),saved=hasSave();
   $('#tsBg').style.backgroundImage=`url("${ASSETS.backgrounds.Twilight}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
   clearTimeout(glintT);glintT=setTimeout(glint,1200);

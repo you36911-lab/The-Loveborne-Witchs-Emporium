@@ -125,7 +125,6 @@ const ASSETS = {
   logo: 'assets/scene/logo.png',  /* the shop's logo as drawn: the winged heart in its silver frame */
   logoFlat: 'assets/scene/logo-flat.png',  /* the same drawing in flat pinks of one hue, for My Shop (the tab icon, assets/scene/favicon.png, is this, squared and 128px) */
   splash: 'assets/scene/splash.png',  /* the title screen: the logo with the game's name on the heart */
-  wallDecor: 'assets/scene/wall-decor.png',  /* on the workroom wall above the altar */
   sounds: {  /* recorded sounds (see js/sound.js) */
     shopBell:'assets/sounds/shop-bell.mp3', altarBell:'assets/sounds/altar-bell.mp3', notify:'assets/sounds/notify.mp3',
     receipt:'assets/sounds/receipt.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', cabinetOpen:'assets/sounds/cabinet-open.mp3', cabinetClose:'assets/sounds/cabinet-close.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3'},
