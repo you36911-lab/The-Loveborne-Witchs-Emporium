@@ -61,7 +61,7 @@ const LESSONS=[
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
-    {glow:'#crystalBtn',say:'A charm for her pocket… and the ball’s pale blue. She’s worried, then.',wait:7500,allow:['#counter .balloon']},
+    {glow:'#crystalBtn',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* the index: its rows and the page turns, to find a charm */
     {glow:()=>{const h=[...document.querySelectorAll('#books .pg h3.cat')].find(x=>x.textContent==='Charm');return h?h:'#turnNext'},say:'The index first. She wants a charm.',done:()=>pageOf().startsWith('recipe:')||!!S.target,allow:[...TURNS,'#books .idxrow']},
@@ -76,7 +76,7 @@ const LESSONS=[
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
-    {say:'',wait:9000,allow:['#counter .balloon']},
+    {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
     {glow:()=>seen('[data-go="recipe:111"]')?'[data-go="recipe:111"]':'#turnFirst',say:'The Language of Ravens.',done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[...TURNS]},
     {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
@@ -93,7 +93,7 @@ const LESSONS=[
     {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'Reviews came in overnight.',done:()=>pcApp('shop'),allow:[]},
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. Things they let slip tend to matter later.',wait:8000,allow:[]}]},
   {id:'advice1',at:FIRST_ADVICE,when:()=>atCounter(FIRST_ADVICE),until:()=>S.seen[FIRST_ADVICE],steps:[
-    {say:'She only wants to know which herb. Nothing to make.',wait:8000,allow:['#counter .balloon']},
+    {say:()=>wordsDone()?'She only wants to know which herb. Nothing to make.':'',done:()=>spokenFor(3500),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Herbiary"]',say:'The Herbiary. Something for love, for the mind, and strong.',done:()=>bookOpen('Herbiary'),allow:[]},
     {glow:()=>isOpen('books')?'':'#adviceIn',say:'Then I tell her its name.',done:()=>S.seen[FIRST_ADVICE]}]},
   {id:'report',when:()=>S.queue&&S.queue.type==='report',until:()=>!S.queue||S.queue.type!=='report',steps:[
@@ -119,6 +119,12 @@ function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.spli
   LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]})}
 /* the notebook step: once the player writes something, its star has done its job and goes */
 let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset.memo!==undefined)memoTyped=true});
+/* Whether the customer has finished speaking: their words type out letter by letter (typeBalloon in scene.js), or all at
+   once when the balloon is clicked. spokenFor(ms): they finished at least this long ago (counted within the current step). */
+function wordsDone(){const b=$('#counter .balloon');if(!b)return false;if(!typeFrom||matchMedia('(prefers-reduced-motion: reduce)').matches)return true;
+  return Date.now()>=typeFrom+b.textContent.length*TYPE_STEP*1000}
+let spokeAt=0;
+function spokenFor(ms){if(!wordsDone()){spokeAt=0;return false}if(!spokeAt)spokeAt=Date.now();return Date.now()-spokeAt>=ms}
 /* ---------- running it ---------- */
 let guideStepAt=0,guideNow='';  /* when the current step began (for waits), and which lesson/step that was */
 function guideState(){return S.guide||(S.guide={})}
@@ -136,7 +142,7 @@ function guideTick(){
     if(L.until()){finish(L);L=current();continue}
     let i=g[L.id],st=L.steps[i];const key=L.id+':'+i;
     if(!st){finish(L);L=current();continue}  /* never stall on a step that is not there (an older save, a hole) */
-    if(guideNow!==key){guideNow=key;guideStepAt=Date.now()}
+    if(guideNow!==key){guideNow=key;guideStepAt=Date.now();spokeAt=0}
     const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(st.wait&&Date.now()-guideStepAt>=st.wait);
     if(passed){g[L.id]=i+1;save();if(g[L.id]>=L.steps.length){finish(L);L=current()}continue}
     if(st.ensure)st.ensure();  /* a step can put back what it needs on screen (after a reload, say) */
