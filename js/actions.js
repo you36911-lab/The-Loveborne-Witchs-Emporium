@@ -9,8 +9,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */
   if(b.dataset.shelf){openShelf=openShelf===b.dataset.shelf?'':b.dataset.shelf;renderShelves();return}
-  /* tutorials: close this one for good, or skip them all */
-  if(b.dataset.tutclose){S.tut[b.dataset.tutclose]='closed';render();return}
   switch(b.id){
     case 'craftBell':ringAltarBell();break;
     case 'spellBtn':takeSpell();break;

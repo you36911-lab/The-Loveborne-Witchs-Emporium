@@ -247,13 +247,6 @@ function renderAltar(){
   const res=$('#result');
   if(S.result&&!S.result.test){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;  /* test crafts go to the phone */
 }
-/* A tutorial is shown once: during the first visit of its kind, and never again after that visit. The × puts it away for good;
-   A replay (a new game after one that got past the tutorial days) has none (S.tutOff, see newState in core.js). */
-function tutorial(kind,key){S.tut=S.tut||{};if(S.tutOff||S.tut[kind]&&S.tut[kind]!==key)return '';S.tut[kind]=key;
-  return `<div class="coach"><button class="dclose" data-tutclose="${kind}" aria-label="Close this tutorial">×</button>${TUTORIAL[kind](visitByKey(key))}</div>`}
-const TUTORIAL={
-  order:()=>`<b>Your first order</b><ol><li>Listen. Customers never name the recipe: what they say, what they do (in brackets) and the colour in the crystal ball all count.</li><li>Find the one recipe that fits in the books on the counter.</li><li>In the Recipe Book, find its kind in the index, then its name. Tap the name on its page to choose it as what you are making (a tick appears). The little <b>bell</b> lays out what you have written on the altar.</li><li>The little <b>bottle</b> test crafts it, as often as you like. When it is right, go down to the altar and ring the <b>silver bell</b> to make it.</li><li>What you made waits on the counter. Click it to hand it over.</li></ol>`,
-  advice:v=>`<b>Just a question</b><p>They only want your advice, not a spell. There is nothing to make.</p><ol><li>Listen for three things: what it is for (a keyword), who or what it is for (the body, the heart or the home) and how strong it should be.</li><li>Look it up in ${v.ask.cat==='Crystals'?'the Crystal Almanac':'the Herbiary'}.</li><li>Type its name below (after two letters, names from ${esc(v.ask.cat.toLowerCase())} are suggested) and press <b>Answer</b>.</li></ol>`};
 /* Everything at the counter is in one speech balloon: what they do (the cue) in brackets first, then what they say.
    Nobody is labelled: who they are comes out in what they say and do. */
 const balloon=(v,inner)=>`<div class="balloon">${v.cue?`<p class="cue">(${esc(v.cue)})</p>`:''}${inner}</div>`;
@@ -299,11 +292,11 @@ function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#count
     /* The answer is typed. The counter is redrawn on clicks, so what was typed (and the focus) is kept in adviceDraft. */
     const focused=document.activeElement&&document.activeElement.id==='adviceIn';
     if(adviceDraft.key!==q.key)adviceDraft={key:q.key,text:'',hi:-1};
-    el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}${tutorial('advice',q.key)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
+    el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
     const inp=$('#adviceIn');inp.value=adviceDraft.text;fillSuggest();if(focused){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>`)}${tutorial('order',q.key)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
+  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>${v.tutLine&&!S.tutOff?`<p>“${esc(v.tutLine)}”</p>`:''}`)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;

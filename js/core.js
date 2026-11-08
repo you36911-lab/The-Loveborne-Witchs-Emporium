@@ -34,9 +34,14 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   delete S.hints;S.reviewsSeen=S.reviewsSeen||0;S.memo=S.memo||[];
 }
 sanitize();
+/* The game saves after everything the player does. The little save icon in the corner (#saveMark) shows only when
+   something that matters is kept: a new hour or day, or a sale or an answer rung up. */
+let savedAt='';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  const mark=S.day+'-'+S.h+'-'+S.pend.length;if(savedAt&&mark!==savedAt)showSaved();savedAt=mark;
   if(S.day>profile().furthestDay)try{localStorage.setItem(PROFILE_KEY,JSON.stringify({...profile(),furthestDay:S.day}))}catch(e){}}
 function profile(){try{return {furthestDay:0,...JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')}}catch(e){return {furthestDay:0}}}
+function showSaved(){const m=$('#saveMark');if(!m)return;m.classList.remove('on');void m.offsetWidth;m.classList.add('on')}
 /* A new game: fresh, and without the tutorial if this player has played past it before (a replay). */
 function newState(){S=fresh();if(profile().furthestDay>TUTORIAL_LAST_DAY)S.tutOff=true;sanitize()}
 /* A short notice in the subtitle spot, styled like the scene's mood line: it floats in, stays a moment, then fades.

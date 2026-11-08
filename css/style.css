@@ -437,10 +437,6 @@ button.small{font-size:12px;padding:2px 10px}
 .suggest button:hover,.suggest button.hi{background:var(--butter);color:#3A2530}
 .dialogue .row:has(.askwrap){align-items:flex-start}
 /* a tutorial note, shown once: pinned paper, clearly not part of what the customer says */
-.coach{margin:12px 0 0;background:var(--butter);color:#3A2530;border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;line-height:1.45;box-shadow:var(--glow);rotate:-.6deg}
-.coach>b{font-family:var(--font-title);font-size:18px;display:block;margin-bottom:2px}
-.coach .dclose{background:none;border:0;box-shadow:none;color:#3A2530;margin:-6px -8px 0 6px}
-.coach ol{margin:4px 0 0;padding-left:20px}.coach li{margin:2px 0}.coach p{margin:2px 0}
 /* a result read at the counter, with nobody there: a plain card */
 .dialogue.plain{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px}
 .dclose{float:right;margin:-4px -6px 4px 8px;padding:0 9px;font-size:18px;line-height:1.4}  /* the tutorial note's × */
@@ -997,7 +993,6 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .dialogue .balloon,.dialogue.plain{background:color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent)}
 .dialogue .balloon::after{border-color:transparent color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent) transparent transparent}
 .dialogue button:not(.main):not(.dclose):not(.kw),.dialogue input,.dialogue select{background:color-mix(in srgb,var(--card) calc(var(--dlg-a)*100%),transparent)}
-.dialogue .coach{background:color-mix(in srgb,var(--butter) calc((var(--dlg-a) + .06)*100%),transparent)}
 
 /* ---------- the phone (phone.js): lying on the altar right of the candle stand (assets/scene/altar-phone.png, 800×638,
    phone2, the designer's picture cut out), dimmed a little to the room's light like the stand. Test craft results come to it:
@@ -1122,9 +1117,11 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   background:linear-gradient(90deg,transparent,rgba(255,232,244,.65) 30%,rgba(255,232,244,.65) 70%,transparent);transition:background .3s ease}
 .ts-menu button:hover>.sh,.ts-menu button:focus-visible>.sh{background:linear-gradient(90deg,transparent,#F7B8D6 30%,#F7B8D6 70%,transparent)}
 .ts-menu button small{display:block;font-family:var(--font-text);font-style:normal;font-size:12px;font-weight:600;letter-spacing:.08em;opacity:.75;margin-top:-1px}
-.ts-confirm{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px;max-width:min(340px,90vw)}
-.ts-confirm p{margin:0 0 10px}
-.ts-confirm .row{justify-content:center}
+/* Start a new game? Asked in the title's own look: the question in the serif italic, the two answers like its buttons. */
+.ts-confirm{text-align:center;color:rgba(255,240,247,.86);max-width:min(520px,90vw);margin-top:clamp(14px,3vh,32px)}  /* the same soft white as the buttons */
+.ts-confirm p{margin:0 0 clamp(20px,3.2vh,30px);font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(20px,2.2vw,28px);line-height:1.25;text-shadow:0 1px 2px rgba(40,10,50,.75),0 2px 14px rgba(40,10,50,.6)}
+.ts-menu.ts-choice{flex-direction:row;justify-content:center;gap:28px}
+.ts-menu.ts-choice button{width:auto;min-width:150px}
 .ts-glow{position:absolute;left:50%;top:38%;width:min(70vw,900px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(255,170,215,.28) 0%,rgba(200,150,240,.12) 40%,transparent 68%);animation:tsBreathe 7s ease-in-out infinite}
 @keyframes tsBreathe{50%{opacity:.55;transform:scale(1.06)}}
@@ -1151,7 +1148,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 /* Side panels (the menu in play, Settings): they slide in from the left, the height of the window, and the screen behind
    dims; closing, they slide back out (closePanel in menu.js). */
 .modal.side{padding:0;align-items:stretch;justify-content:flex-start;overflow:hidden}
-.modal.side>.sheet{margin:0;height:100%;width:min(340px,88vw);border-radius:0;border-top:0;border-bottom:0;border-left:0;padding:max(14vh,72px) 24px 28px;overflow:auto;
+.modal.side>.sheet{margin:0;height:100%;width:min(340px,88vw);border-radius:0;border-top:0;border-bottom:0;border-left:0;padding:clamp(28px,6vh,56px) 24px 28px;overflow:auto;
   display:flex;flex-direction:column;justify-content:flex-start;animation:menuIn .32s cubic-bezier(.2,.8,.3,1) both}
 .modal.side.open{animation:dimIn .25s both}
 .modal.side.closing>.sheet{animation:menuOut .22s ease-in both}
@@ -1184,3 +1181,39 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .switch:checked{background:var(--kw)}
 .switch:checked::after{left:20px}
 .setfoot{justify-content:flex-end;margin-top:14px}
+
+
+/* ---------- the tutorial (tutorial.js) ---------- */
+/* The side panels' buttons show no focus ring. */
+.modal.side button:focus,.modal.side button:focus-visible{outline:none}
+/* the shopkeeper's thought: the subtitle spot, in italics, above any popup; the mood line steps aside for it */
+.guideline{z-index:62;font-style:italic}  /* above every popup, even the new-email card (60) */
+.guideline:not([hidden]){display:block}
+.guideline[hidden]{display:none}
+.guideline.in{animation:subIn .6s ease-out both}
+.scenenote.guided{visibility:hidden}
+/* the glow round the next thing to click: a soft pink ring that breathes; it never takes the click */
+.guidering{position:fixed;z-index:62;pointer-events:none;border-radius:14px;
+  box-shadow:0 0 0 2px rgba(255,190,225,.85),0 0 18px 6px rgba(247,140,200,.55);animation:guideBreathe 1.8s ease-in-out infinite}
+.guidering[hidden]{display:none}
+@keyframes guideBreathe{50%{box-shadow:0 0 0 2px rgba(255,190,225,.45),0 0 28px 10px rgba(247,140,200,.3)}}
+@media (prefers-reduced-motion: reduce){.guidering{animation:none}}
+/* Hester's note: a small paper note in her hand */
+.hnote{z-index:63}
+.hpaper{width:min(420px,90vw);background:#FFF8EC;color:#3A2A3A;padding:22px 26px 18px;border-radius:3px;rotate:-1.2deg;
+  box-shadow:0 2px 4px rgba(40,20,30,.25),0 14px 34px rgba(20,8,24,.45);font-family:'Caveat',cursive;font-size:24px;line-height:1.25}
+.hpaper h3{font-family:'Caveat',cursive;font-size:30px;margin:0 0 6px;color:#7A2E5E;font-weight:500}
+.hpaper p{margin:0 0 8px}
+.hpaper .hsig{text-align:right;margin:4px 0 0}
+
+/* The save icon: a small heart in a turning ring of light, bottom right, for a moment when the game has kept something
+   that matters (see save() in core.js). */
+.savemark{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:28px;height:28px;z-index:61;pointer-events:none;opacity:0}
+.savemark svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 1px 3px rgba(20,6,26,.6))}
+.savemark .sm-ring{fill:none;stroke:#F7B8D6;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:44 16;transform-origin:12px 12px}
+.savemark .sm-heart{fill:#F7B8D6}
+.savemark.on{animation:saveShow 1.8s ease both}
+.savemark.on .sm-ring{animation:saveSpin 1.8s linear}
+@keyframes saveShow{0%{opacity:0;transform:scale(.8)}15%,70%{opacity:.95;transform:none}100%{opacity:0}}
+@keyframes saveSpin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.savemark.on .sm-ring{animation:none}}

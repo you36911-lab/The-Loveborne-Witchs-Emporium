@@ -1,7 +1,15 @@
-# Tutorial plan (draft for review)
+# Tutorial plan
 
-Not built yet. Agreed so far (2026-11-08): what is taught and in what order, how it is shown, no "Skip tutorials", and a
-replay (a new game after one that got past Day 2) has no tutorial.
+Built in `js/tutorial.js` (2026-11-08). Agreed: what is taught and in what order, how it is shown, no "Skip tutorials",
+and a replay (a new game after one that got past Day 2) has no tutorial. Saving is not mentioned: a small save icon shows instead.
+
+Changes made while building it:
+- The Recipe Book's recipes have blanks the player fills in, so the first order also teaches the blanks and where to look
+  things up ("Not sure what does what? The other books on the counter say: the Herbiary for herbs.").
+- Hester's note on the crystal ball uses the game's aura meanings: gold joy, grey sadness, pale blue worry, red anger,
+  pink longing, bright pink embarrassment.
+- Hester's notes are not kept in the notebook (the notebook is the player's own pages); to decide.
+- The closing thought after a lesson is used for the first order only.
 
 ## How it is shown
 

@@ -14,7 +14,7 @@ applySettings();
 function fillSettings(){$('#setVol').value=Math.round(SET.volume*100);$('#setVolN').textContent=Math.round(SET.volume*100)+'%';
   $('#setSub').querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.sub===SET.sub));
   $('#setFull').checked=!!document.fullscreenElement}
-function openSettings(){fillSettings();$('#settings').classList.add('open');$('#setDone').focus()}
+function openSettings(){fillSettings();$('#settings').classList.add('open')}
 /* a side panel slides back out, then closes (see .modal.side in style.css) */
 function closePanel(m,then){if(!m.classList.contains('open')||m.classList.contains('closing'))return;m.classList.add('closing');
   setTimeout(()=>{m.classList.remove('open','closing');if(then)then()},220)}
@@ -73,12 +73,12 @@ $('#tsQuit').onclick=()=>window.close();
 const menuOpen=()=>$('#gameMenu').classList.contains('open');
 function somethingOpen(){return ['books','pc','phoneView','receiptsView','info'].some(id=>$('#'+id).classList.contains('open'))||!$('#mailFx').hidden||!!openShelf}
 function openMenu(){$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
-  $('#gameMenu').classList.add('open');$('#world').inert=true;$('#gmResume').focus()}
+  $('#gameMenu').classList.add('open');$('#world').inert=true}
 function closeMenu(){closePanel($('#gameMenu'),()=>{if(!titleOpen())$('#world').inert=false})}
 $('#gmResume').onclick=closeMenu;
 $('#gmSettings').onclick=openSettings;
-$('#gmRestart').onclick=()=>{$('#gmList').hidden=true;$('#gmConfirm').hidden=false;$('#gmNo').focus()};
-$('#gmNo').onclick=()=>{$('#gmConfirm').hidden=true;$('#gmList').hidden=false;$('#gmRestart').focus()};
+$('#gmRestart').onclick=()=>{$('#gmList').hidden=true;$('#gmConfirm').hidden=false};
+$('#gmNo').onclick=()=>{$('#gmConfirm').hidden=true;$('#gmList').hidden=false};
 $('#gmYes').onclick=()=>{closeMenu();newState();showDawn()};  /* a new game opens like the first one: the day card, then the post */
 $('#gmTitle').onclick=()=>{save();$('#gameMenu').classList.remove('open');showTitle()};
 $('#gmQuit').onclick=()=>{save();window.close()};
