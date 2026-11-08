@@ -92,7 +92,9 @@ function showDawn(lead=0){const T=today();dawnUntil=Date.now()+lead+DAWN_MS;
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote'),av=v&&v.key&&(!(v.tales||[]).length||v.newsDone)?visitByKey(v.key):null;
   const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
-  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+AFTER_DAWN_MS||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  /* post comes first: when an email is about to drop in, the mood line waits until it has, and stays away while the new-email card is up */
+  const mailWaiting=mailIn().some(m=>!(m.i in (S.mail||{})));
+  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+(mailWaiting?MAIL_AFTER_DAWN_MS:AFTER_DAWN_MS)||!$('#mailFx').hidden||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* The bell brings the next customer, and only the bell does: someone due this hour comes in; otherwise time moves

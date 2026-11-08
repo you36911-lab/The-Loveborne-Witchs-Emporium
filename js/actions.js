@@ -32,7 +32,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'tillBtn':openReceipts();break;
     case 'notebookBtn':openDiary();break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);openLetters(m?'mail:'+m.i:'');break}
-    case 'mailLater':$('#mailFx').hidden=true;break;
+    case 'mailLater':$('#mailFx').hidden=true;render();break;  /* the mood line may come back now */
     case 'moveBtn':clearTimeout(autoT);nextHour();break;
     case 'cantBtn':if(b.dataset.sure){sendAway();render()}else{b.dataset.sure='1';b.textContent='Let them go';toast('They\u2019ll leave empty-handed\u2026 Should I really let them go?',{thought:true,ms:4000});setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='I don\u2019t know how to make this'}},4000)}break;
     case 'stayBtn':S.stay=S.day+'-'+S.h;autoTick();break;
@@ -81,7 +81,7 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
   /* a book closes at a click anywhere outside it (the bookmarks and word bank columns too), except on a control */
   if(inside('books')&&!path.some(n=>n.matches?.('.tome, button, input, select, textarea, a'))){$('#books').classList.remove('open');render()}
   if(t.id==='dayEnd')$('#dayGo')?.click();  /* the day's summary has one way out: on to the next day */
-  const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard'))fx.hidden=true;
+  const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard')){fx.hidden=true;render()}
   if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
   /* a result read at the counter (nobody there) */
   /* a lingering customer leaves at a click elsewhere (the click that gave the order does not count) */

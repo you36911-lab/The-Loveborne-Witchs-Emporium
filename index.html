@@ -41,7 +41,6 @@
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
       <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button>
-      <select id="protoMark" aria-label="Tutorial mark"></select>
       </span>
     </div>
   </div>
@@ -79,7 +78,7 @@
 <!-- A book: the closed cover first, which swings open onto the spread; one entry per page, and pages turn. -->
 <div class="modal bookview" id="books" role="dialog" aria-modal="true" aria-label="Books">
   <div class="bookmain">
-    <aside class="markside"><h3 style="margin-top:0">Bookmarks</h3><div class="marks" id="marks"></div></aside>
+    <aside class="markside"><h3 style="margin-top:0" id="marksHead">Bookmarks</h3><div class="marks" id="marks"></div></aside>
     <div class="tomewrap" id="tomeWrap">
       <button class="turn prev" id="turnPrev" aria-label="Previous page">‹</button>
       <div class="tome closed" id="tome">
@@ -175,8 +174,7 @@
     <div class="row"><button class="main" id="gmYes">Start over</button><button id="gmNo">Keep playing</button></div></div>
 </div></div>
 <div class="toast guideline" id="guideLine" hidden></div>  <!-- the tutorial: the shopkeeper's thought (tutorial.js) -->
-<div class="guidering" id="guideRing" hidden aria-hidden="true"></div>  <!-- the tutorial: the mark on the next thing to click -->
-<div class="guidespot" id="guideSpot" hidden aria-hidden="true"></div>  <!-- the tutorial: the spotlight way of marking it -->
+<div class="guidering" id="guideRing" hidden aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1.5l2.6 7.1 7.4.3-5.8 4.6 2 7.2L12 16.6l-6.2 4.1 2-7.2L2 8.9l7.4-.3z"/></svg></div>  <!-- the tutorial: the star on the next thing to click -->
 <div class="modal hnote" id="hNote" role="dialog" aria-modal="true" aria-label="A note from Hester"><div class="hpaper" id="hNoteBody"></div></div>
 <div class="savemark" id="saveMark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="sm-ring" cx="12" cy="12" r="9.5"/><path class="sm-heart" d="M12 16.6s-4.3-2.6-4.3-5.4c0-1.4 1-2.4 2.3-2.4.9 0 1.6.5 2 1.1.4-.6 1.1-1.1 2-1.1 1.3 0 2.3 1 2.3 2.4 0 2.8-4.3 5.4-4.3 5.4z"/></svg></div>  <!-- the save icon (save() in core.js) -->
 <div class="toast" id="toast"></div>

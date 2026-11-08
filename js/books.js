@@ -184,7 +184,11 @@ function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(p
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
 function renderBooks(){
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  /* the notebook keeps Hester's notes beside it, as slips of paper; a book keeps its bookmarks there */
+  if(curBook===DIARY){const notes=Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);$('#marksHead').textContent='Hester’s notes';
+    $('#marks').innerHTML=notes.length?notes.map(k=>`<button class="hslip" data-hnote="${k}">${esc(HESTER_NOTES[k].title)}</button>`).join(''):'<span class="muted" style="font-size:13px">Nothing from Hester yet.</span>'}
+  else{$('#marksHead').textContent='Bookmarks';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>'}
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
@@ -262,6 +266,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
     $('#books').classList.remove('open');goTo('altar');
     if(b.dataset.booktest)doCraft(true);else{render();toast(`Laid out ${D.recipes[id].name} on the altar.`)}
     return}
+  if(b.dataset.hnote){openNote(b.dataset.hnote);return}  /* one of Hester's notes, read again */
   if(b.id==='cover'){openTome();return}
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
   if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}
