@@ -36,8 +36,9 @@ A step is done when the player does the thing, never by a "Next" button. If the 
 | Step | Glow on | Thought (subtitle) | Done when |
 |---|---|---|---|
 | 1 | the computer (new-email badge) | *The computer's chiming. Post, before I've even opened.* | Moonpost is open |
-| 2 | a dotted word in the apothecary's email (the first one read) | *A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.* | a word is collected |
-| 2b | Hester's emails, oldest (the bottom one) first | *And three from H., from before I came. She kept this shop before me.* | all three are read |
+| 2 | H.'s oldest email (the bottom of the inbox) | *Three from H., from before I came. The oldest first.* | it is open |
+| 2b | a dotted word in its body (joy, in her P.S.) | *A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.* | a word is collected |
+| 2c | her other two, bottom up, then the apothecary's | *She kept this shop before me. Best read all she left.* / *And the one that just came, from the apothecary.* | all read |
 | 3 | (Hester's note pops up: the aura colours, see below) | | closed |
 | 4 | the shop bell | *Right. Time to open the door. The bell calls the next one in.* | the bell is rung |
 
