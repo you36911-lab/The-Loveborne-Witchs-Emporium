@@ -705,6 +705,16 @@ button.small{font-size:12px;padding:2px 10px}
    over the painted door, so it looks painted until it moves. Hovering lets the door ease open a crack onto the dark
    inside; the open cupboard's door swings wide on its hinge. */
 .cubbies{display:contents}
+/* The workroom wall above the altar. The old decoration drawn into the room picture is covered by a patch of the same picture:
+   the plain wall from lower down (rows 845 to 1160 of 2752×1536), stretched up over it (the wood runs up and down, so it
+   stretches without showing), a little darker to match the wall up there, with soft edges. The new decoration
+   (ASSETS.wallDecor) hangs over it, centred where the old one was. */
+.wallpatch{position:absolute;left:39.8%;top:13.5%;width:20.5%;height:40.9%;pointer-events:none;
+  background-image:var(--room-img);background-repeat:no-repeat;background-size:100cqw calc(100cqh * 1.994);background-position:-39.8cqw -109.7cqh;
+  filter:brightness(.78);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);-webkit-mask-composite:source-in;
+  mask:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent),linear-gradient(transparent,#000 7%,#000 93%,transparent);mask-composite:intersect}
+.walldecor{position:absolute;left:50%;top:34.6%;width:22%;translate:-50% -50%;pointer-events:none;filter:brightness(.86) saturate(.95) drop-shadow(0 .4cqw .6cqw rgba(10,4,12,.55))}
 /* inside a cupboard: the picture of an empty cupboard (ASSETS.cabinetInside), stretched to the door */
 .cubby{--inside:var(--inside-img,none) center/100% 100% no-repeat,#120A0D}
 .cubby{position:absolute;padding:0;border:0;border-radius:2px;cursor:pointer;perspective:30cqw;box-shadow:none;
@@ -1086,8 +1096,10 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   70%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(90deg);opacity:0}}
 
 /* ---------- Title screen and Settings (menu.js) ---------- */
-/* The title: the shop at twilight, softened and darkened at the edges, the winged heart, the name in the dawn card's
-   italic serif, and the buttons stacked under it. It fades away when the game starts. */
+/* The title: the shop at twilight, softened and darkened at the edges, the splash picture (the logo with the game's name)
+   and the buttons stacked under it. It fades away when the game starts (TITLE_FADE_MS in config.js). While it waits, a few
+   quiet things move: the background drifts, the splash floats, a pink glow breathes behind it, light motes rise through the
+   room and glints twinkle on the silver frame (menu.js places them). */
 .titlescreen{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;
   color:#fff;background:#2C2652;transition:opacity .7s ease}
 .titlescreen[hidden]{display:none}
@@ -1097,10 +1109,6 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 @keyframes tsDrift{to{transform:scale(1.09) translateY(-1%)}}
 .ts-main{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 16px;text-align:center;animation:tsIn 1.4s ease-out both}
 @keyframes tsIn{from{opacity:0;transform:translateY(14px)}}
-.ts-logo{width:clamp(90px,13vh,160px);height:auto;filter:drop-shadow(0 2px 10px rgba(255,190,225,.45)) drop-shadow(0 2px 3px rgba(40,10,50,.5))}
-.ts-name{margin:.25em 0 .9em;color:#fff;font-family:var(--font-title);font-style:italic;font-weight:600;font-size:clamp(34px,5.6vw,80px);line-height:1;
-  text-shadow:0 1px 2px rgba(40,10,50,.55),0 3px 18px rgba(40,10,50,.6)}
-.ts-the{display:block;font-size:.42em;letter-spacing:.3em;text-transform:uppercase;font-style:normal;font-family:var(--font-text);font-weight:700;margin-bottom:.35em;opacity:.9}
 .ts-menu{display:flex;flex-direction:column;gap:10px;width:min(280px,80vw)}
 .ts-menu[hidden],.ts-confirm[hidden]{display:none}
 .ts-menu button{font-family:var(--font-title);font-size:clamp(20px,2.2vw,26px);font-weight:700;padding:6px 18px;border-radius:999px;
@@ -1110,8 +1118,36 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ts-confirm{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:var(--glow);padding:14px 18px;max-width:min(340px,90vw)}
 .ts-confirm p{margin:0 0 10px}
 .ts-confirm .row{justify-content:center}
-.ts-foot{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);margin:0;font-size:12px;letter-spacing:.12em;opacity:.6}
-@media (prefers-reduced-motion: reduce){.ts-bg,.ts-main{animation:none}}
+.ts-glow{position:absolute;left:50%;top:38%;width:min(70vw,900px);aspect-ratio:1;translate:-50% -50%;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,170,215,.28) 0%,rgba(200,150,240,.12) 40%,transparent 68%);animation:tsBreathe 7s ease-in-out infinite}
+@keyframes tsBreathe{50%{opacity:.55;transform:scale(1.06)}}
+.ts-splash{position:relative;width:min(46vh,62vw,560px);margin-bottom:clamp(10px,2.5vh,28px);animation:tsFloat 6s ease-in-out infinite}
+.ts-splash img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 18px rgba(40,10,50,.55))}
+@keyframes tsFloat{50%{transform:translateY(-8px)}}
+/* a glint: a four-pointed star of light that swells and fades */
+.ts-glints{position:absolute;inset:0;pointer-events:none}
+.ts-glints i{position:absolute;width:calc(26px * var(--s,1));aspect-ratio:1;translate:-50% -50%;
+  background:radial-gradient(circle,#fff 0 8%,transparent 30%),linear-gradient(transparent 46%,rgba(255,255,255,.95) 50%,transparent 54%),linear-gradient(90deg,transparent 46%,rgba(255,255,255,.95) 50%,transparent 54%);
+  -webkit-mask:radial-gradient(circle,#000 20%,transparent 70%);mask:radial-gradient(circle,#000 20%,transparent 70%);
+  filter:drop-shadow(0 0 4px rgba(255,220,240,.9));animation:tsGlint 1.8s ease-in-out both}
+@keyframes tsGlint{0%{opacity:0;transform:scale(.2) rotate(0)}45%{opacity:1;transform:scale(1) rotate(20deg)}100%{opacity:0;transform:scale(.3) rotate(45deg)}}
+/* light motes: small soft dots rising slowly from the bottom, swaying, fading in and out */
+.ts-motes{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.ts-motes i{position:absolute;bottom:-10px;width:var(--z);height:var(--z);border-radius:50%;background:#FFE3F1;box-shadow:0 0 8px 2px rgba(255,190,225,.6);
+  opacity:0;animation:tsMote var(--d) linear var(--w) infinite}
+@keyframes tsMote{0%{opacity:0;transform:translate(0,0)}10%{opacity:.8}50%{transform:translate(var(--x),-55vh)}85%{opacity:.6}100%{opacity:0;transform:translate(0,-110vh)}}
+@media (prefers-reduced-motion: reduce){.ts-bg,.ts-main,.ts-glow,.ts-splash,.ts-motes,.ts-glints{animation:none}.ts-motes,.ts-glints{display:none}}
+/* leaving the title, the shop's first background shows at once behind it (menu.js) */
+.scene.nofade .bg{transition:none}
+/* The menu in play (Esc). */
+#gameMenu{z-index:42}
+.menusheet{width:min(320px,100%);padding:16px 20px;text-align:center}
+.menusheet .row{justify-content:center}
+.menusheet h2{margin:0 0 10px}
+.gm-list{display:flex;flex-direction:column;gap:8px}
+.gm-list[hidden],.gm-confirm[hidden]{display:none}
+.gm-list button{padding:8px 14px;font-size:16px}
+.gm-confirm p{margin:0 0 10px}
 /* Settings sits above the title screen. */
 #settings{z-index:45}
 .setsheet{width:min(440px,100%);padding:16px 20px}

@@ -81,7 +81,7 @@ function renderShop(){const rt=rating(),days=[...new Set(S.reviews.map(r=>r.day)
   const shown=days.filter(d=>!reviewDay||d===reviewDay).map(d=>`<h3 class="sh-day">${esc(dayLabel(d))}</h3>`+
     S.reviews.filter(r=>r.day===d).reverse().map(reviewHTML).join('')).join('');
   $('#shopApp').innerHTML=`<aside class="sh-side">
-      <div class="sh-brand"><img src="${ASSETS.logoFlat}" alt=""><b>The Loveborne Witch’s Emporium</b></div>
+      <div class="sh-brand"><img src="${ASSETS.logo}" alt=""><b>The Loveborne Witch’s Emporium</b></div>
       <div class="sh-rating"><div class="sh-big">${rt.toFixed(1)}</div><div class="sh-stars">${stars(Math.round(rt))}</div>
         <small class="muted">${S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}</small></div>
       <nav class="sh-days" aria-label="Days">${[0,...days].map(d=>`<button data-rday="${d}" aria-pressed="${d===reviewDay}">${d?`Day ${d}`:'All days'}<span class="muted">${count(d)}</span></button>`).join('')}</nav>

@@ -41,7 +41,6 @@
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
       <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button>
-      <button id="restartBtn">Restart</button>
       </span>
     </div>
   </div>
@@ -54,6 +53,7 @@
      kind of ingredient; clicking a door swings it open. What is laid out stands on the table, which is the altar. -->
 <section class="view altarview" id="altarView" aria-label="The workroom" inert>
   <div class="room" id="room">
+    <div class="wallpatch" aria-hidden="true"></div><img class="walldecor" id="wallDecor" alt="">  <!-- the wall decoration over the table (see .walldecor in style.css) -->
     <div class="cubbies" id="cubbies" aria-label="Cabinets"></div>
     <div class="books" id="altarBooks" aria-label="The books"></div>  <!-- the same stack of books as on the counter, at the left end of the table -->
     <div class="tabletop" aria-label="The altar">
@@ -137,10 +137,9 @@
 <div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
 <!-- The title screen: the first thing shown when the game opens (menu.js). -->
 <div class="titlescreen" id="title" role="dialog" aria-modal="true" aria-label="The Loveborne Witch’s Emporium">
-  <div class="ts-bg" id="tsBg" aria-hidden="true"></div>
+  <div class="ts-bg" id="tsBg" aria-hidden="true"></div><div class="ts-glow" aria-hidden="true"></div>
   <div class="ts-main">
-    <img class="ts-logo" id="tsLogo" alt="">
-    <h1 class="ts-name"><span class="ts-the">The</span>Loveborne Witch’s Emporium</h1>
+    <div class="ts-splash"><img id="tsSplash" alt="The Loveborne Witch’s Emporium"><span class="ts-glints" id="tsGlints" aria-hidden="true"></span></div>
     <nav class="ts-menu" id="tsMenu">
       <button id="tsContinue" hidden>Continue<small id="tsWhere"></small></button>
       <button id="tsNew">New Game</button>
@@ -152,7 +151,7 @@
       <div class="row"><button class="main" id="tsYes">Start over</button><button id="tsNo">Keep it</button></div>
     </div>
   </div>
-  <p class="ts-foot">Prototype · week one</p>
+  <div class="ts-motes" id="tsMotes" aria-hidden="true"></div>
 </div>
 <!-- Settings: from the title screen (and later the menu in play). Kept under SETTINGS_KEY, apart from the save. -->
 <div class="modal" id="settings" role="dialog" aria-modal="true" aria-label="Settings"><div class="sheet setsheet">
@@ -161,6 +160,19 @@
   <div class="setrow"><span>Subtitle size</span><span class="seg" id="setSub"><button data-sub="0.85">Small</button><button data-sub="1">Medium</button><button data-sub="1.2">Large</button></span></div>
   <label class="setrow"><span>Full screen</span><input type="checkbox" id="setFull" class="switch"></label>
   <div class="row setfoot"><button class="main" id="setDone">Done</button></div>
+</div></div>
+<!-- The menu in play: Esc opens it (when nothing else is open) and closes it again. The shop waits behind it. -->
+<div class="modal" id="gameMenu" role="dialog" aria-modal="true" aria-label="Menu"><div class="sheet menusheet">
+  <div class="row"><h2>Paused</h2></div>
+  <nav class="gm-list" id="gmList">
+    <button class="main" id="gmResume">Resume</button>
+    <button id="gmSettings">Settings</button>
+    <button id="gmRestart">Restart</button>
+    <button id="gmTitle">Back to title</button>
+    <button id="gmQuit" hidden>Quit</button>
+  </nav>
+  <div class="gm-confirm" id="gmConfirm" hidden><p>Start the game over from Day One? This game will be lost.</p>
+    <div class="row"><button class="main" id="gmYes">Start over</button><button id="gmNo">Keep playing</button></div></div>
 </div></div>
 <div class="toast" id="toast"></div>
 <div class="mailfx" id="mailFx" hidden role="dialog" aria-label="New email"><div class="mailcard"><div class="env" aria-hidden="true"><div class="flap"></div><div class="seal">♥</div></div><p><b>New email</b><br><small class="muted" id="mailFrom"></small></p><div class="row" style="justify-content:center"><button class="main" id="mailRead">Read it now</button><button id="mailLater">Later</button></div></div></div>

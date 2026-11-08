@@ -41,7 +41,7 @@ function setBackground(key){const src=bgSrc(key);if(src===bgNow)return;
   {const L=lightFor(key),lum=.3*L[0]+.59*L[1]+.11*L[2];$('#counter').style.setProperty('--dlg-a',Math.max(.98,Math.min(.99,.99-(1-lum)*.03)).toFixed(2))}
   const next=bgTop==='bgA'?'bgB':'bgA';$('#'+next).style.backgroundImage=`url("${src}")`;
   {const br=BG_BRIGHTER[today()?.sabbat+'|'+key];$('#'+next).style.filter=br?`brightness(${br})`:''}
-  const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;
+  const room=$('#room');room.style.backgroundImage=`url("${ASSETS.altarRoom}")`;if(!$('#wallDecor').src)$('#wallDecor').src=ASSETS.wallDecor;
   /* full address: a url() in a variable is read from the stylesheet's folder */
   room.style.setProperty('--room-img',`url("${new URL(ASSETS.altarRoom,location.href).href}")`);
   room.style.setProperty('--wall-l',`url("${new URL(ASSETS.altarWallL,location.href).href}")`);
@@ -83,9 +83,10 @@ function fadeLight(to){const from=lightNow,t0=performance.now();
 const NUM_WORDS=['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],
   TENS_WORDS=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
 const numWord=n=>n<20?NUM_WORDS[n]:n<100?TENS_WORDS[Math.floor(n/10)]+(n%10?'-'+NUM_WORDS[n%10]:''):String(n);
-function showDawn(){const T=today();dawnUntil=Date.now()+DAWN_MS;
-  $('#dayCard').innerHTML=`<span class="dc-title"><i class="dc-rule"></i>Day ${numWord(S.day)}<i class="dc-rule"></i></span><small>${esc(T.weekday)}${T.sabbat?' \u2726 '+esc(T.sabbat):''}</small>`;$('#dayCard').classList.add('on');document.body.classList.add('dawning');
-  render();setTimeout(()=>{$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');render()},DAWN_MS);setTimeout(render,DAWN_MS+AFTER_DAWN_MS);setTimeout(render,DAWN_MS+MAIL_AFTER_DAWN_MS)}
+/* lead: wait this long before the card comes up (the title screen fading away first); the dawn picture is behind it already */
+function showDawn(lead=0){const T=today();dawnUntil=Date.now()+lead+DAWN_MS;
+  $('#dayCard').innerHTML=`<span class="dc-title"><i class="dc-rule"></i>Day ${numWord(S.day)}<i class="dc-rule"></i></span><small>${esc(T.weekday)}${T.sabbat?' \u2726 '+esc(T.sabbat):''}</small>`;document.body.classList.add('dawning');setTimeout(()=>$('#dayCard').classList.add('on'),lead);
+  render();setTimeout(()=>{$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');render()},lead+DAWN_MS);setTimeout(render,lead+DAWN_MS+AFTER_DAWN_MS);setTimeout(render,lead+DAWN_MS+MAIL_AFTER_DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
 function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
@@ -94,18 +95,21 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
   if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+AFTER_DAWN_MS||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
-/* The bell brings the next customer, and only the bell does: someone due this hour comes straight in; otherwise time moves
-   on to the next hour with someone (or something) in it, and if that is a customer, they come in. */
-function ringBell(){const bell=$('#bellBtn');
+/* The bell brings the next customer, and only the bell does: someone due this hour comes in; otherwise time moves
+   on to the next hour with someone (or something) in it, and if that is a customer, they come in.
+   The bell rings first; a moment later (BELL_TO_DOOR_MS) the door opens and the customer appears. The bell does nothing
+   while it waits for the door. */
+let bellWait=0;
+function letIn(){bellWait=setTimeout(()=>{bellWait=0;S.rung=true;render()},BELL_TO_DOOR_MS)}
+function ringBell(){const bell=$('#bellBtn');if(bellWait)return;
   S.parting=null;  /* the bell sends a lingering customer on their way */
   if(currentVisitor()){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');playBell();toast('Someone is already at the counter.');return}
   bell.classList.remove('ring');void bell.offsetWidth;bell.classList.add('ring');playBell();
-  if(someoneDue()){S.rung=true;S.result=null;render();return}
+  if(someoneDue()){S.result=null;render();letIn();return}
   if(S.h>=3){nextHour();return}
   const mail0=Object.keys(S.mail||{}).length;
   do{nextHour(true)}while(S.h<3&&!someoneDue()&&Object.keys(S.mail||{}).length===mail0);
-  if(someoneDue())S.rung=true;
-  S.result=null;render()}
+  S.result=null;render();if(someoneDue())letIn()}
 function openInfo(title,html){$('#infoTitle').textContent=title;$('#infoBody').innerHTML=html;$('#info').classList.add('open')}
 /* The aura is read from the colour glowing around the crystal ball, never as words.
    Hester's first letter says what the colours mean. */

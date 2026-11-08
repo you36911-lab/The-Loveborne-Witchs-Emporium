@@ -17,6 +17,8 @@ const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */
 const DAWN_MS = 1800;
 const AFTER_DAWN_MS = 1100;  /* after the day card fades, a short pause before the mood line comes up at the bottom */
+const BELL_TO_DOOR_MS = 1400;  /* after the shop bell rings, the pause before the door opens and the customer comes in */
+const TITLE_FADE_MS = 700;  /* the title screen fading away as the game starts (keep in step with .titlescreen in style.css) */
 const MAIL_AFTER_DAWN_MS = 1800;  /* after the day card fades, the pause before the morning's new email pops up */
 
 /* How each ingredient's picture is drawn, so a cupboard stands like things together: 0 bottles and flasks, 1 cork-stoppered
@@ -120,8 +122,9 @@ const ASSETS = {
   altarWallL: 'assets/scene/altar-wall-left.jpg', altarWallR: 'assets/scene/altar-wall-right.jpg',
   cabinetInside: 'assets/scene/cabinet-inside.jpg',  /* seen behind a cupboard door when it opens */
   cabinetBack: 'assets/scene/cabinet-back.jpg',  /* the back panel of that cupboard (wood grain): behind the things in an open cupboard */
-  logo: 'assets/scene/logo.png',  /* the shop's winged heart, as drawn (the tab icon is assets/scene/favicon.png: the flat pink version below, squared and 128px) */
-  logoFlat: 'assets/scene/logo-flat.png',
+  logo: 'assets/scene/logo.png',  /* the shop's logo: the winged heart in its silver frame (the tab icon, assets/scene/favicon.png, is the same, squared and 128px) */
+  splash: 'assets/scene/splash.png',  /* the title screen: the logo with the game's name on the heart */
+  wallDecor: 'assets/scene/wall-decor.png',  /* on the workroom wall above the altar */
   sounds: {  /* recorded sounds (see js/sound.js) */
     shopBell:'assets/sounds/shop-bell.mp3', altarBell:'assets/sounds/altar-bell.mp3', notify:'assets/sounds/notify.mp3',
     receipt:'assets/sounds/receipt.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', cabinetOpen:'assets/sounds/cabinet-open.mp3', cabinetClose:'assets/sounds/cabinet-close.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3'},
