@@ -57,7 +57,7 @@ const LESSONS=[
     {glow:'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',wait:4500,allow:[],
       ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
     /* the rest of the notebook is the player's own: they may write in it, and a click beside it closes it */
-    {glow:'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
+    {glow:()=>memoTyped?'':'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',  /* the star goes once something is written */done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER],end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
@@ -117,6 +117,8 @@ const LESSONS=[
    one at or after it starts again. (close1's "2-Sunrise-" means it is over once Day 2 has begun.) */
 function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.split('-');return +d*4+HOURS.indexOf(hr)};
   LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]})}
+/* the notebook step: once the player writes something, its star has done its job and goes */
+let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset.memo!==undefined)memoTyped=true});
 /* ---------- running it ---------- */
 let guideStepAt=0,guideNow='';  /* when the current step began (for waits), and which lesson/step that was */
 function guideState(){return S.guide||(S.guide={})}
