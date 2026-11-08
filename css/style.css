@@ -180,7 +180,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .made .bow::before,.made .bow::after{content:"";position:absolute;bottom:0;width:50%;height:100%;border:max(3px,.35vw) solid #E57FAE;border-radius:50% 50% 10% 50%}
 .made .bow::before{left:0;rotate:-20deg}.made .bow::after{right:0;rotate:20deg;border-radius:50% 50% 50% 10%}
 .made .tag{position:absolute;right:-28%;top:42%;max-width:85%;background:#FFF9EC;border:1px solid #CBB79B;border-radius:3px;padding:.15em .45em;rotate:8deg;
-  font-family:'Caveat',cursive;font-size:clamp(11px,1vw,18px);line-height:1.05;color:#3D2A5C;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+  font-family:'Caveat',cursive;font-size:clamp(11px,1vw,18px);line-height:1.05;color:#3A2A3A;box-shadow:0 2px 3px rgba(0,0,0,.25)}
 .scene .bell{left:68.4%;bottom:18.5%;width:4.8%;z-index:0}
 .scene .computer{left:72%;bottom:11.5%;width:27%;z-index:1}
 .scene .pcbadge{position:absolute;right:3%;top:2%;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;border-radius:1em}
@@ -285,7 +285,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* hovering a blank: no box, only its label and its line turn pink (the line a little bolder) */
 .wblank:hover,.wblank.open,.wblank:active{color:var(--kw-text);background:none;box-shadow:none;transform:none}
 .wblank:hover i,.wblank.open i{border-bottom:2px solid var(--pink)}
-.chip.hand,.pg .chip.hand,.leaf .chip.hand{font-family:'Caveat',cursive;font-size:1.35em;line-height:1;padding:0 8px;margin:0!important;color:#3D2A5C;background:none;border:0;box-shadow:none;border-bottom:1.5px solid #C9A8B8;border-radius:0}
+.chip.hand,.pg .chip.hand,.leaf .chip.hand{font-family:'Caveat',cursive;font-size:1.35em;line-height:1;padding:0 8px;margin:0!important;color:#3A2A3A;background:none;border:0;box-shadow:none;border-bottom:1.5px solid #C9A8B8;border-radius:0}
 .chip.hand:hover,.chip.hand:active{color:var(--kw-text);background:none;box-shadow:none;transform:none;border-bottom:2px solid var(--pink)}
 .chip.hand.on{border-bottom-color:var(--pink)}
 .wgroup{position:relative}
@@ -661,7 +661,7 @@ button.small{font-size:12px;padding:2px 10px}
    book's width), measured on diary-open.png (968px wide): 15 rules, 37.25px apart, the first 8.05cqw below the page's top. */
 .bookview.diary :is(.markside,.bank){display:none}
 .bookview.diary .bookmain{grid-template-columns:minmax(0,1fr)}.bookview.diary .bookmain>.tomewrap{grid-column:1}.bookview.diary .tome{width:min(calc(100% - 132px),calc((100dvh - 200px) * var(--ar)))}
-.tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3D2A5C;overflow:hidden;
+.tome.diary :is(.pg,.pcopy){font-family:'Caveat',cursive;font-size:2.7cqw;line-height:3.848cqw;color:#3A2A3A;overflow:hidden;
   padding:5.2cqw 3.5cqw 3.7cqw 2.9cqw}
 .tome.diary :is(.pg.right,.pcopy.right){padding:5.2cqw 3cqw 3.7cqw 3.4cqw}
 .tome.diary .pnum{display:none}
@@ -976,7 +976,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 /* the tick sits just after the last word, in a small space every title keeps at its end (chosen or not) plus the gap
    before the icons, so choosing a recipe never changes how its title wraps or moves the page */
 .recipe .rtitle h3{padding-right:.45em}
-.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:#3D2A5C;fill:currentColor;stroke:currentColor;stroke-width:1;stroke-linejoin:round;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
+.recipe .tick{position:absolute;left:calc(100% + .08em);bottom:.12em;width:.9em;height:.82em;color:#3A2A3A;fill:currentColor;stroke:currentColor;stroke-width:1;stroke-linejoin:round;rotate:-4deg;overflow:visible;filter:url(#ink);opacity:.92}  /* a pen-drawn tick (an inline drawing, so it looks written, not typed) */
 .bookicons{flex:none;display:flex;gap:.6em;padding-top:.3em}
 .pg .bookico,.leaf .bookico,.bookico{background:none;border:0;box-shadow:none;padding:0;border-radius:6px;line-height:0;cursor:pointer}
 .bookico img{height:1.7em;width:auto;display:block;transition:transform .15s}
