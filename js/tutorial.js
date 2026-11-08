@@ -41,11 +41,12 @@ const LESSONS=[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
       /* came back to it (a reload) with the email still unread: its card comes up again, as it was */
       ensure:()=>{if(isOpen('pc')||!$('#mailFx').hidden)return;const m=mailIn().find(m=>S.mail&&S.mail[m.i]===false);if(m)showMailFx(m)}},
-    {glow:'[data-lsel="start:0"]',say:'From H.… She kept this shop before me.',done:()=>S.letters[0],allow:[]},
-    {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:[]},
-    /* the word bank: the apothecary's email has the first dotted word (Hester's have none) */
-    {glow:()=>letterSel==='mail:0'?'#letterRead .kw':'[data-lsel="mail:0"]',say:()=>letterSel==='mail:0'?'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.':'And one from the apothecary.',
+    /* the word bank, in the first email read (the apothecary's: Read it now opens it, and it has the first dotted word) */
+    {glow:()=>letterSel==='mail:0'?'#letterRead .kw':'[data-lsel="mail:0"]',say:()=>letterSel==='mail:0'?'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.':'The apothecary first.',
       done:()=>S.bank.length>0,allow:[]},
+    /* then Hester's, oldest first: the bottom one, then up */
+    {glow:'[data-lsel="start:0"]',say:'And three from H., from before I came. She kept this shop before me.',done:()=>S.letters[0],allow:[]},
+    {glow:()=>!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'There’s more from her. Best read it all.',done:()=>S.letters.every(Boolean),allow:[]},
     /* the computer closes at a click outside it, like every popup: only that click works here */
     {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[t=>t.id==='pc']},
     {note:'aura'},

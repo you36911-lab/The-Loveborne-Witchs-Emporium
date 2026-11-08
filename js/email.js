@@ -8,10 +8,11 @@ const slug=s=>s.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'');
 /* "Mill Lane Apothecary, Wrenmoor" is sent from millaneapothecary@wrenmoor.owl. */
 function senderOf(from){const [who,where]=from.split(/,\s*/);return {name:who,addr:`${slug(who)}@${where?slug(where):'moonpost'}.owl`}}
 function avatarOf(name){let h=0;for(const c of name)h=(h*31+c.charCodeAt(0))>>>0;return AVATARS[h%AVATARS.length]}
-/* Every email, newest first. The three from H. were waiting in the inbox when the shop became yours. */
+/* Every email, newest first. The three from H. were waiting in the inbox when the shop became yours: her first one
+   (On the Moon) is the oldest, so it is at the very bottom. */
 function allMail(){return [
   ...mailIn().reverse().map(m=>({key:'mail:'+m.i,...senderOf(m.from),subject:m.title,lines:m.lines,open:S.mail[m.i],when:`Day ${m.day}`,whenFull:`Day ${m.day}, ${m.hour}`})),
-  ...D.letters.map((l,i)=>({key:'start:'+i,name:'H.',addr:'h@moonpost.owl',subject:l.title,lines:l.lines,open:S.letters[i],when:'Earlier',whenFull:'Before you came'}))]}
+  ...D.letters.map((l,i)=>({key:'start:'+i,name:'H.',addr:'h@moonpost.owl',subject:l.title,lines:l.lines,open:S.letters[i],when:'Earlier',whenFull:'Before you came'})).reverse()]}
 function folderMail(f){const arc=S.archive||(S.archive=[]),all=allMail();
   return all.filter(x=>arc.includes(x.key)===(f==='archive'))}
 function openLetters(sel){mailFolder='inbox';mailQuery='';$('#wmSearch').value='';letterSel=sel||'';if(sel)markOpen(sel);openPC('mail')}

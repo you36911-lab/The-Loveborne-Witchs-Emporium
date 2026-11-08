@@ -59,9 +59,33 @@ function leaveTitle(start){const t=$('#title'),scene=$('#scene');
   Promise.race([im.decode().catch(()=>{}),new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(()=>{
     void scene.offsetWidth;scene.classList.remove('nofade');$('#world').inert=false;t.classList.add('gone');
     setTimeout(()=>{t.hidden=true;clearTimeout(glintT)},TITLE_FADE_MS)}))}
+/* ---------- coming back to where the player left off ----------
+   When the page is left (closed, reloaded) or the player goes back to the title, what was open is kept in the save
+   (S.ui): the workroom or the counter, the computer with its apps and the email being read, a book and its page, the
+   phone, an open cupboard, the receipts, the end-of-day card. Continue puts it all back, so the player is on the very
+   screen they left (the tutorial carries on from there too). */
+function uiState(){const on=id=>$('#'+id).classList.contains('open');
+  return {view,books:on('books')?curBook:'',pc:on('pc')?{apps:[...pcOpen],min:[...pcMin],letter:letterSel,folder:mailFolder}:null,
+    phone:on('phoneView'),shelf:openShelf||'',receipts:on('receiptsView'),dayEnd:on('dayEnd')?$('#dayEndBody').innerHTML:''}}
+function keepUI(){if(titleOpen())return;S.ui=uiState();save()}
+addEventListener('pagehide',keepUI);addEventListener('beforeunload',keepUI);
+function restoreUI(u){if(!u)return;
+  if(u.view==='altar')goTo('altar');
+  if(u.dayEnd){$('#dayEndBody').innerHTML=u.dayEnd;$('#dayEnd').classList.add('open');$('#dayGo').onclick=openNextDay;return}
+  if(u.shelf){openShelf=u.shelf;renderShelves()}
+  if(u.books){curBook=u.books;if(u.books===DIARY)openDiary();else openBooks()}
+  if(u.pc){mailFolder=u.pc.folder||'inbox';letterSel=u.pc.letter||'';openPC();u.pc.apps.forEach(a=>openApp(a));u.pc.min.forEach(a=>minApp(a))}
+  if(u.phone)openPhone();
+  if(u.receipts)openReceipts()}
+/* the title opened from the menu in play: everything is still as it was behind it, so Continue only lifts the title */
+let titleFromGame=false;
+
 /* a new game opens like the first one: the dawn picture behind the fading title, then the day card, then the post */
-function newGame(){leaveTitle(()=>{newState();showDawn(TITLE_FADE_MS+150)})}
-$('#tsContinue').onclick=()=>leaveTitle(()=>{if(S.day===1&&S.h===0&&!S.hist.length)showDawn(TITLE_FADE_MS+150);else render()});
+function newGame(){titleFromGame=false;leaveTitle(()=>{newState();showDawn(TITLE_FADE_MS+150)})}
+/* Continue: back where the player left off. Only a game where nothing has happened yet (no post has come) opens at dawn again. */
+$('#tsContinue').onclick=()=>{const live=titleFromGame;titleFromGame=false;leaveTitle(()=>{
+  if(live){render();return}
+  if(S.day===1&&S.h===0&&!S.hist.length&&!Object.keys(S.mail||{}).length)showDawn(TITLE_FADE_MS+150);else{render();restoreUI(S.ui)}})};
 $('#tsNew').onclick=()=>{if(!hasSave())return newGame();$('#tsMenu').hidden=true;$('#tsConfirm').hidden=false};
 $('#tsYes').onclick=newGame;
 $('#tsNo').onclick=()=>{$('#tsConfirm').hidden=true;$('#tsMenu').hidden=false};
@@ -83,8 +107,8 @@ $('#gmSettings').onclick=openSettings;
 $('#gmRestart').onclick=()=>{$('#gmList').hidden=true;$('#gmConfirm').hidden=false};
 $('#gmNo').onclick=()=>{$('#gmConfirm').hidden=true;$('#gmList').hidden=false};
 $('#gmYes').onclick=()=>{closeMenu();newState();showDawn()};  /* a new game opens like the first one: the day card, then the post */
-$('#gmTitle').onclick=()=>{save();$('#gameMenu').classList.remove('open');showTitle()};
-$('#gmQuit').onclick=()=>{save();window.close()};
+$('#gmTitle').onclick=()=>{S.ui=uiState();save();titleFromGame=true;$('#gameMenu').classList.remove('open');showTitle()};
+$('#gmQuit').onclick=()=>{keepUI();window.close()};
 $('#gameMenu').onclick=e=>{if(e.target.id==='gameMenu')closeMenu()};  /* a click beside the panel resumes */
 
 /* Esc: Settings first, then the title screen, then the menu; anything else open handles its own Esc (but the menu is always

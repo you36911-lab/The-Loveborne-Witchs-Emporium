@@ -181,9 +181,11 @@ function endDay(){const before=rating(),reviews=S.pend.splice(0);
   <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
   $('#dayEnd').classList.add('open');
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
-  $('#dayGo').onclick=()=>{$('#dayEnd').classList.remove('open');
-    if(last){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
-    showDawn()}}
+  $('#dayGo').onclick=openNextDay}
+/* the end-of-day card's button: on to the next day (or, after the last playable day, a new game) */
+function openNextDay(){$('#dayEnd').classList.remove('open');
+  if(S.day>=LAST_PLAYABLE_DAY){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
+  S.ui=null;showDawn()}
 function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   return `<h3>Your week</h3><p>Orders by stars: \u2605\u2605\u2605\u2605\u2605 ${s.perfect}, \u2605\u2605\u2605\u2605 ${s.good}, \u2605\u2605 ${s.clumsy}, \u2605 ${s.failed}. Advice given ${s.advice}. Customers who left empty-handed ${s.missed}.</p>
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
