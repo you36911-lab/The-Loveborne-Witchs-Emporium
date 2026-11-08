@@ -85,7 +85,7 @@ const LESSONS=[
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]},
     /* what she lets slip as she goes (the hint): it comes back in her review on the computer, after closing */
-    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll read it again in her review on my computer, once the shop closes.':'',done:()=>!S.parting,allow:[]}]},
+    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll read it again in her review on my computer, once the shop closes.':'',done:()=>!S.parting,allow:[],holdCustomer:4000}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
@@ -137,6 +137,8 @@ let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset
    once when the balloon is clicked (wordsDone, in scene.js). spokenFor(ms): they finished at least this long ago (counted within the current step). */
 let spokeAt=0;
 function spokenFor(ms){if(!wordsDone()){spokeAt=0;return false}if(!spokeAt)spokeAt=Date.now();return Date.now()-spokeAt>=ms}
+/* a step with holdCustomer keeps a parting customer that much longer, so its thought can be read */
+function partingExtra(){return ringStep&&ringStep.holdCustomer||0}
 /* ---------- running it ---------- */
 let guideStepAt=0,guideNow='';  /* when the current step began (for waits), and which lesson/step that was */
 function guideState(){return S.guide||(S.guide={})}

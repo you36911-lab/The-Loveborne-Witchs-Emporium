@@ -104,7 +104,9 @@ function wordsDone(){const b=$('#counter .balloon');if(!b)return false;if(!typeF
 let partingDoneAt=0;
 setInterval(()=>{if(!S.parting||$('#title').hidden===false){partingDoneAt=0;return}
   if(!wordsDone()){partingDoneAt=0;return}if(!partingDoneAt)partingDoneAt=Date.now();
-  if(Date.now()-partingDoneAt>=PARTING_MS){partingDoneAt=0;S.parting=null;render()}},300);
+  /* the tutorial can keep them a little longer, while its thought about them is read (partingExtra in tutorial.js) */
+  const extra=typeof partingExtra==='function'?partingExtra():0;
+  if(Date.now()-partingDoneAt>=PARTING_MS+extra){partingDoneAt=0;S.parting=null;render()}},300);
 /* The bell brings the next customer, and only the bell does: someone due this hour comes in; otherwise time moves
    on to the next hour with someone (or something) in it, and if that is a customer, they come in.
    The bell rings first; a moment later (BELL_TO_DOOR_MS) the door opens and the customer appears. The bell does nothing
