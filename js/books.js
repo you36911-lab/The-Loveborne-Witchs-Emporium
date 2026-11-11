@@ -49,6 +49,17 @@ function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
     (pic?`<img class="in-pic" src="${pic}" alt="">`:it.look?`<p class="in-look">${esc(it.look)}</p>`:'')+
     (it.line?`<p class="in-line">${esc(it.line)}</p>`:'')+`<p class="in-done">✦ Complete</p>`;
   $('#ingNote').classList.add('open')}
+/* A recipe just solved (every blank written, from the book or by a perfect test craft): its page comes up the same way,
+   with the spell's picture as the Recipe Book prints it (only its outline until it has been made just right), what it is
+   for, and everything that goes into it. */
+function showRecipeDone(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=seen?ASSETS.spells[id]:ASSETS.spellOutlines[id];
+  const row=(k,v)=>`<p class="in-row"><b>${k}</b> ${esc(v)}</p>`;
+  $('#ingNoteBody').innerHTML=`<p class="in-cat">${esc(r.type)}</p><h3>${esc(r.name)}</h3><p class="in-intent">${esc(r.intent)}.</p>`+
+    `<p class="in-kw">${r.themes.map(esc).join(' · ')}</p>`+
+    (pic?`<img class="in-pic${seen?'':' outline'}" src="${pic}" alt="">`:'')+
+    `<div class="in-rows">${row('Ingredients',r.ing.join(', '))}${r.candle?row('Candle',r.candle):''}${r.tarot?row('Card',r.tarot):''}${r.conds.length?row('When',r.conds.map(condName).join(', ')):''}</div>`+
+    `<p class="in-done">✦ Recipe solved</p>`;
+  $('#ingNote').classList.add('open')}
 $('#ingNote').addEventListener('click',()=>$('#ingNote').classList.remove('open'));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#ingNote').classList.contains('open')){$('#ingNote').classList.remove('open');e.stopImmediatePropagation()}},true);
 function entryHTML(e){
@@ -270,7 +281,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
     if(pickOpen)placeIndex();return}
   if(b.dataset.choose){const[row,id,i]=b.dataset.choose.split('|'),v=b.dataset.val,n=noteOf(id);
     if(row==='ing')n.ing[+i]=v;else if(row==='when')n.when[+i]=v;else if(row==='candle')n.candle=v;else if(row==='tarot')n.tarot=v;
-    pickOpen='';if(recipeLocked(id))toast('Recipe solved ✦');save();renderBooks();return}
+    pickOpen='';if(recipeLocked(id))setTimeout(()=>showRecipeDone(id),350);save();renderBooks();return}
   if(b.dataset.chooseRecipe){const id=b.dataset.chooseRecipe;S.target=String(S.target)===id?'':id;save();renderBooks();render();return}
   if(b.dataset.rmCandle){noteOf(b.dataset.rmCandle).candle='';save();renderBooks();return}
   if(b.dataset.rmTarot){noteOf(b.dataset.rmTarot).tarot='';save();renderBooks();return}
@@ -308,7 +319,7 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
   if(t.dataset.setTarot!==undefined)noteOf(t.dataset.setTarot).tarot=t.value;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
-  if(id&&recipeLocked(id))toast('Recipe solved \u2726')
+  if(id&&recipeLocked(id))setTimeout(()=>showRecipeDone(id),350)
   save();renderBooks()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(pickOpen){pickOpen='';renderBooks();return}$('#books').classList.remove('open');render()}
   /* the arrow keys turn the pages, unless a box or list has the keyboard */

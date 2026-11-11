@@ -113,7 +113,7 @@ function judge(r,test){
     /* A perfect test says so plainly and writes the recipe into the book, so the player is never left guessing. */
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
-      if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});toast('Recipe solved \u2726')}}
+      if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});setTimeout(()=>showRecipeDone(r.id),1600)}}  /* once the crafting has settled, its page comes up (books.js) */
     S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10);  /* the result goes to the phone (phone.js) */
     /* a perfect test of what the waiting customer ordered is ready to give, as if made with the bell */
     const o=orderRecipe(),give=ev.grade==='Perfect'&&o&&String(o.id)===String(r.id)&&S.queue;
