@@ -138,9 +138,10 @@ const LESSONS=[
   /* taught where they first matter */
   {id:'words',when:()=>S.day>=2&&!S.bank.length&&!!seen('.kw'),until:()=>S.bank.length>0,steps:[
     {glow:'.kw',say:'That word, with the dots under it… worth keeping.',done:()=>S.bank.length>0}]},
-  {id:'blanks',when:()=>S.bank.length>0&&isOpen('books')&&!!seen('#books .pg .blank'),until:()=>Object.values(S.fills).some(f=>(f||[]).some(Boolean)),steps:[
-    {glow:'#bank .word',say:'A word I’ve kept. I pick it up…',done:()=>!!selWord},
-    {glow:'#books .pg .blank:not(.filled)',say:'…and put it where it belongs.',done:()=>Object.values(S.fills).some(f=>(f||[]).some(Boolean))}]},
+  /* the word bank: a blank in a book unfolds the words kept (or a word picked up from the bank goes straight in) */
+  {id:'blanks',when:()=>S.bank.length>0&&isOpen('books')&&!!seen('#books .pg button.blank'),until:()=>Object.values(S.fills).some(f=>(f||[]).some(Boolean)),steps:[
+    {glow:'#books .pg button.blank:not(.filled)',say:'A gap in the page. Tapped, it shows the words I’ve kept.',done:()=>pickOpen.startsWith('kw|')||!!selWord},
+    {glow:()=>selWord?'#books .pg button.blank:not(.filled)':'#books .kwindex [data-val]:not([data-val=""])',say:'…and one of them belongs here.',done:()=>Object.values(S.fills).some(f=>(f||[]).some(Boolean))}]},
   {id:'candle',when:()=>(S.failTests||0)>0&&!(S.guideNotes||{}).tests,until:()=>(S.guideNotes||{}).tests,steps:[
     {glow:'#testCandles',say:'One candle out. Five, and the neighbours will smell it.',wait:6000},{note:'tests'}]},
   {id:'timing',when:()=>{const r=S.target&&D.recipes[S.target];return !!r&&r.conds.some(c=>c.t==='time')&&pageOf()==='recipe:'+S.target&&isOpen('books')},until:()=>false,steps:[

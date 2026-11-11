@@ -1287,3 +1287,9 @@ body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none
 .titlescreen .ts-bg{opacity:0;transition:opacity .8s ease}
 .titlescreen.ready .ts-bg{opacity:1}
 .titlescreen:not(.ready) :is(.ts-main,.ts-motes){visibility:hidden;animation:none}
+/* a blank in a book entry unfolds the words in the word bank under it (wordIndex in books.js), like the Recipe Book's lists */
+.kwpick{position:relative;display:inline-block}
+.kwpick>.kwindex{left:0;top:calc(100% + 4px);width:max-content;min-width:11em;max-width:20em}
+.kwindex .rub span{font-style:italic;color:var(--ink-soft)}
+.kwindex .kwnone{grid-column:1/-1;margin:0;font-size:.85em;font-style:italic;color:var(--ink-soft);white-space:normal}
+.blank.open{border-bottom:2px solid var(--kw);color:var(--kw-text)}
