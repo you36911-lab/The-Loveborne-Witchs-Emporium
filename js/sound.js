@@ -34,8 +34,9 @@ function playCabinetClose(){sfx('cabinetClose',.5,0,.74)}
 /* A button on the title screen: a clear little ding, "Ding" (freesound_community). The recording rings on for 2.7s;
    its first 0.45s plays as it is, then it fades out over 0.35s. */
 function playDing(){sfx('ding',.45,800,0,350)}
-/* The computer: a mouse click for every click on it ("Computer Mouse Click", Universfield): the computer on the counter,
-   anywhere on its screen (apps, icons, windows, the taskbar), and the buttons on a new email's card. A click the tutorial
-   holds back makes no sound (it never gets this far). */
+/* The computer: a mouse click for every click on its screen (apps, icons, windows, the email list, the taskbar) and on a
+   new email's card buttons; not for the computer on the counter itself. The path is taken as the click began, since a click
+   on the screen often redraws what was clicked (the email list does) before this hears it. A click the tutorial holds back
+   makes no sound (it never gets this far). */
 function playClick(){sfx('mouseClick',.5)}
-document.addEventListener('click',e=>{if(e.target.closest('#pcScreen, #pcBtn, #mailFx button'))playClick()});
+document.addEventListener('click',e=>{if(e.composedPath().some(n=>n.id==='pcScreen'||(n.matches&&n.matches('#mailFx button'))))playClick()});
