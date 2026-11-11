@@ -38,5 +38,5 @@ function playDing(){sfx('ding',.45,800,0,350)}
    new email's card buttons; not for the computer on the counter itself. The path is taken as the click began, since a click
    on the screen often redraws what was clicked (the email list does) before this hears it. A click the tutorial holds back
    makes no sound (it never gets this far). */
-function playClick(){sfx('mouseClick',.5)}
+function playClick(){sfx('mouseClick',.5,0,.15)}  /* the recording starts with 0.15s of silence: skip it, so the click lands with the finger */
 document.addEventListener('click',e=>{if(e.composedPath().some(n=>n.id==='pcScreen'||(n.matches&&n.matches('#mailFx button'))))playClick()});
