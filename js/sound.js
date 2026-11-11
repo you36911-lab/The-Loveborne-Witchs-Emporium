@@ -34,3 +34,8 @@ function playCabinetClose(){sfx('cabinetClose',.5,0,.74)}
 /* A button on the title screen: a clear little ding, "Ding" (freesound_community). The recording rings on for 2.7s;
    its first 0.45s plays as it is, then it fades out over 0.35s. */
 function playDing(){sfx('ding',.45,800,0,350)}
+/* The computer: a mouse click for every click on it ("Computer Mouse Click", Universfield): the computer on the counter,
+   anywhere on its screen (apps, icons, windows, the taskbar), and the buttons on a new email's card. A click the tutorial
+   holds back makes no sound (it never gets this far). */
+function playClick(){sfx('mouseClick',.5)}
+document.addEventListener('click',e=>{if(e.target.closest('#pcScreen, #pcBtn, #mailFx button'))playClick()});

@@ -27,7 +27,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/data/story.js`: customer visits, post letters, auras, starting stock.
 - `js/core.js`: save state, helpers, letters and post, calendar conditions.
 - `js/crafting.js`: comparing the altar with a recipe; clue lines.
-- `js/sound.js`: sounds, all recordings in `assets/sounds` (Pixabay, Pixabay Content License): the shop bell, the altar's desk bell, the computer's notification, the receipts at closing, the door as a customer comes in, a test-craft candle going out, the phone, crafting, the cupboard doors, the title screen's buttons (a ding).
+- `js/sound.js`: sounds, all recordings in `assets/sounds` (Pixabay, Pixabay Content License): the shop bell, the altar's desk bell, the computer's notification, the receipts at closing, the door as a customer comes in, a test-craft candle going out, the phone, crafting, the cupboard doors, the title screen's buttons (a ding), clicks on the computer (a mouse click).
 - `js/visitors.js`: who is at the counter.
 - `js/scene.js`: rendering, the shop scene, hour backgrounds and the dawn card.
 - `js/actions.js`: clicks, the bell, giving orders, the end of the day.
