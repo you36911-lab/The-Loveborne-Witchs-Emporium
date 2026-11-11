@@ -3,6 +3,14 @@
 Built in `js/tutorial.js` (2026-11-08). Agreed: what is taught and in what order, how it is shown, no "Skip tutorials",
 and a replay (a new game after one that got past Day 2) has no tutorial. Saving is not mentioned: a small save icon shows instead.
 
+Changes after the designer's playtest (2026-11-11):
+- Emails: H.'s three oldest first, then the apothecary's; the email that is open can always be read and its words tapped. The word bank is taught in her second email (her first no longer has the aura P.S.).
+- The star is bigger, with a breathing golden halo.
+- First order: a step on the recipe's themes ("Everything that goes in carries one of those"); each ingredient is given one theme of its own (Chamomile comfort, Blue thread calm, Small key opportunity).
+- After the first sale (lesson sale1): the till and its receipt, then her review on My Shop and its P.S. (reviews now come in as customers leave). The Day 2 reviews lesson is gone.
+- Hester's test: the result on the phone is shown part by part (the grade, the ingredients right, what is off under each heading).
+- The nurse: once her recipe is open, its themes and how they lead to the ingredients, then Hester's note "What goes in".
+
 Changes made while building it:
 - The first order is shown whole (decided 2026-11-08): the star goes to the right recipe in the index, its name, then
   each ingredient blank and the right name in its list, with why it fits ("Herb or flower: Chamomile, for calm and

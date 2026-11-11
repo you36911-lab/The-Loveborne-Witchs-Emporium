@@ -25,6 +25,10 @@ if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();
   $('#protoWho').onchange=e=>{const v=X.visits[e.target.value];if(!v)return;
     $('#protoWeek').value=Math.ceil(v.day/7);$('#protoDay').innerHTML=protoDays(Math.ceil(v.day/7));$('#protoDay').value=v.day;$('#protoHour').value=HOURS.indexOf(v.hour)};
   $('#protoGo').onclick=()=>jumpTo(+$('#protoDay').value,+$('#protoHour').value);
+  /* the tutorial on or off for this game (a lock never reaches this bar: it is in ALWAYS_FREE, tutorial.js) */
+  const tutLabel=()=>{const b=$('#protoTut');b.textContent='Tutorial: '+(S.tutOff?'off':'on');b.setAttribute('aria-pressed',String(!S.tutOff))};tutLabel();
+  $('#proto').addEventListener('pointerenter',tutLabel);  /* a new game may have changed it */
+  $('#protoTut').onclick=()=>{S.tutOff=!S.tutOff;save();tutLabel();if(typeof guideTick==='function')guideTick()};
   $('#protoDawn').onclick=()=>{jumpTo(+$('#protoDay').value,0);showDawn()};
   /* fold the bar away to its label (remembered in this browser); the ` key does it too */
   const fold=on=>{$('#proto').classList.toggle('folded',on);$('#protoFold').setAttribute('aria-expanded',String(!on));try{localStorage.setItem('protoFolded',on?'1':'')}catch(e){}};

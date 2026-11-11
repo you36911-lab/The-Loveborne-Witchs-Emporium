@@ -16,7 +16,9 @@ document.querySelectorAll('#pc [data-icon]').forEach(el=>el.innerHTML=PC_ICONS[e
 /* (the wallpaper path is made absolute: a relative url() in a CSS variable would be read from the css folder) */
 function openPC(app){$('#pcScreen').style.setProperty('--wall',`url("${new URL(ASSETS.pcWallpaper,location.href).href}")`);$('#pc').classList.add('open');
   if(app)openApp(app);else renderPCBar()}
-function closePC(){$('#pc').classList.remove('open');render()}
+/* closing the computer closes its windows too: it always opens on the desktop (an email opened from a new email's card
+   opens Moonpost itself) */
+function closePC(){$('#pc').classList.remove('open');pcOpen.forEach(a=>{const w=winOf(a);w.hidden=true;w.classList.remove('max');w.style.left=w.style.top=''});pcOpen=[];pcMin.clear();render()}
 function renderPC(){pcOpen.forEach(fillApp);renderPCBar()}
 function fillApp(app){if(app==='mail')renderLetters();if(app==='shop'){S.reviewsSeen=S.reviews.length;save();renderBadge();renderShop()}}
 /* A window grows out of where it comes from (its desktop icon, or its taskbar button) and shrinks back into it. */
@@ -57,7 +59,7 @@ $('#desk').addEventListener('dblclick',e=>{const bar=e.target.closest('.pcbar');
 
 let reviewDay=0;  /* the day My Shop shows; 0 is every day */
 /* ---------- reviews ---------- */
-/* At closing every receipt becomes a review. A customer who got just what they needed writes their own (review in
+/* Every receipt becomes a review as it is rung up (record in visitors.js). A customer who got just what they needed writes their own (review in
    story.js) and adds, as a P.S., what they let slip at the counter (the hint). Everyone else writes a line that fits their stars. */
 const REVIEW_LINES={
   Good:['Nearly perfect. Not quite what I needed, but close.','Lovely little shop. It worked, mostly.','Good, just not quite right. I would come back.'],
@@ -86,7 +88,7 @@ function renderShop(){const rt=rating(),days=[...new Set(S.reviews.map(r=>r.day)
         <small class="muted">${S.hist.length?`Average of the last ${S.hist.length} of up to 20 reviews`:'No reviews yet'}</small></div>
       <nav class="sh-days" aria-label="Days">${[0,...days].map(d=>`<button data-rday="${d}" aria-pressed="${d===reviewDay}">${d?`Day ${d}`:'All days'}<span class="muted">${count(d)}</span></button>`).join('')}</nav>
     </aside>
-    <div class="sh-list">${shown||'<p class="muted sh-empty">No reviews yet. Customers leave their reviews when the shop closes for the night.</p>'}</div>`}
+    <div class="sh-list">${shown||'<p class="muted sh-empty">No reviews yet. Customers leave their reviews as they go.</p>'}</div>`}
 
 $('#pc').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.dataset.collect)return;const d=b.dataset;
   if(d.app)openApp(d.app);

@@ -38,12 +38,24 @@ function dispOrder(e){let x=2166136261;for(const ch of 'order|'+e.sk){x^=ch.char
   const a=[...e.props];for(let i=a.length-1;i>0;i--){x^=x<<13;x^=x>>>17;x^=x<<5;const j=(x>>>0)%(i+1);[a[i],a[j]]=[a[j],a[i]]}return a}
 function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.length===1)return[e.props[0]];const s=shownOf(e);return e.props.filter(p=>!s.includes(p))}
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.sk]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
-/* ---------- books as pages: an index, one entry per page, up to five bookmarks ---------- */
+/* ---------- books as pages: an index, one entry per page, up to MAX_MARKS bookmarks ---------- */
 const MARKCOL=['#E2483D','#F59A3B','#5DBB6A','#4C7BD9','#9B5FD0'];
+const MAX_MARKS=60;  /* the bookmarks column scrolls */
+/* An ingredient's entry just completed: its page, on paper like the book's, with its picture (as the book prints it) or,
+   without one, what it looks like; everything it is for, and its line. A click anywhere closes it. */
+function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
+  $('#ingNoteBody').innerHTML=`<p class="in-cat">${esc(CATLABEL[it.c]||it.c)}</p><h3>${esc(e.k)}</h3>`+
+    `<p class="in-kw">${dispOrder(e).map(esc).join(' · ')}</p>`+
+    (pic?`<img class="in-pic" src="${pic}" alt="">`:it.look?`<p class="in-look">${esc(it.look)}</p>`:'')+
+    (it.line?`<p class="in-line">${esc(it.line)}</p>`:'')+`<p class="in-done">✦ Complete</p>`;
+  $('#ingNote').classList.add('open')}
+$('#ingNote').addEventListener('click',()=>$('#ingNote').classList.remove('open'));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#ingNote').classList.contains('open')){$('#ingNote').classList.remove('open');e.stopImmediatePropagation()}},true);
 function entryHTML(e){
   if(e.method)return `<div class="entry method"><b>${esc(e.k)}</b><span class="muted">${esc(e.where)}</span><span class="bookline" style="font-style:normal;color:var(--ink)">${esc(e.how)}</span>${e.bases.length?`<span class="bookline">Base: ${e.bases.map(esc).join(', ')}.</span>`:''}</div>`;
   const h=hiddenOf(e),f=S.fills[e.sk]||[];
-  const lk=entryLocked(e),sh=shownOf(e),blank=i=>`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):' '}</button>`;
+  /* a finished entry reads like the rest of the book: its words as plain print, no blanks left */
+  const lk=entryLocked(e),sh=shownOf(e),blank=i=>lk?`<span class="blank done">${esc(f[i])}</span>`:`<button class="blank ${f[i]?'filled':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to clear':'Blank'}" ${lk?'disabled':''}>${f[i]?esc(f[i]):' '}</button>`;
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?kw(p):blank(h.indexOf(p))).join(' · ');
   return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
@@ -276,14 +288,16 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
-    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=5){toast('Only five bookmarks fit. I\u2019ll have to take one out first.');return}
-    else{const used=S.marks.map(x=>x.color),p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL.find(c=>!used.includes(c))})}
+    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=MAX_MARKS){toast('No room for another bookmark. I\u2019ll have to take one out first.');return}
+    else{const p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL[S.marks.length%MARKCOL.length]})}
     save();renderBooks();return}
   if(b.dataset.book){if(b.dataset.book!==curBook)showBook(b.dataset.book);return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i;const f=S.fills[k]||(S.fills[k]=[]);
-    if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k);if(e&&entryLocked(e)){toast(`${e.k} is complete \u2726`)}
-      if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),e&&entryLocked(e)?2300:0)}else if(f[i]){f[i]=undefined}else{toast('I need a word from the word bank first.')}
+    if(selWord){const w=selWord;f[i]=w;const e=entryList(curBook).find(x=>x.sk===k),done=e&&entryLocked(e);
+      /* an ingredient's entry complete: its page comes up on its own, picture and all; anything else just says so */
+      if(done){if(e.sk.startsWith('item:'))setTimeout(()=>showEntryDone(e),350);else toast(`${e.k} is complete \u2726`)}
+      if(usedUp(w))setTimeout(()=>toast(`\u201C${w}\u201D is used up: every blank that needs it is filled.`),done?2300:0)}else if(f[i]){f[i]=undefined}else{toast('I need a word from the word bank first.')}
     save();renderBooks();return}
   if(b.dataset.rmIng){const[id,i]=b.dataset.rmIng.split('|');noteOf(id).ing[+i]='';save();renderBooks();return}
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}

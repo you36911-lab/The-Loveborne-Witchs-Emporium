@@ -15,8 +15,15 @@ const FIRST_ADVICE=vkey(X.visits.find(v=>v.kind==='advice'));
 const R1=visitByKey(FIRST_ORDER).rid;  /* the first order's recipe, which the tutorial shows whole */
 /* the first of its ingredient blanks still empty (-1 when all are written) */
 const firstBlank=()=>{const n=noteOf(R1);return D.recipes[R1].ing.findIndex((_,i)=>!n.ing[i])};
-/* why an ingredient fits a recipe: what it does that the recipe asks for ("calm and comfort") */
-function whyFits(item,rid){const w=ITEM[item].props.filter(p=>D.recipes[rid].themes.includes(p));return w.length>1?w.slice(0,-1).join(', ')+' and '+w[w.length-1]:w[0]||'this'}
+/* why an ingredient fits a recipe: the one theme it brings. Each ingredient brings its own, none twice: the themes are
+   shared out among the ingredients (Chamomile comfort, Blue thread calm, Small key opportunity). */
+function themeShare(rid){const r=D.recipes[rid],ings=r.ing.filter(i=>ITEM[i]);let best={},most=-1;
+  /* every way of sharing them out; the one that gives the most ingredients a theme wins (a base may bring none) */
+  const go=(k,cur,n)=>{if(k===ings.length){if(n>most){most=n;best={...cur}}return}
+    ITEM[ings[k]].props.filter(p=>r.themes.includes(p)&&!Object.values(cur).includes(p)).forEach(p=>go(k+1,{...cur,[ings[k]]:p},n+1));
+    go(k+1,{...cur,[ings[k]]:''},n)};
+  go(0,{},0);return best}
+function whyFits(item,rid){return themeShare(rid)[item]||ITEM[item].props.find(p=>D.recipes[rid].themes.includes(p))||'this'}
 
 /* small helpers the lessons read */
 const isOpen=id=>$('#'+id).classList.contains('open');
@@ -33,6 +40,7 @@ function seen(sel){for(const el of document.querySelectorAll(sel)){const r=el.ge
 /* Hester's notes: short rules in her own hand */
 const HESTER_NOTES={
   aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. Gold: joy. Grey: sadness. Pale blue: worry. Red: anger. Pink: longing; bright pink, embarrassment.','Watch it, dear. People rarely ask for what they need.']},
+  themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']},
   tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']}};
 
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
@@ -42,20 +50,24 @@ const HESTER_NOTES={
    it), or {self: selector} (that element alone, e.g. a popup's backdrop, whose click closes it);
    a step without allow blocks nothing). */
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
+const READING=['#letterRead .wm-text'];  /* the open email: scrolled and read, its dotted words tapped */
+const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its page */
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
       /* came back to it (a reload) with the email still unread: its card comes up again, as it was */
       ensure:()=>{if(isOpen('pc')||!$('#mailFx').hidden)return;const m=mailIn().find(m=>S.mail&&S.mail[m.i]===false);if(m)showMailFx(m)}},
-    /* H.'s first, the oldest (at the bottom of the inbox), then the word bank in her email: its P.S. has the first dotted
-       word (joy), scrolled into view; then her other two, bottom up; the apothecary's last */
-    {glow:'[data-lsel="start:0"]',say:'Three from H., from before I came. The oldest first.',done:()=>letterSel==='start:0'||S.bank.length>0,allow:[]},
-    {glow:'#letterRead .kw',say:'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.',done:()=>S.bank.length>0,allow:[],
+    /* H.'s three, the oldest first (at the bottom of the inbox), then the apothecary's. The email that is open can always
+       be read (scrolled, its dotted words tapped): READING. The word bank is taught in her second email, whose first
+       dotted word is scrolled into view. */
+    {glow:'[data-lsel="start:0"]',say:'Three from H., from before I came. The oldest first.',done:()=>!!S.letters[0],allow:[]},
+    {glow:'[data-lsel="start:1"]',say:'She kept this shop before me. Best read all she left.',done:()=>!!S.letters[1]&&letterSel==='start:1',allow:READING},
+    {glow:'#letterRead .kw',say:'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.',done:()=>S.bank.length>0,allow:READING,
       ensure:()=>{const k=$('#letterRead .kw');if(k&&!k.dataset.shown){k.dataset.shown=1;k.scrollIntoView({block:'center',behavior:'smooth'})}}},
-    {glow:()=>!S.letters[0]?'[data-lsel="start:0"]':!S.letters[1]?'[data-lsel="start:1"]':'[data-lsel="start:2"]',say:'She kept this shop before me. Best read all she left.',done:()=>S.letters.every(Boolean),allow:[]},
-    {glow:'[data-lsel="mail:0"]',say:'And the one that just came, from the apothecary.',done:()=>S.mail&&S.mail[0]===true,allow:[]},
-    /* the computer closes at a click outside it, like every popup: only that click works here */
-    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[{self:'#pc'}]},
+    {glow:'[data-lsel="start:2"]',say:'And her last.',done:()=>S.letters.every(Boolean),allow:READING},
+    {glow:'[data-lsel="mail:0"]',say:'And the one that just came, from the apothecary.',done:()=>S.mail&&S.mail[0]===true,allow:READING},
+    /* the computer closes at a click outside it, like every popup: only that click works here (and reading on) */
+    {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},...READING]},
     {note:'aura'},
     /* where Hester's notes are kept: beside the notebook, as slips, to read again */
     {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
@@ -73,6 +85,8 @@ const LESSONS=[
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
     {glow:()=>seen(`[data-go="recipe:${R1}"]`)?`[data-go="recipe:${R1}"]`:'#turnNext',say:()=>`The index first. A charm, for an easier day: ${D.recipes[R1].name}.`,done:()=>pageOf()==='recipe:'+R1,allow:[...TURNS]},
     {glow:`#books .pg [data-choose-recipe="${R1}"]`,say:'That’s the one. I’ll tap its name to mark it as what I’m making.',done:()=>String(S.target)===String(R1),allow:[]},
+    /* what the recipe is for: everything in it carries one of these (the link between the books and the recipes) */
+    {glow:THEMES,say:()=>`What it’s for: ${D.recipes[R1].themes.join(', ')}. Everything that goes in carries one of those.`,wait:6500,allow:[]},
     /* each blank in turn: the star on the blank, then on the right name in the list it opens */
     {glow:()=>{const i=firstBlank();if(i<0)return '';const key=`ing|${R1}|${i}`;
         return pickOpen===key?`#books .windex [data-choose="${key}"][data-val="${D.recipes[R1].ing[i]}"]`:`#books .pg [data-pick="${key}"]`},
@@ -85,7 +99,14 @@ const LESSONS=[
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]},
     /* what she lets slip as she goes (the hint): it comes back in her review on the computer, after closing */
-    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll read it again in her review on my computer, once the shop closes.':'',done:()=>!S.parting,allow:[],holdCustomer:4000}]},
+    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll find it again in her review on the computer.':'',done:()=>!S.parting,allow:[],holdCustomer:4000}]},
+  /* after the first sale: its receipt at the till, then her review, which comes in as she leaves, with what she let slip */
+  {id:'sale1',at:'1-Noon-~sale',when:()=>guideState().order1==='done'&&!S.queue&&!S.parting&&S.reviews.length>0,until:()=>!!S.queue||S.day>1,steps:[
+    {glow:'#tillBtn',say:'The till printed her receipt. What she had, and her stars.',done:()=>isOpen('receiptsView'),allow:[]},
+    {say:'',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
+    {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'And her review’s come in already.',done:()=>pcApp('shop'),allow:[]},
+    {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
+    {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
@@ -93,17 +114,21 @@ const LESSONS=[
     {glow:()=>seen('[data-go="recipe:111"]')?'[data-go="recipe:111"]':'#turnFirst',say:'The Language of Ravens.',done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[...TURNS]},
     {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
     {glow:'#phoneBtn',say:'The phone. That’s where a test tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
-    /* the phone closes at a click outside it */
-    {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'}]},
+    /* the result on the phone, part by part; then it closes at a click outside it */
+    {glow:'#phoneApp .ph-grade',say:'How it came out, at the top.',wait:4000,allow:['#phoneApp']},
+    {glow:()=>seen('#phoneApp .ph-score')?'#phoneApp .ph-score':'',say:'How many of the ingredients were right…',wait:4500,allow:['#phoneApp']},
+    {glow:'#phoneApp .ph-sec[data-k]:not([data-k=""])',say:'…and what’s off, under each heading: the ingredients, the candle, the card.',wait:6500,allow:['#phoneApp']},
+    {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
     {note:'tests'},
     {say:'That one goes in my notebook too.',wait:3500},
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>S.seen[HESTER_DAY1]}]},
-  {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000}]},
+  {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000},
+    /* once her recipe is open: what it is for, and how that leads to what goes in */
+    {say:'',done:()=>bookOpen('Recipe Book')&&pageOf()==='recipe:'+visitByKey(NURSE).rid},
+    {glow:THEMES,say:()=>`${D.recipes[visitByKey(NURSE).rid].themes.join(', ')}. Each thing in it carries one of those, and the books say what each thing carries.`,wait:7000},
+    {note:'themes'}]},
   {id:'close1',at:'2-Sunrise-',when:()=>S.day===1&&isOpen('dayEnd'),until:()=>S.day>1||!isOpen('dayEnd'),steps:[
     {glow:'#dayEnd .receipts',say:'The day’s receipts. Everyone who came, and their stars.',done:()=>!isOpen('dayEnd')}]},
-  {id:'reviews',at:'2-Sunrise-',when:()=>S.day===2&&S.h===0&&afterDawn()&&(S.reviews||[]).length>0,until:()=>S.h>0||!!S.queue,steps:[
-    {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'Reviews came in overnight.',done:()=>pcApp('shop'),allow:[]},
-    {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. Things they let slip tend to matter later.',wait:8000,allow:[]}]},
   {id:'advice1',at:FIRST_ADVICE,when:()=>atCounter(FIRST_ADVICE),until:()=>S.seen[FIRST_ADVICE],steps:[
     {say:()=>wordsDone()?'She only wants to know which herb. Nothing to make.':'',done:()=>spokenFor(3500),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Herbiary"]',say:'The Herbiary. Something for love, for the mind, and strong.',done:()=>bookOpen('Herbiary'),allow:[]},
@@ -191,7 +216,7 @@ function show(st){const line=$('#guideLine');ringStep=st;
 const DRAWN_INSET={'#pcBtn':[.16,.03]};  /* the monitor's top edge slants down a little toward its left */
 function placeRing(){const ring=$('#guideRing');let r=ringEl&&ringEl.isConnected&&ringEl.getBoundingClientRect();
   if(!r||!r.width){ring.hidden=true;return}
-  const [ix,iy]=DRAWN_INSET[ringSel]||[0,0],left=r.left+r.width*ix,top=r.top+r.height*iy,size=r.height<36?30:44,  /* smaller over a word or a short line */below=top<50;
+  const [ix,iy]=DRAWN_INSET[ringSel]||[0,0],left=r.left+r.width*ix,top=r.top+r.height*iy,size=r.height<36?38:56,  /* smaller over a word or a short line */below=top<50;
   /* something wide and low (a row in a list, a line of text) gets its star at its left end instead, so it does not sit on the row above */
   const wide=r.width>r.height*2.6&&r.height<90;
   ring.hidden=false;ring.classList.toggle('below',below&&!wide);
@@ -205,9 +230,9 @@ setInterval(guideTick,250);  /* the tutorial looks at where things stand four ti
    Any other click does nothing (the star gives a small pulse), and Esc does not close what is open. Always free: the menu,
    the prototype bar, Hester's note, and a new email that arrives meanwhile (post comes first). It can never get stuck:
    if the star's thing is not on screen, or something lies over it, nothing is blocked until it can be reached. */
-const ALWAYS_FREE='#guideLine, #hNote, #proto, #title, #gameMenu, #settings';
+const ALWAYS_FREE='#guideLine, #hNote, #ingNote, #proto, #title, #gameMenu, #settings';
 /* the star's thing can be reached: it is on screen, and no open popup lies over it (it is inside the topmost one) */
-const OVERLAYS=['#hNote','#mailFx','#dayEnd','#phoneView','#receiptsView','#info','#pc','#books'];
+const OVERLAYS=['#hNote','#ingNote','#mailFx','#dayEnd','#phoneView','#receiptsView','#info','#pc','#books'];
 function reachable(el){if(!el||!el.isConnected)return false;const r=el.getBoundingClientRect();if(!r.width||!r.height)return false;
   const over=OVERLAYS.map(q=>$(q)).find(m=>m&&(m.id==='mailFx'?!m.hidden:m.classList.contains('open')));return !over||over.contains(el)}
 function locked(){const st=ringStep;if(!st||!st.allow||S.tutOff||titleOpen()||menuOpen()||isOpen('hNote'))return false;

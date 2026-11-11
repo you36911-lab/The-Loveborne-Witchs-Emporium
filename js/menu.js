@@ -44,7 +44,12 @@ function makeMotes(){const box=$('#tsMotes');if(box.childElementCount)return;
     box.appendChild(m)}}
 function showTitle(){const t=$('#title'),saved=hasSave();
   /* the shop as the player left it: the saved day's hour (a festival's own picture on its days); twilight before any game */
-  $('#tsBg').style.backgroundImage=`url("${saved?bgSrc(HOURS[S.h]):ASSETS.backgrounds.Twilight}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
+  const bg=saved?bgSrc(HOURS[S.h]):ASSETS.backgrounds.Twilight;
+  $('#tsBg').style.backgroundImage=`url("${bg}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
+  /* the background and the splash fade in together once both pictures are ready (at most 1.5s), so the plain colour
+     behind them is never seen to snap into a picture */
+  if(!t.classList.contains('ready')){const wait=src=>{const im=new Image();im.src=src;return im.decode().catch(()=>{})};
+    Promise.race([Promise.all([wait(bg),wait(ASSETS.splash)]),new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(()=>t.classList.add('ready')))}
   clearTimeout(glintT);glintT=setTimeout(glint,1200);
   $('#tsContinue').hidden=!saved;
   if(saved)$('#tsWhere').textContent=`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;

@@ -4,7 +4,9 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
   const b=e.target.closest('button');if(!b)return;
   if(b.dataset.openbook){curBook=b.dataset.openbook;openBooks();return}
   if(b.dataset.collect){collect(b.dataset.collect);if($('#books').classList.contains('open'))renderBooks();if($('#pc').classList.contains('open'))renderPC();if($('#phoneView').classList.contains('open'))$('#phoneApp').innerHTML=phoneHTML();  /* the phone keeps the result it shows */render();return}
-  if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else if(S.altar.length>=ALTAR_MAX){toast('The altar is full. Seven things are all it holds.');return}else S.altar.push(n);render();return}
+  if(b.dataset.item){const n=b.dataset.item;const i=S.altar.indexOf(n);if(i>=0)S.altar.splice(i,1);else if(S.altar.length>=ALTAR_MAX){toast('The altar is full. Seven things are all it holds.');return}else{S.altar.push(n);
+    if(ITEM[n]&&ITEM[n].c==='Crystals')toast(n)}  /* crystals look alike: taking one out, its name shows as a subtitle */
+    render();return}
   if(b.dataset.candle!==undefined){S.candle=S.candle===b.dataset.candle?'':b.dataset.candle;render();return}
   if(b.dataset.tarot!==undefined){S.tarot=S.tarot===b.dataset.tarot?'':b.dataset.tarot;render();return}
   /* a shelf row opens (or closes again); the open shelf has its own close button */
@@ -168,22 +170,24 @@ function receiptHTML(x,i=0){
     rows.map((t,i)=>`<span class="ln${i===rows.length-1?' who':''}" style="--r:${i}">${esc(t)}</span>`).join('')+
     `<span class="ln rs" style="--r:${rows.length}" aria-label="${SCORE[x.g]} of 5 stars"><span class="stamp">${stars(SCORE[x.g])}</span></span>`+
     `<span class="ln when" style="--r:4">Day ${x.day||S.day}, ${esc(x.hour)}</span></div>`}
-function endDay(){const before=rating(),reviews=S.pend.splice(0);
-  reviews.forEach(x=>S.hist.push(SCORE[x.g]));postReviews(reviews);S.hist=S.hist.slice(-20);const after=rating();
+/* closing: the day's receipts and how the rating moved since the shop opened (the reviews came in during the day) */
+function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRating!=null?S.openRating:after;  /* the first day had no rating to move from */
   const body=$('#dayEndBody');
   const last=S.day>=LAST_PLAYABLE_DAY;
-  body.innerHTML=`<h2>${last?'End of the first week':'The shop closes for the night'}</h2>
-  <h3>Today's receipts</h3>${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="muted">No sales today.</p>'}
-  <p>Rating: ${before.toFixed(1)} \u2192 <b>${after.toFixed(1)}</b> of 5 (${S.hist.length?`average of the last ${S.hist.length} review${S.hist.length===1?'':'s'}`:'no reviews yet'}; Good work tops out at 4)</p>
-  <p class="muted">Tonight's reviews are on the computer. How things turned out, customers will tell you when they next come in.</p>
+  /* a paper card, like the shop's other papers: the day, the title, the day's receipts in a row, the rating as it moved */
+  const T=today(),d=after-before,move=Math.abs(d)<.05?'':`<span class="de-move ${d>0?'up':'down'}">${d>0?'\u25b2':'\u25bc'} ${Math.abs(d).toFixed(1)}</span>`;
+  body.innerHTML=`<p class="de-day">Day ${S.day} \u00b7 ${esc(T.weekday)}${T.sabbat?' \u00b7 '+esc(T.sabbat):''}</p>
+  <h2>${last?'End of the first week':'The shop closes for the night'}</h2>
+  ${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="de-none">No sales today.</p>'}
+  <div class="de-rating" aria-label="Rating ${after.toFixed(1)} of 5"><span class="de-stars">${stars(Math.round(after))}</span><b>${after.toFixed(1)}</b>${move}</div>
   ${last?summaryHTML():''}
-  <div class="row"><button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button></div>`;
+  <button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button>`;
   $('#dayEnd').classList.add('open');
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
   $('#dayGo').onclick=openNextDay}
 /* the end-of-day card's button: on to the next day (or, after the last playable day, a new game) */
 function openNextDay(){$('#dayEnd').classList.remove('open');
-  if(S.day>=LAST_PLAYABLE_DAY){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot=''}
+  if(S.day>=LAST_PLAYABLE_DAY){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot='';S.openRating=rating()}
   S.ui=null;showDawn()}
 function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   return `<h3>Your week</h3><p>Orders by stars: \u2605\u2605\u2605\u2605\u2605 ${s.perfect}, \u2605\u2605\u2605\u2605 ${s.good}, \u2605\u2605 ${s.clumsy}, \u2605 ${s.failed}. Advice given ${s.advice}. Customers who left empty-handed ${s.missed}.</p>

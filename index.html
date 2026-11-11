@@ -40,7 +40,7 @@
       <span class="protobody" id="protoBody">
       <select id="protoWeek" aria-label="Week"></select><select id="protoDay" aria-label="Day"></select><select id="protoHour" aria-label="Hour"></select>
       <select id="protoWho" aria-label="Customer"></select>
-      <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button>
+      <button id="protoGo" class="main">Go</button><button id="protoDawn">From dawn</button><button id="protoTut" aria-pressed="true">Tutorial: on</button>
       </span>
     </div>
   </div>
@@ -133,7 +133,7 @@
   </div></div>
 </div>
 <div class="modal" id="info" role="dialog" aria-modal="true"><div class="sheet" style="max-width:620px"><div class="row" style="margin-bottom:8px"><h2 style="margin:0" id="infoTitle"></h2></div><div id="infoBody"></div></div></div>
-<div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet" id="dayEndBody" style="max-width:560px"></div></div>
+<div class="modal" id="dayEnd" role="dialog" aria-modal="true" aria-label="End of day"><div class="sheet dayendcard" id="dayEndBody"></div></div>
 <!-- The title screen: the first thing shown when the game opens (menu.js). -->
 <div class="titlescreen" id="title" role="dialog" aria-modal="true" aria-label="The Loveborne Witch’s Emporium">
   <div class="ts-bg" id="tsBg" aria-hidden="true"></div><div class="ts-glow" aria-hidden="true"></div>
@@ -175,6 +175,7 @@
 </div></div>
 <div class="toast guideline" id="guideLine" hidden></div>  <!-- the tutorial: the shopkeeper's thought (tutorial.js) -->
 <div class="guidering" id="guideRing" hidden aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 1.5l2.6 7.1 7.4.3-5.8 4.6 2 7.2L12 16.6l-6.2 4.1 2-7.2L2 8.9l7.4-.3z"/></svg></div>  <!-- the tutorial: the star on the next thing to click -->
+<div class="modal ingnote" id="ingNote" role="dialog" aria-modal="true" aria-label="Entry complete"><div class="ingpage" id="ingNoteBody"></div></div>  <!-- an ingredient's entry completed (books.js) -->
 <div class="modal hnote" id="hNote" role="dialog" aria-modal="true" aria-label="A note from Hester"><div class="hpaper" id="hNoteBody"></div></div>
 <div class="savemark" id="saveMark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle class="sm-ring" cx="12" cy="12" r="9.5"/><path class="sm-heart" d="M12 16.6s-4.3-2.6-4.3-5.4c0-1.4 1-2.4 2.3-2.4.9 0 1.6.5 2 1.1.4-.6 1.1-1.1 2-1.1 1.3 0 2.3 1 2.3 2.4 0 2.8-4.3 5.4-4.3 5.4z"/></svg></div>  <!-- the save icon (save() in core.js) -->
 <div class="toast" id="toast"></div>
