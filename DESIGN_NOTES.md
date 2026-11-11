@@ -171,7 +171,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 - **#194 The Inner Housekeeper** is now Nettle, Milk powder, **Rose petals** (was Chamomile): one theme per ingredient (Nettle healing, Milk powder rest, Rose petals self-love), no overlap. Rule from the designer: no theme is covered twice and no ingredient supplies two themes; themes spread evenly, and ingredients link to the spell intuitively. An audit found 80 of 240 recipes where the themes can't be shared out one per ingredient (still to fix).
 - The closing card is a paper card: the day, the title, the day's receipts in a row, the rating with how it moved today, one button.
 - Completing an ingredient's entry in a book brings up its page as a card (picture as the book prints it, or its look; all its keywords; its line). Finished entries read as ordinary print.
-- Solved recipes no longer react to the pointer. Up to 60 bookmarks (the column scrolls).
+- Solved recipes no longer react to the pointer. Up to 30 bookmarks (the column scrolls).
 - A crystal taken out of its cupboard says its name as a subtitle (they look alike).
 - Closing the computer closes its windows: it always opens on the desktop.
 - The title screen waits in its plain colour until its pictures are ready, then fades them in (no snap).

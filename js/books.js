@@ -40,7 +40,7 @@ function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.sk]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
 /* ---------- books as pages: an index, one entry per page, up to MAX_MARKS bookmarks ---------- */
 const MARKCOL=['#E2483D','#F59A3B','#5DBB6A','#4C7BD9','#9B5FD0'];
-const MAX_MARKS=60;  /* the bookmarks column scrolls */
+const MAX_MARKS=30;  /* the bookmarks column scrolls */
 /* An ingredient's entry just completed: its page, on paper like the book's, with its picture (as the book prints it) or,
    without one, what it looks like; everything it is for, and its line. A click anywhere closes it. */
 function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
