@@ -10,9 +10,11 @@ a theme was swapped where an ingredient already carried a fitting one, or an ing
 customer's words, the weekday clue (a recipe on a weekday shares a theme with it), and every letter's hint.
 Week one: Black thread now shows banishing (#25), Lapis lazuli truth (#49), Cherry wonder and Strawberry play (#236).
 
-Still open (were already like this before): #158 and #159 have one theme; #213 is on a Wednesday but shares no theme with it;
-the wandwrights' letter (willow bark, intuition) and the sweet shop's letter (pink glitter, self-love) hint at keywords that
-are not themes of the recipes they lead to (#99, #227).
+Also fixed (they were like this before):
+- #158 Pocketful of Sunbeams had one theme (joy, on every ingredient): now **joy, focus** (Yellow thread: noticing the little moments).
+- #159 Rain on the Windowsill had one theme (cleansing): now **cleansing, comfort**, with **Chamomile** for Rosemary (a rainy day made comforting).
+- #213 The Lost-and-Found Familiar was on a Wednesday but shared no theme with it: now on a **Thursday** (luck). In the Walk-in Plan it moves from Day 75 Noon to Day 69 Twilight.
+- The wandwrights' letter now says willow bark helped him **release** what couldn't be changed (hint: release, which #99 needs); the sweet shop's letter says a room with a bit of **play** in it lets a girl play too (hint: play, which #227 needs).
 
 | # | Recipe | Themes | Ingredients | Who carries what | Note |
 |---|---|---|---|---|---|
