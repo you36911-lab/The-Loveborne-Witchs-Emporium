@@ -84,12 +84,16 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .entry b{min-width:150px}
 .entry.locked b::after{content:" ✦";color:var(--pink)}
 .blank{min-width:70px;border-bottom:2px solid var(--ink);padding:0 6px;cursor:pointer;background:none;box-shadow:none;border-top:0;border-left:0;border-right:0;border-radius:0}
-/* A blank in a book is a line on the page, not a button: no box. Under the pointer its line darkens to pink, as if the
-   pen were about to touch it; a word written in it is in Hester's ink and hand (Caveat, #3A2A3A), on a fine line, and is
-   drawn in from left to right as it is written. */
-button.blank:hover,button.blank:focus-visible{background:none;box-shadow:0 1px 0 var(--kw);border-bottom-color:var(--kw);outline:none}
-.blank.filled{background:none;font-family:'Caveat',cursive;font-weight:500;font-size:1.45em;line-height:1;color:#3A2A3A;border-bottom:1px solid rgba(58,42,58,.45)}
-button.blank.filled:hover,button.blank.filled:focus-visible{box-shadow:none;border-bottom-color:var(--kw);color:#5A3A52}
+/* The keywords of a book entry look like the Recipe Book's: a blank is a light line (pink and heavier under the pointer,
+   or while its list is open); a word written in it, and every keyword already printed in the entry, is in Hester's hand
+   (Caveat, #3A2A3A) on a light line; a finished entry's words sit on a pink line. A word just written is drawn in, left
+   to right. Words still to be collected keep their dotted underline. */
+.pg button.blank,.leaf button.blank{background:none;box-shadow:none;border:0;border-bottom:1.5px solid #C9A8B8;border-radius:0;transform:none}
+.pg button.blank:hover,.leaf button.blank:hover,.pg button.blank:focus-visible,.pg button.blank.open,.leaf button.blank.open{color:var(--kw-text);background:none;box-shadow:none;border-bottom:2px solid var(--pink);outline:none;transform:none}
+.pg .blank.filled,.leaf .blank.filled,.pg .blank.done,.leaf .blank.done,.ekw{font-family:'Caveat',cursive;font-weight:500;font-size:1.35em;line-height:1;color:#3A2A3A;padding:0 8px}
+.pg .blank.done,.leaf .blank.done{display:inline-block;min-width:0;border-bottom:1.5px solid var(--pink)}
+.ekw{display:inline-block;border-bottom:1.5px solid #C9A8B8}
+.ekw .kw{color:#3A2A3A;text-decoration-color:var(--pink)}
 .blank.writing{animation:inkIn .45s ease-out both}
 @keyframes inkIn{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% 0 -20% 0)}}
 @media (prefers-reduced-motion: reduce){.blank.writing{animation:none}}
