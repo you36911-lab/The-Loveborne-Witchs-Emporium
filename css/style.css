@@ -1167,7 +1167,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ts-menu>button:nth-child(3){animation-delay:.84s!important}.ts-menu>button:nth-child(4){animation-delay:.96s!important}
 @keyframes tsBtnIn{from{opacity:0;transform:translateY(10px)}}
 /* as the logo rises and the buttons come, its light and the halo fade softly away */
-.ts-halo{transition:opacity 2.4s cubic-bezier(.4,0,.2,1),scale 2.4s cubic-bezier(.4,0,.2,1)}  /* a slow, soft fade */
+.ts-halo{transition:opacity 1.9s cubic-bezier(.4,0,.2,1),scale 2.2s cubic-bezier(.4,0,.2,1)}  /* a slow, soft fade */
 .titlescreen.ready:not(.intro) .ts-halo{opacity:0;scale:.8}  /* its animations carry on unchanged, so nothing cuts the fade short */
 .titlescreen.ready:not(.intro) .ts-aureole{opacity:0;scale:.82}  /* shrinking a little with the logo as they go */
 /* skipped: straight to the end, with no movement */
