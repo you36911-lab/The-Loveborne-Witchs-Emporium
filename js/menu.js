@@ -45,7 +45,7 @@ function makeMotes(){const box=$('#tsMotes');if(box.childElementCount)return;
 function showTitle(){const t=$('#title'),saved=hasSave();
   /* the shop as the player left it: the saved day's hour (a festival's own picture on its days); twilight before any game */
   const bg=saved?bgSrc(HOURS[S.h]):ASSETS.backgrounds.Twilight;
-  $('#tsBg').style.backgroundImage=`url("${bg}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
+  $('#tsBg').style.backgroundImage=`url("${bg}")`;$('#tsSplash').sizes='min(46vh, 62vw, 560px)';$('#tsSplash').srcset=ASSETS.splashSet;$('#tsSplash').src=ASSETS.splash;makeMotes();
   /* the background and the splash fade in together once both pictures are ready (at most 1.5s), so the plain colour
      behind them is never seen to snap into a picture */
   t.hidden=false;titleIntro();  /* the logo is placed in the middle before anything shows */
