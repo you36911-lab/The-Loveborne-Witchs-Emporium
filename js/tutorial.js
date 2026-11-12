@@ -108,7 +108,8 @@ const LESSONS=[
     {say:'The spell, her name, her stars, the day and the hour. A click beside it puts it away.',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
     {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'And her review’s come in already.',done:()=>pcApp('shop'),allow:[]},
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
-    {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']}]},
+    {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']},
+    {glow:'#bellBtn',say:'Ready for whoever’s next. The bell calls them in.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
@@ -124,6 +125,9 @@ const LESSONS=[
     {note:'tests'},
     {say:'That one goes in my notebook too.',wait:3500},
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>S.seen[HESTER_DAY1]}]},
+  /* after Hester has gone: the bell again, for the next one */
+  {id:'bell2',when:()=>S.day===1&&!!S.seen[HESTER_DAY1]&&!S.seen[NURSE]&&!S.queue&&!S.parting&&!bellWait&&!somethingOpen(),until:()=>!!S.queue||!!bellWait||!!S.seen[NURSE]||S.day>1,steps:[
+    {glow:'#bellBtn',say:'Someone else will be waiting. The bell.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
   {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000},
     /* once her recipe is open: what it is for, and how that leads to what goes in */
     {say:'',done:()=>bookOpen('Recipe Book')&&pageOf()==='recipe:'+visitByKey(NURSE).rid},
@@ -168,6 +172,11 @@ function spokenFor(ms){if(!wordsDone()){spokeAt=0;return false}if(!spokeAt)spoke
 /* a step with holdCustomer keeps a parting customer that much longer, so its thought can be read */
 function partingExtra(){return ringStep&&ringStep.holdCustomer||0}
 /* ---------- running it ---------- */
+/* A thought that only asks to be read (a step with wait and nothing to do) stays until the player clicks, anywhere,
+   once it has been up a moment (TAP_MIN_MS); its line ends in a small blinking › to say so. A step that waits for
+   something (done) keeps its wait, if any, only as a fallback. */
+const TAP_MIN_MS=700;let tapAt=0;
+const tapStep=st=>!!(st&&st.wait&&!st.done&&!st.note);
 let guideStepAt=0,guideNow='';  /* when the current step began (for waits), and which lesson/step that was */
 function guideState(){return S.guide||(S.guide={})}
 /* Lessons tied to a moment (at) come first: one under way carries on, or the first that may start. The ones taught where
@@ -185,7 +194,7 @@ function guideTick(){
     let i=g[L.id],st=L.steps[i];const key=L.id+':'+i;
     if(!st){finish(L);L=current();continue}  /* never stall on a step that is not there (an older save, a hole) */
     if(guideNow!==key){guideNow=key;guideStepAt=Date.now();spokeAt=0}
-    const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(st.wait&&Date.now()-guideStepAt>=st.wait);
+    const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(tapStep(st)?tapAt>guideStepAt+TAP_MIN_MS:(st.wait&&Date.now()-guideStepAt>=st.wait));
     if(passed){g[L.id]=i+1;save();if(g[L.id]>=L.steps.length){finish(L);L=current()}continue}
     if(st.ensure)st.ensure();  /* a step can put back what it needs on screen (after a reload, say) */
     if(postFirst()){show(null);return}
@@ -203,6 +212,7 @@ let ringEl=null,ringSel='',ringStep=null,ringWanted=false;
 function show(st){const line=$('#guideLine');ringStep=st;
   const say=(st&&(typeof st.say==='function'?st.say():st.say))||'',toastUp=$('#toast').style.display==='block';
   if(line.dataset.say!==say){line.dataset.say=say;line.textContent=say;line.classList.remove('in');if(say){void line.offsetWidth;line.classList.add('in')}}
+  line.classList.toggle('tap',tapStep(st));
   let sel=st&&st.glow;if(typeof sel=='function')sel=sel();
   ringEl=sel?(typeof sel==='string'?seen(sel):sel):null;ringSel=typeof sel==='string'?sel:'';ringWanted=!!sel;  /* (a step's glow can be empty for a while: no star yet, but the lock holds) */
   /* inside a book, the star waits until the book has opened and while a page turns, so it lands straight on its thing */
@@ -247,7 +257,11 @@ function stepAllows(t){if(!locked())return true;
   if(ringEl&&ringEl.contains(t))return true;
   return ringStep.allow.some(a=>typeof a==='string'?t.closest(a):t.matches(a.self))}
 /* a blocked click: the subtitle stays as it is, and the star gives one small pulse to show where to click */
-document.addEventListener('click',e=>{if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();
+document.addEventListener('click',e=>{
+  /* a thought that is only read: any click, once it has been up a moment, moves on (and a click on nothing does nothing else) */
+  const tap=tapStep(ringStep)&&!S.tutOff&&!titleOpen()&&!menuOpen()&&!isOpen('hNote')&&Date.now()-guideStepAt>TAP_MIN_MS&&!e.target.closest('#proto, #gameMenu, #settings');
+  if(tap){tapAt=Date.now();setTimeout(guideTick,0)}
+  if(stepAllows(e.target))return;e.stopImmediatePropagation();e.preventDefault();if(tap)return;
   const ring=$('#guideRing');ring.classList.remove('nudge');void ring.offsetWidth;ring.classList.add('nudge')},true);
 /* Hover too: while locked, everything but the star's thing and what the step allows ignores the mouse (body.guide-locked
    in style.css), so nothing else even lights up under the pointer. The allowed things are marked each frame. */

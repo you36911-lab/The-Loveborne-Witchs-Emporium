@@ -1220,6 +1220,9 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .guideline:not([hidden]){display:block}
 .guideline[hidden]{display:none}
 .guideline.in{animation:subIn .6s ease-out both}
+/* a thought that waits for a click: a small › after it, blinking softly */
+.guideline.tap::after{content:'›';display:inline-block;margin-left:.45em;font-style:normal;font-weight:700;color:#F7B8D6;animation:tapBlink 1.2s ease-in-out infinite}
+@keyframes tapBlink{50%{opacity:.25;transform:translateX(3px)}}
 .scenenote.guided{visibility:hidden}
 /* Hester's notes taped onto the notebook's first page (hesterPageHTML in books.js): the very note, the same paper, size
    and hand as when it was given (.hpaper), with a strip of tape across the top; it is only paper (nothing happens at a click) */

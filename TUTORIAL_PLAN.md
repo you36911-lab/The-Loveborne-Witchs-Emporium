@@ -137,6 +137,8 @@ Taught once, the first time the situation comes up, not on a set day.
 | The first email after Day 1 | Glow on the computer (no thought; the chime says it). |
 | The notebook, first time it has something new | *Hester's notes are kept in my notebook.* |
 
+A thought that is only read (no thing to do) waits for a click anywhere, marked with a small blinking ›; none moves on by itself. After the first sale and after Hester, the star goes to the shop bell for the next customer.
+
 ## Open questions
 
 1. The aura colours: settled. They follow the design document (all ten, with its meanings); Hester's note lists them all.
