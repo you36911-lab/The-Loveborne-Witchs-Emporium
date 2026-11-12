@@ -87,7 +87,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* The keywords of a book entry, in the book's own print: a blank is a light line like the Recipe Book's (pink and heavier
    under the pointer); a word written in it sits on that line, with a small x to rub it out; keywords already printed and
    a finished entry's words have no line. */
-.pg button.blank,.leaf button.blank{background:none;box-shadow:none;border:0;border-bottom:1.5px solid #C9A8B8;border-radius:0;transform:none}
+.pg button.blank,.leaf button.blank{font:inherit;background:none;box-shadow:none;border:0;border-bottom:1.5px solid #C9A8B8;border-radius:0;transform:none}
 .pg button.blank:hover,.leaf button.blank:hover,.pg button.blank:focus-visible,.pg button.blank.open,.leaf button.blank.open{color:var(--kw-text);background:none;box-shadow:none;border-bottom:2px solid var(--pink);outline:none;transform:none}
 .pg .blank.done,.leaf .blank.done{display:inline-block;min-width:0;border:0}  /* a finished entry's words: no line, like the printed ones */
 .ekw{display:inline-block}  /* printed keywords: no line (words still to be collected keep their dotted one) */
