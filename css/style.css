@@ -90,9 +90,10 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
    to right. Words still to be collected keep their dotted underline. */
 .pg button.blank,.leaf button.blank{background:none;box-shadow:none;border:0;border-bottom:1.5px solid #C9A8B8;border-radius:0;transform:none}
 .pg button.blank:hover,.leaf button.blank:hover,.pg button.blank:focus-visible,.pg button.blank.open,.leaf button.blank.open{color:var(--kw-text);background:none;box-shadow:none;border-bottom:2px solid var(--pink);outline:none;transform:none}
-.pg .blank.filled,.leaf .blank.filled,.pg .blank.done,.leaf .blank.done,.ekw{font-family:'Caveat',cursive;font-weight:500;font-size:1.35em;line-height:1;color:#3A2A3A;padding:0 8px}
-.pg .blank.done,.leaf .blank.done{display:inline-block;min-width:0;border-bottom:1.5px solid var(--pink)}
-.ekw{display:inline-block;border-bottom:1.5px solid #C9A8B8}
+.pg .blank.filled,.leaf .blank.filled,.pg .blank.done,.leaf .blank.done,.ekw{font-family:'Caveat',cursive;font-weight:400;font-size:1.5em;  /* the same size as the Recipe Book's hand (its pages set a larger base) */
+  line-height:1;color:#3A2A3A;padding:0 8px}
+.pg .blank.done,.leaf .blank.done{display:inline-block;min-width:0;border:0}  /* a finished entry's words: no line, like the printed ones */
+.ekw{display:inline-block}  /* printed keywords: no line (words still to be collected keep their dotted one) */
 .ekw .kw{color:#3A2A3A;text-decoration-color:var(--pink)}
 .blank.writing{animation:inkIn .45s ease-out both}
 @keyframes inkIn{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% 0 -20% 0)}}
