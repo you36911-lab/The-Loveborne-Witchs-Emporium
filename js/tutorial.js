@@ -39,7 +39,7 @@ function seen(sel){for(const el of document.querySelectorAll(sel)){const r=el.ge
 
 /* Hester's notes: short rules in her own hand */
 const HESTER_NOTES={
-  aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. Pink: longing, affection; bright pink, embarrassment. Red: anger, passion, urgency. Grey: sadness, grief, tiredness. Pale blue: worry. Gold: pride, joy. Yellow: nerves, curiosity. Murky green: envy. Purple: a stirring of intuition. A dark knot: shame, something hidden. Sparkling white: hope, a fresh start.','Watch it, dear. People rarely ask for what they need.']},
+  aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. [pink|Pink]: longing, affection; [pinkstrong|bright pink], embarrassment. [red|Red]: anger, passion, urgency. [grey|Grey]: sadness, grief, tiredness. [blue|Pale blue]: worry. [gold|Gold]: pride, joy. [yellow|Yellow]: nerves, curiosity. [green|Murky green]: envy. [purple|Purple]: a stirring of intuition. A [darkknot|dark knot]: shame, something hidden. [white|Sparkling white]: hope, a fresh start.','Watch it, dear. People rarely ask for what they need.']},
   themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']},
   tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']}};
 
@@ -72,14 +72,15 @@ const LESSONS=[
     /* where Hester's notes are kept: beside the notebook, as slips, to read again */
     {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
     /* the star on the slip goes once the pointer has been over it */
-    {glow:()=>slipSeen?'':'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',wait:4500,allow:[],
+    {glow:()=>slipSeen?'':'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',done:()=>slipSeen&&Date.now()-slipSeen>=1500,allow:[],
       ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
-    /* the rest of the notebook is the player's own: they may write in it, and a click beside it closes it */
-    {glow:()=>memoTyped?'':'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',  /* the star goes once something is written */done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
+    /* the rest of the notebook is the player's own: something is written in it first, then a click beside it closes it */
+    {glow:'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',done:()=>memoTyped||(S.memo||[]).some(Boolean),allow:['#books .pg .memo']},
+    {say:'When I’m done, a click beside the book puts it away.',done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER]&&!S.parting,end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
-    {glow:()=>wordsDone()?'#crystalBtn':'',say:()=>wordsDone()?'A charm for her pocket… and the ball’s pale blue. She’s worried, then.':'',done:()=>spokenFor(4000),allow:['#counter .balloon']},
+    {done:()=>spokenFor(800),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* The first order is shown whole: the star goes to the right recipe in the index, then to each blank and the right
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
@@ -157,7 +158,7 @@ function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.spli
   LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]})}
 /* the notebook steps: once the player has looked at the slip (the pointer over it), or written something, the star has
    done its job and goes */
-let slipSeen=false;$('#books').addEventListener('pointerover',e=>{if(e.target.closest('.hslip'))slipSeen=true});
+let slipSeen=0;$('#books').addEventListener('pointerover',e=>{if(!slipSeen&&e.target.closest('.hslip'))slipSeen=Date.now()});  /* when it was first looked at */
 let memoTyped=false;$('#books').addEventListener('input',e=>{if(e.target.dataset.memo!==undefined)memoTyped=true});
 /* Whether the customer has finished speaking: their words type out letter by letter (typeBalloon in scene.js), or all at
    once when the balloon is clicked (wordsDone, in scene.js). spokenFor(ms): they finished at least this long ago (counted within the current step). */
@@ -262,7 +263,9 @@ function markLock(){const on=locked();document.body.classList.toggle('guide-lock
 
 /* Hester's note: in the middle of the screen, in her hand; a click outside closes it, like every popup */
 /* a note's words, the same in the popup and taped into the notebook */
-function noteHTML(id){const n=HESTER_NOTES[id];return `<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${esc(t)}</p>`).join('')}<p class="hsig">— H.</p>`}
+/* [aura|words] in a note: the words marked as with a highlighter in that aura's colour */
+const noteMarks=s=>s.replace(/\[(\w+)\|([^\]]+)\]/g,(m,k,w)=>`<mark class="hl" data-aura="${k}" style="--hl:${(X.auras[k]||['#FFE36E'])[0]}">${w}</mark>`);
+function noteHTML(id){const n=HESTER_NOTES[id];return `<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${noteMarks(esc(t))}</p>`).join('')}<p class="hsig">— H.</p>`}
 function openNote(id){$('#hNoteBody').innerHTML=noteHTML(id);
   $('#hNote').dataset.note=id;$('#hNote').classList.add('open')}
 function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return;(S.guideNotes||(S.guideNotes={}))[m.dataset.note]=true;save();m.classList.remove('open')}

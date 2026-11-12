@@ -15,10 +15,10 @@ Changes made while building it:
 - The first order is shown whole (decided 2026-11-08): the star goes to the right recipe in the index, its name, then
   each ingredient blank and the right name in its list, with why it fits ("Herb or flower: Chamomile, for calm and
   comfort."). "Next time I'll work it out from the books myself."
-- Hester's note on the crystal ball uses the game's aura meanings: gold joy, grey sadness, pale blue worry, red anger,
-  pink longing, bright pink embarrassment.
+- Hester's note on the crystal ball uses the design document's aura meanings, all ten colours (and bright pink, embarrassment).
 - Hester's notes are taped onto the notebook's first page as paper slips, to read again; after the first, the tutorial
-  points to the notebook and then to the slip.
+  points to the notebook and then to the slip (it moves on once the slip has been looked at), then to the right-hand page:
+  something has to be written there before the notebook can be closed.
 - The mark is a small pink star on the thing (chosen over a glow, a spotlight and hand-drawn marks). A step blocks every other
   click until it is done.
 - The closing thought after a lesson is used for the first order only.
@@ -64,7 +64,7 @@ The core loop, one step at a time.
 
 | Step | Glow on | Thought | Done when |
 |---|---|---|---|
-| 1 | the balloon, then the crystal ball | *A charm for her pocket… and the ball's gone blue. Calm, then. Things a little easier.* | the words have finished |
+| 1 | the balloon | (no thought: the aura is already in Hester's note) | the words have finished |
 | 2 | the books | *The Recipe Book will have it. Charms, things for an easier day.* | the Recipe Book is open |
 | 3 | the index | *The index first: what kind of thing she asked for.* | a charm page is open |
 | 4 | the recipe name | *That's the one. I'll mark it, so I know what I'm making.* | the recipe is chosen (tick) |

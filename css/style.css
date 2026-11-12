@@ -1205,6 +1205,15 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .hpaper h3{font-family:'Caveat',cursive;font-size:30px;margin:0 0 6px;color:#7A2E5E;font-weight:500}
 .hpaper p{margin:0 0 8px}
 .hpaper .hsig{text-align:right;margin:4px 0 0}
+/* a colour's name in Hester's crystal-ball note, gone over with a highlighter: a translucent stroke, a little uneven and
+   slightly tilted, lower than the letters' tops, as a quick hand would draw it */
+.hpaper mark.hl{color:inherit;padding:0 .18em;margin:0 -.08em;border-radius:.5em .2em .45em .25em/.3em .5em .25em .45em;
+  background:linear-gradient(100deg,color-mix(in srgb,var(--hl) 0%,transparent) 0,color-mix(in srgb,var(--hl) 62%,transparent) .25em,
+    color-mix(in srgb,var(--hl) 55%,transparent) 55%,color-mix(in srgb,var(--hl) 66%,transparent) calc(100% - .3em),color-mix(in srgb,var(--hl) 0%,transparent) 100%)
+    0 62%/100% 68% no-repeat;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+/* the dark knot's stroke is lighter, so the ink still reads; white on the cream paper gets a lilac-silver edge to show */
+.hpaper mark.hl[data-aura="darkknot"]{--hl:#8C7A8C}
+.hpaper mark.hl[data-aura="white"]{--hl:#C8BFEA}
 
 /* The save icon: a small heart in a turning ring of light, bottom right, for a moment when the game has kept something
    that matters (see save() in core.js). */
