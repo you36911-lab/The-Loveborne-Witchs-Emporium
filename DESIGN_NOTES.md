@@ -158,6 +158,8 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 - Keeping it smooth as more art comes in: no blur effects (backdrop-filter) anywhere, since they are redrawn every frame; export new pictures at about the sizes now used (characters ~1650px tall, items ~600px, cards ~840px wide); big pictures are decoded ahead of time.
 - Later: split the prototype into a real web project.
 
+- **Auras follow the design document**: all ten colours (pink, red, grey, yellow, murky green, pale blue, gold, purple, dark knot, sparkling white, plus strong pink for embarrassment) with its meanings, in X.auras and in Hester's crystal-ball note. Her emails do not explain the auras.
+
 ## Birthstones
 
 - "The customer's birthstone" (The Starbound Self, #131) is not a stone of its own: it is the crystal for the month the customer was born in, picked from the Crystals cupboard. January Garnet, February Amethyst, March Aquamarine, April Clear quartz (for diamond), May Jade (for emerald), June Pearl, July Carnelian (for ruby), August Peridot, September Lapis lazuli (for sapphire), October Moonstone (for opal), November Citrine, December Amazonite (for turquoise). The Crystal Almanac's birthstone page lists them.

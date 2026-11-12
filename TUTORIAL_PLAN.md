@@ -139,7 +139,7 @@ Taught once, the first time the situation comes up, not on a set day.
 
 ## Open questions
 
-1. The aura colours and their meanings for Hester's note: check against `X.auras` and the design document.
-2. Should the closing thought after each step appear every time, or only for the first order? (Proposal: first order only.)
+1. The aura colours: settled. They follow the design document (all ten, with its meanings); Hester's note lists them all.
+2. The closing thought: settled, first order only.
 3. Hester teaches test crafts in her own balloon. Her current line already says "So you're the new keeper…"; the test
    craft advice would follow it. Check that this fits her voice.

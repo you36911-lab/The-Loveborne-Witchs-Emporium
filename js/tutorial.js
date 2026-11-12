@@ -39,7 +39,7 @@ function seen(sel){for(const el of document.querySelectorAll(sel)){const r=el.ge
 
 /* Hester's notes: short rules in her own hand */
 const HESTER_NOTES={
-  aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. Gold: joy. Grey: sadness. Pale blue: worry. Red: anger. Pink: longing; bright pink, embarrassment.','Watch it, dear. People rarely ask for what they need.']},
+  aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. Pink: longing, affection; bright pink, embarrassment. Red: anger, passion, urgency. Grey: sadness, grief, tiredness. Pale blue: worry. Gold: pride, joy. Yellow: nerves, curiosity. Murky green: envy. Purple: a stirring of intuition. A dark knot: shame, something hidden. Sparkling white: hope, a fresh start.','Watch it, dear. People rarely ask for what they need.']},
   themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']},
   tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']}};
 

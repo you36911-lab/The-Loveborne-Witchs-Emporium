@@ -64,7 +64,7 @@ const X = {
  "A woman who keeps dating the same man":"Kasia Moretti",
  "A young poet":"Theo Linden",
  "A first-year student":"Emi Laurent"},
-"auras":{"gold":["#F5C542","Gold glow: joy"],"grey":["#9A97A8","Grey drizzle: sadness"],"blue":["#8FB8F0","Pale blue ripples: anxiety"],"red":["#F0645A","Red sparks: anger"],"pink":["#FFB8D2","Pink haze: longing"],"pinkstrong":["#FF5FA8","Strong pink: embarrassment"],"unknown":["#C9B8E8","An aura you cannot read"]},
+"auras":{"gold":["#F5C542","Gold glow: pride, joy, celebration"],"grey":["#9A97A8","Grey drizzle: sadness, grief, tiredness"],"blue":["#8FB8F0","Pale blue ripples: anxiety, worry"],"red":["#F0645A","Red sparks: anger, passion, urgency"],"pink":["#FFB8D2","Pink haze: longing, affection, wanting to be loved"],"pinkstrong":["#FF5FA8","Strong pink haze: embarrassment"],"yellow":["#FFE36E","Yellow flicker: nervous excitement, curiosity"],"green":["#7E8C4E","Murky green: envy, insecurity, comparison"],"purple":["#9B6FD6","Purple shimmer: an intuitive or spiritual stirring"],"darkknot":["#4A3A4A","Dark knot: shame, guilt, something hidden"],"white":["#F4F1FF","Sparkling white: hope, relief, a fresh start"],"unknown":["#C9B8E8","An aura you cannot read"]},
 
 "letterWords":[["beginnings"],["dreams","home","courage","protection","communication","focus","luck","abundance","love","beauty","endings","success","rest"],["calm","sleep","rest","cleansing","focus","home","intuition","transformation","truth"]]
 }
