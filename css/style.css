@@ -630,6 +630,10 @@ button.small{font-size:12px;padding:2px 10px}
 .jumptab.first:disabled{width:calc(var(--flp,4%) - var(--flc,0%) + 2.1em)}.jumptab.last:disabled{width:calc(var(--frp,4%) - var(--frc,0%) + 2.1em)}  /* always just a little see-through, like real flags (buttons otherwise fade when disabled) */
 .tome:not(.opened) .jumptab{visibility:hidden;opacity:0}
 .turn:disabled{opacity:.3;cursor:default;box-shadow:none}
+/* an invisible margin round each arrow that turns the page too (the arrow keeps its size), so a click that just misses it
+   turns the page instead of closing the book: tall, and a little to either side, short of the pages and the columns */
+.turn{position:relative}
+.turn::after{content:'';position:absolute;inset:-140px -22px;border-radius:30px}
 .tomewrap:has(.tome:not(.opened)) .turn{visibility:hidden}
 @media (prefers-reduced-motion:reduce){.tome,.cover,.leaf,.spread,.tome .pg{transition:none}}
 
