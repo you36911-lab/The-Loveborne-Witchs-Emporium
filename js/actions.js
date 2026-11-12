@@ -214,10 +214,10 @@ function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
       el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-9%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
         {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`,offset:.6},
-        {transform:'none'}],{duration:2500,easing:'ease-in-out'})});  /* a long, gentle settle back to where they stood */
-    setTimeout(()=>craftBurst(plates),1000);
-    setTimeout(()=>plates.classList.remove('charging'),1500);
-    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},2600)},moving?1150:150)}
+        {transform:'none'}],{duration:4000,easing:'ease-in-out'})});  /* a long, gentle settle back to where they stood */
+    setTimeout(()=>craftBurst(plates),1700);
+    setTimeout(()=>plates.classList.remove('charging'),2500);
+    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},4200)},moving?1150:150)}
 /* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
 function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
   const wave=(n,dmin,dmax,smin,smax,dur,delay)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.4,d=dmin+Math.random()*(dmax-dmin),s=document.createElement('span');
@@ -232,5 +232,5 @@ function craftMotes(pr,cx){const top=pr.top+pr.height*.25;
     m.style.cssText=`left:${x}px;top:${y}px;width:${s}px;height:${s}px`;document.body.appendChild(m);
     const tx=(cx-x)*(.55+Math.random()*.35)+(Math.random()-.5)*30,ty=top-y-Math.random()*pr.height*.25;
     m.animate([{transform:'translate(0,0)',opacity:0},{opacity:.95,offset:.25},{transform:`translate(${tx*.5}px,${ty*.55}px)`,opacity:.9,offset:.6},
-      {transform:`translate(${tx}px,${ty}px) scale(.4)`,opacity:0}],{duration:1100+Math.random()*500,delay:Math.random()*450,easing:'ease-in-out',fill:'both'})
+      {transform:`translate(${tx}px,${ty}px) scale(.4)`,opacity:0}],{duration:1700+Math.random()*700,delay:Math.random()*900,easing:'ease-in-out',fill:'both'})
       .onfinish=()=>m.remove()}}
