@@ -84,20 +84,13 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .entry b{min-width:150px}
 .entry.locked b::after{content:" ✦";color:var(--pink)}
 .blank{min-width:70px;border-bottom:2px solid var(--ink);padding:0 6px;cursor:pointer;background:none;box-shadow:none;border-top:0;border-left:0;border-right:0;border-radius:0}
-/* The keywords of a book entry look like the Recipe Book's: a blank is a light line (pink and heavier under the pointer,
-   or while its list is open); a word written in it, and every keyword already printed in the entry, is in Hester's hand
-   (Caveat, #3A2A3A) on a light line; a finished entry's words sit on a pink line. Words still to be collected keep their
-   dotted underline. */
+/* The keywords of a book entry, in the book's own print: a blank is a light line like the Recipe Book's (pink and heavier
+   under the pointer); a word written in it sits on that line, with a small x to rub it out; keywords already printed and
+   a finished entry's words have no line. */
 .pg button.blank,.leaf button.blank{background:none;box-shadow:none;border:0;border-bottom:1.5px solid #C9A8B8;border-radius:0;transform:none}
 .pg button.blank:hover,.leaf button.blank:hover,.pg button.blank:focus-visible,.pg button.blank.open,.leaf button.blank.open{color:var(--kw-text);background:none;box-shadow:none;border-bottom:2px solid var(--pink);outline:none;transform:none}
-.pg .blank.filled,.leaf .blank.filled,.pg .blank.done,.leaf .blank.done,.ekw{font-family:'Caveat',cursive;font-weight:400;font-size:1.5em;  /* the same size as the Recipe Book's hand (its pages set a larger base) */
-  line-height:1;color:rgba(58,42,58,.8);padding:0 8px}
-/* (the ink is a touch see-through: these books' papers are a darker cream than the Recipe Book's, and full ink on them
-   reads heavier than the same hand there) */
-.ekw .kw{color:inherit}
 .pg .blank.done,.leaf .blank.done{display:inline-block;min-width:0;border:0}  /* a finished entry's words: no line, like the printed ones */
 .ekw{display:inline-block}  /* printed keywords: no line (words still to be collected keep their dotted one) */
-.ekw .kw{text-decoration-color:var(--pink)}
 
 .word{font-size:13px;padding:2px 9px}
 .word.sel{background:var(--kw);border-color:var(--kw-text);color:#fff}
