@@ -208,8 +208,8 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
    wall behind, the things take on a pink rim of light and drift in toward the middle, turning a little, while tiny motes
    of light rise off the cloth and gather over them; at the peak a burst of stars, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
-const CRAFT_PEAK_MS=2900,SPELL_DROP_MS=1500;  /* the rise to the top; the finished spell's coming down */
-let spellDrop=false;  /* the next finished spell drawn on the altar comes down from where the things rose to */
+const CRAFT_PEAK_MS=2500,SPELL_DROP_MS=1500;  /* the rise to the top; the finished spell's coming down */
+let spellDrop=false,craftRise=0;  /* craftRise: how far up (px) the things went, where the spell appears */  /* the next finished spell drawn on the altar comes down from where the things rose to */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
   if(calm()){setTimeout(()=>{playCraft();done()},moving?950:0);return}
   document.body.classList.add('crafting');
@@ -217,16 +217,17 @@ function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
     const mc=$('#magicCircle'),x=(cx-glow.parentElement.getBoundingClientRect().left)+'px';glow.style.left=mc.style.left=x;  /* both centred on what is laid out */
     [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});playCraft();plates.classList.add('charging');craftMotes(pr,cx);
     /* the things rise slowly, drawing in and turning, and stay up there a moment */
+    craftRise=Math.round(pr.height*1.1);const up=craftRise;  /* how high they rise: a good way above the table, whatever their size */
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
-      el.animate([{transform:'none'},{transform:`translate(${dx*.5}px,-8%) scale(.93) rotate(${turn/2}deg)`,offset:.4},
-        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.85},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`}],
+      el.animate([{transform:'none'},{transform:`translate(${dx*.5}px,${-up*.3}px) scale(.93) rotate(${turn/2}deg)`,offset:.4},
+        {transform:`translate(${dx}px,${-up*.92}px) scale(.84) rotate(${turn}deg)`,offset:.85},{transform:`translate(${dx}px,${-up}px) scale(.84) rotate(${-turn}deg)`}],
         {duration:CRAFT_PEAK_MS,easing:'ease-in-out',fill:'forwards'})});
     setTimeout(()=>craftBurst(plates),CRAFT_PEAK_MS-300);
     /* at the top, with the burst, they become the finished spell, which comes down in their place (spellDrop, scene.js) */
     setTimeout(()=>{plates.classList.remove('charging');spellDrop=true;done();if(spellDrop){spellDrop=false;render()}},CRAFT_PEAK_MS);
     setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting')},CRAFT_PEAK_MS+SPELL_DROP_MS)},moving?1150:150)}
 /* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
-function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
+function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.4-craftRise;  /* up where the things have risen to */
   const wave=(n,dmin,dmax,smin,smax,dur,delay)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.4,d=dmin+Math.random()*(dmax-dmin),s=document.createElement('span');
     s.className='burst';s.textContent='\u2726';s.setAttribute('aria-hidden','true');
     s.style.cssText=`left:${cx}px;top:${cy}px;--dx:${Math.cos(a)*d}px;--dy:${Math.sin(a)*d*.7-20}px;--sz:${smin+Math.random()*(smax-smin)}px;animation-duration:${dur}ms;animation-delay:${delay+Math.random()*80}ms`;

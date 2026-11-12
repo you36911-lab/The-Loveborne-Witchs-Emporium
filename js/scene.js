@@ -258,7 +258,7 @@ function renderAltar(){
   if(S.spell){const sp=S.spell,pic=ASSETS.spells[sp.rid];
     $('#plates').innerHTML=`<button class="ontable spellmade" id="spellBtn" aria-label="${esc(sp.name)}: ${sp.give?'take it up to the counter':'clear it away'}"><img src="${pic||ASSETS.iconPhoneApp}" alt="" class="${pic?'':'nopic'}" style="--h:${pic?SPELL_SIZE[sp.type]||.6:.62}">${pic?'':`<span class="nm">${esc(sp.name)}</span>`}</button>`;
     /* just crafted: it appears up where the things rose to, in a flash of light, and settles gently down onto the table */
-    if(typeof spellDrop!=='undefined'&&spellDrop){spellDrop=false;$('#spellBtn').animate([{transform:'translateY(-26%) scale(.9)',opacity:0,filter:'brightness(1.8) drop-shadow(0 0 1.2cqw #FFE3F0)'},
+    if(typeof spellDrop!=='undefined'&&spellDrop){spellDrop=false;$('#spellBtn').animate([{transform:`translateY(${-(craftRise||0)}px) scale(.9)`,opacity:0,filter:'brightness(1.8) drop-shadow(0 0 1.2cqw #FFE3F0)'},
       {opacity:1,offset:.2},{transform:'none',opacity:1,filter:'brightness(1) drop-shadow(0 0 0 transparent)'}],{duration:SPELL_DROP_MS,easing:'cubic-bezier(.3,.1,.3,1)'})}}
   else $('#plates').innerHTML=back.length?`<div class="prow back">${back.map(plate).join('')}</div><div class="prow front">${front.map(plate).join('')}</div>`:front.map(plate).join('');
   /* the candle stand is always on the altar; a chosen candle stands in its cup, behind the cup's front lip (a second copy
