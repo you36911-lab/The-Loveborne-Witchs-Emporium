@@ -142,9 +142,6 @@ const LESSONS=[
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
     {glow:'#spellBtn',say:'Made. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Hand it over.',done:()=>S.seen[HESTER_DAY1],allow:[]}]},
-  /* after Hester has gone: the bell again, for the next one */
-  {id:'bell2',when:()=>S.day===1&&!!S.seen[HESTER_DAY1]&&!S.seen[NURSE]&&!S.queue&&!S.parting&&!bellWait&&!somethingOpen(),until:()=>!!S.queue||!!bellWait||!!S.seen[NURSE]||S.day>1,steps:[
-    {glow:'#bellBtn',say:'Someone else will be waiting. The bell.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
   {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000},
     /* once her recipe is open: what it is for, and how that leads to what goes in */
     {say:'',done:()=>bookOpen('Recipe Book')&&pageOf()==='recipe:'+visitByKey(NURSE).rid},

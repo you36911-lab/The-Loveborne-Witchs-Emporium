@@ -141,7 +141,7 @@ Hester's lesson ends like the first order: once her rune is made, *Made. Up to t
 
 Bookmarks: the first time a book is open on an entry after Hester's lesson (usually while making the nurse's tea), *A page I'll want again. The ribbon at the top keeps my place.* (star on the ribbon), then *There it is, beside the book. A tap brings me straight back to it, whatever page I'm on.* (star on the bookmark).
 
-A thought that is only read (no thing to do) waits for a click anywhere, marked with a small blinking ›; none moves on by itself. After the first sale and after Hester, the star goes to the shop bell for the next customer.
+A thought that is only read (no thing to do) waits for a click anywhere, marked with a small blinking ›; none moves on by itself. After the first sale, the star goes to the shop bell for the next customer (Hester); the nurse is rung for unguided.
 
 ## Open questions
 
