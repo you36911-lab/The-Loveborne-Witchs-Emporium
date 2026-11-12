@@ -324,7 +324,7 @@ function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#count
   el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>${v.tutLine&&!S.tutOff?`<p>“${esc(v.tutLine)}”</p>`:''}`)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
-  const b=$('#madeBtn'),m=S.made;b.hidden=!m;if(!m)return;
+  const b=$('#madeBtn'),m=S.made&&!(S.spell&&S.spell.give)?S.made:null;b.hidden=!m;if(!m)return;  /* the parcel waits on the counter only once the spell has been brought up from the altar */
   $('#madeTag').textContent=m.name;b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
 function render(){if(Date.now()>=dawnUntil+MAIL_AFTER_DAWN_MS)checkMail();  /* post waits until the dawn card has gone, and a moment more */

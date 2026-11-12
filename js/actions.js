@@ -133,7 +133,7 @@ function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
   setTimeout(()=>craftAnim(()=>{bellBusy=false;doCraft(false)}),450)}  /* it is crafted (the same as a test craft); the spell then waits on the altar */
 /* Hand over what was made: the grade was settled when it was made. */
-function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
+function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q)||(S.spell&&S.spell.give))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
   {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
