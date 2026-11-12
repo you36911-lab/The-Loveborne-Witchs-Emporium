@@ -139,7 +139,7 @@ Taught once, the first time the situation comes up, not on a set day.
 
 Hester's lesson ends like the first order: once her rune is made, *Made. Up to the counter with it.* (star on the spell), then *Hand it over.* (star on the parcel); the "Fill in what's missing" thought goes as soon as it is made.
 
-Bookmarks: the first time a book is open on an entry after Hester's lesson (usually while making the nurse's tea), *A page I'll want again. The ribbon at the top keeps my place.* (star on the ribbon), then straight away *There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.* (star on the same ribbon), done when it is taken out.
+Bookmarks, in the first order, right after her recipe is chosen (its page is open): *A page I'll want again. The ribbon at the top keeps my place.* (star on the ribbon), then straight away *There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.* (star on the same ribbon), done when it is taken out.
 
 A thought that is only read (no thing to do) waits for a click anywhere, marked with a small blinking ›; none moves on by itself. After the first sale, the star goes to the shop bell for the next customer (Hester); the nurse is rung for unguided.
 

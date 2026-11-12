@@ -94,6 +94,10 @@ const LESSONS=[
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
     {glow:()=>seen(`[data-go="recipe:${R1}"]`)?`[data-go="recipe:${R1}"]`:'#turnNext',say:()=>`The index first. A charm, for an easier day: ${D.recipes[R1].name}.`,done:()=>pageOf()==='recipe:'+R1,allow:[...TURNS]},
     {glow:`#books .pg [data-choose-recipe="${R1}"]`,say:'That’s the one. I’ll tap its name to mark it as what I’m making.',done:()=>String(S.target)===String(R1),allow:[]},
+    /* bookmarks, on her recipe's page: one made, and straight away taken out again */
+    {glow:`#books .pg .ribbon[data-bm="recipe:${R1}"]`,say:'A page I’ll want again. The ribbon at the top keeps my place.',done:()=>(S.marks||[]).length>0||!!bmKey,allow:[]},
+    {ensure:keepBm,glow:()=>bmRibbon()||'#marks .mark',say:'There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.',
+      done:()=>!!bmKey&&!(S.marks||[]).some(m=>m.key===bmKey),allow:['#marks']},
     /* what the recipe is for: everything in it carries one of these (the link between the books and the recipes) */
     {glow:THEMES,say:()=>`What it’s for: ${D.recipes[R1].themes.join(', ')}. Everything that goes in carries one of those.`,wait:6500,allow:[]},
     /* each blank in turn: the star on the blank, then on the right name in the list it opens */
@@ -156,14 +160,6 @@ const LESSONS=[
   {id:'report',when:()=>S.queue&&S.queue.type==='report',until:()=>!S.queue||S.queue.type!=='report',steps:[
     {say:'Back to tell me how it went.',done:()=>!S.queue||S.queue.type!=='report'}]},
   /* taught where they first matter */
-  /* bookmarks: the first time a book is open on an entry (after Hester's lesson, so usually while making the nurse's tea
-     on her own, going back and forth between the recipe and the books) */
-  {id:'bookmark',when:()=>isOpen('books')&&(typeof guideState().bookmark==='number'||guideState().hester==='done'&&!(S.marks||[]).length&&curBook!==DIARY&&!onIndex()&&!!seen('#books .pg .ribbon')),  /* once begun, it carries on while a book is open */
-    until:()=>S.day>3,steps:[
-    {glow:'#books .pg .ribbon',say:'A page I’ll want again. The ribbon at the top keeps my place.',done:()=>(S.marks||[]).length>0,allow:[...TURNS]},
-    /* and straight out again: the same ribbon (what it is for is said on the way: the list beside the book) */
-    {ensure:keepBm,glow:()=>bmRibbon()||'#marks .mark',say:'There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.',
-      done:()=>!!bmKey&&!(S.marks||[]).some(m=>m.key===bmKey),allow:['#marks',...TURNS]}]},
   {id:'words',when:()=>S.day>=2&&!S.bank.length&&!!seen('.kw'),until:()=>S.bank.length>0,steps:[
     {glow:'.kw',say:'That word, with the dots under it… worth keeping.',done:()=>S.bank.length>0}]},
   /* the word bank: a blank in a book unfolds the words kept (or a word picked up from the bank goes straight in) */
