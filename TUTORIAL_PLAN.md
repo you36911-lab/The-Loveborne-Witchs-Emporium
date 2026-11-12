@@ -64,7 +64,7 @@ The core loop, one step at a time.
 
 | Step | Glow on | Thought | Done when |
 |---|---|---|---|
-| 1 | the balloon | (no thought: the aura is already in Hester's note) | the words have finished |
+| 1 | the balloon, then the crystal ball | *A charm for her pocket… and the ball's pale blue. She's worried, then.* | a click, once the words have finished |
 | 2 | the books | *The Recipe Book will have it. Charms, things for an easier day.* | the Recipe Book is open |
 | 3 | the index | *The index first: what kind of thing she asked for.* | a charm page is open |
 | 4 | the recipe name | *That's the one. I'll mark it, so I know what I'm making.* | the recipe is chosen (tick) |

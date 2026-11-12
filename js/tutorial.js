@@ -49,6 +49,8 @@ const HESTER_NOTES={
    allow (while it waits, only the star's thing and these can be clicked or even hovered: a selector (that and all inside
    it), or {self: selector} (that element alone, e.g. a popup's backdrop, whose click closes it);
    a step without allow blocks nothing). */
+const RAVENS='[data-go="recipe:111"]';  /* Hester's rune in the Recipe Book's index */
+const onIndex=()=>{const p=String(pageOf());return !p||p.startsWith('index')};  /* a book not yet turned opens on its index */
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const READING=['#letterRead .wm-text'];  /* the open email: scrolled and read, its dotted words tapped */
 const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its page */
@@ -81,6 +83,7 @@ const LESSONS=[
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER]&&!S.parting,end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
     {done:()=>spokenFor(800),allow:['#counter .balloon']},
+    {glow:'#crystalBtn',say:'A charm for her pocket… and the ball’s pale blue. She’s worried, then.',wait:1,allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'The Recipe Book will have it.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* The first order is shown whole: the star goes to the right recipe in the index, then to each blank and the right
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
@@ -114,7 +117,10 @@ const LESSONS=[
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
-    {glow:()=>seen('[data-go="recipe:111"]')?'[data-go="recipe:111"]':'#turnFirst',say:'The Language of Ravens.',done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[...TURNS]},
+    /* to her rune by the index: the teal tab first if the book is open elsewhere, then on through the index to the runes */
+    {glow:()=>seen(RAVENS)?RAVENS:onIndex()?'#turnNext':'#turnFirst',
+      say:()=>seen(RAVENS)?'The Language of Ravens.':onIndex()?'Runes come further on in the index.':'The index first. The tab at the edge goes back to it.',
+      done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[]},
     {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
     {glow:'#phoneBtn',say:'The phone. That’s where a test tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
     /* the result on the phone, part by part; then it closes at a click outside it */
