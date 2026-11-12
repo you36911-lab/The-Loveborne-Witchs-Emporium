@@ -1149,8 +1149,8 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   opacity:.75;transition:opacity 1.6s ease,scale 1.6s ease;animation:tsRays 90s linear infinite}
 @keyframes tsRays{to{rotate:360deg}}
 /* the halo: a thin ring of light floating above the logo's star, seen a little from the side */
-.ts-halo{position:absolute;left:50%;top:-9%;width:26%;height:7%;translate:-50% 0;pointer-events:none;border-radius:50%;
-  border:2px solid rgba(255,246,251,.95);
+.ts-halo{position:absolute;left:50%;top:-13%;width:38%;height:10%;translate:-50% 0;pointer-events:none;border-radius:50%;
+  border:3px solid rgba(255,246,251,.95);
   box-shadow:0 0 5px 1px rgba(255,220,240,.95),0 0 16px 4px rgba(247,168,210,.6),0 0 34px 8px rgba(214,176,250,.3),inset 0 0 6px 1px rgba(255,220,240,.85);
   animation:tsHalo 5s ease-in-out infinite}
 @keyframes tsHalo{50%{transform:translateY(-5px);box-shadow:0 0 6px 2px rgba(255,226,244,1),0 0 22px 6px rgba(247,168,210,.75),0 0 44px 12px rgba(214,176,250,.38),inset 0 0 7px 2px rgba(255,226,244,.9)}}
@@ -1166,9 +1166,12 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ts-menu>button:nth-child(1){animation-delay:.75s!important}.ts-menu>button:nth-child(2){animation-delay:.9s!important}
 .ts-menu>button:nth-child(3){animation-delay:1.05s!important}.ts-menu>button:nth-child(4){animation-delay:1.2s!important}
 @keyframes tsBtnIn{from{opacity:0;transform:translateY(10px)}}
+/* as the logo rises and the buttons come, its light and the halo fade softly away */
+.ts-halo{transition:opacity 1.4s ease}
+.titlescreen.ready:not(.intro) .ts-halo{animation:tsHalo 5s ease-in-out infinite;opacity:0}
+.titlescreen.ready:not(.intro) .ts-aureole{opacity:0}
 /* skipped: straight to the end, with no movement */
-.titlescreen.intro-skip :is(.ts-splash,.ts-aureole){transition:none}
-.titlescreen.intro-skip .ts-halo{animation:tsHalo 5s ease-in-out infinite}
+.titlescreen.intro-skip :is(.ts-splash,.ts-aureole,.ts-halo){transition:none}
 @media (prefers-reduced-motion: reduce){.ts-bg,.ts-main,.ts-glow,.ts-splash,.ts-motes,.ts-glints,.ts-aureole,.ts-halo,.ts-menu>button{animation:none!important}.ts-motes,.ts-glints{display:none}}
 /* leaving the title, the shop's first background shows at once behind it (menu.js) */
 .scene.nofade .bg{transition:none}

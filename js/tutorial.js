@@ -11,6 +11,11 @@ const vkey=v=>v.day+'-'+v.hour+'-'+v.who;
 const FIRST_ORDER=vkey(X.visits.find(v=>v.kind!=='advice'));
 const HESTER_DAY1='1-Twilight-Hester';
 const NURSE='1-Nightfall-A night-shift nurse';
+/* a test craft made while Hester teaches does not count toward the five (its candle still goes out, and lights again after) */
+/* the bookmark made in the bookmark lesson (the newest), which its last step takes out again */
+let bmKey='';const bmRibbon=()=>bmKey&&seen(`#books .pg .ribbon[data-bm="${bmKey}"]`)?`#books .pg .ribbon[data-bm="${bmKey}"]`:'';
+const keepBm=()=>{const m=S.marks||[];if(!bmKey&&m.length)bmKey=m[m.length-1].key};
+const tutorialTest=()=>!S.tutOff&&typeof guideState().hester==='number';
 const FIRST_ADVICE=vkey(X.visits.find(v=>v.kind==='advice'));
 const R1=visitByKey(FIRST_ORDER).rid;  /* the first order's recipe, which the tutorial shows whole */
 /* the first of its ingredient blanks still empty (-1 when all are written) */
@@ -114,7 +119,10 @@ const LESSONS=[
     {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']},
     {glow:'#bellBtn',say:'Ready for whoever’s next. The bell calls them in.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
   /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
-  {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],steps:[
+  {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],
+    /* the test crafts made while she teaches are free: the black candles they put out light again when she has gone */
+    start:()=>{S.tutFails0=S.failTests||0},
+    end:()=>{const was=S.tutFails0;delete S.tutFails0;if(was==null||(S.failTests||0)<=was)return '';S.failTests=was;save();renderCandles();return 'The black candles have lit themselves again. Her lesson was on the house.'},steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
     {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* to her rune by the index: the teal tab first if the book is open elsewhere, then on through the index to the runes */
@@ -151,9 +159,12 @@ const LESSONS=[
   /* bookmarks: the first time a book is open on an entry (after Hester's lesson, so usually while making the nurse's tea
      on her own, going back and forth between the recipe and the books) */
   {id:'bookmark',when:()=>isOpen('books')&&(typeof guideState().bookmark==='number'||guideState().hester==='done'&&!(S.marks||[]).length&&curBook!==DIARY&&!onIndex()&&!!seen('#books .pg .ribbon')),  /* once begun, it carries on while a book is open */
-    until:()=>!isOpen('books')&&(S.marks||[]).length>0,steps:[
+    until:()=>S.day>3,steps:[
     {glow:'#books .pg .ribbon',say:'A page I’ll want again. The ribbon at the top keeps my place.',done:()=>(S.marks||[]).length>0,allow:[...TURNS]},
-    {glow:'#marks .mark',say:'There it is, beside the book. A tap brings me straight back to it, whatever page I’m on.',wait:1,allow:['#marks',...TURNS]}]},
+    {ensure:keepBm,glow:'#marks .mark',say:'There it is, beside the book. A tap brings me straight back to it, whatever page I’m on.',wait:1,allow:['#marks',...TURNS]},
+    /* and out again: the ribbon on its page (the bookmark beside the book leads there first, if the page is elsewhere) */
+    {glow:()=>bmRibbon()?bmRibbon():'#marks .mark',say:()=>bmRibbon()?'When I’m done with a page, the same ribbon takes the bookmark out again.':'When I’m done with a page, its ribbon takes the bookmark out again.',
+      ensure:keepBm,done:()=>!!bmKey&&!(S.marks||[]).some(m=>m.key===bmKey),allow:['#marks',...TURNS]}]},
   {id:'words',when:()=>S.day>=2&&!S.bank.length&&!!seen('.kw'),until:()=>S.bank.length>0,steps:[
     {glow:'.kw',say:'That word, with the dots under it… worth keeping.',done:()=>S.bank.length>0}]},
   /* the word bank: a blank in a book unfolds the words kept (or a word picked up from the bank goes straight in) */
@@ -201,7 +212,7 @@ function guideTick(){
   if(S.tutOff||titleOpen()||menuOpen()){show(null);return}
   const g=guideState();let L=current();
   for(let n=0;L&&n<LESSONS.length;n++){
-    if(g[L.id]===undefined){g[L.id]=0;save()}
+    if(g[L.id]===undefined){g[L.id]=0;if(L.start)L.start();save()}
     if(L.until()){finish(L);L=current();continue}
     let i=g[L.id],st=L.steps[i];const key=L.id+':'+i;
     if(!st){finish(L);L=current();continue}  /* never stall on a step that is not there (an older save, a hole) */
