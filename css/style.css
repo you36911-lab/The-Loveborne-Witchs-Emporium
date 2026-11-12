@@ -1151,7 +1151,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   background:radial-gradient(circle,rgba(255,238,248,.5) 0%,rgba(255,196,228,.3) 20%,rgba(214,176,250,.12) 40%,transparent 60%),
     repeating-conic-gradient(from 0deg,rgba(255,226,244,.14) 0deg 3deg,transparent 3deg 12deg);
   -webkit-mask:radial-gradient(circle,#000 14%,transparent 58%);mask:radial-gradient(circle,#000 14%,transparent 58%);
-  opacity:.75;transition:opacity 1.2s ease,scale 1.3s cubic-bezier(.55,0,.3,1);animation:tsRays 90s linear infinite}
+  opacity:.75;transition:opacity 2.6s cubic-bezier(.4,0,.2,1),scale 2.6s cubic-bezier(.4,0,.2,1);animation:tsRays 90s linear infinite}
 @keyframes tsRays{to{rotate:360deg}}
 /* the halo: a thin ring of light floating above the logo's star, seen a little from the side */
 .ts-halo{position:absolute;left:50%;top:-13%;width:38%;height:10%;translate:-50% 0;pointer-events:none;border-radius:50%;
@@ -1172,8 +1172,8 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .ts-menu>button:nth-child(3){animation-delay:.84s!important}.ts-menu>button:nth-child(4){animation-delay:.96s!important}
 @keyframes tsBtnIn{from{opacity:0;transform:translateY(10px)}}
 /* as the logo rises and the buttons come, its light and the halo fade softly away */
-.ts-halo{transition:opacity 1.2s ease,scale 1.3s cubic-bezier(.55,0,.3,1)}
-.titlescreen.ready:not(.intro) .ts-halo{animation:tsHalo 5s ease-in-out infinite;opacity:0;scale:.8}
+.ts-halo{transition:opacity 2.4s cubic-bezier(.4,0,.2,1),scale 2.4s cubic-bezier(.4,0,.2,1)}  /* a slow, soft fade */
+.titlescreen.ready:not(.intro) .ts-halo{opacity:0;scale:.8}  /* its animations carry on unchanged, so nothing cuts the fade short */
 .titlescreen.ready:not(.intro) .ts-aureole{opacity:0;scale:.82}  /* shrinking a little with the logo as they go */
 /* skipped: straight to the end, with no movement */
 .titlescreen.intro-skip :is(.ts-splash,.ts-aureole,.ts-halo){transition:none}
