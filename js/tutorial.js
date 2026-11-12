@@ -200,7 +200,10 @@ function guideState(){return S.guide||(S.guide={})}
 /* Lessons tied to a moment (at) come first: one under way carries on, or the first that may start. The ones taught where
    they first matter (no at) show only while their situation is on screen (when), and wait, part-way if need be, while a
    lesson tied to a moment runs. */
-function current(){const g=guideState(),open=l=>typeof g[l.id]==='number'||!g[l.id];
+/* The tutorial is over once Hester's lesson is: from the nurse on, the player is on their own and no lesson starts.
+   (The lessons after it are kept below, unused, in case one is wanted back.) */
+const tutorialOver=()=>guideState().hester==='done'||!!S.seen[HESTER_DAY1];
+function current(){if(tutorialOver())return null;const g=guideState(),open=l=>typeof g[l.id]==='number'||!g[l.id];
   return LESSONS.find(l=>l.at&&typeof g[l.id]==='number')||LESSONS.find(l=>l.at&&!g[l.id]&&l.when())||
     LESSONS.find(l=>!l.at&&open(l)&&l.when())}
 /* a lesson is under way (or about to show): the scene's mood line keeps out of the way (renderScene) */

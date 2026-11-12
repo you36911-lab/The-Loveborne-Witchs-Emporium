@@ -143,6 +143,8 @@ Bookmarks, in the first order, right after her recipe is chosen (its page is ope
 
 A thought that is only read (no thing to do) waits for a click anywhere, marked with a small blinking ›; none moves on by itself. After the first sale, the star goes to the shop bell for the next customer (Hester); the nurse is rung for unguided.
 
+**The tutorial ends with Hester's lesson.** From the nurse on there is no tutorial at all: the nurse's lesson, the day-end receipts, the first advice, reports, dotted words, blanks, candles, timing, the full moon and new emails are not taught (their lessons are kept in tutorial.js, unused).
+
 ## Open questions
 
 1. The aura colours: settled. They follow the design document (all ten, with its meanings); Hester's note lists them all.
