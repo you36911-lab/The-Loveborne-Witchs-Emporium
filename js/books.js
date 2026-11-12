@@ -70,7 +70,7 @@ function entryHTML(e){
      a way to rub it out) */
   const lk=entryLocked(e),sh=shownOf(e),blank=i=>{if(lk)return `<span class="blank done">${esc(f[i])}</span>`;
     const key=`kw|${e.sk}|${i}`,open=pickOpen===key;
-    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: choose another word':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i]):' '}</button>${open?wordIndex(key,f[i]):''}</span>`};
+    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i]):' '}</button>${open?wordIndex(key,f[i]):''}</span>`};
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?kw(p):blank(h.indexOf(p))).join(' · ');
   return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
@@ -322,8 +322,10 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
     save();renderBooks();return}
   if(b.dataset.book){if(b.dataset.book!==curBook)showBook(b.dataset.book);return}
   if(b.dataset.word){selWord=selWord===b.dataset.word?null:b.dataset.word;renderBooks();return}
-  /* a blank: with a word picked up from the word bank, it goes straight in; otherwise the blank's list unfolds (or folds) */
-  if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i,key=`kw|${k}|${i}`;
+  /* a blank: one that holds a word is rubbed out by a tap (and that word, if picked up in the word bank, is put down);
+     an empty one takes the word picked up from the word bank, or else unfolds (or folds) its list */
+  if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i,key=`kw|${k}|${i}`,had=(S.fills[k]||[])[i];
+    if(had){pickOpen='';if(selWord===had)selWord=null;fillBlank(k,i,'');return}
     if(selWord){pickOpen='';fillBlank(k,i,selWord);return}
     pickOpen=pickOpen===key?'':key;renderBooks();return}
   if(b.dataset.rmIng){const[id,i]=b.dataset.rmIng.split('|');noteOf(id).ing[+i]='';save();renderBooks();return}
