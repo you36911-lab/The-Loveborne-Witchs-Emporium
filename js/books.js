@@ -71,8 +71,9 @@ function entryHTML(e){
   const lk=entryLocked(e),sh=shownOf(e),blank=i=>{if(lk)return `<span class="blank done">${esc(f[i])}</span>`;
     const key=`kw|${e.sk}|${i}`,open=pickOpen===key;
     return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i])+' ×':' '}</button></span>`};
+  /* (the note, e.g. "Base for Cookies", is left out when the item's own line already says it) */
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?`<span class="ekw">${kw(p)}</span>`:blank(h.indexOf(p))).join(' · ');
-  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
+  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note&&!(ITEM[e.k]?.line||'').includes(e.note)?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
     if(e.k===BIRTHSTONE)return `<span class="bookline months">${Object.entries(BIRTHSTONES).map(([m,s])=>`<span>${m}</span><b>${esc(s)}</b>`).join('')}</span>`;
     if(pic)return `<img class="entrypic ${e.sk.startsWith('tarot:')?'card':''}" src="${pic}" alt="">`;
