@@ -277,9 +277,9 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div class="wgroup"><div class="wrow"><b>Card:</b><span class="wvals">${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</span></div>${pickOpen.startsWith('tarot|')?ccList:''}</div>
   <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div></div>
   </div>`}
-/* A blank's list: the words in the word bank (those not used up), A to Z; a blank that holds a word can also be rubbed out. */
+/* A blank's list: the words in the word bank (those not used up), A to Z. (A blank that holds a word is rubbed out by a tap.) */
 function wordIndex(key,has){const words=S.bank.filter(w=>!usedUp(w)||w===has).sort();
-  return `<div class="windex kwindex" role="listbox">${has?`<button data-choose="${esc(key)}" data-val="" role="option" class="rub"><span>Rub it out</span></button>`:''}`+
+  return `<div class="windex kwindex" role="listbox">`+
     (words.length?words.map(w=>`<button data-choose="${esc(key)}" data-val="${esc(w)}" role="option"${w===has?' aria-selected="true"':''}><span>${esc(w)}</span></button>`).join('')
       :'<p class="kwnone">No words kept yet. Dotted words, tapped, go into the word bank.</p>')+'</div>'}
 /* Write a word into an entry's blank (an empty word rubs it out). A finished ingredient entry brings up its page. */
