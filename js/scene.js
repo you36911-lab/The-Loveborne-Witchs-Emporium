@@ -94,7 +94,10 @@ function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<da
   const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
   /* post comes first: when an email is about to drop in, the mood line waits until it has, and stays away while the new-email card is up */
   const mailWaiting=mailIn().some(m=>!(m.i in (S.mail||{})));
-  if(!thinking&&(v||S.parting)||Date.now()<dawnUntil+(mailWaiting?MAIL_AFTER_DAWN_MS:AFTER_DAWN_MS)||!$('#mailFx').hidden||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
+  /* the mood line is for a quiet shop only: not while someone is on their way in (the bell rung), nor while the tutorial
+     is in the middle of a lesson */
+  const busy=!!bellWait||(typeof tutorialBusy==='function'&&tutorialBusy());
+  if(!thinking&&(v||S.parting||busy)||Date.now()<dawnUntil+(mailWaiting?MAIL_AFTER_DAWN_MS:AFTER_DAWN_MS)||!$('#mailFx').hidden||$('#dayEnd').classList.contains('open')){note.hidden=true;return}
   note.dataset.thought=thinking?'1':'';if(!thinking)note.style.animation='';  /* a thought waits for the customer's words (see typeBalloon) */
   const line=thinking?adviceThought(av):moodLine();if(note.hidden||note.textContent!==line){note.textContent=line;note.hidden=false;note.classList.remove('in');void note.offsetWidth;note.classList.add('in')}}
 /* A customer who got just what they needed says their goodbye (the hint) in their own balloon, stays long enough to
@@ -112,7 +115,7 @@ setInterval(()=>{if(!S.parting||$('#title').hidden===false){partingDoneAt=0;retu
    The bell rings first; a moment later (BELL_TO_DOOR_MS) the door opens and the customer appears. The bell does nothing
    while it waits for the door. */
 let bellWait=0;
-function letIn(){bellWait=setTimeout(()=>{bellWait=0;S.rung=true;render()},BELL_TO_DOOR_MS)}
+function letIn(){bellWait=setTimeout(()=>{bellWait=0;S.rung=true;render()},BELL_TO_DOOR_MS);renderScene()}  /* the mood line steps away at once */
 function ringBell(){const bell=$('#bellBtn');if(bellWait)return;
   /* a customer still saying their goodbye is not hurried: the bell only gives a little shake */
   if(S.parting){bell.classList.remove('nope');void bell.offsetWidth;bell.classList.add('nope');toast('Let them finish first.',{thought:true});return}

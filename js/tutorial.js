@@ -208,7 +208,10 @@ function guideState(){return S.guide||(S.guide={})}
 function current(){const g=guideState(),open=l=>typeof g[l.id]==='number'||!g[l.id];
   return LESSONS.find(l=>l.at&&typeof g[l.id]==='number')||LESSONS.find(l=>l.at&&!g[l.id]&&l.when())||
     LESSONS.find(l=>!l.at&&open(l)&&l.when())}
-function guideTick(){
+/* a lesson is under way (or about to show): the scene's mood line keeps out of the way (renderScene) */
+function tutorialBusy(){return !S.tutOff&&!!current()}
+let wasBusy=false;
+function guideTick(){const b=tutorialBusy();if(b!==wasBusy){wasBusy=b;renderScene()}
   if(S.tutOff||titleOpen()||menuOpen()){show(null);return}
   const g=guideState();let L=current();
   for(let n=0;L&&n<LESSONS.length;n++){
