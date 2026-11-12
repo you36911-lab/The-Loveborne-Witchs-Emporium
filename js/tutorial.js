@@ -100,11 +100,12 @@ const LESSONS=[
     {glow:'#spellBtn',say:'There it is. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Wrapped and waiting. Hand it over.',done:()=>S.seen[FIRST_ORDER],allow:[]},
     /* what she lets slip as she goes (the hint): it comes back in her review on the computer, after closing */
-    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll find it again in her review on the computer.':'',done:()=>!S.parting,allow:[],holdCustomer:4000}]},
+    {glow:()=>S.parting&&wordsDone()?'#counter .balloon':'',say:()=>S.parting&&wordsDone()?'What she let slip… I’ll find it again in her review on the computer.':'',  /* over once she has gone, or once the word is kept */
+      done:()=>!S.parting||(visitByKey(FIRST_ORDER).hint?.words||[]).some(w=>S.bank.includes(w)),allow:[],holdCustomer:4000}]},
   /* after the first sale: its receipt at the till, then her review, which comes in as she leaves, with what she let slip */
   {id:'sale1',at:'1-Noon-~sale',when:()=>guideState().order1==='done'&&!S.queue&&!S.parting&&S.reviews.length>0,until:()=>!!S.queue||S.day>1,steps:[
     {glow:'#tillBtn',say:'The till printed her receipt. What she had, and her stars.',done:()=>isOpen('receiptsView'),allow:[]},
-    {say:'',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
+    {say:'The spell, her name, her stars, the day and the hour. A click beside it puts it away.',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
     {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'And her review’s come in already.',done:()=>pcApp('shop'),allow:[]},
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
     {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']}]},
