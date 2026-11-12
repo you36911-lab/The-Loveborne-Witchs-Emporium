@@ -82,8 +82,8 @@ function adviceAnswer(v){const t=normName(adviceDraft.text);
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
   if(t.id==='info')$('#info').classList.remove('open');
   if(t.id==='pc')closePC();
-  /* a book closes at a click anywhere outside it (the bookmarks and word bank columns too), except on a control */
-  if(inside('books')&&!path.some(n=>n.matches?.('.tome, button, input, select, textarea, a'))){$('#books').classList.remove('open');render()}
+  /* a book closes at a click anywhere outside it, except on a control or on what the bookmarks and word bank columns hold (their titles, their text, the gaps between their words) */
+  if(inside('books')&&!path.some(n=>n.matches?.('.tome, button, input, select, textarea, a, .markside>*, .bank>*'))){$('#books').classList.remove('open');render()}
   if(t.id==='dayEnd')$('#dayGo')?.click();  /* the day's summary has one way out: on to the next day */
   const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard')){fx.hidden=true;render()}
   if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
