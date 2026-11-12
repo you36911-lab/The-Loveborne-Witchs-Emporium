@@ -70,7 +70,7 @@ function entryHTML(e){
      a way to rub it out) */
   const lk=entryLocked(e),sh=shownOf(e),blank=i=>{if(lk)return `<span class="blank done">${esc(f[i])}</span>`;
     const key=`kw|${e.sk}|${i}`,open=pickOpen===key;
-    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i]):' '}</button>${open?wordIndex(key,f[i]):''}</span>`};
+    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i])+' ×':' '}</button></span>`};
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?`<span class="ekw">${kw(p)}</span>`:blank(h.indexOf(p))).join(' · ');
   return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
@@ -277,11 +277,6 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   <div class="wgroup"><div class="wrow"><b>Card:</b><span class="wvals">${r.tarot?slot('Card',n.tarot,`data-rm-tarot="${r.id}"`,`tarot|${r.id}`):none}</span></div>${pickOpen.startsWith('tarot|')?ccList:''}</div>
   <div class="wgroup"><div class="wrow"><b>When:</b><span class="wvals">${M?r.conds.map((c,i)=>slot(CONDKIND[c.t],n.when[i],`data-rm-when="${r.id}|${i}"`,`when|${r.id}|${i}`)).join(' '):'<span class="muted">any time</span>'}</span></div>${whenList}</div></div>
   </div>`}
-/* A blank's list: the words in the word bank (those not used up), A to Z. (A blank that holds a word is rubbed out by a tap.) */
-function wordIndex(key,has){const words=S.bank.filter(w=>!usedUp(w)||w===has).sort();
-  return `<div class="windex kwindex" role="listbox">`+
-    (words.length?words.map(w=>`<button data-choose="${esc(key)}" data-val="${esc(w)}" role="option"${w===has?' aria-selected="true"':''}><span>${esc(w)}</span></button>`).join('')
-      :'<p class="kwnone">No words kept yet. Dotted words, tapped, go into the word bank.</p>')+'</div>'}
 /* Write a word into an entry's blank (an empty word rubs it out). A finished ingredient entry brings up its page. */
 function fillBlank(k,i,w){const f=S.fills[k]||(S.fills[k]=[]);
   if(!w){f[i]=undefined;save();renderBooks();return}
@@ -327,7 +322,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.entry){const k=b.dataset.entry,i=+b.dataset.i,key=`kw|${k}|${i}`,had=(S.fills[k]||[])[i];
     if(had){pickOpen='';if(selWord===had)selWord=null;fillBlank(k,i,'');return}
     if(selWord){pickOpen='';fillBlank(k,i,selWord);return}
-    pickOpen=pickOpen===key?'':key;renderBooks();return}
+    toast('A word from the word bank first. Tap one, then the blank.',{thought:true});return}
   if(b.dataset.rmIng){const[id,i]=b.dataset.rmIng.split('|');noteOf(id).ing[+i]='';save();renderBooks();return}
   if(b.dataset.rmWhen){const[id,i]=b.dataset.rmWhen.split('|');noteOf(id).when[+i]='';save();renderBooks();return}
 });
