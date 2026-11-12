@@ -61,7 +61,7 @@ function showTitle(){const t=$('#title'),saved=hasSave();
 /* The title's opening, every time it is shown: at first only the logo, in the middle, with a soft light behind it and a
    halo above it; then it rises and the buttons fade in under it, one after another. A click or a key skips straight to
    the end. The logo is moved down by half of what is under it (the buttons), so it starts in the very middle. */
-const INTRO_HOLD_MS=2600,INTRO_RISE_MS=1600;
+const INTRO_HOLD_MS=2000,INTRO_RISE_MS=1300;
 let introT=0;
 function titleIntro(){const t=$('#title');clearTimeout(introT);
   if(matchMedia('(prefers-reduced-motion: reduce)').matches){endIntro(true);return}
