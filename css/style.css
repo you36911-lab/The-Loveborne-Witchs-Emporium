@@ -84,7 +84,15 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .entry b{min-width:150px}
 .entry.locked b::after{content:" ✦";color:var(--pink)}
 .blank{min-width:70px;border-bottom:2px solid var(--ink);padding:0 6px;cursor:pointer;background:none;box-shadow:none;border-top:0;border-left:0;border-right:0;border-radius:0}
-.blank.filled{background:var(--pink-soft)}
+/* A blank in a book is a line on the page, not a button: no box. Under the pointer its line darkens to pink, as if the
+   pen were about to touch it; a word written in it is in Hester's ink and hand (Caveat, #3A2A3A), on a fine line, and is
+   drawn in from left to right as it is written. */
+button.blank:hover,button.blank:focus-visible{background:none;box-shadow:0 1px 0 var(--kw);border-bottom-color:var(--kw);outline:none}
+.blank.filled{background:none;font-family:'Caveat',cursive;font-weight:500;font-size:1.45em;line-height:1;color:#3A2A3A;border-bottom:1px solid rgba(58,42,58,.45)}
+button.blank.filled:hover,button.blank.filled:focus-visible{box-shadow:none;border-bottom-color:var(--kw);color:#5A3A52}
+.blank.writing{animation:inkIn .45s ease-out both}
+@keyframes inkIn{from{clip-path:inset(-20% 100% -20% 0)}to{clip-path:inset(-20% 0 -20% 0)}}
+@media (prefers-reduced-motion: reduce){.blank.writing{animation:none}}
 .word{font-size:13px;padding:2px 9px}
 .word.sel{background:var(--kw);border-color:var(--kw-text);color:#fff}
 .bank{border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--paper)}

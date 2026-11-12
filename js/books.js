@@ -70,7 +70,7 @@ function entryHTML(e){
      a way to rub it out) */
   const lk=entryLocked(e),sh=shownOf(e),blank=i=>{if(lk)return `<span class="blank done">${esc(f[i])}</span>`;
     const key=`kw|${e.sk}|${i}`,open=pickOpen===key;
-    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i]):' '}</button>${open?wordIndex(key,f[i]):''}</span>`};
+    return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''} ${f[i]&&justWritten===key?'writing':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i]):' '}</button>${open?wordIndex(key,f[i]):''}</span>`};
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?kw(p):blank(h.indexOf(p))).join(' · ');
   return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
@@ -283,7 +283,8 @@ function wordIndex(key,has){const words=S.bank.filter(w=>!usedUp(w)||w===has).so
     (words.length?words.map(w=>`<button data-choose="${esc(key)}" data-val="${esc(w)}" role="option"${w===has?' aria-selected="true"':''}><span>${esc(w)}</span></button>`).join('')
       :'<p class="kwnone">No words kept yet. Dotted words, tapped, go into the word bank.</p>')+'</div>'}
 /* Write a word into an entry's blank (an empty word rubs it out). A finished ingredient entry brings up its page. */
-function fillBlank(k,i,w){const f=S.fills[k]||(S.fills[k]=[]);
+let justWritten='';  /* the blank just written in (kw|entry|i): its word is drawn in, left to right, once */
+function fillBlank(k,i,w){const f=S.fills[k]||(S.fills[k]=[]);justWritten=w?`kw|${k}|${i}`:'';setTimeout(()=>{justWritten=''},600);
   if(!w){f[i]=undefined;save();renderBooks();return}
   f[i]=w;const e=entryList(curBook).find(x=>x.sk===k),done=e&&entryLocked(e);
   /* an ingredient's entry complete: its page comes up on its own, picture and all; anything else just says so */
