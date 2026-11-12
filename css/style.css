@@ -1035,8 +1035,8 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .craftglow{position:absolute;left:50%;bottom:8%;width:46%;height:150%;translate:-50% 0;z-index:0;pointer-events:none;opacity:0;
   background:radial-gradient(ellipse closest-side,rgba(255,232,244,.55),rgba(255,206,230,.32) 30%,rgba(244,173,207,.14) 58%,rgba(244,173,207,.04) 80%,rgba(244,173,207,0));
   filter:blur(14px);mix-blend-mode:screen}
-.craftglow.on{animation:craftglow 3.2s ease-in-out both}
-@keyframes craftglow{0%{opacity:0;scale:.85}35%{opacity:.7}56%{opacity:1;scale:1.05}80%{opacity:.5}100%{opacity:0;scale:1.1}}
+.craftglow.on{animation:craftglow 4.4s ease-in-out both}
+@keyframes craftglow{0%{opacity:0;scale:.85}40%{opacity:.7}66%{opacity:1;scale:1.05}85%{opacity:.5}100%{opacity:0;scale:1.1}}
 /* the magic circle lies flat on the cloth under what is laid out: it draws itself in, turns slowly, glows, and fades */
 .magiccircle{position:absolute;left:50%;bottom:16%;width:27%;aspect-ratio:1;translate:-50% 50%;z-index:0;pointer-events:none;opacity:0;overflow:visible;
   transform:perspective(60cqw) rotateX(74deg);fill:none;stroke:#FFE0EE;stroke-width:1.1;stroke-linecap:round;
@@ -1044,9 +1044,9 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .magiccircle .mc-dots{fill:#FFE0EE;stroke:none}
 .magiccircle :is(circle,path,polygon){stroke-dasharray:600;stroke-dashoffset:600}
 .magiccircle .mc-spin{transform-origin:100px 100px}
-.magiccircle.on{animation:mcFade 3.2s ease-in-out both}
-.magiccircle.on :is(circle,path,polygon){animation:mcDraw 1.6s ease-out both}
-.magiccircle.on .mc-spin{animation:mcSpin 3.2s linear both}
+.magiccircle.on{animation:mcFade 4.4s ease-in-out both}
+.magiccircle.on :is(circle,path,polygon){animation:mcDraw 2s ease-out both}
+.magiccircle.on .mc-spin{animation:mcSpin 4.4s linear both}
 @keyframes mcFade{0%{opacity:0}15%{opacity:.95}70%{opacity:1}100%{opacity:0}}
 @keyframes mcDraw{to{stroke-dashoffset:0}}
 @keyframes mcSpin{from{rotate:0deg}to{rotate:80deg}}

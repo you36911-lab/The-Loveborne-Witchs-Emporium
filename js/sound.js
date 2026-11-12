@@ -16,7 +16,7 @@ function playBell(){sfx('shopBell',.45)}
 function playAltarBell(){sfx('altarBell',1)}
 /* Something new on the computer (an email, the night's reviews): "New Notification 012" (Universfield). */
 function playNotify(){sfx('notify',.5)}
-/* The till at closing, as the day's receipts come out: "cash drawer and receipt" (freesound_community). */
+/* The till, as receipts come out (clicked, when there are any, and at closing): "cash drawer and receipt" (freesound_community). */
 function playReceiptPrint(){sfx('receipt',.9)}
 /* A customer comes in: the shop's old door creaks open and swings shut behind them. "Creaking Door 03" (Universfield),
    then "Close Door" (DRAGON-STUDIO) as the creak fades. */

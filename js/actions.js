@@ -31,7 +31,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
     case 'pcBtn':openPC();break;
-    case 'tillBtn':openReceipts();break;
+    case 'tillBtn':if(S.pend.length)playReceiptPrint();openReceipts();break;  /* the till prints them as it opens, whenever there are any */
     case 'notebookBtn':openDiary();break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);
       /* in the first morning's tutorial it opens the inbox, so H.'s emails are read first, oldest first */
@@ -98,7 +98,7 @@ let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#c
      counter, where it is given;
    - any other test: clicking it clears it away. */
 function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
-  if(test){render();craftAnim(()=>setTimeout(()=>judgeTest(r),600));return}  /* a moment after it settles, then judged */
+  if(test){render();craftAnim(()=>judgeTest(r));return}  /* judged at the top of the crafting, as the finished spell comes down */
   judge(r,false)}
 function judgeTest(r){const before=S.failTests||0;judge(r,true);phoneNotify((S.failTests||0)>before?1100:300)}
 /* the finished spell takes the place of what was laid out */
@@ -205,19 +205,23 @@ function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.
    wall behind, the things take on a pink rim of light and drift in toward the middle, turning a little, while tiny motes
    of light rise off the cloth and gather over them; at the peak a burst of stars, and they settle back. Nothing can be clicked meanwhile. If the view is still
    sliding down to the workroom, it waits for that first. */
+const CRAFT_PEAK_MS=2900,SPELL_DROP_MS=1500;  /* the rise to the top; the finished spell's coming down */
+let spellDrop=false;  /* the next finished spell drawn on the altar comes down from where the things rose to */
 function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
   if(calm()){setTimeout(()=>{playCraft();done()},moving?950:0);return}
   document.body.classList.add('crafting');
   setTimeout(()=>{const plates=$('#plates'),pr=plates.getBoundingClientRect(),cx=pr.left+pr.width/2,glow=$('#craftGlow');
     const mc=$('#magicCircle'),x=(cx-glow.parentElement.getBoundingClientRect().left)+'px';glow.style.left=mc.style.left=x;  /* both centred on what is laid out */
     [glow,mc].forEach(e=>{e.classList.remove('on');void e.getBoundingClientRect();e.classList.add('on')});playCraft();plates.classList.add('charging');craftMotes(pr,cx);
+    /* the things rise slowly, drawing in and turning, and stay up there a moment */
     plates.querySelectorAll('.ontable').forEach((el,i)=>{const r=el.getBoundingClientRect(),dx=(cx-(r.left+r.width/2))*.55,turn=i%2?7:-7;
-      el.animate([{transform:'none'},{transform:`translate(${dx*.6}px,-9%) scale(.92) rotate(${turn/2}deg)`,offset:.3},
-        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.55},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`,offset:.6},
-        {transform:'none'}],{duration:4000,easing:'ease-in-out'})});  /* a long, gentle settle back to where they stood */
-    setTimeout(()=>craftBurst(plates),1700);
-    setTimeout(()=>plates.classList.remove('charging'),2500);
-    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting');done()},4200)},moving?1150:150)}
+      el.animate([{transform:'none'},{transform:`translate(${dx*.5}px,-8%) scale(.93) rotate(${turn/2}deg)`,offset:.4},
+        {transform:`translate(${dx}px,-24%) scale(.84) rotate(${turn}deg)`,offset:.85},{transform:`translate(${dx}px,-27%) scale(.84) rotate(${-turn}deg)`}],
+        {duration:CRAFT_PEAK_MS,easing:'ease-in-out',fill:'forwards'})});
+    setTimeout(()=>craftBurst(plates),CRAFT_PEAK_MS-300);
+    /* at the top, with the burst, they become the finished spell, which comes down in their place (spellDrop, scene.js) */
+    setTimeout(()=>{plates.classList.remove('charging');spellDrop=true;done();if(spellDrop){spellDrop=false;render()}},CRAFT_PEAK_MS);
+    setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting')},CRAFT_PEAK_MS+SPELL_DROP_MS)},moving?1150:150)}
 /* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
 function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.35;
   const wave=(n,dmin,dmax,smin,smax,dur,delay)=>{for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.4,d=dmin+Math.random()*(dmax-dmin),s=document.createElement('span');
