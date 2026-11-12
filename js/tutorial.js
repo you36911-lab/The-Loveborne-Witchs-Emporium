@@ -161,10 +161,9 @@ const LESSONS=[
   {id:'bookmark',when:()=>isOpen('books')&&(typeof guideState().bookmark==='number'||guideState().hester==='done'&&!(S.marks||[]).length&&curBook!==DIARY&&!onIndex()&&!!seen('#books .pg .ribbon')),  /* once begun, it carries on while a book is open */
     until:()=>S.day>3,steps:[
     {glow:'#books .pg .ribbon',say:'A page I’ll want again. The ribbon at the top keeps my place.',done:()=>(S.marks||[]).length>0,allow:[...TURNS]},
-    {ensure:keepBm,glow:'#marks .mark',say:'There it is, beside the book. A tap brings me straight back to it, whatever page I’m on.',wait:1,allow:['#marks',...TURNS]},
-    /* and out again: the ribbon on its page (the bookmark beside the book leads there first, if the page is elsewhere) */
-    {glow:()=>bmRibbon()?bmRibbon():'#marks .mark',say:()=>bmRibbon()?'When I’m done with a page, the same ribbon takes the bookmark out again.':'When I’m done with a page, its ribbon takes the bookmark out again.',
-      ensure:keepBm,done:()=>!!bmKey&&!(S.marks||[]).some(m=>m.key===bmKey),allow:['#marks',...TURNS]}]},
+    /* and straight out again: the same ribbon (what it is for is said on the way: the list beside the book) */
+    {ensure:keepBm,glow:()=>bmRibbon()||'#marks .mark',say:'There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.',
+      done:()=>!!bmKey&&!(S.marks||[]).some(m=>m.key===bmKey),allow:['#marks',...TURNS]}]},
   {id:'words',when:()=>S.day>=2&&!S.bank.length&&!!seen('.kw'),until:()=>S.bank.length>0,steps:[
     {glow:'.kw',say:'That word, with the dots under it… worth keeping.',done:()=>S.bank.length>0}]},
   /* the word bank: a blank in a book unfolds the words kept (or a word picked up from the bank goes straight in) */
