@@ -1128,6 +1128,9 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
   background:radial-gradient(circle,rgba(255,170,215,.28) 0%,rgba(200,150,240,.12) 40%,transparent 68%);animation:tsBreathe 7s ease-in-out infinite}
 @keyframes tsBreathe{50%{opacity:.55;transform:scale(1.06)}}
 .ts-splash{position:relative;width:min(46vh,62vw,560px);margin-bottom:clamp(10px,2.5vh,28px);animation:tsFloat 6s ease-in-out infinite}
+/* drawn once, at full quality, and that picture is what floats: otherwise the big logo is rescaled every frame as it
+   moves a fraction of a pixel, and the thin script letters shimmer and break up */
+.ts-splash{will-change:transform;backface-visibility:hidden}
 .ts-splash img{display:block;width:100%;height:auto;filter:drop-shadow(0 4px 18px rgba(40,10,50,.55))}
 @keyframes tsFloat{50%{transform:translateY(-8px)}}
 /* a glint: a four-pointed star of light that swells and fades */
