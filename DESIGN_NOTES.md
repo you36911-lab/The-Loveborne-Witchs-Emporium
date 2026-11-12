@@ -208,6 +208,6 @@ Done: the save icon; the auras follow the design document; the closing thought a
 - Completing an ingredient's entry in a book brings up its page as a card (picture as the book prints it, or its look; all its keywords; its line). Finished entries read as ordinary print.
 - Solved recipes no longer react to the pointer. Up to 30 bookmarks (the column scrolls).
 - A crystal taken out of its cupboard says its name as a subtitle (they look alike).
-- Closing the computer closes its windows: it always opens on the desktop.
+- Stepping away from the computer leaves its windows open: it opens again just as it was left (the email being read, its apps, minimised ones).
 - The title screen waits in its plain colour until its pictures are ready, then fades them in (no snap).
 - Prototype bar: a Tutorial on/off button. The tutorial's lock never reaches the prototype bar.

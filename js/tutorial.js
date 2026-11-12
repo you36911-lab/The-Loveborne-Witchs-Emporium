@@ -118,7 +118,7 @@ const LESSONS=[
   {id:'sale1',at:'1-Noon-~sale',when:()=>guideState().order1==='done'&&!S.queue&&!S.parting&&S.reviews.length>0,until:()=>!!S.queue||S.day>1,steps:[
     {glow:'#tillBtn',say:'The till printed her receipt. What she had, and her stars.',done:()=>isOpen('receiptsView'),allow:[]},
     {say:'The spell, her name, her stars, the day and the hour. A click beside it puts it away.',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
-    {glow:()=>isOpen('pc')?'#desk .dicon[data-app="shop"]':'#pcBtn',say:'And her review’s come in already.',done:()=>pcApp('shop'),allow:[]},
+    {glow:()=>!isOpen('pc')?'#pcBtn':topApp()&&topApp()!=='shop'?`[data-winmin="${topApp()}"]`:'#desk .dicon[data-app="shop"]',say:'And her review’s come in already.',done:()=>pcApp('shop')&&topApp()==='shop',allow:[]},
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
     {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']},
     {glow:'#bellBtn',say:'Ready for whoever’s next. The bell calls them in.',done:()=>!!bellWait||!!S.queue,allow:[]}]},

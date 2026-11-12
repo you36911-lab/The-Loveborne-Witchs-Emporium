@@ -15,10 +15,10 @@ const topApp=()=>[...pcOpen].reverse().find(a=>!pcMin.has(a))||'';
 document.querySelectorAll('#pc [data-icon]').forEach(el=>el.innerHTML=PC_ICONS[el.dataset.icon]);
 /* (the wallpaper path is made absolute: a relative url() in a CSS variable would be read from the css folder) */
 function openPC(app){$('#pcScreen').style.setProperty('--wall',`url("${new URL(ASSETS.pcWallpaper,location.href).href}")`);$('#pc').classList.add('open');
-  if(app)openApp(app);else renderPCBar()}
-/* closing the computer closes its windows too: it always opens on the desktop (an email opened from a new email's card
-   opens Moonpost itself) */
-function closePC(){$('#pc').classList.remove('open');pcOpen.forEach(a=>{const w=winOf(a);w.hidden=true;w.classList.remove('max');w.style.left=w.style.top=''});pcOpen=[];pcMin.clear();render()}
+  if(app)openApp(app);else renderPC()}  /* what was left open is brought up to date */
+/* stepping away from the computer leaves its windows as they were: it opens again just as it was left (an email opened
+   from a new email's card opens Moonpost itself) */
+function closePC(){$('#pc').classList.remove('open');render()}
 function renderPC(){pcOpen.forEach(fillApp);renderPCBar()}
 function fillApp(app){if(app==='mail')renderLetters();if(app==='shop'){S.reviewsSeen=S.reviews.length;save();renderBadge();renderShop()}}
 /* A window grows out of where it comes from (its desktop icon, or its taskbar button) and shrinks back into it. */
