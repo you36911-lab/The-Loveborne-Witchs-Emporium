@@ -134,6 +134,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene button.obj:hover,.scene button.obj:focus-visible{transform:translateY(-1.5%) scale(1.03);filter:drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 6px 4px rgba(60,20,30,.35));outline:none}
 /* the things standing on the desk only glow; they do not lift */
 .scene button.obj:is(.till,.notebook,.computer):is(:hover,:focus-visible){transform:none}  /* more specific than the lift above */
+/* the bell does not invite a ring while someone is at the counter, saying goodbye, or on their way in (renderScene) */
+.scene button.obj.bell.busy:is(:hover,:focus-visible){transform:none;filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
 .scene .books{left:2%;bottom:12%;width:15%;aspect-ratio:659/672;cursor:default;filter:none;z-index:2}
 /* the same stack on the altar, standing on the left end of the table */
 .room .books{position:absolute;left:6%;bottom:14.5%;width:13.5%;aspect-ratio:659/672;z-index:2}

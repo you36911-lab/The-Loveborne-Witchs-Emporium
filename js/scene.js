@@ -89,7 +89,7 @@ function showDawn(lead=0){const T=today();dawnUntil=Date.now()+lead+DAWN_MS;
   render();setTimeout(()=>{$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');render()},lead+DAWN_MS);setTimeout(render,lead+DAWN_MS+AFTER_DAWN_MS);setTimeout(render,lead+DAWN_MS+MAIL_AFTER_DAWN_MS)}
 /* The hour is not shown as a label; the background shows it. A quiet hour's mood line runs along the bottom
    of the scene like a film subtitle. */
-function renderScene(){renderAura();renderCustomer();setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
+function renderScene(){renderAura();renderCustomer();$('#bellBtn').classList.toggle('busy',!!currentVisitor()||!!S.parting||!!bellWait);setBackground(Date.now()<dawnUntil?'Dawn':HOURS[S.h]);
   const v=currentVisitor(),note=$('#sceneNote'),av=v&&v.key&&(!(v.tales||[]).length||v.newsDone)?visitByKey(v.key):null;
   const thinking=!!av&&av.kind==='advice';  /* while a customer waits for advice, the witch's own thought runs as the subtitle */
   /* post comes first: when an email is about to drop in, the mood line waits until it has, and stays away while the new-email card is up */

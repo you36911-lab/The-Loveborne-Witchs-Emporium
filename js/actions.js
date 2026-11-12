@@ -194,6 +194,9 @@ function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filte
   <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
   ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
+/* A button clicked with the mouse lets go of the keyboard focus, so a key pressed later (Space while reading, say) does
+   not press it again, nor light it up as if the pointer were on it. Pressed from the keyboard (detail 0), it keeps it. */
+document.addEventListener('click',e=>{if(e.detail>0){const b=e.target.closest&&e.target.closest('button');if(b)setTimeout(()=>b.blur(),0)}});
 document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;$('#receiptsView').classList.remove('open');$('#info').classList.remove('open');if(openShelf){openShelf='';renderShelves()}});
 /* A burst of little pink stars from the middle of an element, flying out in a ring and fading (none with reduced motion). */
 function starBurst(el){if(calm())return;const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,n=8;
