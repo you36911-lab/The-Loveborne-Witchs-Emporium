@@ -138,7 +138,10 @@ const LESSONS=[
     {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
     {note:'tests'},
     {say:'That one goes in my notebook too.',wait:3500},
-    {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>S.seen[HESTER_DAY1]}]},
+    /* until it is made (with the silver bell, or by a perfect test of her rune) */
+    {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
+    {glow:'#spellBtn',say:'Made. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
+    {glow:'#madeBtn',say:'Hand it over.',done:()=>S.seen[HESTER_DAY1],allow:[]}]},
   /* after Hester has gone: the bell again, for the next one */
   {id:'bell2',when:()=>S.day===1&&!!S.seen[HESTER_DAY1]&&!S.seen[NURSE]&&!S.queue&&!S.parting&&!bellWait&&!somethingOpen(),until:()=>!!S.queue||!!bellWait||!!S.seen[NURSE]||S.day>1,steps:[
     {glow:'#bellBtn',say:'Someone else will be waiting. The bell.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
