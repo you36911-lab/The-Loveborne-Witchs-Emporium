@@ -31,7 +31,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'newsBtn':S.queue.newsDone=true;render();break;
     case 'bellBtn':ringBell();break;
     case 'pcBtn':openPC();break;
-    case 'tillBtn':if(S.pend.length)playReceiptPrint();openReceipts();break;  /* the till prints them as it opens, whenever there are any */
+    case 'tillBtn':if(S.pend.length)playTill();openReceipts();break;  /* the till prints them as it opens, whenever there are any */
     case 'notebookBtn':openDiary();break;
     case 'mailRead':{$('#mailFx').hidden=true;const m=mailIn().reverse().find(m=>!S.mail[m.i]);
       /* in the first morning's tutorial it opens the inbox, so H.'s emails are read first, oldest first */

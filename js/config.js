@@ -133,7 +133,7 @@ const ASSETS = {
   splash: 'assets/scene/splash.png',  /* the title screen: the logo with the game's name on the heart */
   sounds: {  /* recorded sounds (see js/sound.js) */
     shopBell:'assets/sounds/shop-bell.mp3', altarBell:'assets/sounds/altar-bell.mp3', notify:'assets/sounds/notify.mp3',
-    receipt:'assets/sounds/receipt.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', cabinetOpen:'assets/sounds/cabinet-open.mp3', cabinetClose:'assets/sounds/cabinet-close.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3', ding:'assets/sounds/ding.mp3', mouseClick:'assets/sounds/mouse-click.mp3'},
+    receipt:'assets/sounds/receipt.mp3', receiptPrinter:'assets/sounds/receipt-printer.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', cabinetOpen:'assets/sounds/cabinet-open.mp3', cabinetClose:'assets/sounds/cabinet-close.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3', ding:'assets/sounds/ding.mp3', mouseClick:'assets/sounds/mouse-click.mp3'},
   iconBottle: 'assets/scene/icon-bottle.svg',  /* a plain round-bottomed spell bottle, flat in the shop's pinks: the Recipe Book's Test craft this */
   iconPhoneApp: 'assets/scene/icon-bottle-app.svg',  /* the phone's Test Craft app: the same bottle with a sparkle inside */
   iconBell: 'assets/scene/icon-bell.png',  /* the altar's desk bell, the same drawing flattened to three pinks: the Recipe Book's Lay out on the altar */  /* the same picture, its shading flattened to three flat pinks (deep, mid, light), for the My Shop app */
