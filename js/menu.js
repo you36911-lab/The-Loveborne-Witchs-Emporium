@@ -48,14 +48,36 @@ function showTitle(){const t=$('#title'),saved=hasSave();
   $('#tsBg').style.backgroundImage=`url("${bg}")`;$('#tsSplash').src=ASSETS.splash;makeMotes();
   /* the background and the splash fade in together once both pictures are ready (at most 1.5s), so the plain colour
      behind them is never seen to snap into a picture */
+  t.hidden=false;titleIntro();  /* the logo is placed in the middle before anything shows */
   if(!t.classList.contains('ready')){const wait=src=>{const im=new Image();im.src=src;return im.decode().catch(()=>{})};
-    Promise.race([Promise.all([wait(bg),wait(ASSETS.splash)]),new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(()=>t.classList.add('ready')))}
+    Promise.race([Promise.all([wait(bg),wait(ASSETS.splash)]),new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(()=>{t.classList.add('ready');startIntro()}))}
+  else startIntro();
   clearTimeout(glintT);glintT=setTimeout(glint,1200);
   $('#tsContinue').hidden=!saved;
   if(saved)$('#tsWhere').textContent=`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;
   $('#tsQuit').hidden=!DESKTOP_BUILD;
   $('#tsMenu').hidden=false;$('#tsConfirm').hidden=true;
   $('#world').inert=true;t.hidden=false;t.classList.remove('gone')}
+/* The title's opening, every time it is shown: at first only the logo, in the middle, with a soft light behind it and a
+   halo above it; then it rises and the buttons fade in under it, one after another. A click or a key skips straight to
+   the end. The logo is moved down by half of what is under it (the buttons), so it starts in the very middle. */
+const INTRO_HOLD_MS=2600,INTRO_RISE_MS=1600;
+let introT=0;
+function titleIntro(){const t=$('#title');clearTimeout(introT);
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches){endIntro(true);return}
+  $('#tsMenu').hidden=false;$('#tsConfirm').hidden=true;
+  const below=$('#tsMenu').offsetHeight+parseFloat(getComputedStyle($('.ts-splash')).marginBottom||0);
+  t.style.setProperty('--drop',(below/2)+'px');
+  t.classList.add('intro-skip','intro');void t.offsetWidth;t.classList.remove('intro-skip')}  /* put there at once, not moved there */
+/* once the pictures show: the logo waits alone a moment, then rises */
+function startIntro(){clearTimeout(introT);if($('#title').classList.contains('intro'))introT=setTimeout(()=>endIntro(false),INTRO_HOLD_MS)}
+function endIntro(skip){const t=$('#title');clearTimeout(introT);if(!t.classList.contains('intro')&&!skip)return;
+  if(skip)t.classList.add('intro-skip');t.classList.remove('intro')}
+/* a click or a key while the logo is still alone skips to the buttons (and does nothing else) */
+$('#title').addEventListener('pointerdown',e=>{if($('#title').classList.contains('intro')){endIntro(true);e.stopPropagation();e.preventDefault()}},true);
+$('#title').addEventListener('click',e=>{if($('#title').classList.contains('intro-skip')&&!e.target.closest('button'))e.stopPropagation()},true);
+document.addEventListener('keydown',e=>{if(titleOpen()&&$('#title').classList.contains('intro')){endIntro(true);e.stopImmediatePropagation();e.preventDefault()}},true);
+
 /* Leaving the title: the shop is drawn behind it first, its background shown at once (no fade) once the picture has
    loaded, and only then does the title fade away, so the counter is never seen half-built. */
 function leaveTitle(start){const t=$('#title'),scene=$('#scene');
