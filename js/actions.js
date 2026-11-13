@@ -93,7 +93,8 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
 /* A test craft: what was written is laid out on the altar, it is crafted (craftAnim), and only then is it judged: a black
    candle goes out if it isn't perfect, and the result comes to the phone (a sound and a badge; the phone shows it
-   when clicked). Either way what was laid out is used up and the finished spell stands on the altar (S.spell):
+   when clicked). A perfect test is used up and the finished spell stands on the altar (S.spell); one that isn't comes
+   back down onto the table as it was laid out, to change and try again. The finished spell:
    - made with the bell, or a perfect test of what the customer at the counter ordered: clicking it takes it up to the
      counter, where it is given;
    - any other test: clicking it clears it away. */
@@ -118,7 +119,7 @@ function judge(r,test){
     /* a perfect test of what the waiting customer ordered is ready to give, as if made with the bell */
     const o=orderRecipe(),give=ev.grade==='Perfect'&&o&&String(o.id)===String(r.id)&&S.queue;
     if(give)S.made={for:visitorId(S.queue),rid:r.id,name:r.name,type:r.type,ev};
-    makeSpell(r,!!give)}
+    if(ev.grade==='Perfect')makeSpell(r,!!give)}  /* only a perfect test becomes the spell; otherwise what was laid out stays, to change */
   else{/* Made for real: the spell stands on the altar; clicking it takes it up to the counter, where it is given (giveMade). */
     const q=S.queue;if(!q)return;
     S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;makeSpell(r,true)}
@@ -224,7 +225,9 @@ function craftAnim(done){const moving=$('#world').getAnimations?.().length>0;
         {duration:CRAFT_PEAK_MS,easing:'ease-in-out',fill:'forwards'})});
     setTimeout(()=>craftBurst(plates),CRAFT_PEAK_MS-300);
     /* at the top, with the burst, they become the finished spell, which comes down in their place (spellDrop, scene.js) */
-    setTimeout(()=>{plates.classList.remove('charging');spellDrop=true;done();if(spellDrop){spellDrop=false;render()}},CRAFT_PEAK_MS);
+    setTimeout(()=>{plates.classList.remove('charging');spellDrop=true;done();
+      if(spellDrop){spellDrop=false;render();  /* nothing was made (a test that went wrong): what was laid out comes back down */
+        $('#plates').querySelectorAll('.ontable').forEach(el=>el.animate([{transform:`translateY(${-craftRise}px) scale(.84)`},{transform:'none'}],{duration:SPELL_DROP_MS,easing:'cubic-bezier(.3,.1,.3,1)'}))}},CRAFT_PEAK_MS);
     setTimeout(()=>{glow.classList.remove('on');mc.classList.remove('on');document.body.classList.remove('crafting')},CRAFT_PEAK_MS+SPELL_DROP_MS)},moving?1150:150)}
 /* the burst at the peak of crafting: a big ring of stars flying wide from over the middle, then a second, smaller wave */
 function craftBurst(el){const r=el.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height*.4-craftRise;  /* up where the things have risen to */
