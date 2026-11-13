@@ -105,10 +105,13 @@ function allPages(book){if(book===DIARY)return diaryPages();
   const entries=bookPages(book),q=searchOf().toLowerCase(),marks=S.marks||[];
   const list=entries.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
   const intro=book==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
-  const chunks=[];let cur=[],lines=intro?7:4,lc=null;  /* the first page starts under the title */
-  const cap=idxLines(book);
-  list.forEach(p=>{if(lines+(p.cat&&p.cat!==lc?3:1)>cap&&cur.length){chunks.push(cur);cur=[];lines=0;lc=null}
-    const head=!!p.cat&&p.cat!==lc;lines+=head?3:1;lc=p.cat;cur.push({p,head})});
+  /* the index is split by height: the page's room, measured (idxFit), less the title on the first page; a heading at the
+     top of a page has no space above it. Until measured, in lines: INDEX_LINES a page, a heading three, the title four. */
+  const f=idxFit[book],room=f?f.room:INDEX_LINES,row=f?f.row:1,head1=f?f.headTop:3,headN=f?f.head:3;
+  const chunks=[];let cur=[],used=f?f.title+(intro?f.intro:0):(intro?7:4),lc=null;
+  list.forEach(p=>{let head=!!p.cat&&p.cat!==lc,add=row+(head?(used?headN:head1):0);
+    if(used+add>room&&cur.length){chunks.push(cur);cur=[];used=0;lc=null;head=!!p.cat;add=row+(head?head1:0)}
+    used+=add;lc=p.cat;cur.push({p,head})});
   chunks.push(cur);
   const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
     (i===0?`<h2 class="idx">${esc(book)}</h2><p class="muted idxsub">Index${q?` · matching “${esc(searchOf())}”`:''}</p>${intro}`:'')+
@@ -151,7 +154,7 @@ function pageHTML(pages,i){const p=pages[i];if(!p)return '';
 /* Dress the book: the spread, the paper, and the cover (a picture, or a plain cover with the title). */
 function setArt(){const a=ASSETS.books[curBook],tome=$('#tome'),img=$('#spreadImg');
   /* no open picture yet: the spread is drawn in CSS from the book's colour and paper */
-  if(a.open){tome.removeAttribute('data-drawn');img.onload=()=>tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);img.src=a.open}
+  if(a.open){tome.removeAttribute('data-drawn');img.onload=()=>{tome.style.setProperty('--ar',img.naturalWidth/img.naturalHeight);if($('#books').classList.contains('open')&&!turning&&measureIndex())drawBooks()};img.src=a.open}
   else{tome.dataset.drawn='';img.onload=null;img.removeAttribute('src');tome.style.setProperty('--ar',1.42);tome.style.setProperty('--book-bg',a.color)}
   [['--pt',0],['--po',1],['--pb',2]].forEach(([v,i])=>tome.style.setProperty(v,a.page[i]+'%'));tome.style.setProperty('--paper-c',a.paper);
   /* the page flags follow this book's edges (flags in config.js); without measurements, a guess from the margin */
@@ -229,15 +232,22 @@ function markWords(m){if(m.key.startsWith('recipe:')){const r=D.recipes[m.key.sl
   const e=entryList(m.book).find(x=>x.sk===m.key);if(!e||e.method)return[];
   if(entryLocked(e))return e.props;
   return [...new Set([...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)])]}
-/* How many index lines a page holds: measured on the page as it is shown (each book's pages are their own height, and
-   shorter on a smaller window), so an index never scrolls but goes on over the page. INDEX_LINES until measured. */
-let idxCapNow={};
-function idxLines(book){return idxCapNow[book]||INDEX_LINES}
-function measureIndex(){const pb=[...document.querySelectorAll('#tome .pg .pbody')].find(e=>e.clientHeight&&e.querySelector('.idxrow'));if(!pb)return false;
-  const row=pb.querySelector('.idxrow').getBoundingClientRect().height;if(!row)return false;
-  const cap=Math.max(8,Math.floor(pb.clientHeight/row));if(cap===idxCapNow[curBook])return false;idxCapNow[curBook]=cap;return true}
-addEventListener('resize',()=>{if($('#books').classList.contains('open')){idxCapNow={};renderBooks()}});
-function renderBooks(){drawBooks();if(measureIndex())drawBooks()}  /* drawn, measured, and drawn again if the index needs it */
+/* How much an index page holds, measured on the page as shown: the page's own height inside its padding, an index line,
+   a heading, and the title. Each book's pages are their own height, so an index never scrolls and leaves no empty paper
+   at the bottom. Measured again only when the page's size or print size has changed (the window, the book's picture). */
+let idxFit={};
+function measureIndex(){if(curBook===DIARY)return false;
+  const pb=[...document.querySelectorAll('#tome .pg .pbody')].find(e=>e.offsetParent&&e.querySelector('.idxrow'));if(!pb)return false;
+  const pg=pb.closest('.pg'),cs=getComputedStyle(pg),room=pg.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom),size=room+'|'+cs.fontSize;
+  if(room<=0||idxFit[curBook]?.size===size)return false;
+  const probe=document.createElement('div');pb.append(probe);
+  const h=html=>{probe.innerHTML='<div style="display:flow-root">'+html+'</div>';return probe.firstChild.getBoundingClientRect().height};
+  const r='<button class="idxrow"><span class="t">Ag</span><span class="muted"> ✦</span></button>',row=h(r);
+  idxFit[curBook]={size,room:room-2,row,head:h(r+'<h3 class="cat">Ag</h3>')-row,headTop:h('<h3 class="cat">Ag</h3>'),
+    title:h(`<h2 class="idx">${esc(curBook)}</h2><p class="muted idxsub">Index</p>`),intro:h('<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>')};
+  probe.remove();return true}
+addEventListener('resize',()=>{if($('#books').classList.contains('open')&&!turning)renderBooks()});
+function renderBooks(){drawBooks();if(measureIndex())drawBooks()}  /* an index measured for the first time (or at a new size) is drawn again */
 function drawBooks(){
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-x" data-unmark="${i}" aria-label="Take out this bookmark" title="Take it out">×</span><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';

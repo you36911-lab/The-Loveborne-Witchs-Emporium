@@ -16,8 +16,8 @@ function playBell(){sfx('shopBell',.45)}
 function playAltarBell(){sfx('altarBell',1)}
 /* Something new on the computer (an email, the night's reviews): "New Notification 012" (Universfield). */
 function playNotify(){sfx('notify',.5)}
-/* The till clicked, when there are receipts in it: "cash drawer and receipt" (freesound_community). */
-function playTill(){sfx('receipt',.9)}
+/* The till clicked, when there are receipts in it: the receipt part of "cash drawer and receipt" (freesound_community). */
+function playTill(){sfx('receipt',.9,0,.93)}  /* only the printing: the cash drawer's clunk (its first 0.35s) and the pause after it are skipped */
 /* Closing, as the day's receipts come out: "Receipt Printer 01" (freesound_community). */
 function playReceiptPrint(){sfx('receiptPrinter',.9)}
 /* A customer comes in: the shop's old door creaks open and swings shut behind them. "Creaking Door 03" (Universfield),

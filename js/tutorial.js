@@ -79,7 +79,7 @@ const LESSONS=[
     /* where Hester's notes are kept: beside the notebook, as slips, to read again */
     {glow:'#notebookBtn',say:'Her note goes in my notebook, to keep.',done:()=>isOpen('books')&&curBook===DIARY,allow:[]},
     /* the star on the slip goes once the pointer has been over it */
-    {glow:()=>slipSeen?'':'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',done:()=>slipSeen&&Date.now()-slipSeen>=1500,allow:[],
+    {glow:()=>slipSeen?'':'#books .pg .hslip',say:'There. Taped in the front of my notebook, whenever I need it again.',done:()=>!!slipSeen,allow:[],
       ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
     /* the rest of the notebook is the player's own: something is written in it first, then a click beside it closes it */
     {glow:'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',done:()=>memoTyped||(S.memo||[]).some(Boolean),allow:['#books .pg .memo']},

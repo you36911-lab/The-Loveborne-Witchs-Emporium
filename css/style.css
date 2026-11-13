@@ -174,8 +174,22 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
 .scene .crystal.glowing[data-aura="pink"]::after{opacity:.85}  /* the soft pink is strawberry milk: light and bright, not dusty */
 .scene .crystal.glowing[data-aura="pink"] img{filter:var(--light) brightness(1.08) saturate(1.15) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
+/* Gold and yellow kept apart: gold is a deep, warm amber with a stronger glow; yellow a light lemon, the glass lifted. */
+.scene .crystal.glowing[data-aura="gold"]::after{opacity:.85}
+.scene .crystal.glowing[data-aura="gold"] img{filter:var(--light) brightness(.97) saturate(1.4) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 80%,transparent)) drop-shadow(0 0 12px color-mix(in srgb,var(--aura-glow) 45%,transparent))}
+.scene .crystal.glowing[data-aura="yellow"]::after{opacity:.9}
+.scene .crystal.glowing[data-aura="yellow"] img{filter:var(--light) brightness(1.18) saturate(1.2) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
+/* Sparkling white has no colour to lend the glass (tinted, it looked like the ball at rest, or grey): the swirl stays
+   white, the glass is lit from inside with a bright white glow round it, and small sparkles twinkle in it. */
+.scene .crystal.glowing[data-aura="white"] img.swirl{opacity:0}
+.scene .crystal.glowing[data-aura="white"] img{filter:var(--light) brightness(1.12) drop-shadow(0 0 6px #fff) drop-shadow(0 0 14px rgba(255,255,255,.75))}
+.scene .crystal.glowing[data-aura="white"]::before{background:radial-gradient(circle,rgba(255,255,255,.7) 0%,rgba(255,255,255,.28) 30%,rgba(255,255,255,.08) 50%,transparent 70%)}
+.scene .crystal.glowing[data-aura="white"]::after{mix-blend-mode:normal;opacity:1;-webkit-mask-image:none;mask-image:none;filter:drop-shadow(0 0 3px #fff);
+  background:radial-gradient(circle at 30% 30%,#fff 0 2.6%,rgba(255,255,255,.6) 3.4000000000000004%,transparent 5.6%),radial-gradient(circle at 68% 24%,#fff 0 2%,rgba(255,255,255,.6) 2.8%,transparent 5%),radial-gradient(circle at 62% 60%,#fff 0 3%,rgba(255,255,255,.6) 3.8%,transparent 6%),radial-gradient(circle at 36% 66%,#fff 0 1.8%,rgba(255,255,255,.6) 2.6%,transparent 4.8%),radial-gradient(circle at 78% 46%,#fff 0 2.2%,rgba(255,255,255,.6) 3%,transparent 5.2%),radial-gradient(circle at 48% 42%,#fff 0 1.6%,rgba(255,255,255,.6) 2.4000000000000004%,transparent 4.6%),radial-gradient(circle at 22% 50%,#fff 0 1.5%,rgba(255,255,255,.6) 2.3%,transparent 4.5%),radial-gradient(circle at 50% 45%,rgba(255,255,255,.75),rgba(255,255,255,.45) 55%,rgba(255,255,255,0) 72%);
+  animation:auraTwinkle 1.8s ease-in-out infinite}
+@keyframes auraTwinkle{0%,100%{opacity:.7}50%{opacity:1}}
 @keyframes auraPulse{0%,100%{scale:1;opacity:.75}50%{scale:1.05;opacity:.95}}  /* a slow, gentle breath */
-@media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before{animation:none}}
+@media (prefers-reduced-motion: reduce){.scene .crystal.glowing::before,.scene .crystal.glowing::after{animation:none}}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}
 .scene .notebook{left:54%;bottom:11%;width:13.5%;z-index:3}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
