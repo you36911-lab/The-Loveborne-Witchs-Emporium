@@ -61,7 +61,10 @@ function evaluate(r,test,level=1){
   if(ingProbs&&!level){const by=(list,f)=>{const n={};list.forEach(x=>{const k=f(x);n[k]=(n[k]||0)+1});return Object.entries(n)};
     const miss=[...loneMissing,...swaps.map(s=>s.want)],over=[...loneWrong,...swaps.map(s=>s.got)];
     if(miss.some(isStone))L('ing','It needs their birthstone: the stone of the month they were born in.');
-    by(miss.filter(m=>!isStone(m)),shelfOf).forEach(([sh,n])=>L('ing',`${n} more from ${sh}.`));
+    /* "more from" only for what a shelf is still short of: a wrong one put in from the same shelf already stands in its
+       place, so that shelf only hears that one doesn't belong */
+    const overBy=Object.fromEntries(by(over,shelfOf));
+    by(miss.filter(m=>!isStone(m)),shelfOf).forEach(([sh,n])=>{const k=n-(overBy[sh]||0);if(k>0)L('ing',`${k} more from ${sh}.`)});
     by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
   else if(ingProbs){
     swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
