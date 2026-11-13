@@ -132,7 +132,7 @@ Decided, to build:
 - **The title's opening: built** (every time the title shows): the logo alone in the middle, a little larger, with a soft light and slowly turning rays behind it (.ts-aureole) and a halo, a ring of light, floating above its star (.ts-halo, CSS; it only floats gently up and down, never grows or shrinks; the logo floats too, shown from copies made smaller ahead of time (splash-560/840/1120.png, picked by the size it is shown at) so its thin script outlines no longer flicker); after 2s it rises (1.3s), the light and the halo fade away, and the buttons fade in one after another. A click or a key skips to the end.
 
 To write:
-- **Day 8+ dialogue** for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Only week one is playable (LAST_PLAYABLE_DAY 7, 24 visits). Check the regulars' beats (see below) read well when written. Week one uses six auras (gold, grey, pale blue, pink, strong pink, unknown); red, yellow, murky green, purple, dark knot and sparkling white wait for Day 8+.
+- **Day 8+ dialogue** for walk-ins, regulars and advice (order line, cue, aura, hint, four report lines each). Only week one is playable (LAST_PLAYABLE_DAY 7, 24 visits). Check the regulars' beats (see below) read well when written. Week one uses seven auras (gold, grey, pale blue, pink, strong pink, purple for Morwenna, unknown); red, yellow, murky green, dark knot and sparkling white wait for Day 8+. Dark knot and sparkling white are given to no one in the design document yet (only its two aura tables); they stay, for Day 8+ walk-ins.
 - **Walk-in Plan**: its order of teaching was built round weather days and wants a second look.
 
 To check:
@@ -198,7 +198,7 @@ Done: the save icon; the auras follow the design document; the closing thought a
 - Keeping it smooth as more art comes in: no blur effects (backdrop-filter) anywhere, since they are redrawn every frame; export new pictures at about the sizes now used (characters ~1650px tall, items ~600px, cards ~840px wide); big pictures are decoded ahead of time.
 - Later: split the prototype into a real web project.
 
-- **Auras outside the table fixed in the design document**: Sam Okafor is now "Yellow flicker with red sparks" (was orange sparks), Morwenna Hale "A steady purple shimmer" (was calm blue with a purple shimmer).
+- **Auras outside the table fixed in the design document**: Sam Okafor is now "Yellow flicker with red sparks" (was orange sparks), Morwenna Hale "A steady purple shimmer" (was calm blue with a purple shimmer); her week-one visit in the game is purple too (it had stayed blue).
 - **Auras follow the design document**: all ten colours (pink, red, grey, yellow, murky green, pale blue, gold, purple, dark knot, sparkling white, plus strong pink for embarrassment) with its meanings, in X.auras and in Hester's crystal-ball note. Her emails do not explain the auras. In the note each colour's name is gone over with a highlighter in its own colour ([aura|words] in a note line).
 
 ## Birthstones
