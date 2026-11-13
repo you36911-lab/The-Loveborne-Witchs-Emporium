@@ -230,7 +230,7 @@ function markWords(m){if(m.key.startsWith('recipe:')){const r=D.recipes[m.key.sl
   return [...new Set([...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)])]}
 function renderBooks(){
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-x" data-unmark="${i}" aria-label="Take out this bookmark" title="Take it out">×</span><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
@@ -321,6 +321,8 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}
   if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}
   if(b.id==='turnFirst'||b.id==='turnLast'){turnTo(b.id==='turnFirst'?0:allPages(curBook).length-1);return}
+  /* the small x on a bookmark takes it out (its page's ribbon does the same) */
+  const un=e.target.closest('[data-unmark]');if(un){S.marks.splice(+un.dataset.unmark,1);save();renderBooks();return}
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
