@@ -40,7 +40,12 @@ function hiddenOf(e){if(e.always||e.method||!e.props.length)return[];if(e.props.
 function entryLocked(e){const h=hiddenOf(e);if(!h.length)return false;const f=(S.fills[e.sk]||[]);return h.every(w=>f.includes(w))&&f.filter(Boolean).length===h.length}
 /* ---------- books as pages: an index, one entry per page, up to MAX_MARKS bookmarks ---------- */
 const MARKCOL=['#E2483D','#F59A3B','#5DBB6A','#4C7BD9','#9B5FD0'];
-const MAX_MARKS=30;  /* the bookmarks column scrolls */
+const MAX_MARKS=30;  /* at most, whatever the screen */
+/* as many bookmarks as the column beside the book can show without scrolling (measured as it stands; at least 3) */
+function marksRoom(){const ms=$('.markside'),mk=$('#marks');if(!ms||!mk||!ms.getBoundingClientRect().height)return MAX_MARKS;
+  const gap=parseFloat(getComputedStyle(mk).rowGap)||6,h=mk.querySelector('.mark')?.getBoundingClientRect().height||46;
+  const room=ms.getBoundingClientRect().bottom-mk.getBoundingClientRect().top;
+  return Math.max(3,Math.min(MAX_MARKS,Math.floor((room+gap)/(h+gap))))}
 /* An ingredient's entry just completed: its page, on paper like the book's, with its picture (as the book prints it) or,
    without one, what it looks like; everything it is for, and its line. A click anywhere closes it. */
 function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
@@ -217,9 +222,15 @@ function turnTo(i){if(turning)return;const pages=allPages(curBook),from=pageAt(p
   let ended=false;const done=()=>{if(ended)return;ended=true;leaf.hidden=true;leaf.innerHTML='';leaf.className='leaf';turning=false;renderBooks()};
   requestAnimationFrame(frame);setTimeout(done,TURN_MS+400)}  /* finishes even if the window stops drawing frames */
 function turnBy(d){const pages=allPages(curBook),s=pageAt(pages)>>1;turnTo(2*(s+d))}
+/* A bookmark's keywords, as its page shows them: a recipe's themes; an entry's printed keywords and those written in
+   (all of them once it is finished). What is still hidden is never given away. */
+function markWords(m){if(m.key.startsWith('recipe:')){const r=D.recipes[m.key.slice(7)];return r?r.themes:[]}
+  const e=entryList(m.book).find(x=>x.sk===m.key);if(!e||e.method)return[];
+  if(entryLocked(e))return e.props;
+  return [...new Set([...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)])]}
 function renderBooks(){
   const marks=S.marks||(S.marks=[]);
-  $('#marks').innerHTML=marks.length?marks.map((m,i)=>`<button class="mark" data-mark="${i}">${esc(m.title)}</button>`).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
@@ -313,7 +324,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
   if(b.dataset.bm){const k=b.dataset.bm,i=S.marks.findIndex(x=>x.book===curBook&&x.key===k);
-    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=MAX_MARKS){toast('No room for another bookmark. I\u2019ll have to take one out first.');return}
+    if(i>=0)S.marks.splice(i,1);else if(S.marks.length>=marksRoom()){toast('No room for another bookmark. I\u2019ll have to take one out first.');return}
     else{const p=bookPages(curBook).find(x=>x.key===k);S.marks.push({book:curBook,key:k,title:p.title,color:MARKCOL[S.marks.length%MARKCOL.length]})}
     save();renderBooks();return}
   if(b.dataset.book){if(b.dataset.book!==curBook)showBook(b.dataset.book);return}

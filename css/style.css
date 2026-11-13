@@ -508,6 +508,9 @@ button.small{font-size:12px;padding:2px 10px}
 .modal.bookview{background:color-mix(in srgb,#1A1430 78%,transparent);flex-direction:column;align-items:stretch;gap:8px;overflow:hidden;padding-left:16px;padding-right:16px}
 .bookview .marks{margin:0;flex-direction:column;align-items:stretch;flex-wrap:nowrap}
 .bookview .mark{max-width:none;text-align:left}
+/* a bookmark: its title, and under it the page's keywords, small */
+.mark .mk-t,.mark .mk-kw{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mark .mk-kw{font-size:11px;font-weight:500;opacity:.7;margin-top:1px}
 /* the book in the middle of the screen; the bookmarks halfway between the book and the left edge, the word bank as tall as the book (--tome-h, set in books.js), halfway between the book and the right edge */
 .bookmain{flex:1;min-height:0;display:grid;grid-template-columns:minmax(260px,1fr) auto minmax(260px,1fr);gap:14px;align-items:center}
 .bookmain>.tomewrap{grid-column:2}
