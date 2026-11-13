@@ -106,7 +106,8 @@ function allPages(book){if(book===DIARY)return diaryPages();
   const list=entries.filter(p=>!q||p.find.some(x=>x&&x.toLowerCase().includes(q)));
   const intro=book==='Book of Making'?'<p class="muted">How each kind of spell is made, and the base it needs. Paper and ink can go in any spell.</p>':'';
   const chunks=[];let cur=[],lines=intro?7:4,lc=null;  /* the first page starts under the title */
-  list.forEach(p=>{if(lines+(p.cat&&p.cat!==lc?3:1)>INDEX_LINES&&cur.length){chunks.push(cur);cur=[];lines=0;lc=null}
+  const cap=idxLines(book);
+  list.forEach(p=>{if(lines+(p.cat&&p.cat!==lc?3:1)>cap&&cur.length){chunks.push(cur);cur=[];lines=0;lc=null}
     const head=!!p.cat&&p.cat!==lc;lines+=head?3:1;lc=p.cat;cur.push({p,head})});
   chunks.push(cur);
   const idx=chunks.map((rows,i)=>({key:'index:'+i,index:true,html:()=>
@@ -228,7 +229,16 @@ function markWords(m){if(m.key.startsWith('recipe:')){const r=D.recipes[m.key.sl
   const e=entryList(m.book).find(x=>x.sk===m.key);if(!e||e.method)return[];
   if(entryLocked(e))return e.props;
   return [...new Set([...shownOf(e),...(S.fills[e.sk]||[]).filter(Boolean)])]}
-function renderBooks(){
+/* How many index lines a page holds: measured on the page as it is shown (each book's pages are their own height, and
+   shorter on a smaller window), so an index never scrolls but goes on over the page. INDEX_LINES until measured. */
+let idxCapNow={};
+function idxLines(book){return idxCapNow[book]||INDEX_LINES}
+function measureIndex(){const pb=[...document.querySelectorAll('#tome .pg .pbody')].find(e=>e.clientHeight&&e.querySelector('.idxrow'));if(!pb)return false;
+  const row=pb.querySelector('.idxrow').getBoundingClientRect().height;if(!row)return false;
+  const cap=Math.max(8,Math.floor(pb.clientHeight/row));if(cap===idxCapNow[curBook])return false;idxCapNow[curBook]=cap;return true}
+addEventListener('resize',()=>{if($('#books').classList.contains('open')){idxCapNow={};renderBooks()}});
+function renderBooks(){drawBooks();if(measureIndex())drawBooks()}  /* drawn, measured, and drawn again if the index needs it */
+function drawBooks(){
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-x" data-unmark="${i}" aria-label="Take out this bookmark" title="Take it out">×</span><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
