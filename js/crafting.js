@@ -68,10 +68,17 @@ function evaluate(r,test,level=1){
     by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
   else if(ingProbs){
     swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
+    /* a wrong one in the place of a missing one from the same shelf is one line, not two (it doesn't belong, and one
+       more is needed, would read as if that shelf wanted two) */
+    const inPlace=new Set();
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
+      const m=loneMissing.find(m=>!inPlace.has(m)&&!isStone(m)&&shelfOf(m)===shelfOf(w));
+      if(m){inPlace.add(m);const pic=ITEM[m]?.look?` Picture the right one: ${ITEM[m].look}.`:'';
+        if(props.length){L('ing',`The one from ${shelfOf(w)} isn\u2019t right: it adds ${props[0]}, which this doesn\u2019t want.${pic}`);gained.push(props[0])}
+        else L('ing',`The one from ${shelfOf(w)} isn\u2019t right.${pic}`);return}
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
-    loneMissing.forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
+    loneMissing.filter(m=>!inPlace.has(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
   if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
   else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
