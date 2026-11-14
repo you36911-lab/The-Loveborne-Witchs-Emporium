@@ -15,7 +15,6 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'craftBell':ringAltarBell();break;
     case 'spellBtn':takeSpell();break;
     /* the name of what is being made: little pink stars burst from it, then the Recipe Book opens on its page */
-    case 'makingBtn':starBurst(b);setTimeout(()=>{curBook='Recipe Book';if(S.target){(S.page||(S.page={}))['Recipe Book']='recipe:'+S.target}openBooks()},calm()?0:420);break;
     case 'madeBtn':giveMade();break;
     case 'toAltar':setView('altar');break;
     case 'toShop':setView('shop');break;
