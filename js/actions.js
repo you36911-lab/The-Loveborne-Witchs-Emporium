@@ -27,7 +27,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
         S.queue.push={n:((S.queue.push||{}).n||0)+1,text:`Hm… ${p?`isn’t ${a.toLowerCase()} for ${p}? `:''}That’s not what I’m after. ${v.question}`};
         spoilCandle();render();break}
       record(grade,v.who,'Advice (no charge)',S.queue.key);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
-      if(grade==='Perfect')part(v);
+      if(grade==='Perfect'){part(v);relightCandles(2)}
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);part(v,BYE.advice)}
       else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);part(v,BYE.advice)}
       render();break}
