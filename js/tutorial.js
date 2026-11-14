@@ -59,6 +59,7 @@ const onIndex=()=>{const p=String(pageOf());return !p||p.startsWith('index')};  
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const READING=['#letterRead .wm-text'];  /* the open email: scrolled and read, its dotted words tapped */
 const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its page */
+const CAME='#phoneApp .ph-sec[data-k="came"]';  /* a test's "Came through" on the phone */
 const CRYSTALS='#cubbies [data-shelf="Crystals"]';  /* the crystal cupboard's door, in the workroom */
 const crystalOut=()=>(D.items.find(i=>i.c==='Crystals'&&S.altar.includes(i.n))||{}).n||'';  /* a crystal on the table, if any */
 const LESSONS=[
@@ -142,6 +143,10 @@ const LESSONS=[
     {glow:'#phoneApp .ph-grade',say:'How it came out, at the top.',wait:4000,allow:['#phoneApp']},
     {glow:()=>seen('#phoneApp .ph-score')?'#phoneApp .ph-score':'',say:'How many of the ingredients were right…',wait:4500,allow:['#phoneApp']},
     {glow:'#phoneApp .ph-sec[data-k]:not([data-k=""])',say:'…and what’s off, under each heading: the ingredients, the candle, the card.',wait:6500,allow:['#phoneApp']},
+    /* what came through: only the recipe's themes, and only from what is right (her first test: intuition and
+       transformation, not yet truth). Skipped if the test brought none. */
+    {glow:()=>seen(CAME)?CAME:'',say:()=>seen(CAME)?'What came through is only from what’s right. A theme it wants that isn’t there yet, I’m still missing.':'',
+      done:()=>!seen(CAME),wait:7500,allow:['#phoneApp']},
     {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
     {note:'tests'},
     {say:'That one goes in my notebook too.',wait:3500},
