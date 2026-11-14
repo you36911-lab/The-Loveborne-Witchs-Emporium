@@ -1335,7 +1335,7 @@ body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none
 /* the closing card does not scroll: the day's receipts, side by side and never overlapping, are sized (0.4 to 0.6) and the
    card widened so they fit the window (fitDayEnd in actions.js) */
 #dayEnd{overflow:hidden}
-.dayendcard .receipts{justify-content:center;gap:12px;margin:4px 0 16px;zoom:.6}
+.dayendcard .receipts{justify-content:center;gap:30px;margin:4px 0 16px;zoom:.6}  /* gap: clear of each slip's tilt and shadow (GAP in fitDayEnd) */
 .dayendcard .de-none{margin:10px 0 18px;font-style:italic;color:#7D5F70}
 .dayendcard .de-rating{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:0 0 18px;padding-top:14px;border-top:1px dashed #E2C9D5}
 .dayendcard .de-stars{color:#E0A526;font-size:22px;letter-spacing:2px}
