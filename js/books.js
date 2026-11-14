@@ -131,15 +131,18 @@ function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=AS
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
-/* The first page is Hester's: her notes are taped onto it, whole, just as she gave them, to read again. The player's
-   own pages follow it. */
-function diaryPages(){const n=memoWritten(),count=1+Math.max(1,n+1);
-  const pages=[{key:'diary:0',plain:true,html:hesterPageHTML},
-    ...Array.from({length:count-1},(_,m)=>({key:'diary:'+(m+1),plain:true,html:()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`}))];
+/* The first pages are Hester's: her notes are taped in, whole, just as she gave them, to read again, one to a page (so
+   none is cut off at the bottom): the first on the left page, the next on the right, and so on. The player's own pages
+   follow them. */
+const hesterNotes=()=>Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);
+const hesterPageCount=()=>Math.max(1,hesterNotes().length);
+function diaryPages(){const n=memoWritten(),H=hesterPageCount(),count=H+Math.max(1,n+1);
+  const pages=[...Array.from({length:H},(_,i)=>({key:'diary:'+i,plain:true,html:()=>hesterPageHTML(i)})),
+    ...Array.from({length:count-H},(_,m)=>({key:'diary:'+(m+H),plain:true,html:()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`}))];
   if(pages.length%2)pages.push({key:'diary:'+pages.length,plain:true,html:()=>`<textarea class="memo" data-memo="${count-1}" aria-label="My notes, page ${count}" spellcheck="false">${esc(S.memo[count-1]||'')}</textarea>`});
   return pages}
-function hesterPageHTML(){const notes=Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);
-  return `<p class="dtitle">My notes</p>`+(notes.length?notes.map(k=>`<div class="hslip" role="note" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></div>`).join(''):'')}
+function hesterPageHTML(i){const notes=hesterNotes().slice(i,i+1);
+  return (i?'':`<p class="dtitle">My notes</p>`)+(notes.length?notes.map(k=>`<div class="hslip" role="note" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></div>`).join(''):'')}
 /* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
   if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. I\u2019ll write on the next one.')}
@@ -190,7 +193,7 @@ function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))
 function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick();
   setTimeout(()=>BOOKS.forEach(decodeBook),1500)}  /* the other books get ready in the background, for quick switching */
 /* The notebook opens on the last page written on. */
-function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+memoWritten();renderBooks();autoTick()}  /* the last page written on (page 0 is Hester's) */
+function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(hesterPageCount()-1+memoWritten());renderBooks();autoTick()}  /* the last page written on (the first pages are Hester's) */
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
    hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
 const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */

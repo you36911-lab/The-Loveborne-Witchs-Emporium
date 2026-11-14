@@ -42,11 +42,11 @@ function allWritten(id){const r=D.recipes[id],n=S.notes[id];if(!r||!n)return fal
 /* the first visible element that matches (inside an open book, only the open spread) */
 function seen(sel){for(const el of document.querySelectorAll(sel)){const r=el.getBoundingClientRect();if(r.width&&r.height&&!el.closest('[hidden]'))return el}return null}
 
-/* Hester's notes: short rules in her own hand */
+/* Hester's notes: short rules in her own hand, in the order they are given (the notebook tapes them in this order) */
 const HESTER_NOTES={
   aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. [pink|Pink]: longing, affection; [pinkstrong|bright pink], embarrassment. [red|Red]: anger, passion, urgency. [grey|Grey]: sadness, grief, tiredness. [blue|Pale blue]: worry. [gold|Gold]: pride, joy. [yellow|Yellow]: nerves, curiosity. [green|Murky green]: envy. [purple|Purple]: a stirring of intuition. A [darkknot|dark knot]: shame, something hidden. [white|Sparkling white]: hope, a fresh start.','Watch it, dear. People rarely ask for what they need.']},
-  themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']},
-  tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']}};
+  tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']},
+  themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']}};
 
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
    ensure: run while the step is current, to put back what it needs. A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
