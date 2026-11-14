@@ -23,7 +23,9 @@ function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L
     az(Object.keys(D.colours)).forEach(c=>{  /* name only the forms this colour really comes in */
       const forms=['candle',...[['thread',c+' thread'],['ink',(c==='Purple'?'Violet':c)+' ink'],['paint',c+' paint']].filter(([,n])=>ITEM[n]).map(([f])=>f)];
       add(c,D.colours[c],forms.length===1?'Candles only':'Comes as '+forms.join(', ').replace(/, ([^,]*)$/,' and $1'),false,'colour');L[L.length-1].cat='Colours'});
-    D.items.filter(i=>['Buttons','Wood & branches','Findings & tools','Threads & ribbons'].includes(i.c)&&!/ thread$/.test(i.n)&&i.props.length&&!(/ ink$| paint$/.test(i.n))).sort((a,b)=>a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,'',false);L[L.length-1].cat='Symbols & Charms'})}
+    /* the things with a meaning, grouped as their cupboards are, in the cupboards' order */
+    const GC=['Buttons','Threads & ribbons','Wood & branches','Findings & tools'];
+    D.items.filter(i=>GC.includes(i.c)&&!/ thread$/.test(i.n)&&i.props.length&&!(/ ink$| paint$/.test(i.n))).sort((a,b)=>GC.indexOf(a.c)-GC.indexOf(b.c)||a.n.localeCompare(b.n)).forEach(i=>{add(i.n,i.props,'',false);L[L.length-1].cat=i.c})}
   if(book==='Book of Making')az(Object.keys(D.methods)).forEach(t=>{const m=D.methods[t];
     const bases=az(D.items.filter(i=>i.base.includes(t)).map(i=>i.n));
     L.push({k:t,props:[],method:true,where:m.where,how:m.how,bases})});
@@ -271,7 +273,7 @@ function drawBooks(){
   $('#pgL').innerHTML=pageHTML(pages,2*s);$('#pgR').innerHTML=pageHTML(pages,2*s+1);
   $('#turnPrev').disabled=$('#turnFirst').disabled=s===0;$('#turnNext').disabled=$('#turnLast').disabled=2*s+2>=pages.length}
 /* Each ingredient slot shows which shelf its ingredient comes from. */
-const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding','Inks & paints':'Ink or paint'};
+const CATLABEL={'Base waters':'Water','Oils, butters & waxes':'Oil, butter or wax','Herbs & flowers':'Herb or flower','Fruits':'Fruit','Spices':'Spice','Pantry: salts, sugars & baking':'Pantry','Resins & incense':'Resin','Crystals':'Crystal','Animal gifts':'Animal gift','Buttons':'Button','Threads & ribbons':'Thread or ribbon','Wood & branches':'Wood','Findings & tools':'Finding or tool','Inks & paints':'Ink or paint'};
 const CONDKIND={day:'Weekday',full:'Moon',time:'Magic Hour',starry:'Sky Event',sabbat:'Festival',named:'Moon',event:'Sky Event',afterfull:'Special',sabset:'Festival',special:'Special'};
 const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
  'Magic Hour':HOURS,'Sky Event':az(['Blue Moon','Clear starry night','Lunar Eclipse','Rainbow','Shooting stars']),

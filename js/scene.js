@@ -195,7 +195,7 @@ const SHELVES=[['Herbs & flowers','Spices','Candles','Tarot'],
 /* the word written on each door's painted label (short, the paper is small); the open cupboard shows the full name */
 const PLATE={'Herbs & flowers':'Herbs','Spices':'Spices','Fruits':'Fruits','Pantry: salts, sugars & baking':'Pantry','Base waters':'Waters',
   'Oils, butters & waxes':'Oils','Resins & incense':'Resins','Inks & paints':'Inks','Candles':'Candles','Tarot':'Tarot',
-  'Crystals':'Crystals','Animal gifts':'Critters','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
+  'Crystals':'Crystals','Animal gifts':'Animals','Buttons':'Buttons','Threads & ribbons':'Threads','Wood & branches':'Wood','Findings & tools':'Findings'};
 const SHELFNAME={'Base waters':'Waters & bottles','Tarot':'Tarot cards'};
 let openShelf='',shownShelf='',heardShelf='';
 /* how many things from this cupboard are on the table now */
