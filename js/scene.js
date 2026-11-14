@@ -281,7 +281,7 @@ function renderCounter(){fillCounter();balloonEnter();typeBalloon()}
    in over 1.2s, see .customer in style.css) and the balloon follows a moment later; someone already standing there speaks straight away. */
 let balloonKey='',balloonWho='';
 function balloonEnter(){const q=S.queue,el=$('#counter');
-  const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')):S.parting?'parting:'+S.parting.who:'';
+  const key=q?(q.type==='report'?'report:'+q.at+q.who:q.key+(q.newsDone?':order':'')+(q.push?':again'+q.push.n:'')):S.parting?'parting:'+S.parting.who:'';
   if(key===balloonKey)return;
   const v=q?currentVisit():S.parting,who=v&&ASSETS.characters[v.pic||v.who]?(v.pic||v.who):'';
   const wait=who&&who!==balloonWho?1400:0;
@@ -316,7 +316,7 @@ function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#count
     /* The answer is typed. The counter is redrawn on clicks, so what was typed (and the focus) is kept in adviceDraft. */
     const focused=document.activeElement&&document.activeElement.id==='adviceIn';
     if(adviceDraft.key!==q.key)adviceDraft={key:q.key,text:'',hi:-1};
-    el.innerHTML=`${balloon(v,`<p>“${esc(v.line)} ${esc(v.question)}”</p>`)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
+    el.innerHTML=`${balloon(v,`<p>“${q.push?esc(q.push.text):esc(v.line)+' '+esc(v.question)}”</p>`)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
     const inp=$('#adviceIn');inp.value=adviceDraft.text;fillSuggest();if(focused){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;

@@ -70,7 +70,7 @@ const SPOILED={who:'A neighbour',text:'The whole street smelled of burnt herbs a
 function pickOf(list,seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;return list[h%list.length]}
 function postReviews(list){list.forEach(x=>{const v=x.key&&visitByKey(x.key),best=x.g==='Perfect'&&v,spoiled=x.who==='Spoiled test batches';
   S.reviews.push({day:S.day,hour:x.hour,who:spoiled?SPOILED.who:x.who,g:x.g,item:x.item,
-    text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:best&&v.hint?v.hint.text:''})})}
+    text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:v&&v.hint?v.hint.text:''})})}
 const unquote=t=>t.replace(/^["“]|["”]$/g,'');
 function reviewHTML(r){const bought=r.item==='No sale'?'Left without buying':r.item;
   return `<article class="rv"><header class="rv-head">${avatarHTML({name:r.who})}<div><b>${esc(r.who)}</b><small class="muted">Day ${r.day}, ${esc(r.hour)}</small></div>

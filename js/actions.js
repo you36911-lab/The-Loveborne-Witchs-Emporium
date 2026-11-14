@@ -21,6 +21,11 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
     case 'adviceBtn':{const v=visitByKey(S.queue.key);const a=adviceAnswer(v);if(!a)break;adviceDraft={key:'',text:'',hi:-1};
       const it=ITEM[a],k=v.ask,has=it.props.includes(k.kw);
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
+      /* not what they need at all: they say so, a black candle goes out, and they wait for another answer (as many as it
+         takes: every customer's hint has to be reachable) */
+      if(grade==='Clumsy'){const sh=shownOf({props:it.props,sk:'item:'+a}),p=sh[0]||'';
+        S.queue.push={n:((S.queue.push||{}).n||0)+1,text:`Hm… ${p?`isn’t ${a.toLowerCase()} for ${p}? `:''}That’s not what I’m after. ${v.question}`};
+        spoilCandle();render();break}
       record(grade,v.who,'Advice (no charge)',S.queue.key);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
       if(grade==='Perfect')part(v);
       else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);part(v,BYE.advice)}
@@ -104,12 +109,14 @@ function judgeTest(r){const before=S.failTests||0;judge(r,true);phoneNotify((S.f
 /* the finished spell takes the place of what was laid out */
 function makeSpell(r,give){S.spell={rid:r.id,name:r.name,type:r.type,give};S.altar=[];S.candle='';S.tarot=''}
 function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');else render()}
+/* A black candle goes out (a test craft gone wrong, or advice that missed): every fifth spoils a batch, a one-star review that night. */
+function spoilCandle(){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five candles out. That will cost me a star tonight.')}}
 function judge(r,test){
   const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
   if(ev.grade==='Perfect')(S.spellArt||(S.spellArt={}))[r.id]=true;  /* made just right: its illustration in the Recipe Book unlocks */
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect')tries[r.id]=(tries[r.id]||0)+1;
-    if(ev.grade!=='Perfect'){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five test crafts gone wrong. That will cost me a star tonight.')}}
+    if(ev.grade!=='Perfect')spoilCandle();
     /* A perfect test says so plainly and writes the recipe into the book, so the player is never left guessing. */
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
       const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
