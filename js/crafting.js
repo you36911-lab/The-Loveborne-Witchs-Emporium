@@ -78,7 +78,8 @@ function evaluate(r,test,level=1){
     by(miss.filter(m=>!isStone(m)),shelfOf).forEach(([sh,n])=>{const k=n-(overBy[sh]||0);if(k>0)L('ing',`${k} more from ${sh}.`)});
     by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
   else if(ingProbs){
-    swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
+    /* from the third test of a recipe, a wrong one that is close (shares a theme) is also pictured, so the clues keep moving on */
+    swaps.forEach(sw=>{const pic=level>=2&&sw.kind!=='same'&&ITEM[sw.want]?.look?` Picture the right one: ${ITEM[sw.want].look}.`:'';L('ing',ingLine(sw)+pic);if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
       const m=inPlace.get(w);
       if(m){const pic=ITEM[m]?.look?` Picture the right one: ${ITEM[m].look}.`:'';
