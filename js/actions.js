@@ -195,16 +195,17 @@ function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRat
   $('#dayEnd').classList.add('open');fitDayEnd();requestAnimationFrame(fitDayEnd);
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
   $('#dayGo').onclick=openNextDay}
-/* The closing card fits the window, never scrolling: its receipts stay in one row, as large as the height allows (at most
-   0.6 of their size), and overlap (each still showing a third of itself) or shrink further when there are too many to sit side by side. */
-function fitDayEnd(){const m=$('#dayEnd'),body=$('#dayEndBody'),rc=body.querySelector('.receipts');if(!m.classList.contains('open')||!rc)return;
-  const items=[...rc.children],n=items.length,RW=330,RH=RW*644/486,GAP=12;
-  rc.style.zoom=1;rc.style.gap='';items.forEach(e=>e.style.marginLeft='');
-  const cs=getComputedStyle(m),avail=m.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
-  const other=body.offsetHeight-rc.offsetHeight,W=rc.clientWidth;
-  let z=Math.max(.2,Math.min(.6,(avail-other-2)/RH)),step=RW+GAP;
-  if(n>1&&n*RW+(n-1)*GAP>W/z){step=Math.max((W/z-RW)/(n-1),RW/3);if(RW+(n-1)*step>W/z)z=W/(RW+(n-1)*step)}
-  rc.style.zoom=z;if(step<RW+GAP){rc.style.gap='0';items.forEach((e,i)=>{if(i)e.style.marginLeft=(step-RW)+'px'})}}
+/* The closing card fits the window without scrolling: its receipts sit side by side in rows, never overlapping, as large as
+   fits (0.6 of their size at most, 0.4 at least), the card widening (up to 1100px) so more fit in a row. On a very short
+   window the smallest size is kept rather than shrinking them further. */
+function fitDayEnd(){const m=$('#dayEnd'),body=$('#dayEndBody'),rc=body.querySelector('.receipts');if(!rc)body.style.width='';if(!m.classList.contains('open')||!rc)return;
+  const n=rc.children.length,RW=330,RH=RW*644/486,GAP=12,PAD=56;
+  body.style.width='';rc.style.zoom=.6;
+  const cs=getComputedStyle(m),avail=m.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom),maxW=Math.min(1100,m.clientWidth-20)-PAD;
+  const other=body.offsetHeight-rc.offsetHeight;
+  let pick=null;for(let z=.6;z>=.399;z-=.02){const per=Math.max(1,Math.min(n,Math.floor((maxW/z+GAP)/(RW+GAP)))),rows=Math.ceil(n/per);
+    const h=(rows*RH+(rows-1)*GAP)*z,w=(per*(RW+GAP)-GAP)*z;pick={z,w};if(other+h<=avail)break}
+  rc.style.zoom=pick.z;if(pick.w+PAD>720)body.style.width=Math.ceil(pick.w+PAD+2)+'px'}
 addEventListener('resize',fitDayEnd);
 /* the end-of-day card's button: on to the next day (or, after the last playable day, a new game) */
 function openNextDay(){$('#dayEnd').classList.remove('open');
