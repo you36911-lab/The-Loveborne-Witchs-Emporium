@@ -21,8 +21,11 @@ let S;
 /* Whether a game is saved (the title screen offers Continue only then). Nothing saves until the game starts. */
 const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getItem(k))}catch(e){return false}};
 /* Load the save; an older prototype save is picked up once and carried over. */
-/* ("Ink" is now "Plain ink": an older save's notes and altar are renamed as they load.) */
-try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?raw.replace(/"Ink"/g,'"Plain ink"'):null)||fresh()}catch(e){S=fresh()}
+/* Things renamed or merged since: an older save's notes and altar are renamed as they load ("Ink" is now "Plain ink";
+   the dark-glass compact and the black satin pouch were merged into the Clamshell compact and the Fabric pouch). */
+const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch'};
+const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
+try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?renameOld(raw):null)||fresh()}catch(e){S=fresh()}
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
   delete S.orders;  /* orders taken for later belong to older builds */
