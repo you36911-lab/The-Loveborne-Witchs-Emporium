@@ -51,13 +51,17 @@ function evaluate(r,test,level=1){
   if(other){missing.splice(missing.indexOf(theirs),1);wrong.splice(wrong.indexOf(other),1)}
   const swaps=findSwaps(r,missing,wrong,used);
   const loneMissing=missing.filter(m=>!swaps.some(s=>s.want===m)),loneWrong=wrong.filter(w=>!swaps.some(s=>s.got===w));
-  let probs=swaps.length+loneMissing.length+loneWrong.length+(other?1:0);const lines=[];const gained=[];
+  const isStone=m=>m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m);
+  /* a wrong one put in the place of a missing one from the same shelf (the wrong compact for the right one): one problem,
+     and one clue line, not "doesn't belong" plus "one more is needed" (wrong one -> the one it stands in for) */
+  const inPlace=new Map();
+  loneWrong.forEach(w=>{const m=loneMissing.find(m=>![...inPlace.values()].includes(m)&&!isStone(m)&&shelfOf(m)===shelfOf(w));if(m)inPlace.set(w,m)});
+  let probs=swaps.length+loneMissing.length+loneWrong.length-inPlace.size+(other?1:0);const lines=[];const gained=[];
   /* Each clue line is tagged with what it is about, so a wrong card isn't read as an ingredient problem. */
   const L=(k,t)=>lines.push({k,t});let il='';
   /* Ingredients: say how many are off, then one plain clue per problem, naming the ingredient that is wrong. */
   const ingProbs=swaps.length+loneMissing.length+loneWrong.length;
   if(other)L('ing',`The ${other.toLowerCase()} is a birthstone, but not theirs. Theirs is the stone of the month they were born in.`);
-  const isStone=m=>m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m);
   if(ingProbs&&!level){const by=(list,f)=>{const n={};list.forEach(x=>{const k=f(x);n[k]=(n[k]||0)+1});return Object.entries(n)};
     const miss=[...loneMissing,...swaps.map(s=>s.want)],over=[...loneWrong,...swaps.map(s=>s.got)];
     if(miss.some(isStone))L('ing','It needs their birthstone: the stone of the month they were born in.');
@@ -68,17 +72,14 @@ function evaluate(r,test,level=1){
     by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
   else if(ingProbs){
     swaps.forEach(sw=>{L('ing',ingLine(sw));if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
-    /* a wrong one in the place of a missing one from the same shelf is one line, not two (it doesn't belong, and one
-       more is needed, would read as if that shelf wanted two) */
-    const inPlace=new Set();
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
-      const m=loneMissing.find(m=>!inPlace.has(m)&&!isStone(m)&&shelfOf(m)===shelfOf(w));
-      if(m){inPlace.add(m);const pic=ITEM[m]?.look?` Picture the right one: ${ITEM[m].look}.`:'';
+      const m=inPlace.get(w);
+      if(m){const pic=ITEM[m]?.look?` Picture the right one: ${ITEM[m].look}.`:'';
         if(props.length){L('ing',`The one from ${shelfOf(w)} isn\u2019t right: it adds ${props[0]}, which this doesn\u2019t want.${pic}`);gained.push(props[0])}
         else L('ing',`The one from ${shelfOf(w)} isn\u2019t right.${pic}`);return}
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
-    loneMissing.filter(m=>!inPlace.has(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
+    loneMissing.filter(m=>![...inPlace.values()].includes(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
   if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
   else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
