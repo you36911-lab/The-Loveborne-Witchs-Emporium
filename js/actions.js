@@ -182,7 +182,7 @@ function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRat
   ${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="de-none">No sales today.</p>'}
   <div class="de-rating" aria-label="Rating ${after.toFixed(1)} of 5"><span class="de-stars">${stars(Math.round(after))}</span><b>${after.toFixed(1)}</b>${move}</div>
   ${last?summaryHTML():''}
-  <button class="main" id="dayGo">${last?'Start over':'Open the shop on Day '+(S.day+1)}</button>`;
+  <button class="main" id="dayGo">${last?'Start over':'Sleep until morning'}</button>`;
   $('#dayEnd').classList.add('open');
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
   $('#dayGo').onclick=openNextDay}
