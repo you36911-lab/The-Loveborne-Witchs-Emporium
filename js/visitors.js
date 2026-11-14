@@ -14,7 +14,10 @@ function currentVisitor(){
   return null}
 /* A customer who got just what they needed lingers to pass on a hint, in their own balloon, until the player clicks
    away or rings the bell. */
-function part(v){S.parting={who:v.who,pic:v.pic,text:v.hint.text}}
+/* A customer leaving says a last line in their own balloon, then goes: after a perfect one, their hint (hint: true);
+   otherwise just a goodbye, as how it went is told later (tell). */
+const BYE={advice:'Thanks, I’ll try that.',order:'Thanks. I’ll let you know how it goes.'};
+function part(v,bye){S.parting={who:v.who,pic:v.pic,text:bye||v.hint.text,hint:!bye}}
 const visitorId=q=>q.key;  /* which visit something made at the altar is for */
 function visitByKey(k){return X.visits.find(v=>v.day+'-'+v.hour+'-'+v.who===k)}
 /* Star rating is the average of the last 20 deliveries and advice answers. */

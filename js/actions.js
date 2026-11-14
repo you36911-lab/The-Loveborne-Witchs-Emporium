@@ -23,8 +23,8 @@ document.addEventListener('click',e=>{if(e.target.closest('#receiptsView')){$('#
       const grade=has&&it.t===k.t&&it.s===k.s?'Perfect':has?'Good':'Clumsy';
       record(grade,v.who,'Advice (no charge)',S.queue.key);S.stats.advice++;S.seen[S.queue.key]=true;S.queue=null;
       if(grade==='Perfect')part(v);
-      else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
-      else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);S.result={grade,first:'',lines:['They thank you and hurry off.'],test:false}}
+      else if(grade==='Good'){const kind=it.t!==k.t?k.t+'>'+it.t:(k.s==='Gentle'?'strong':'weak');tell(v,reactionFor(v,null,kind),`your advice to use ${a.toLowerCase()}`);part(v,BYE.advice)}
+      else{tell(v,v.oops,`your advice to use ${a.toLowerCase()}`);part(v,BYE.advice)}
       render();break}
     case 'reportBtn':{const q=S.queue;S.reports=S.reports.filter(r=>!(r.at===q.at&&r.who===q.who));S.queue=null;render();break}
     case 'newsBtn':S.queue.newsDone=true;render();break;
@@ -139,7 +139,7 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q)||(S
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`,q.key);
     if(ev.grade==='Perfect')part(v);
-    else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);S.result={grade:ev.grade,first:'',lines:['They thank you and take it home.'],test:false}}
+    else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);part(v,BYE.order)}
     S.queue=null}
   render()}
 function nextHour(auto){
