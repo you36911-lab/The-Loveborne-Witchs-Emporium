@@ -320,7 +320,9 @@ const noteMarks=s=>s.replace(/\[(\w+)\|([^\]]+)\]/g,(m,k,w)=>`<mark class="hl" d
 function noteHTML(id){const n=HESTER_NOTES[id];return `<h3>${esc(n.title)}</h3>${n.lines.map(t=>`<p>${noteMarks(esc(t))}</p>`).join('')}<p class="hsig">— H.</p>`}
 function openNote(id){$('#hNoteBody').innerHTML=noteHTML(id);
   $('#hNote').dataset.note=id;$('#hNote').classList.add('open')}
-function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return;(S.guideNotes||(S.guideNotes={}))[m.dataset.note]=true;save();m.classList.remove('open')}
+function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return;const k=m.dataset.note,g=S.guideNotes||(S.guideNotes={});
+  if(!g[k])(S.notePage||(S.notePage={}))[k]=notePageNow();  /* taped on the page after the last thing in the notebook (books.js) */
+  g[k]=true;save();m.classList.remove('open')}
 $('#hNote').addEventListener('click',e=>{if(e.target.id==='hNote')closeNote()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isOpen('hNote')){closeNote();e.stopImmediatePropagation()}},true);
 

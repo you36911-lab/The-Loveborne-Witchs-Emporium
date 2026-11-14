@@ -131,18 +131,28 @@ function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=AS
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */
 const memoWritten=()=>{const m=S.memo;let n=m.length;while(n&&!m[n-1])n--;return n};
-/* The first pages are Hester's: her notes are taped in, whole, just as she gave them, to read again, one to a page (so
-   none is cut off at the bottom): the first on the left page, the next on the right, and so on. The player's own pages
-   follow them. */
+/* Hester's notes are taped in, whole, just as she gave them, to read again, one to a page (so none is cut off at the
+   bottom). The first page is always hers (the title, and her first note). Each note is taped on the page after the last
+   thing in the book when she gives it: after her last note, or after the player's last written page if they have written
+   on since, so a note never goes over (or pushes along) what is already written. Where each one went is kept
+   (S.notePage); a note given before that was kept goes straight after the one before it. */
 const hesterNotes=()=>Object.keys(HESTER_NOTES).filter(k=>(S.guideNotes||{})[k]);
-const hesterPageCount=()=>Math.max(1,hesterNotes().length);
-function diaryPages(){const n=memoWritten(),H=hesterPageCount(),count=H+Math.max(1,n+1);
-  const pages=[...Array.from({length:H},(_,i)=>({key:'diary:'+i,plain:true,html:()=>hesterPageHTML(i)})),
-    ...Array.from({length:count-H},(_,m)=>({key:'diary:'+(m+H),plain:true,html:()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`}))];
-  if(pages.length%2)pages.push({key:'diary:'+pages.length,plain:true,html:()=>`<textarea class="memo" data-memo="${count-1}" aria-label="My notes, page ${count}" spellcheck="false">${esc(S.memo[count-1]||'')}</textarea>`});
+/* page index -> note, and which pages are the player's (memo m on the m-th page that is not a note) */
+function diaryLayout(){const at={},pos=S.notePage||{};let prev=-1;
+  hesterNotes().map(k=>[k,pos[k]]).sort((a,b)=>(a[1]??1e9)-(b[1]??1e9)).forEach(([k,p])=>{p=Math.max(p??prev+1,prev+1);at[p]=k;prev=p});
+  const n=memoWritten(),memos=[];let i=1,m=0;  /* page 0 is Hester's even before her first note */
+  while(i<=prev||m<Math.max(1,n+1)){if(!(i in at))memos[m++]=i;i++}
+  if(i%2){memos[m++]=i;i++}  /* whole spreads */
+  return {at,memos,count:i}}
+/* the page a note goes on, as it is given (closeNote in tutorial.js) */
+function notePageNow(){const L=diaryLayout(),last=Math.max(-1,...Object.keys(L.at).map(Number)),n=memoWritten();
+  return Math.max(last+1,n?L.memos[n-1]+1:0)}
+function diaryPages(){const L=diaryLayout(),pages=[];
+  for(let i=0;i<L.count;i++){const m=L.memos.indexOf(i);
+    pages.push({key:'diary:'+i,plain:true,html:m<0?()=>hesterPageHTML(i,L.at[i]):()=>`<textarea class="memo" data-memo="${m}" aria-label="My notes, page ${m+1}" spellcheck="false">${esc(S.memo[m]||'')}</textarea>`})}
   return pages}
-function hesterPageHTML(i){const notes=hesterNotes().slice(i,i+1);
-  return (i?'':`<p class="dtitle">My notes</p>`)+(notes.length?notes.map(k=>`<div class="hslip" role="note" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></div>`).join(''):'')}
+function hesterPageHTML(i,k){
+  return (i?'':`<p class="dtitle">My notes</p>`)+(k?`<div class="hslip" role="note" aria-label="Hester’s note: ${esc(HESTER_NOTES[k].title)}"><i class="tape"></i><div class="hpaper">${noteHTML(k)}</div></div>`:'')}
 /* Writing: a page holds only what fits on its lines; past that, the last letters are taken off again. */
 $('#books').addEventListener('input',e=>{const t=e.target;if(t.dataset.memo===undefined)return;
   if(t.scrollHeight>t.clientHeight+1){while(t.value&&t.scrollHeight>t.clientHeight+1)t.value=t.value.slice(0,-1);toast('This page is full. I\u2019ll write on the next one.')}
@@ -193,7 +203,7 @@ function openTome(){const tome=$('#tome');if(!tome.classList.contains('closed'))
 function openBooks(){if(curBook===DIARY)curBook=shelfBook;$('#books').classList.add('open');showBook(curBook);autoTick();
   setTimeout(()=>BOOKS.forEach(decodeBook),1500)}  /* the other books get ready in the background, for quick switching */
 /* The notebook opens on the last page written on. */
-function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(hesterPageCount()-1+memoWritten());renderBooks();autoTick()}  /* the last page written on (the first pages are Hester's) */
+function openDiary(){$('#books').classList.add('open');showBook(DIARY);(S.page||(S.page={}))[DIARY]='diary:'+(memoWritten()?diaryLayout().memos[memoWritten()-1]:0);renderBooks();autoTick()}  /* the last page written on (or Hester's first) */
 /* Turn to page i: one sheet of paper turns over, whichever way and however far. The sheet is cut into thin strips, each
    hinged to the one before, so it bends as it turns: the free edge lags behind and the paper curves, then lies flat again. */
 const STRIPS=12,BEND=9;  /* how many strips, and how far each bends from the last at mid-turn, in degrees */

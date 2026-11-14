@@ -22,7 +22,7 @@ Changes made while building it:
   each ingredient blank and the right name in its list, with why it fits ("Herb or flower: Chamomile, for calm and
   comfort."). "Next time I'll work it out from the books myself."
 - Hester's note on the crystal ball uses the design document's aura meanings, all ten colours (and bright pink, embarrassment).
-- Hester's notes are taped into the notebook's first pages as paper slips, one to a page (the first on the left, the next on the right), so none is cut off, to read again; after the first, the tutorial
+- Hester's notes are taped into the notebook's first pages as paper slips, one to a page, so none is cut off: each on the page after the last thing in the notebook when it is given (her last note, or the player's last written page if they wrote since), so a note never pushes along what is written, to read again; after the first, the tutorial
   points to the notebook and then to the slip (it moves on once the slip has been looked at), then to the right-hand page:
   something has to be written there before the notebook can be closed.
 - The mark is a small pink star on the thing (chosen over a glow, a spotlight and hand-drawn marks). A step blocks every other
