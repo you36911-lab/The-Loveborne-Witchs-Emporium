@@ -246,10 +246,9 @@ function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test cra
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
   const orderR=orderRecipe();
-  /* what is being made is chosen in the Recipe Book (its kind in the index, then its name, then a tap on the name on its
-     page); a subtitle on the table names it, and opens that page */
+  /* what is being made is chosen in the Recipe Book (the little bell on its page lays it out, or the bottle tests it); a subtitle on the table names it, and opens that page */
   const tr=D.recipes[S.target];
-  $('#makingBtn').innerHTML=tr?esc(tr.name):'<span class="mk">Choose what to make in the Recipe Book</span>';
+  $('#makingBtn').innerHTML=tr?esc(tr.name):'<span class="mk">Lay out a recipe from the Recipe Book</span>';
   /* what is laid out stands on the table; tap a thing to put it back */
   /* five or more stand in two rows: the smaller things in front, the bigger ones a step further back on the table (higher,
      a little smaller, a little darker), so seven big things still fit between the phone and the bell */

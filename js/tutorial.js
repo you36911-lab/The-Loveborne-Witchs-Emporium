@@ -59,6 +59,7 @@ const onIndex=()=>{const p=String(pageOf());return !p||p.startsWith('index')};  
 const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a book's pages */
 const READING=['#letterRead .wm-text'];  /* the open email: scrolled and read, its dotted words tapped */
 const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its page */
+const CRYSTALS='#cubbies [data-shelf="Crystals"]';  /* the crystal cupboard's door, in the workroom */
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
@@ -95,7 +96,6 @@ const LESSONS=[
     /* The first order is shown whole: the star goes to the right recipe in the index, then to each blank and the right
        name in its list, with why it fits. Working it out from the books is for the orders after this one. */
     {glow:()=>seen(`[data-go="recipe:${R1}"]`)?`[data-go="recipe:${R1}"]`:'#turnNext',say:()=>`The index first. A charm, for an easier day: ${D.recipes[R1].name}.`,done:()=>pageOf()==='recipe:'+R1,allow:[...TURNS]},
-    {glow:`#books .pg [data-choose-recipe="${R1}"]`,say:'That’s the one. I’ll tap its name to mark it as what I’m making.',done:()=>String(S.target)===String(R1),allow:[]},
     /* bookmarks, on her recipe's page: one made, and straight away taken out again */
     {glow:`#books .pg .ribbon[data-bm="recipe:${R1}"]`,say:'A page I’ll want again. The ribbon at the top keeps my place.',done:()=>(S.marks||[]).length>0||!!bmKey,allow:[]},
     {ensure:keepBm,glow:()=>bmRibbon()||'#marks .mark',say:'There it is, beside the book: a tap there brings me straight back. And the same ribbon takes it out again.',
@@ -144,6 +144,14 @@ const LESSONS=[
     {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
     {note:'tests'},
     {say:'That one goes in my notebook too.',wait:3500},
+    /* the cupboards, shown as another way (not the way): one opened, looked through, something laid on the table by hand */
+    {ensure:()=>{if(view!=='altar')setView('altar')},glow:CRYSTALS,
+      say:'Everything she kept is in these cupboards too, if I’d rather pick things out myself.',done:()=>openShelf==='Crystals',allow:[]},
+    /* (if the cupboard shuts meanwhile, the star goes back to its door) */
+    {glow:()=>openShelf==='Crystals'?'#shelfOpen':CRYSTALS,say:'More in here than fits at once.',
+      done:()=>{const i=openShelf==='Crystals'&&$('#shelfOpen .cabinside');return !!i&&(i.scrollTop>20||i.scrollHeight<=i.clientHeight+2)},allow:['#shelfOpen',CRYSTALS]},
+    {glow:()=>openShelf==='Crystals'?'':CRYSTALS,say:'Anything I take out goes on the table. Put back just as easily.',done:()=>D.items.some(i=>i.c==='Crystals'&&S.altar.includes(i.n)),allow:['#shelfOpen',CRYSTALS]},
+    {say:'Handy, when I already know what I want. The book’s little bell does the same from what’s written.',wait:6000,allow:['#shelfOpen',CRYSTALS]},
     /* until it is made (with the silver bell, or by a perfect test of her rune) */
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
     {glow:'#spellBtn',say:'Made. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},

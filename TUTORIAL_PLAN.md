@@ -13,6 +13,8 @@ Changes after the designer's playtest (2026-11-11):
 
 Changes on 2026-11-14:
 - After H.'s third email, one thought: "Her recipes are in my Recipe Book now. The first two whole, the third still with gaps."
+- Hester's lesson, after the test notes: the cupboards as another way (not the way). The crystal cupboard opened, looked through, a stone laid on the table by hand: *Everything she kept is in these cupboards too, if I'd rather pick things out myself.* / *More in here than fits at once.* / *Anything I take out goes on the table. Put back just as easily.* / *Handy, when I already know what I want. The book's little bell does the same from what's written.*
+- The first order no longer has the step that marks the recipe by its name (the tick is gone: the little bell chooses it).
 - No thoughts about how to close things ("a click beside it puts it away"): they broke the spell. The steps still wait for the close.
 
 Changes made while building it:
@@ -71,7 +73,6 @@ The core loop, one step at a time.
 | 1 | the balloon, then the crystal ball | *A charm for her pocket… and the ball's pale blue. She's worried, then.* | a click, once the words have finished |
 | 2 | the books | *The Recipe Book will have it. Charms, things for an easier day.* | the Recipe Book is open |
 | 3 | the index | *The index first: what kind of thing she asked for.* | a charm page is open |
-| 4 | the recipe name | *That's the one. I'll mark it, so I know what I'm making.* | the recipe is chosen (tick) |
 | 5 | the little bell on the page | *The little bell lays it all out downstairs.* | it is laid out |
 | 6 | the arrow down | *Down to the workroom.* | the view is at the altar |
 | 7 | the silver bell on the altar | *Everything's on the table. Ring, and it's made.* | it is made |

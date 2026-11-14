@@ -129,7 +129,7 @@ function judge(r,test){
    up to the counter, so it is seen and heard. */
 let bellBusy=false;
 function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
-  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'I haven\u2019t chosen what I\u2019m making yet. The Recipe Book first.':!S.altar.length?'Nothing is laid out on the altar yet.':'';
+  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Which recipe, though? The little bell on its page in the Recipe Book.':!S.altar.length?'Nothing is laid out on the altar yet.':'';
   if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
   setTimeout(()=>craftAnim(()=>{bellBusy=false;doCraft(false)}),450)}  /* it is crafted (the same as a test craft); the spell then waits on the altar */
