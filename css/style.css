@@ -1332,7 +1332,9 @@ body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none
 #dayEndBody>h2{margin:.1em 0 .5em;font-size:34px;color:#7A2E5E}
 #dayEndBody>h2::before,#dayEndBody>h2::after{color:#E8A5C6}
 .dayendcard .de-day{margin:0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7D5F70}
-.dayendcard .receipts{justify-content:center;gap:12px;margin:4px 0 16px;zoom:.6}
+/* the closing card never scrolls: the day's receipts stay in one row, overlapping and shrinking as needed (fitDayEnd in actions.js) */
+#dayEnd{overflow:hidden}
+.dayendcard .receipts{justify-content:center;flex-wrap:nowrap;gap:12px;margin:4px 0 16px;zoom:.6}
 .dayendcard .de-none{margin:10px 0 18px;font-style:italic;color:#7D5F70}
 .dayendcard .de-rating{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:0 0 18px;padding-top:14px;border-top:1px dashed #E2C9D5}
 .dayendcard .de-stars{color:#E0A526;font-size:22px;letter-spacing:2px}
