@@ -293,7 +293,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .artq{position:relative;font-family:var(--font-title);font-size:4em;color:#8A7262;opacity:.55}
 /* a locked picture: its outline (assets/spells/outline, its shape in the paper colour edged with a sepia ink line) */
 .artframe.outlined,.artframe.shown,.artpage.locked .artframe.outlined{position:relative;border:0;background:none;box-shadow:none}
-.artframe.outlined img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
+/* the picture itself sits in the same box as its outline, so solving a recipe never changes its size (a tall picture used to grow to its full height) */
+.artframe.outlined img,.artframe.shown img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
 .artsoon{font-size:3em;color:#E070AE;opacity:.6}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
