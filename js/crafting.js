@@ -80,8 +80,12 @@ function evaluate(r,test,level=1){
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
     loneMissing.filter(m=>![...inPlace.values()].includes(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
-  if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.')}
-  else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.`)}
+  /* from the second test on, a candle clue names a theme the right flame brings: one the recipe wants, and one the candle
+     laid out lacks if there is one (the Grimoire's Colours tell which colours carry it) */
+  const flameWants=()=>{const own=D.colours[S.candle]||[],ok=(D.colours[r.candle]||[]).filter(p=>r.themes.includes(p));
+    const p=ok.find(p=>!own.includes(p))||ok[0];return level&&p?` This flame wants ${p}.`:''};
+  if(r.candle&&!S.candle){probs++;L('candle','It feels as if it was made in the dark.'+flameWants())}
+  else if(r.candle&&S.candle!==r.candle){probs++;L('candle',`The ${S.candle.toLowerCase()} flame flickers uneasily.${flameWants()}`)}
   else if(!r.candle&&S.candle){probs++;L('candle','The candle burned on, ignored.')}
   if(r.tarot&&!S.tarot){probs++;L('card',`It feels unguided, as if waiting for a card.${level?` The card it wants feels like ${CARDFEEL[r.tarot]||'something'}.`:''}`)}
   else if(r.tarot&&S.tarot!==r.tarot){probs++;L('card',`${S.tarot} turned its face away. Not this card.${level?` The card it wants feels like ${CARDFEEL[r.tarot]||'something else'}.`:''}`)}
