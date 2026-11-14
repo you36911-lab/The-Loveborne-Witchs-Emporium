@@ -283,7 +283,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .pbody .recipe .rbody,.pbody .recipe .rbody div{line-height:1.75}
 /* the illustration page facing a recipe: a frame, the picture once the spell has been made just right */
 .pbody:has(>.artpage){height:100%}
-.artpage{box-sizing:border-box;height:calc(100% + 6em);margin:-3.4em -2em -2.6em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8em}
+/* the picture starts where the facing page's text starts (the top of the page's writing area), not in the middle */
+.artpage{box-sizing:border-box;height:calc(100% + 2.6em);margin:0 -2em -2.6em;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:.8em}
 .pg.left .artpage,.pcopy.left .artpage{margin-right:-2.6em}
 .pg.right .artpage,.pcopy.right .artpage{margin-left:-2.6em}  /* the page's padding is taken back, so the picture sits in the middle of the paper */
 .artframe{width:78%;aspect-ratio:3/4;display:grid;place-items:center;border:.12em solid #C9A8B8;border-radius:.4em;background:rgba(255,255,255,.35);box-shadow:inset 0 0 1.2em rgba(176,58,126,.08)}
@@ -294,7 +295,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* a locked picture: its outline (assets/spells/outline, its shape in the paper colour edged with a sepia ink line) */
 .artframe.outlined,.artframe.shown,.artpage.locked .artframe.outlined{position:relative;border:0;background:none;box-shadow:none}
 /* the picture itself sits in the same box as its outline, so solving a recipe never changes its size (a tall picture used to grow to its full height) */
-.artframe.outlined img,.artframe.shown img{position:absolute;inset:6%;width:88%;height:88%;object-fit:contain}
+.artframe.outlined img,.artframe.shown img{position:absolute;inset:0 6% 12%;width:88%;height:88%;object-fit:contain;object-position:top}  /* its top level with the facing page's first line */
 .artsoon{font-size:3em;color:#E070AE;opacity:.6}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}
