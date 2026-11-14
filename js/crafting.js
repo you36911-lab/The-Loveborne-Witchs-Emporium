@@ -46,12 +46,15 @@ function evaluate(r,test,level=1){
   const used=[...new Set(S.altar)],need=recipeNeeds(r,used,currentVisit()?.born);
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
   /* someone else's birthstone in place of theirs: one problem, said plainly */
-  const stones=Object.values(BIRTHSTONES),theirs=missing.find(x=>x!==BIRTHSTONE&&stones.includes(x)&&r.ing.includes(BIRTHSTONE)),
+  /* the customer's own stone (when the recipe asks for their birthstone): only that one counts as "the birthstone", not a
+     birthstone the recipe asks for by name (Moonstone in a recipe that also wants theirs) */
+  const bi=r.ing.indexOf(BIRTHSTONE),theirStone=bi<0?'':need[bi];
+  const stones=Object.values(BIRTHSTONES),theirs=theirStone&&theirStone!==BIRTHSTONE&&missing.includes(theirStone)?theirStone:'',
     other=theirs&&wrong.find(x=>stones.includes(x));
   if(other){missing.splice(missing.indexOf(theirs),1);wrong.splice(wrong.indexOf(other),1)}
   const swaps=findSwaps(r,missing,wrong,used);
   const loneMissing=missing.filter(m=>!swaps.some(s=>s.want===m)),loneWrong=wrong.filter(w=>!swaps.some(s=>s.got===w));
-  const isStone=m=>m===BIRTHSTONE||r.ing.includes(BIRTHSTONE)&&stones.includes(m);
+  const isStone=m=>m===BIRTHSTONE||!!theirStone&&m===theirStone;
   /* a wrong one put in the place of a missing one from the same shelf (the wrong compact for the right one): one problem,
      and one clue line, not "doesn't belong" plus "one more is needed" (wrong one -> the one it stands in for) */
   const inPlace=new Map();
