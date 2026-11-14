@@ -13,7 +13,7 @@ Changes after the designer's playtest (2026-11-11):
 
 Changes on 2026-11-14:
 - After H.'s third email, one thought: "Her recipes are in my Recipe Book now. The first two whole, the third still with gaps."
-- Hester's lesson, after the test notes: the cupboards as another way (not the way). The crystal cupboard opened, looked through, a stone laid on the table by hand: *Everything she kept is in these cupboards too, if I'd rather pick things out myself.* / *More in here than fits at once.* / *Anything I take out goes on the table. Put back just as easily.* / *Handy, when I already know what I want. The book's little bell does the same from what's written.*
+- Hester's lesson, after the test notes: the cupboards as another way (not the way). The crystal cupboard opened, looked through, a stone laid on the table by hand: *Everything she kept is in these cupboards too, if I'd rather pick things out myself.* / *More in here than fits at once.* / *Anything I take out goes on the table.* / then a tap on it on the table puts it back: *And back it goes, if I change my mind.* / *Handy, when I already know what I want. The book's little bell does the same from what's written.*
 - The first order no longer has the step that marks the recipe by its name (the tick is gone: the little bell chooses it).
 - No thoughts about how to close things ("a click beside it puts it away"): they broke the spell. The steps still wait for the close.
 

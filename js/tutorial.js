@@ -60,6 +60,7 @@ const TURNS=['#turnPrev','#turnNext','#turnFirst','#turnLast'];  /* turning a bo
 const READING=['#letterRead .wm-text'];  /* the open email: scrolled and read, its dotted words tapped */
 const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its page */
 const CRYSTALS='#cubbies [data-shelf="Crystals"]';  /* the crystal cupboard's door, in the workroom */
+const crystalOut=()=>(D.items.find(i=>i.c==='Crystals'&&S.altar.includes(i.n))||{}).n||'';  /* a crystal on the table, if any */
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
@@ -150,7 +151,9 @@ const LESSONS=[
     /* (if the cupboard shuts meanwhile, the star goes back to its door) */
     {glow:()=>openShelf==='Crystals'?'#shelfOpen':CRYSTALS,say:'More in here than fits at once.',
       done:()=>{const i=openShelf==='Crystals'&&$('#shelfOpen .cabinside');return !!i&&(i.scrollTop>20||i.scrollHeight<=i.clientHeight+2)},allow:['#shelfOpen',CRYSTALS]},
-    {glow:()=>openShelf==='Crystals'?'':CRYSTALS,say:'Anything I take out goes on the table. Put back just as easily.',done:()=>D.items.some(i=>i.c==='Crystals'&&S.altar.includes(i.n)),allow:['#shelfOpen',CRYSTALS]},
+    {glow:()=>openShelf==='Crystals'?'':CRYSTALS,say:'Anything I take out goes on the table.',done:()=>!!crystalOut(),allow:['#shelfOpen',CRYSTALS]},
+    /* and back again: a tap on it, on the table, puts it back in its cupboard */
+    {glow:()=>crystalOut()?`#altarView .ontable[data-item="${crystalOut()}"]`:'',say:'And back it goes, if I change my mind.',done:()=>!crystalOut(),allow:['#shelfOpen',CRYSTALS,'#altarView .ontable']},
     {say:'Handy, when I already know what I want. The book’s little bell does the same from what’s written.',wait:6000,allow:['#shelfOpen',CRYSTALS]},
     /* until it is made (with the silver bell, or by a perfect test of her rune) */
     {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
