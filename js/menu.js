@@ -98,7 +98,9 @@ function keepUI(){if(titleOpen())return;S.ui=uiState();save()}
 addEventListener('pagehide',keepUI);addEventListener('beforeunload',keepUI);
 function restoreUI(u){if(!u)return;
   if(u.view==='altar')goTo('altar');
-  if(u.dayEnd){$('#dayEndBody').innerHTML=u.dayEnd;$('#dayEnd').classList.add('open');$('#dayGo').onclick=openNextDay;return}
+  /* the closing card comes back as it was, but its fitting to the window is done again (an older save kept the old overlapping layout) */
+  if(u.dayEnd){const b=$('#dayEndBody');b.innerHTML=u.dayEnd;b.style.width='';b.querySelectorAll('.receipts,.receipts>*').forEach(e=>{e.style.zoom='';e.style.gap='';e.style.marginLeft=''});
+    $('#dayEnd').classList.add('open');$('#dayGo').onclick=openNextDay;fitDayEnd();requestAnimationFrame(fitDayEnd);return}
   if(u.shelf){openShelf=u.shelf;renderShelves()}
   if(u.books){curBook=u.books;if(u.books===DIARY)openDiary();else openBooks()}
   if(u.pc){mailFolder=u.pc.folder||'inbox';letterSel=u.pc.letter||'';openPC();u.pc.apps.forEach(a=>openApp(a));u.pc.min.forEach(a=>minApp(a))}
