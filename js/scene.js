@@ -4,9 +4,11 @@
 const unreadLetters=()=>S.letters.filter(x=>!x).length+Object.values(S.mail||{}).filter(x=>!x).length;
 const newReviews=()=>Math.max(0,S.reviews.length-S.reviewsSeen);
 /* the computer's red badge counts what is new; when it goes up (not when the game opens), a notification chime is heard,
-   once for things that arrive together (several emails at once ring once) */
+   once for things that arrive together (several emails at once ring once). What arrives with the dawn card waits:
+   it rings once, as the morning's email card comes up (not once at dawn and again with the card). */
 let badgeWas=null,chimedAt=0;
 function renderBadge(){const n=unreadLetters()+newReviews(),bd=$('#booksBadge');bd.hidden=!n;bd.textContent=n;$('#pcBtn').setAttribute('aria-label',n?`Computer: ${n} new`:'Computer');
+  if(badgeWas!==null&&n>badgeWas&&Date.now()<dawnUntil+MAIL_AFTER_DAWN_MS)return;  /* still dawn: the chime waits */
   if(badgeWas!==null&&n>badgeWas&&Date.now()-chimedAt>3000){chimedAt=Date.now();playNotify()}badgeWas=n}
 /* ---------- the shop scene: every counter object is a button ---------- */
 
