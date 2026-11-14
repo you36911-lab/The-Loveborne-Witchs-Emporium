@@ -22,8 +22,8 @@ let S;
 const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getItem(k))}catch(e){return false}};
 /* Load the save; an older prototype save is picked up once and carried over. */
 /* Things renamed or merged since: an older save's notes and altar are renamed as they load ("Ink" is now "Plain ink";
-   the dark-glass compact and the black satin pouch were merged into the Clamshell compact and the Fabric pouch). */
-const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch'};
+   the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc). */
+const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc'};
 const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
 try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?renameOld(raw):null)||fresh()}catch(e){S=fresh()}
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
