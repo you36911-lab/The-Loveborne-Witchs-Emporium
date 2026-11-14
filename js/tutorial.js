@@ -72,6 +72,8 @@ const LESSONS=[
     {glow:'#letterRead .kw',say:'A word with dots under it… worth keeping. Tapped, it goes into my word bank, by the books.',done:()=>S.bank.length>0,allow:READING,
       ensure:()=>{const k=$('#letterRead .kw');if(k&&!k.dataset.shown){k.dataset.shown=1;k.scrollIntoView({block:'center',behavior:'smooth'})}}},
     {glow:'[data-lsel="start:2"]',say:'And her last.',done:()=>S.letters.every(Boolean),allow:READING},
+    /* her third email writes its recipes into the Recipe Book (markOpen, email.js): said once, briefly */
+    {say:'Her recipes are in my Recipe Book now. The first two whole, the third still with gaps.',wait:6000,allow:READING},
     {glow:'[data-lsel="mail:0"]',say:'And the one that just came, from the apothecary.',done:()=>S.mail&&S.mail[0]===true,allow:READING},
     /* the computer closes at a click outside it, like every popup: only that click works here (and reading on) */
     {say:'That’s plenty to start with. Back to the counter.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},...READING]},
@@ -83,7 +85,7 @@ const LESSONS=[
       ensure:()=>{if(isOpen('books')&&curBook===DIARY&&pageOf()!=='diary:0'&&!turning)turnTo(0)}},
     /* the rest of the notebook is the player's own: something is written in it first, then a click beside it closes it */
     {glow:'#books .pg .memo',say:'The rest of the pages are mine. Anything worth remembering, I can write here.',done:()=>memoTyped||(S.memo||[]).some(Boolean),allow:['#books .pg .memo']},
-    {say:'When I’m done, a click beside the book puts it away.',done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
+    {say:'',done:()=>!isOpen('books'),allow:['#books .pg .memo',{self:'#books'},{self:'#books .bookmain'}]},
     {glow:'#bellBtn',say:'Time to open. The bell calls the next one in.',done:()=>!!bellWait||!!S.queue||S.h>0,allow:[]}]},
   {id:'order1',at:FIRST_ORDER,when:()=>atCounter(FIRST_ORDER),until:()=>S.seen[FIRST_ORDER]&&!S.parting,end:()=>S.pend.some(p=>p.key===FIRST_ORDER&&p.g==='Perfect')?'One done. Her shoulders came down a little as she left.':'Made and given. We’ll see how it goes.',steps:[
     /* listening: only the balloon (a click shows the rest of the words at once) */
@@ -117,7 +119,7 @@ const LESSONS=[
   /* after the first sale: its receipt at the till, then her review, which comes in as she leaves, with what she let slip */
   {id:'sale1',at:'1-Noon-~sale',when:()=>guideState().order1==='done'&&!S.queue&&!S.parting&&S.reviews.length>0,until:()=>!!S.queue||S.day>1,steps:[
     {glow:'#tillBtn',say:'The till printed her receipt. What she had, and her stars.',done:()=>isOpen('receiptsView'),allow:[]},
-    {say:'The spell, her name, her stars, the day and the hour. A click beside it puts it away.',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
+    {say:'The spell, her name, her stars, the day and the hour.',done:()=>!isOpen('receiptsView'),allow:['#receiptsView']},
     {glow:()=>!isOpen('pc')?'#pcBtn':topApp()&&topApp()!=='shop'?`[data-winmin="${topApp()}"]`:'#desk .dicon[data-app="shop"]',say:'And her review’s come in already.',done:()=>pcApp('shop')&&topApp()==='shop',allow:[]},
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
     {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']},

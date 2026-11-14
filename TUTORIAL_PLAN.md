@@ -11,6 +11,10 @@ Changes after the designer's playtest (2026-11-11):
 - Hester's test: the result on the phone is shown part by part (the grade, the ingredients right, what is off under each heading).
 - The nurse: once her recipe is open, its themes and how they lead to the ingredients, then Hester's note "What goes in".
 
+Changes on 2026-11-14:
+- After H.'s third email, one thought: "Her recipes are in my Recipe Book now. The first two whole, the third still with gaps."
+- No thoughts about how to close things ("a click beside it puts it away"): they broke the spell. The steps still wait for the close.
+
 Changes made while building it:
 - The first order is shown whole (decided 2026-11-08): the star goes to the right recipe in the index, its name, then
   each ingredient blank and the right name in its list, with why it fits ("Herb or flower: Chamomile, for calm and
