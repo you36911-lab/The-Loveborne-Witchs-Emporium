@@ -199,7 +199,7 @@ function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRat
    fits (0.6 of their size at most, 0.4 at least), the card widening (up to 1100px) so more fit in a row. On a very short
    window the smallest size is kept rather than shrinking them further. */
 function fitDayEnd(){const m=$('#dayEnd'),body=$('#dayEndBody'),rc=body.querySelector('.receipts');if(!rc)body.style.width='';if(!m.classList.contains('open')||!rc)return;
-  const n=rc.children.length,RW=330,RH=RW*644/486,GAP=30,PAD=56;
+  const n=rc.children.length,RW=330,RH=RW*644/486,GAP=12,PAD=56;
   body.style.width='';rc.style.zoom=.6;
   const cs=getComputedStyle(m),avail=m.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom),maxW=Math.min(1100,m.clientWidth-20)-PAD;
   const other=body.offsetHeight-rc.offsetHeight;
