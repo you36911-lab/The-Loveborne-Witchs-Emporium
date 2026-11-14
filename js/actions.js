@@ -111,6 +111,9 @@ function makeSpell(r,give){S.spell={rid:r.id,name:r.name,type:r.type,give};S.alt
 function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');else render()}
 /* A black candle goes out (a test craft gone wrong, or advice that missed): every fifth spoils a batch, a one-star review that night. */
 function spoilCandle(){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five candles out. That will cost me a star tonight.')}}
+/* A perfect order lights up to two black candles again (never past the last five: a spoiled batch stays spoiled). */
+function relightCandles(n){const f=S.failTests||0,k=Math.min(n,f%5);if(!k)return;S.failTests=f-k;
+  setTimeout(()=>{renderCandles();toast(k===1?'One of the black candles has lit itself again.':'Two of the black candles have lit themselves again.',{thought:true})},1200)}
 function judge(r,test){
   const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
   if(ev.grade==='Perfect')(S.spellArt||(S.spellArt={}))[r.id]=true;  /* made just right: its illustration in the Recipe Book unlocks */
@@ -145,7 +148,7 @@ function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q)||(S
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`,q.key);
-    if(ev.grade==='Perfect')part(v);
+    if(ev.grade==='Perfect'){part(v);relightCandles(2)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);part(v,BYE.order)}
     S.queue=null}
   render()}
