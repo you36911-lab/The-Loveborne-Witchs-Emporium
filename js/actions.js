@@ -210,10 +210,14 @@ addEventListener('resize',fitDayEnd);
 function openNextDay(){$('#dayEnd').classList.remove('open');
   if(S.day>=LAST_PLAYABLE_DAY){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot='';S.openRating=rating()}
   S.ui=null;showDawn()}
-function summaryHTML(){const s=S.stats;const locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
-  return `<h3>Your week</h3><p>Orders by stars: \u2605\u2605\u2605\u2605\u2605 ${s.perfect}, \u2605\u2605\u2605\u2605 ${s.good}, \u2605\u2605 ${s.clumsy}, \u2605 ${s.failed}. Advice given ${s.advice}. Customers who left empty-handed ${s.missed}.</p>
-  <p>Words collected: ${S.bank.length}. Recipes solved in the Recipe Book: ${locked} of ${Object.keys(D.recipes).length}.</p>
-  ${S.tales.length?`<p>Stories you haven't heard yet: ${S.tales.length}. They'll come up next week.</p>`:''}`}
+/* The week at a glance: six tiles, each a big number over a short label (the shop's side, then what was learned). */
+function summaryHTML(){const s=S.stats,locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
+  const given=s.perfect+s.good+s.clumsy+s.failed,spoiled=S.reviews.filter(r=>r.who===SPOILED.who).length;
+  const tile=(n,label,of)=>`<div class="ws-tile"><b>${n}${of?`<small> / ${of}</small>`:''}</b><span>${label}</span></div>`;
+  return `<section class="weeksum"><h3>Your week</h3>
+    <div class="ws-grid">${tile(given,'spells given')}${tile(s.advice,'advice given')}${tile(s.missed,'sent away empty-handed')}
+      ${tile(spoiled,'spoiled batches')}${tile(locked,'recipes solved',Object.keys(D.recipes).length)}${tile(S.bank.length,'words collected')}</div>
+    ${S.tales.length?`<p class="ws-note">${S.tales.length===1?'One story':S.tales.length+' stories'} still to hear. They\u2019ll come up next week.</p>`:''}</section>`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
 /* A button clicked with the mouse lets go of the keyboard focus, so a key pressed later (Space while reading, say) does
    not press it again, nor light it up as if the pointer were on it. Pressed from the keyboard (detail 0), it keeps it. */

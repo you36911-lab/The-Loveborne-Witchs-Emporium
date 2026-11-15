@@ -2,7 +2,7 @@
    thin solid lines, rounded corners); the romance is in the pictures, the serif titles and the little hearts.
    Dark mode is the same at night. */
 :root{
-  --paper:#F8EEF1; --paper2:#EFDCE4; --ink:#33213A; --ink-soft:#7A6475; --pink:#FFA0CC; --pink-soft:#FFE1EF;
+  --paper:#F8EEF1; --paper2:#EFDCE4; --ink:#33213A; --ink-soft:#7A6475; --pink:#F2A9C9; --pink-soft:#FBE4EE;
   --butter:#FCE7A0; --kw:#D9559E; --kw-dark:#C24488; --kw-text:#B03A7E; --mint:#A9E3CF; --peri:#B5BDF0; --card:#FFF9F4; --line:#E2C9D5; --bad:#D23B3B;
   --lift:0 1px 2px rgba(51,33,58,.10); --lift-hover:0 2px 6px rgba(51,33,58,.16);
   --glow:0 1px 3px rgba(51,33,58,.10),0 10px 30px rgba(51,33,58,.16); --glow-soft:0 0 0 transparent;
@@ -11,14 +11,14 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#FFA0CC; --pink-soft:#4A3150;
+    --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
     --butter:#E9CF7A; --kw:#FF9FCF; --kw-dark:#FF8AC3; --kw-text:#FF9FCF; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7070;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
   }
 }
 :root[data-theme="dark"]{
-    --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#FFA0CC; --pink-soft:#4A3150;
+    --paper:#33284D; --paper2:#43355F; --ink:#FBEFD9; --ink-soft:#CDB4CC; --pink:#F2A9C9; --pink-soft:#4A3150;
     --butter:#E9CF7A; --kw:#FF9FCF; --kw-dark:#FF8AC3; --kw-text:#FF9FCF; --mint:#5FB9A0; --peri:#7C87D6; --card:#2A2140; --line:#5E4766; --bad:#FF7070;
     --lift:0 1px 2px rgba(0,0,0,.3); --lift-hover:0 2px 8px rgba(0,0,0,.4); --glow:0 10px 30px rgba(0,0,0,.45);
     --sky:linear-gradient(180deg,#121735 0%,#2C2652 45%,#5A3762 80%,#7A4466 100%);
@@ -1346,6 +1346,16 @@ body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none
 .dayendcard .de-move{font-size:13px;font-weight:700}
 .dayendcard .de-move.up{color:#3E9A6A}.dayendcard .de-move.down{color:#C2453D}
 .dayendcard h3{color:#7A2E5E}
+/* the end of the week: six tiles, a big number over a short label */
+.weeksum{margin:0 0 18px;padding-top:14px;border-top:1px dashed #E2C9D5}
+.weeksum h3{margin:0 0 10px;font-size:22px}
+.ws-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ws-tile{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 6px;background:rgba(255,255,255,.6);border:1px solid #F1D3E1;border-radius:12px}
+.ws-tile b{font-family:var(--font-title);font-size:30px;line-height:1;color:#3A2530}
+.ws-tile b small{font-size:15px;color:#9C7F90}
+.ws-tile span{font-size:13px;color:#7D5F70;line-height:1.25}
+.ws-note{margin:10px 0 0;font-size:13px;font-style:italic;color:#7D5F70}
+@media (max-width:520px){.ws-grid{grid-template-columns:repeat(2,1fr)}}
 .dayendcard #dayGo{font-size:16px;padding:8px 26px}
 
 /* the title screen waits in its plain colour until its pictures are ready, then they fade in together (showTitle, menu.js) */
