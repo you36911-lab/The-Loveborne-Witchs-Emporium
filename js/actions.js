@@ -116,14 +116,19 @@ function relightCandles(n){const f=S.failTests||0,k=Math.min(n,f%5);if(!k)return
   setTimeout(()=>{renderCandles();toast(k===1?'One of the black candles has lit itself again.':'Two of the black candles have lit themselves again.',{thought:true})},1200)}
 function judge(r,test){
   const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
-  if(ev.grade==='Perfect')(S.spellArt||(S.spellArt={}))[r.id]=true;  /* made just right: its illustration in the Recipe Book unlocks */
+  /* Made just right, however it was laid out (written in the book, or brought from the cupboards), and whether a test or
+     with the bell: its illustration in the Recipe Book unlocks and the recipe is written into the book, so the player is
+     never left guessing; once the crafting has settled, its page comes up (books.js). */
+  let wrote=false;
+  if(ev.grade==='Perfect'){(S.spellArt||(S.spellArt={}))[r.id]=true;
+    const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle||'';n.tarot=r.tarot||'';n.when=r.conds.map(condName);
+    wrote=!was&&recipeLocked(r.id);if(wrote)setTimeout(()=>showRecipeDone(r.id),1600)}
   /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
   if(test){if(ev.grade!=='Perfect')tries[r.id]=(tries[r.id]||0)+1;
     if(ev.grade!=='Perfect')spoilCandle();
-    /* A perfect test says so plainly and writes the recipe into the book, so the player is never left guessing. */
+    /* a perfect test says so plainly */
     if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
-      const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle;n.tarot=r.tarot;n.when=r.conds.map(condName);
-      if(!was&&recipeLocked(r.id)){ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});setTimeout(()=>showRecipeDone(r.id),1600)}}  /* once the crafting has settled, its page comes up (books.js) */
+      if(wrote)ev.lines.push({k:'done',t:'You write it into the Recipe Book.'})}
     S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10);  /* the result goes to the phone (phone.js) */
     /* a perfect test of what the waiting customer ordered is ready to give, as if made with the bell */
     const o=orderRecipe(),give=ev.grade==='Perfect'&&o&&String(o.id)===String(r.id)&&S.queue;
