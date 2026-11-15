@@ -49,5 +49,5 @@ Every walk-in and advice visitor in the game, in order (generated from `js/data/
 | 13 | Noon | Leo Marchetti | Order | A teenage bassist before his first gig, sure everyone else is cooler | envy, insecurity, comparison | keeps glancing at his reflection in the shop window, then away | — |
 | 13 | Nightfall | Tomasz & Ewa Nowak | Advice | A couple waiting for the adoption agency to call | anxiety, worry | one phone on the counter between them; both keep looking at it | — |
 | 14 | Sunrise | Chloé Moreau | Order | A woman turning thirty with none of her life list done | envy, insecurity, comparison | a list in her pocket, half of it crossed out in red | — |
-| 14 | Noon | Samuel Adeyemi | Order | An expectant father whose baby is due any moment | anxiety, worry | a hospital bag over one shoulder and a car seat in the other hand, just in case | — |
+| 14 | Noon | Samuel Dela Cruz | Order | An expectant father whose baby is due any moment | anxiety, worry | a hospital bag over one shoulder and a car seat in the other hand, just in case | — |
 | 14 | Nightfall | Niamh Byrne | Advice | A barmaid with a cold coming on before a double shift | sadness, grief, tiredness | sniffing, a bar towel still over her shoulder | — |

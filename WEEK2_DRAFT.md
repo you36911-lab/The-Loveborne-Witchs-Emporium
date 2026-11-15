@@ -224,7 +224,7 @@ Every new walk-in needs a picture (the regulars all have one).
 - **Hint**: "My nan keeps a snail shell on her windowsill. For patience, she says. It took her forty years to get that house." → **patience** (Snail shell; for The Slow-Blooming Rose on Day 16)
 
 ### Noon · walk-in · #168 The Waiting Room Oracle (Rune) · any time
-- **Who**: An expectant father · **Samuel Adeyemi**
+- **Who**: An expectant father · **Samuel Dela Cruz**
 - **Aura**: pale blue
 - **Cue**: a hospital bag over one shoulder, a car seat in the other hand, just in case
 - **Line**: The baby's due today. Or next week. Or now. Every time the phone rings I fall over. I need something to hold while I wait. A little stone with a mark on it?
