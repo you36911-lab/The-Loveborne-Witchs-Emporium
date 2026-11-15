@@ -82,14 +82,13 @@ function adviceAnswer(v){const t=normName(adviceDraft.text);
   c.addEventListener('click',e=>{const b=e.target.closest('[data-advpick]');if(b)pickSuggest(b.dataset.advpick)});
   c.addEventListener('focusin',e=>{if(e.target.id==='adviceIn')fillSuggest()});
   c.addEventListener('focusout',e=>{if(e.target.id==='adviceIn'){const l=$('#adviceList');if(l)l.hidden=true}})}
-/* Every popup closes when you click outside it. The path is taken as the click began, since a click inside a popup can redraw it. */
+/* Every popup closes when you click outside it, but for the closing card and a new email's card. The path is taken as the click began, since a click inside a popup can redraw it. */
 document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
   if(t.id==='info')$('#info').classList.remove('open');
   if(t.id==='pc')closePC();
   /* a book closes at a click anywhere outside it, except on a control or on what the bookmarks and word bank columns hold (their titles, their text, the gaps between their words) */
   if(inside('books')&&!path.some(n=>n.matches?.('.tome, button, input, select, textarea, a, .markside>*, .bank>*'))){$('#books').classList.remove('open');render()}
-  if(t.id==='dayEnd')$('#dayGo')?.click();  /* the day's summary has one way out: on to the next day */
-  const fx=$('#mailFx');if(!fx.hidden&&Date.now()-(+fx.dataset.at||0)>400&&!t.closest('.mailcard')){fx.hidden=true;render()}
+  /* (not the closing card nor a new email's card: they stay until their own buttons are used) */
   if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
   /* a result read at the counter (nobody there) */
   if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
