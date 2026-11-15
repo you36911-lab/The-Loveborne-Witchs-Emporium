@@ -24,7 +24,7 @@ if(PROTOTYPE_TOOLS){const save0=save;
     save0()}}
 /* Back to an earlier hour with everything as it was: the latest snapshot at or before it (or a new game, if none), and
    the snapshots after it are dropped, as that future is gone. The tutorial setting stays as it is. */
-function rollBack(day,h){const o=snaps(),k=hourNo(day,h),tutOff=S.tutOff,gid=S.gid;
+function rollBack(day,h){keepBackup('roll back');const o=snaps(),k=hourNo(day,h),tutOff=S.tutOff,gid=S.gid;
   const best=Object.keys(o.at).map(Number).filter(x=>x<=k).sort((a,b)=>b-a)[0];
   if(best!==undefined)S=JSON.parse(o.at[best]);else{S=fresh();S.gid=gid}
   S.tutOff=tutOff;sanitize();

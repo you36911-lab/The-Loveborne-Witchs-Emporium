@@ -54,7 +54,9 @@ function showTitle(){const t=$('#title'),saved=hasSave();
   else startIntro();
   clearTimeout(glintT);glintT=setTimeout(glint,1200);
   $('#tsContinue').hidden=!saved;
-  if(saved)$('#tsWhere').textContent=`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;
+  const waiting=saved&&S.held&&S.day>LAST_PLAYABLE_DAY;  /* played to the end of this build: kept for the next */
+  if(saved)$('#tsWhere').textContent=waiting?`Day ${S.day}: your game is kept and carries on here once the next week is added`:`Day ${S.day} · ${today().weekday}, ${HOURS[S.h]}`;
+  $('#tsContinue').disabled=waiting;
   $('#tsQuit').hidden=!DESKTOP_BUILD;
   $('#tsMenu').hidden=false;$('#tsConfirm').hidden=true;
   $('#world').inert=true;t.hidden=false;t.classList.remove('gone')}
@@ -112,7 +114,9 @@ let titleFromGame=false;
 /* a new game opens like the first one: the dawn picture behind the fading title, then the day card, then the post */
 function newGame(){titleFromGame=false;leaveTitle(()=>{newState();showDawn(TITLE_FADE_MS+150)})}
 /* Continue: back where the player left off. Only a game where nothing has happened yet (no post has come) opens at dawn again. */
-$('#tsContinue').onclick=()=>{const live=titleFromGame;titleFromGame=false;leaveTitle(()=>{
+$('#tsContinue').onclick=()=>{const live=titleFromGame;titleFromGame=false;
+  if(S.held){if(S.day>LAST_PLAYABLE_DAY)return;delete S.held;leaveTitle(()=>showDawn(TITLE_FADE_MS+150));return}  /* a kept game: its next day is here now */
+  leaveTitle(()=>{
   if(live){render();return}
   if(S.day===1&&S.h===0&&!S.hist.length&&!Object.keys(S.mail||{}).length)showDawn(TITLE_FADE_MS+150);else{render();restoreUI(S.ui)}})};
 $('#tsNew').onclick=()=>{if(!hasSave())return newGame();$('#tsMenu').hidden=true;$('#tsConfirm').hidden=false};
@@ -128,7 +132,7 @@ $('#title').addEventListener('click',e=>{if(e.target.closest('button'))playDing(
    otherwise Esc closes that first, as before. While it is open the shop behind cannot be clicked. */
 const menuOpen=()=>$('#gameMenu').classList.contains('open');
 function somethingOpen(){return ['books','pc','phoneView','receiptsView','info'].some(id=>$('#'+id).classList.contains('open'))||!$('#mailFx').hidden||!!openShelf}
-function openMenu(){$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
+function openMenu(){$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmBk').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
   $('#gameMenu').classList.add('open');$('#world').inert=true}
 function closeMenu(){closePanel($('#gameMenu'),()=>{if(!titleOpen())$('#world').inert=false})}
 $('#gmResume').onclick=closeMenu;
@@ -136,6 +140,25 @@ $('#gmSettings').onclick=openSettings;
 $('#gmRestart').onclick=()=>{$('#gmList').hidden=true;$('#gmConfirm').hidden=false};
 $('#gmNo').onclick=()=>{$('#gmConfirm').hidden=true;$('#gmList').hidden=false};
 $('#gmYes').onclick=()=>{closeMenu();newState();showDawn()};  /* a new game opens like the first one: the day card, then the post */
+/* Backups (core.js keeps them): the list, newest first; putting one back keeps the game you have now as a backup first,
+   then opens the title, so Continue starts from the game put back. A file is the same save, kept wherever you like. */
+const BK_WHY={day:'start of the day','new game':'before a new game','roll back':'before a roll back',restore:'before a backup was put back',unreadable:'a save that would not load'};
+function bkWhen(t){const d=new Date(t);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+function putBack(raw){let o;try{o=JSON.parse(raw)}catch(e){o=null}
+  if(!o||typeof o.day!=='number'){toast('That is not a saved game.');return}
+  keepBackup('restore');S=o;sanitize();S.ui=null;save();titleFromGame=false;$('#gameMenu').classList.remove('open');showTitle()}
+function openBackups(){const list=backups();
+  $('#bkList').innerHTML=list.length?list.map((b,i)=>`<li><span>Day ${b.day} · ${HOURS[b.h]||''}<small>${esc(bkWhen(b.at))} · ${esc(BK_WHY[b.why]||b.why)}</small></span><button data-bk="${i}">Put back</button></li>`).join('')
+    :'<li class="none">No backups yet. One is kept at the start of each day.</li>';
+  $('#gmList').hidden=true;$('#gmBk').hidden=false}
+$('#gmBackups').onclick=openBackups;
+$('#bkList').onclick=e=>{const b=e.target.closest('[data-bk]');if(b)putBack(backups()[+b.dataset.bk].data)};
+$('#bkBack').onclick=()=>{$('#gmBk').hidden=true;$('#gmList').hidden=false};
+$('#bkSave').onclick=()=>{S.ui=uiState();save();const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download=`loveborne-save-day${S.day}.json`;
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('#bkLoad').onclick=()=>$('#bkFile').click();
+$('#bkFile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;f.text().then(putBack)};
 $('#gmTitle').onclick=()=>{S.ui=uiState();save();titleFromGame=true;$('#gameMenu').classList.remove('open');showTitle()};
 $('#gmQuit').onclick=()=>{keepUI();window.close()};
 $('#gameMenu').onclick=e=>{if(e.target.id==='gameMenu')closeMenu()};  /* a click beside the panel resumes */
@@ -146,7 +169,7 @@ document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;
   const stop=()=>{e.stopImmediatePropagation();e.preventDefault()};
   if($('#settings').classList.contains('open')){closeSettings();return stop()}
   if(titleOpen()){if(!$('#tsConfirm').hidden)$('#tsNo').click();return stop()}
-  if(menuOpen()){if(!$('#gmConfirm').hidden)$('#gmNo').click();else closeMenu();return stop()}
+  if(menuOpen()){if(!$('#gmConfirm').hidden)$('#gmNo').click();else if(!$('#gmBk').hidden)$('#bkBack').click();else closeMenu();return stop()}
   /* something open closes first, except while the tutorial holds the player to a step: then the menu opens over it */
   if(somethingOpen()&&!(typeof locked==='function'&&locked()))return;
   openMenu();stop()},true);

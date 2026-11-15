@@ -189,7 +189,7 @@ function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRat
   ${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="de-none">No sales today.</p>'}
   <div class="de-rating" aria-label="Rating ${after.toFixed(1)} of 5"><span class="de-stars">${stars(Math.round(after))}</span><b>${after.toFixed(1)}</b>${move}</div>
   ${weekEnd?summaryHTML():''}
-  <button class="main" id="dayGo">${last?'Start over':'Sleep until morning'}</button>`;
+  <button class="main" id="dayGo">${last?'Sleep (the next week comes in a later version)':'Sleep until morning'}</button>`;
   $('#dayEnd').classList.add('open');fitDayEnd();requestAnimationFrame(fitDayEnd);
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
   $('#dayGo').onclick=openNextDay}
@@ -205,10 +205,12 @@ function fitDayEnd(){const m=$('#dayEnd'),body=$('#dayEndBody'),rc=body.querySel
     const h=(rows*RH+(rows-1)*GAP)*z,w=(per*(RW+GAP)-GAP)*z;pick={z,w};if(other+h<=avail)break}
   rc.style.zoom=pick.z;if(pick.w+PAD>720)body.style.width=Math.ceil(pick.w+PAD+2)+'px'}
 addEventListener('resize',fitDayEnd);
-/* the end-of-day card's button: on to the next day (or, after the last playable day, a new game) */
+/* the end-of-day card's button: on to the next day. After the last playable day the game is kept, waiting at the next
+   day's dawn (S.held): the title says so, and Continue carries on from there once a later build has that day's customers. */
 function openNextDay(){$('#dayEnd').classList.remove('open');
-  if(S.day>=LAST_PLAYABLE_DAY){S=fresh();sanitize()}else{S.day++;S.h=0;S.altar=[];S.candle='';S.tarot='';S.openRating=rating()}
-  S.ui=null;showDawn()}
+  S.day++;S.h=0;S.altar=[];S.candle='';S.tarot='';S.openRating=rating();S.ui=null;
+  if(S.day>LAST_PLAYABLE_DAY){S.held=true;save();showTitle();return}
+  showDawn()}
 /* The week at a glance: six tiles, each a big number over a short label (the shop's side, then what was learned). */
 function summaryHTML(){const s=S.stats,locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   const given=s.perfect+s.good+s.clumsy+s.failed,spoiled=S.reviews.filter(r=>r.who===SPOILED.who).length;

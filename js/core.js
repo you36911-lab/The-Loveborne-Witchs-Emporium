@@ -25,7 +25,18 @@ const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getIte
    the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc). */
 const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc'};
 const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
-try{const raw=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean);S=JSON.parse(raw?renameOld(raw):null)||fresh()}catch(e){S=fresh()}
+/* Backups of the game, kept in this browser beside the save (the menu's Backups puts one back, or saves the game to a file):
+   one at the start of each day, and one just before anything replaces the game (a new game, Restart, a roll back, putting
+   a backup back, or a save that will not load). The newest BACKUP_MAX are kept. */
+const BACKUP_KEY=SAVE_KEY+'-backups',BACKUP_MAX=12;
+function backups(){try{return JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]')}catch(e){return []}}
+function keepBackup(why,raw){raw=raw||JSON.stringify(S);let o=null;try{o=JSON.parse(raw)}catch(e){}
+  if(o&&o.day===1&&o.h===0&&!(o.hist||[]).length&&why!=='day')return;  /* nothing played yet: nothing to keep */
+  const list=[{at:Date.now(),why,day:o?o.day:0,h:o?o.h:0,gid:o&&o.gid||'',data:raw},...backups()].slice(0,BACKUP_MAX);
+  while(list.length){try{localStorage.setItem(BACKUP_KEY,JSON.stringify(list));return}catch(e){list.pop()}}}  /* storage full: the oldest go first */
+let rawLoad='';
+try{rawLoad=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'';S=JSON.parse(rawLoad?renameOld(rawLoad):null)||fresh()}
+catch(e){keepBackup('unreadable',rawLoad);S=fresh()}
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
   delete S.orders;  /* orders taken for later belong to older builds */
@@ -39,14 +50,16 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
 sanitize();
 /* The game saves after everything the player does. The little save icon in the corner (#saveMark) shows only when
    something that matters is kept: a new hour or day, or a sale or an answer rung up. */
-let savedAt='';
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+let savedAt='',backedDay='';
+function save(){if(!S.gid)S.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,6);  /* which game this is */
+  const dk=S.gid+'-'+S.day;if(dk!==backedDay){backedDay=dk;if(!backups().some(b=>b.why==='day'&&b.gid===S.gid&&b.day===S.day))keepBackup('day')}
+  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
   const mark=S.day+'-'+S.h+'-'+S.pend.length;if(savedAt&&mark!==savedAt)showSaved();savedAt=mark;
   if(S.day>profile().furthestDay)try{localStorage.setItem(PROFILE_KEY,JSON.stringify({...profile(),furthestDay:S.day}))}catch(e){}}
 function profile(){try{return {furthestDay:0,...JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')}}catch(e){return {furthestDay:0}}}
 function showSaved(){const m=$('#saveMark');if(!m)return;m.classList.remove('on');void m.offsetWidth;m.classList.add('on')}
 /* A new game: fresh, and without the tutorial if this player has played past it before (a replay). */
-function newState(){S=fresh();if(profile().furthestDay>TUTORIAL_LAST_DAY)S.tutOff=true;sanitize()}
+function newState(){if(hasSave())keepBackup('new game');S=fresh();if(profile().furthestDay>TUTORIAL_LAST_DAY)S.tutOff=true;sanitize()}
 /* A short notice in the subtitle spot, styled like the scene's mood line: it floats in, stays a moment, then fades.
    The mood line steps aside while it shows, so the two never sit on top of each other. */
 /* opts.thought: the witch's own thought, set in italics; opts.ms: how long it stays (2.2s by default). */

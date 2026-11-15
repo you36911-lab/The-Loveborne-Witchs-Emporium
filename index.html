@@ -163,10 +163,18 @@
   <nav class="gm-list" id="gmList">
     <button class="main" id="gmResume">Resume</button>
     <button id="gmSettings">Settings</button>
+    <button id="gmBackups">Backups</button>
     <button id="gmRestart">Restart</button>
     <button id="gmTitle">Back to title</button>
     <button id="gmQuit" hidden>Quit</button>
   </nav>
+  <!-- Backups (menu.js): the game as it was at the start of each day, and before anything replaced it; or a copy in a file -->
+  <div class="gm-backups" id="gmBk" hidden>
+    <p>Put the game back as it was. The game you have now is kept as a backup first.</p>
+    <ul class="bk-list" id="bkList"></ul>
+    <div class="row"><button id="bkSave">Save to a file</button><button id="bkLoad">Load from a file</button><input type="file" id="bkFile" accept=".json,application/json" hidden></div>
+    <div class="row"><button class="main" id="bkBack">Back</button></div>
+  </div>
   <div class="gm-confirm" id="gmConfirm" hidden><p>Start the game over from Day One? This game will be lost.</p>
     <div class="row"><button class="main" id="gmYes">Start over</button><button id="gmNo">Keep playing</button></div></div>
 </div></div>

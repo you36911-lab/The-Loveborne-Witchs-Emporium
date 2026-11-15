@@ -1210,7 +1210,14 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 .menusheet h2{margin:0 0 16px}
 .menusheet .gm-list button{text-align:left}
 .gm-list{display:flex;flex-direction:column;gap:8px}
-.gm-list[hidden],.gm-confirm[hidden]{display:none}
+.gm-list[hidden],.gm-confirm[hidden],.gm-backups[hidden]{display:none}
+.gm-backups p{margin:0 0 10px;max-width:24em}
+.gm-backups .row{gap:8px;flex-wrap:wrap;margin-top:10px}
+.bk-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto}
+.bk-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 10px;border-radius:10px;background:rgba(255,255,255,.55)}
+.bk-list li span small{display:block;opacity:.7;font-size:.82em}
+.bk-list li.none{opacity:.7}
+.bk-list button{white-space:nowrap;flex:none}
 .gm-list button{padding:8px 14px;font-size:16px}
 .gm-confirm p{margin:0 0 10px}
 /* Settings sits above the title screen. */
