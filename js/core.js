@@ -25,12 +25,12 @@ const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getIte
    the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc). */
 const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc'};
 const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
-/* Backups of the game, kept in this browser beside the save (the menu's Backups puts one back, or saves the game to a file):
+/* Prototype only (PROTOTYPE_TOOLS; the real game keeps a single save): backups of the game, kept in this browser beside the save (the menu's Backups puts one back, or saves the game to a file):
    one at the start of each day, and one just before anything replaces the game (a new game, Restart, a roll back, putting
    a backup back, or a save that will not load). The newest BACKUP_MAX are kept. */
 const BACKUP_KEY=SAVE_KEY+'-backups',BACKUP_MAX=12;
 function backups(){try{return JSON.parse(localStorage.getItem(BACKUP_KEY)||'[]')}catch(e){return []}}
-function keepBackup(why,raw){raw=raw||JSON.stringify(S);let o=null;try{o=JSON.parse(raw)}catch(e){}
+function keepBackup(why,raw){if(!PROTOTYPE_TOOLS)return;raw=raw||JSON.stringify(S);let o=null;try{o=JSON.parse(raw)}catch(e){}
   if(o&&o.day===1&&o.h===0&&!(o.hist||[]).length&&why!=='day')return;  /* nothing played yet: nothing to keep */
   const list=[{at:Date.now(),why,day:o?o.day:0,h:o?o.h:0,gid:o&&o.gid||'',data:raw},...backups()].slice(0,BACKUP_MAX);
   while(list.length){try{localStorage.setItem(BACKUP_KEY,JSON.stringify(list));return}catch(e){list.pop()}}}  /* storage full: the oldest go first */
@@ -52,7 +52,7 @@ sanitize();
    something that matters is kept: a new hour or day, or a sale or an answer rung up. */
 let savedAt='',backedDay='';
 function save(){if(!S.gid)S.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,6);  /* which game this is */
-  const dk=S.gid+'-'+S.day;if(dk!==backedDay){backedDay=dk;if(!backups().some(b=>b.why==='day'&&b.gid===S.gid&&b.day===S.day))keepBackup('day')}
+  const dk=S.gid+'-'+S.day;if(PROTOTYPE_TOOLS&&dk!==backedDay){backedDay=dk;if(!backups().some(b=>b.why==='day'&&b.gid===S.gid&&b.day===S.day))keepBackup('day')}
   try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
   const mark=S.day+'-'+S.h+'-'+S.pend.length;if(savedAt&&mark!==savedAt)showSaved();savedAt=mark;
   if(S.day>profile().furthestDay)try{localStorage.setItem(PROFILE_KEY,JSON.stringify({...profile(),furthestDay:S.day}))}catch(e){}}

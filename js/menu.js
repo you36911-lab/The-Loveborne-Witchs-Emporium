@@ -132,7 +132,7 @@ $('#title').addEventListener('click',e=>{if(e.target.closest('button'))playDing(
    otherwise Esc closes that first, as before. While it is open the shop behind cannot be clicked. */
 const menuOpen=()=>$('#gameMenu').classList.contains('open');
 function somethingOpen(){return ['books','pc','phoneView','receiptsView','info'].some(id=>$('#'+id).classList.contains('open'))||!$('#mailFx').hidden||!!openShelf}
-function openMenu(){$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmBk').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
+function openMenu(){$('#gmBackups').hidden=!PROTOTYPE_TOOLS;$('#gmList').hidden=false;$('#gmConfirm').hidden=true;$('#gmBk').hidden=true;$('#gmQuit').hidden=!DESKTOP_BUILD;
   $('#gameMenu').classList.add('open');$('#world').inert=true}
 function closeMenu(){closePanel($('#gameMenu'),()=>{if(!titleOpen())$('#world').inert=false})}
 $('#gmResume').onclick=closeMenu;
