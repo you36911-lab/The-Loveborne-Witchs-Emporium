@@ -35,7 +35,7 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 |---|---|---|---|---|---|---|---|---|
 | 8 | Noon | Harriet Osei |  | Order | A woman whose best friend borrows everything and who can’t say no | shame, guilt, something hidden | her phone face-down on the counter, buzzing; she doesn’t turn it over | ✅ |
 | 8 | Twilight | Rafael Duarte |  | Advice | A man running a Yule market stall for the first time | nervous excitement, curiosity | a banner rolled under his arm; it keeps unrolling, and he keeps rolling it back up | ✅ |
-| 9 | Noon | Margaret Achterberg |  | Order | A woman whose husband left her after forty years, and who has just bought her own car | hope, relief, a fresh start | turning a brand-new set of car keys over and over | ✅ |
+| 9 | Noon | Margaret Achterberg |  | Order | A woman whose husband left her after fifteen years, and who has just bought her own car | hope, relief, a fresh start | turning a brand-new set of car keys over and over | ✅ |
 | 9 | Twilight | Owen Pritchard |  | Order | A primary teacher who has just survived the last day of term | pride, joy, celebration | glitter in his hair, a paper crown sticking out of his coat pocket | ✅ |
 | 9 | Nightfall | Teresa Okonjo |  | Advice | A hospital cleaner who has made her first friend at work in years | longing, affection, wanting to be loved | a hospital cleaner’s tabard under her coat, a lanyard tucked away | ✅ |
 | 10 | Sunrise | Bartholomew Finch |  | Order | An archivist in a basement who hasn’t seen daylight since October | sadness, grief, tiredness | pale as paper, squinting at the window | ✅ |
@@ -47,7 +47,7 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 | 12 | Twilight | Bridget Halloran |  | Order | A woman with fourteen relatives staying for Yule | anger, passion, urgency | keeps behind the shelf, as if someone might follow her in | ✅ |
 | 13 | Sunrise | Dev Kapoor |  | Order | A commuter tired of the same grey routine | sadness, grief, tiredness | grey coat, grey scarf, grey umbrella | ✅ |
 | 13 | Noon | Leo Marchetti |  | Order | A teenage bassist before his first gig, sure everyone else is cooler | envy, insecurity, comparison | keeps glancing at his reflection in the shop window, then away | ✅ |
-| 13 | Nightfall | Tomasz & Ewa Nowak |  | Advice | A couple waiting for the adoption agency to call | anxiety, worry | one phone on the counter between them; both keep looking at it | ✅ |
+| 13 | Nightfall | Tomasz & Ewa Nowak |  | Advice | A couple waiting for the adoption agency to call | anxiety, worry | a phone each in their hands; both keep checking them | ✅ |
 | 14 | Sunrise | Chloé Moreau |  | Order | A woman turning thirty with none of her life list done | envy, insecurity, comparison | a list in her pocket, half of it crossed out in red | ✅ |
 | 14 | Noon | Samuel Dela Cruz |  | Order | An expectant father whose baby is due any moment | anxiety, worry | a hospital bag over one shoulder and a car seat in the other hand, just in case | ✅ |
 | 14 | Nightfall | Niamh Byrne |  | Advice | A barmaid with a cold coming on before a double shift | sadness, grief, tiredness | sniffing, a bar towel still over her shoulder | ✅ |

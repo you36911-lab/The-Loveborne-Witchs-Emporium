@@ -68,7 +68,7 @@ Every new walk-in needs a picture (the regulars all have one).
 - **Who**: A woman with new car keys · **Margaret Achterberg**
 - **Aura**: sparkling white (a fresh start)
 - **Cue**: turning a brand-new set of car keys over and over
-- **Line**: Forty years married and he did all the driving. Well, he's gone off with the woman from the garden centre, and I've bought a car. Something small and round to keep in my pocket. To remind me I'm the one steering now.
+- **Line**: Fifteen years married and he did all the driving. Well, he's gone off with the woman from the garden centre, and I've bought a car. Something small and round to keep in my pocket. To remind me I'm the one steering now.
 - **Review**: Drove to the coast on my own. Parked badly. Didn't care.
 - **Hint**: "We rang a tiny bell at the window every Yule dawn when I was a girl. For new beginnings, Mother said." → **beginnings** (Tiny bell; for The Sun's Little Promise tomorrow)
 
@@ -208,9 +208,9 @@ Every new walk-in needs a picture (the regulars all have one).
 - **Aura**: pale blue
 - **Line**: We're waiting on a phone call. It could be tomorrow. It could be months.
 - **Question**: A stone to keep us patient? Something gentle. We're frayed enough.
-- **Review**: Still waiting. But the stone sits by the phone, and we take turns holding it.
+- **Review**: Still waiting. But the stone sits between our phones, and we take turns holding it.
 - **Hint**: "We've painted the little room's ceiling with silver mica. For wonder, the man at the shop said. We do hope so." → **wonder** (Silver mica; for Everyday Stardust on Day 20)
-- **Reactions**: target "We slept better. We still check the phone every minute." · strong "We forgot to charge the phone. Twice." · weak "Patient till lunchtime."
+- **Reactions**: target "We slept better. We still check our phones every minute." · strong "We both forgot to charge our phones. Twice." · weak "Patient till lunchtime."
 - *Check*: River stone and Howlite both show patience.
 
 ## Day 14 · Friday
