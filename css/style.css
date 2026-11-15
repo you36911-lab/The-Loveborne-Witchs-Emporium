@@ -1340,7 +1340,7 @@ body.guide-locked .guide-ok-self :not(.guide-ok,.guide-ok *){pointer-events:none
 #dayEnd{overflow:hidden}
 .dayendcard .receipts{justify-content:center;gap:12px;margin:4px 0 16px;zoom:.6}
 .dayendcard .de-none{margin:10px 0 18px;font-style:italic;color:#7D5F70}
-.dayendcard .de-rating{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:0 0 18px;padding-top:14px;border-top:1px dashed #E2C9D5}
+.dayendcard .de-rating{display:flex;align-items:baseline;justify-content:center;gap:10px;margin:0 0 18px}
 .dayendcard .de-stars{color:#E0A526;font-size:22px;letter-spacing:2px}
 .dayendcard .de-rating b{font-family:var(--font-title);font-size:30px;line-height:1;color:#3A2530}
 .dayendcard .de-move{font-size:13px;font-weight:700}
