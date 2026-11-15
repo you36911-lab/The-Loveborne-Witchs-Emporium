@@ -218,7 +218,26 @@ const ASSETS = {
     'A learner driver':                       'assets/characters/learner-driver.png',
     'A woman who keeps dating the same man':  'assets/characters/woman-who-keeps-dating-the-same-man.png',
     'A young poet':                           'assets/characters/young-poet.png',
-    'A first-year student':                   'assets/characters/first-year-student.png'
+    'A first-year student':                   'assets/characters/first-year-student.png',
+    /* week two */
+    'A woman who can’t say no':                 'assets/characters/harriet-osei.png',
+    'A man with a market-stall banner':         'assets/characters/rafael-duarte.png',
+    'A woman with new car keys':                'assets/characters/margaret-achterberg.png',
+    'A teacher at the end of term':             'assets/characters/owen-pritchard.png',
+    'A woman in a cleaner’s tabard':            'assets/characters/teresa-okonjo.png',
+    'An archivist who works underground':       'assets/characters/bartholomew-finch.png',
+    'A sheep farmer in a muddy jacket':         'assets/characters/gwen-llewellyn.png',
+    'A young man in a too-new suit':            'assets/characters/ishaan-mehta.png',
+    'An accountant before the office party':    'assets/characters/fiona-galbraith.png',
+    'A best man with index cards':              'assets/characters/callum-reid.png',
+    'A woman who hasn’t spoken to her sister':  'assets/characters/anneliese-vogt.png',
+    'A woman whose house is full of relatives': 'assets/characters/bridget-halloran.png',
+    'A commuter in a grey coat':                'assets/characters/dev-kapoor.png',
+    'A teenage bassist':                        'assets/characters/leo-marchetti.png',
+    'A couple waiting on a phone call':         'assets/characters/tomasz-ewa-nowak.png',
+    'A woman turning thirty tomorrow':          'assets/characters/chloe-moreau.png',
+    'An expectant father':                      'assets/characters/samuel-dela-cruz.png',
+    'A barmaid with a cold coming on':          'assets/characters/niamh-byrne.png'
   },
   /* Tarot cards (Major Arcana), by name: shown in the Tarot Companion, the Cabinet and the altar's card slot. */
   /* a candle of each colour (D.colours), the designer's pictures: in the Candles cupboard and on the altar */
