@@ -69,8 +69,7 @@ const REVIEW_LINES={
   Missed:['I waited at the counter and went home with nothing.','Came in for help and left empty-handed.']};
 const SPOILED={who:'A neighbour',text:'The whole street smelled of burnt herbs again today. Something in that back room keeps going wrong.'};
 function pickOf(list,seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;return list[h%list.length]}
-function postReviews(list){list.forEach(x=>{const v=x.key&&visitByKey(x.key);if(v&&v.noReview)return;  /* Hester never leaves a review: her sale is on the receipts only */
-  const best=x.g==='Perfect'&&v,spoiled=x.who==='Spoiled test batches';
+function postReviews(list){list.forEach(x=>{const v=x.key&&visitByKey(x.key),best=x.g==='Perfect'&&v,spoiled=x.who==='Spoiled test batches';
   S.reviews.push({day:S.day,hour:x.hour,who:spoiled?SPOILED.who:x.who,g:x.g,item:x.item,
     text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:v&&v.hint&&x.g!=='Missed'?v.hint.text:''})})}
 const unquote=t=>t.replace(/^["“]|["”]$/g,'');

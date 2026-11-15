@@ -182,7 +182,7 @@ Every new walk-in needs a picture (the regulars all have one).
 - **Aura**: unknown
 - **Cue**: snow on her shawl that doesn't melt
 - **Line**: Yule, dear. The longest night. I like to burn something for the people who come in out of the dark. Something warm. You'll know which.
-- **Review**: none (Hester never leaves one; her sale is on the receipts only)
+- **Review**: "The longest night, and the shop was warm. As it should be, dear."
 - **Hint** (she quotes the books, as if from memory): "'Frankincense, for the inner eye.' Intuition, dear. It's in there somewhere." → **intuition** (Frankincense; for The Quiet Between Stars on Day 15)
 
 ## Day 13 · Thursday
@@ -247,6 +247,6 @@ Every new walk-in needs a picture (the regulars all have one).
 
 Decided (2026-11-15):
 - Edmund's question: the archivist's hint that morning gives rosemary's protection.
-- Hester leaves no review (week one's is gone too); her sale shows on the receipts only.
+- Hester leaves a review, as in week one.
 - Pictures: the designer draws the 18 new walk-ins from this list.
 - Hints spread out: 23 hints, 23 different words.
