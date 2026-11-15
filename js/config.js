@@ -138,8 +138,8 @@ const ASSETS = {
   sounds: {  /* recorded sounds (see js/sound.js) */
     shopBell:'assets/sounds/shop-bell.mp3', altarBell:'assets/sounds/altar-bell.mp3', notify:'assets/sounds/notify.mp3',
     receipt:'assets/sounds/receipt.mp3', receiptPrinter:'assets/sounds/receipt-printer.mp3', candleOut:'assets/sounds/candle-out.mp3', phoneNotify:'assets/sounds/phone-notify.mp3', craft:'assets/sounds/craft-spell.mp3', cabinetOpen:'assets/sounds/cabinet-open.mp3', cabinetClose:'assets/sounds/cabinet-close.mp3', doorCreak:'assets/sounds/door-creak.mp3', doorClose:'assets/sounds/door-close.mp3', ding:'assets/sounds/ding.mp3', mouseClick:'assets/sounds/mouse-click.mp3'},
-  iconBottle: 'assets/scene/icon-bottle.svg',  /* a plain round-bottomed spell bottle, flat in the shop's pinks: the Recipe Book's Test craft this */
-  iconPhoneApp: 'assets/scene/icon-bottle-app.svg',  /* the phone's Test Craft app: the same bottle with a sparkle inside */
+  iconBottle: 'assets/scene/icon-bottle.svg',  /* a plain round-bottomed spell bottle, flat in the shop's pinks: no longer used (the Recipe Book's old Test craft button) */
+  iconPhoneApp: 'assets/scene/icon-bottle-app.svg',  /* the phone's Crafting app: the same bottle with a sparkle inside */
   iconBell: 'assets/scene/icon-bell.png',  /* the altar's desk bell, the same drawing flattened to three pinks: the Recipe Book's Lay out on the altar */  /* the same picture, its shading flattened to three flat pinks (deep, mid, light), for the My Shop app */
   pcWallpaper: 'assets/scene/desktop-background.jpg',  /* the computer's desktop */
   receipt: 'assets/scene/receipt.jpg',  /* the printed slip; receipts are written on it */
@@ -148,7 +148,7 @@ const ASSETS = {
      crafted. Until a spell has one, the shop's bottle stands in, with the spell's name under it. */
   spells: Object.fromEntries([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39].map(n=>[n,'assets/spells/'+n+'.png'])),  /* the designer's pictures so far (recipes 1 to 39) */
   spellOutlines: Object.fromEntries([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39].map(n=>[n,'assets/spells/outline/'+n+'.png'])),  /* the locked look of each: its shape in paper, edged with a sepia ink line (made from the picture, 4px line) */
-  altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: test craft results come to it (phone2, the designer's picture, cut out) */
+  altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: every craft's result comes to it (phone2, the designer's picture, cut out) */
   altarBell: 'assets/scene/altar-bell.png',  /* the silver bell on the altar: ringing it makes what is laid out (the designer's picture, cut out) */
   testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
   objects: {

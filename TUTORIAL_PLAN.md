@@ -86,22 +86,24 @@ Tapping it collects it (taught fully on Day 2, see below).
 
 ### Hester (Twilight · The Language of Ravens, a rune)
 
-Hester teaches test crafts herself, in her own balloon, before her order:
-> "Before you start, dear: you needn't guess. Lay it out from the book and test it first. The little bottle on the
-> page. It costs nothing but a candle if it's wrong."
+Hester teaches trying and getting it wrong herself, in her own balloon, before her order (2026-11-15: there are no
+separate test crafts; the silver bell makes everything, and only a spell made just right comes out):
+> "Before you start, dear: you needn't guess. Lay it out from the book and ring the silver bell. If it isn't right,
+> it costs nothing but a candle, and you'll know what's off."
 
 | Step | Glow on | Thought | Done when |
 |---|---|---|---|
-| 1 | the bottle (test craft) on her recipe's page | *Test it first, she said. The little bottle.* | a test craft is made |
-| 2 | the phone on the altar | *The phone. That's where a test tells me how it went.* | the phone is open |
-| 3 | (Hester's note: test crafts) | | closed |
-| 4 | the silver bell, once the test is perfect | *Perfect. Now for real.* | it is made and given |
+| 1 | the little bell on her recipe's page | *The little bell lays out what's written.* | it is laid out |
+| 2 | the silver bell | *And the silver bell makes it, right or not.* | it is made |
+| 3 | the phone on the altar | *The phone. That's where it tells me how it went.* | the phone is open |
+| 4 | (Hester's note: getting it wrong) | | closed |
+| 5 | the silver bell, once it is right | *Fill in what's missing, lay it out again, and ring the silver bell.* | it is made and given |
 
-**Hester's note: test crafts**
-> A test shows you what's missing, shelf by shelf. Try again and it tells you more. But each wrong test puts out a
-> black candle; five out, and the street complains. — H.
+**Hester's note: getting it wrong**
+> If it isn't right, the phone shows what's missing, shelf by shelf. Try again and it tells you more. But each wrong
+> one puts out a black candle; five out, and the street complains. — H.
 
-If her first test is perfect, the candle part is taught later, the first time a test is not (see "When it first happens").
+If her first try is right, the candle part is taught later, the first time a test is not (see "When it first happens").
 
 ### The night-shift nurse (Nightfall)
 

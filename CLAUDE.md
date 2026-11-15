@@ -34,7 +34,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/books.js`: the books (cover, opening, page turns), entries, blanks, word bank.
 - `js/email.js`: Moonpost, the webmail on the computer (the story's letters, shown as email).
 - `js/computer.js`: the computer screen: desktop, taskbar with the date, and the My Shop app (reviews and rating).
-- `js/phone.js`: the phone on the altar: test craft results come to it (a Test Craft app styled like the computer's).
+- `js/phone.js`: the phone on the altar: every craft's result comes to it (a Crafting app styled like the computer's).
 - `js/menu.js`: the title screen (the splash, Continue, New Game, Settings, Quit in the desktop build), Settings (volume, subtitle size, full screen; kept under `SETTINGS_KEY`) and the menu in play (Esc).
 - `js/tutorial.js`: the tutorial (see `TUTORIAL_PLAN.md`): lessons taught once, as the shopkeeper's thoughts, a glow on the next thing to click, and Hester's handwritten notes.
 - `js/prototype.js`: prototype-only jump bar (week, day, hour, customer); off with `PROTOTYPE_TOOLS`.

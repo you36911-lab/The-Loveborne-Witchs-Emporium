@@ -95,65 +95,59 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
   if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
-/* A test craft: what was written is laid out on the altar, it is crafted (craftAnim), and only then is it judged: a black
-   candle goes out if it isn't perfect, and the result comes to the phone (a sound and a badge; the phone shows it
-   when clicked). A perfect test is used up and the finished spell stands on the altar (S.spell); one that isn't comes
-   back down onto the table as it was laid out, to change and try again. The finished spell:
-   - made with the bell, or a perfect test of what the customer at the counter ordered: clicking it takes it up to the
-     counter, where it is given;
-   - any other test: clicking it clears it away. */
-function doCraft(test){const r=D.recipes[S.target];if(!r||!S.altar.length)return;
-  if(test){render();craftAnim(()=>judgeTest(r));return}  /* judged at the top of the crafting, as the finished spell comes down */
-  judge(r,false)}
-function judgeTest(r){const before=S.failTests||0;judge(r,true);phoneNotify((S.failTests||0)>before?1100:300)}
+/* Making a spell: the silver bell on the altar makes what is laid out (from the Recipe Book's little bell, or brought from
+   the cupboards by hand), with or without a customer waiting. It is crafted (craftAnim), and only then judged; the result
+   always comes to the phone (a sound and a badge; the phone shows it when clicked).
+   - Made just right: the finished spell stands on the altar (S.spell) and its recipe is written into the Recipe Book. If it
+     is what the customer at the counter came in for, clicking it takes it up to the counter, where it is given; otherwise
+     clicking it clears it away.
+   - Not right: a black candle goes out and what was laid out stays on the table, to change and try again. Only a spell
+     made just right can be given. */
+function doCraft(){const r=D.recipes[S.target];if(!r||!S.altar.length){bellBusy=false;return}
+  render();craftAnim(()=>{bellBusy=false;const before=S.failTests||0;judge(r);phoneNotify((S.failTests||0)>before?1100:300)})}  /* judged as the finished spell comes down */
 /* the finished spell takes the place of what was laid out */
 function makeSpell(r,give){S.spell={rid:r.id,name:r.name,type:r.type,give};S.altar=[];S.candle='';S.tarot=''}
 function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');else render()}
-/* A black candle goes out (a test craft gone wrong, or advice that missed): every fifth spoils a batch, a one-star review that night. */
-function spoilCandle(){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five test crafts gone wrong');toast('Five candles out. That will cost me a star tonight.')}}
-/* A perfect order lights up to two black candles again (never past the last five: a spoiled batch stays spoiled). */
+/* A black candle goes out (a spell that didn't come out right, or advice that missed): every fifth spoils a batch, a one-star review that night. */
+function spoilCandle(){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five crafts gone wrong');toast('Five candles out. That will cost me a star tonight.')}}
+/* A spell given on the first try lights up to two black candles again (never past the last five: a spoiled batch stays spoiled). */
 function relightCandles(n){const f=S.failTests||0,k=Math.min(n,f%5);if(!k)return;S.failTests=f-k;
   setTimeout(()=>{renderCandles();toast(k===1?'One of the black candles has lit itself again.':'Two of the black candles have lit themselves again.',{thought:true})},1200)}
-function judge(r,test){
-  const tries=S.tests||(S.tests={}),ev=evaluate(r,test,test?tries[r.id]||0:1);  /* S.tests: test crafts of each recipe gone wrong */
-  /* Made just right, however it was laid out (written in the book, or brought from the cupboards), and whether a test or
-     with the bell: its illustration in the Recipe Book unlocks and the recipe is written into the book, so the player is
-     never left guessing; once the crafting has settled, its page comes up (books.js). */
-  let wrote=false;
-  if(ev.grade==='Perfect'){(S.spellArt||(S.spellArt={}))[r.id]=true;
+function judge(r){
+  const tries=S.tests||(S.tests={}),ev=evaluate(r,true,tries[r.id]||0);  /* S.tests: crafts of each recipe gone wrong (the clues say more each time) */
+  const o=orderRecipe(),q=S.queue;
+  if(ev.grade==='Perfect'){
+    /* Made just right, however it was laid out: its illustration in the Recipe Book unlocks and the recipe is written into
+       the book, so the player is never left guessing; once the crafting has settled, its page comes up (books.js). */
+    (S.spellArt||(S.spellArt={}))[r.id]=true;
     const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle||'';n.tarot=r.tarot||'';n.when=r.conds.map(condName);
-    wrote=!was&&recipeLocked(r.id);if(wrote)setTimeout(()=>showRecipeDone(r.id),1600)}
-  /* Test crafts are unlimited, but every fifth one that isn't perfect spoils a batch: a one-star review that night. */
-  if(test){if(ev.grade!=='Perfect')tries[r.id]=(tries[r.id]||0)+1;
-    if(ev.grade!=='Perfect')spoilCandle();
-    /* a perfect test says so plainly */
-    if(ev.grade==='Perfect'){ev.lines.unshift({k:'done',t:'Nothing is off. This is the recipe, ready to give.'});
-      if(wrote)ev.lines.push({k:'done',t:'You write it into the Recipe Book.'})}
-    S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10);  /* the result goes to the phone (phone.js) */
-    /* a perfect test of what the waiting customer ordered is ready to give, as if made with the bell */
-    const o=orderRecipe(),give=ev.grade==='Perfect'&&o&&String(o.id)===String(r.id)&&S.queue;
-    if(give)S.made={for:visitorId(S.queue),rid:r.id,name:r.name,type:r.type,ev};
-    if(ev.grade==='Perfect')makeSpell(r,!!give)}  /* only a perfect test becomes the spell; otherwise what was laid out stays, to change */
-  else{/* Made for real: the spell stands on the altar; clicking it takes it up to the counter, where it is given (giveMade). */
-    const q=S.queue;if(!q)return;
-    S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};S.result=null;makeSpell(r,true)}
+    const wrote=!was&&recipeLocked(r.id);if(wrote)setTimeout(()=>showRecipeDone(r.id),1600);
+    /* given only if it is what the waiting customer came in for */
+    const give=!!(o&&q&&String(o.id)===String(r.id));
+    ev.lines.unshift({k:'done',t:give?'Nothing is off. This is the recipe, ready to give.':o?'Nothing is off. It is made just right, but it isn’t what they came in for.':'Nothing is off. This is the recipe.'});
+    if(wrote)ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});
+    if(give)S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};
+    S.result=null;makeSpell(r,give)}
+  else{/* not right: a black candle goes out; what was laid out stays, to change */
+    tries[r.id]=(tries[r.id]||0)+1;spoilCandle();if(o&&q)q.fails=(q.fails||0)+1}
+  S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10);  /* the result goes to the phone (phone.js) */
   render()}
-/* The silver bell on the altar makes what is laid out, for the customer at the counter. (Test crafts are made from the
-   Recipe Book only.) If it can't be made yet, the bell gives a little shake and says why. It rings out before the view goes
-   up to the counter, so it is seen and heard. */
+/* The silver bell on the altar makes what is laid out (see doCraft). If it can't be made yet, the bell gives a little shake
+   and says why. */
 let bellBusy=false;
 function ringAltarBell(){const b=$('#craftBell');if(bellBusy)return;
-  const why=!orderRecipe()?'Nobody is waiting on an order right now.':!S.target?'Which recipe, though? The little bell on its page in the Recipe Book.':!S.altar.length?'Nothing is laid out on the altar yet.':'';
+  const why=!S.target?'Which recipe, though? The little bell on its page in the Recipe Book.':!S.altar.length?'Nothing is laid out on the altar yet.':'';
   if(why){b.classList.remove('nope','ring');void b.offsetWidth;b.classList.add('nope');playAltarBell();toast(why);return}
   b.classList.remove('ring','nope');void b.offsetWidth;b.classList.add('ring');playAltarBell();bellBusy=true;
-  setTimeout(()=>craftAnim(()=>{bellBusy=false;doCraft(false)}),450)}  /* it is crafted (the same as a test craft); the spell then waits on the altar */
-/* Hand over what was made: the grade was settled when it was made. */
+  setTimeout(doCraft,450)}  /* the spell, if it comes out right, then waits on the altar */
+/* Hand over what was made (only a spell made just right is ever given). A first try, with no candle put out for this
+   customer, lights up to two black candles again. */
 function giveMade(){const m=S.made,q=S.queue;if(!m||!q||m.for!==visitorId(q)||(S.spell&&S.spell.give))return;const r=D.recipes[m.rid],ev=m.ev;S.made=null;
   {const v=visitByKey(q.key);S.seen[q.key]=true;S.activeNow=null;
     /* Every order has exactly one right recipe; making a different one fails, however well it is made. */
     if(String(v.rid)!==String(r.id))ev.grade='Failed';
     S.stats[ev.grade.toLowerCase()]++;record(ev.grade,v.who,`${r.name} (${r.type})`,q.key);
-    if(ev.grade==='Perfect'){part(v);relightCandles(2)}
+    if(ev.grade==='Perfect'){part(v);if(!q.fails)relightCandles(2)}
     else{tell(v,ev.grade==='Good'?reactionFor(v,r,missKind(ev)):v.oops,`the ${r.type.toLowerCase()} you made them`);part(v,BYE.order)}
     S.queue=null}
   render()}

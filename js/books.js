@@ -60,7 +60,7 @@ function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
     (pic?`<img class="in-pic" src="${pic}" alt="">`:it.look?`<p class="in-look">${esc(it.look)}</p>`:'')+
     (it.line?`<p class="in-line">${esc(it.line)}</p>`:'')+`<p class="in-done">✦ Complete</p>`;
   $('#ingNote').classList.add('open')}
-/* A recipe just solved (every blank written, from the book or by a perfect test craft): its page comes up the same way,
+/* A recipe just solved (every blank written, from the book or by a spell made just right): its page comes up the same way,
    with the spell's picture as the Recipe Book prints it (only its outline until it has been made just right), what it is
    for, and everything that goes into it. */
 function showRecipeDone(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=seen?ASSETS.spells[id]:ASSETS.spellOutlines[id];
@@ -128,7 +128,7 @@ function allPages(book){if(book===DIARY)return diaryPages();
   if(book==='Recipe Book'){const pad=idx.length%2?[{key:'index:pad',index:true,html:()=>''}]:[];
     return [...idx,...pad,...entries.flatMap(e=>[e,{key:'art:'+e.key.slice(7),plain:true,html:()=>spellArtHTML(e.key.slice(7))}])]}
   return [...idx,...entries]}
-/* A spell's illustration: only its outline until the spell has been made perfectly (a perfect test craft counts), then the
+/* A spell's illustration: only its outline until the spell has been made perfectly (however it was laid out), then the
    picture itself. No caption. */
 function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=ASSETS.spells[id];
   /* locked: only the picture's outline, drawn on the page, with a question mark (an empty dashed frame until the picture exists) */
@@ -309,15 +309,15 @@ function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=
   if(openFor('tarot'))ccList=windex(pickOpen,Object.keys(D.tarot),'tarot:');
   if(openFor('when'))whenList=windex(pickOpen,KINDOPTS[CONDKIND[r.conds[+open[2]].t]],'cond:');
   /* a slot: what is written there, or a ruled blank naming what kind of thing goes there */
-  /* The page's two actions are small one-colour icons on the title line (the tutorial says what they do): the altar bell
+  /* The page's action is a small one-colour icon on the title line (the tutorial says what it does): the altar bell
      makes this recipe what is being made and lays out what is written here on the altar (with nothing written yet, it
-     only chooses the recipe), the bottle test crafts it. The title itself is plain: no tick to choose it. */
+     only chooses the recipe); the silver bell on the altar then makes it. The title itself is plain: no tick to choose it. */
   /* line breaks in a title: a short word (the, a, of, to…) never ends a line, it stays with the word after it (so "Another
      Orbit Around the Sun" breaks before "the Sun"); the last group and the solved star stay together too */
   const groups=r.name.split(' ').reduce((g,w,i,A)=>{const prev=A[i-1];if(i&&SMALL_WORDS.has(prev.toLowerCase()))g[g.length-1]+=' '+w;else g.push(w);return g},[]),last=groups.pop(),after=(lk?' ✦':'');
   const nb=s=>esc(s).replace(/ /g,' ');
   const titleHTML=(groups.length?groups.map(nb).join(' ')+' ':'')+`<span class="tickword">${nb(last)}${after}</span>`;
-  const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" aria-label="Lay out on the altar"><img src="${ASSETS.iconBell}" alt=""></button>${lk?'':`<button class="bookico" data-booktest="${r.id}" aria-label="Test craft this" ${n.ing.some(Boolean)?'':'disabled'}><img src="${ASSETS.iconBottle}" alt=""></button>`}</span>`;
+  const acts=`<span class="bookicons"><button class="bookico" data-layout="${r.id}" aria-label="Lay out on the altar"><img src="${ASSETS.iconBell}" alt=""></button></span>`;
   const slot=(lab,v,rm,key)=>v?written(v,rm):lk?'':wblank(key,lab);
   const none='<span class="muted">none needed</span>';
   return `<div class="recipe ${lk?'locked':''}"><div class="rtitle"><h3>${titleHTML}</h3>${acts}</div><div class="muted">${esc(r.type)}. ${esc(r.intent)}.</div>
@@ -347,12 +347,12 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
     pickOpen='';if(recipeLocked(id))setTimeout(()=>showRecipeDone(id),350);save();renderBooks();return}
   if(b.dataset.rmCandle){noteOf(b.dataset.rmCandle).candle='';save();renderBooks();return}
   if(b.dataset.rmTarot){noteOf(b.dataset.rmTarot).tarot='';save();renderBooks();return}
-  /* Recipe Book shortcut: put what the player has written for a recipe onto the altar, optionally test it straight away. */
-  if(b.dataset.layout||b.dataset.booktest){const id=b.dataset.layout||b.dataset.booktest,n=noteOf(id);
+  /* Recipe Book shortcut: put what the player has written for a recipe onto the altar (the silver bell there makes it). */
+  if(b.dataset.layout){const id=b.dataset.layout,n=noteOf(id);
     S.target=String(id);S.result=null;
     if(n.ing.some(Boolean)){S.altar=[...new Set(n.ing.filter(x=>x&&x!==BIRTHSTONE))];S.candle=n.candle||'';S.tarot=n.tarot||''}
     $('#books').classList.remove('open');goTo('altar');
-    if(b.dataset.booktest)doCraft(true);else{render();toast(n.ing.some(Boolean)?`Laid out ${D.recipes[id].name} on the altar.`:`${D.recipes[id].name}. Nothing written in it yet; the cupboards, then.`)}
+    render();toast(n.ing.some(Boolean)?`Laid out ${D.recipes[id].name} on the altar.`:`${D.recipes[id].name}. Nothing written in it yet; the cupboards, then.`)
     return}
   if(b.id==='cover'){openTome();return}
   if(b.id==='turnPrev'||b.id==='turnNext'){turnBy(b.id==='turnNext'?1:-1);return}

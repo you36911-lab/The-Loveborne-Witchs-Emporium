@@ -26,9 +26,9 @@ function playDoorClose(){sfx('doorCreak',.6);setTimeout(()=>sfx('doorClose',.55)
 /* A test-craft candle going out: "wind magic (5)" (Yodguard), a soft magical whoosh. The file runs 8 seconds but the
    sound is over in about one; the rest is near silence, so it stops at 1.8s. */
 function playCandleOut(){sfx('candleOut',.3,1800)}
-/* A test craft's result comes to the phone on the altar: "New Notification 057" (Universfield). */
+/* A craft's result comes to the phone on the altar: "New Notification 057" (Universfield). */
 function playPhone(){sfx('phoneNotify',.5)}
-/* Crafting on the altar (a test craft or the real thing): "Magic Spell" (Soumages), chosen by the designer. */
+/* Crafting on the altar (with the silver bell): "Magic Spell" (Soumages), chosen by the designer. */
 function playCraft(){sfx('craft',.6,0,.3)}  /* its first 0.35s is quiet */
 /* A cupboard door in the workroom swinging open, and shut: "Cabinet Door Open" and "Cabinet Door Close" (freesound_community). */
 function playCabinetOpen(){sfx('cabinetOpen',.5,0,.52)}  /* the recordings start with a pause (0.58s, 0.8s): skip it, so the sound comes with the door */

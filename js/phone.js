@@ -1,19 +1,19 @@
-/* The phone on the altar (right of the candle stand). A test craft's result comes to it: the phone chimes with a
+/* The phone on the altar (right of the candle stand). Every craft's result comes to it: the phone chimes with a
    notification sound and shows a badge; clicking it opens the phone, drawn as a real phone (bezel, notch, status bar), on
-   its Test Craft app, whose title bar is like the computer's apps. The last result stays on it (S.lastTest). */
+   its Crafting app, whose title bar is like the computer's apps. The last result stays on it (S.lastTest). */
 const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed'};
 /* the results kept on the phone, newest first (S.testLog, the last ten); phoneAt is the one shown (0 = the newest) */
 let phoneAt=0;
 const phoneLog=()=>S.testLog&&S.testLog.length?S.testLog:S.lastTest?[S.lastTest]:[];
 function phoneHTML(){const R=phoneLog()[phoneAt];
-  if(!R)return `<p class="ph-empty muted">No test crafts yet.<br>Test craft a recipe from the Recipe Book (the little bottle) and the result comes here.</p>`;
+  if(!R)return `<p class="ph-empty muted">Nothing made yet.<br>Lay a recipe out on the altar and ring the silver bell: how it came out comes here.</p>`;
   /* the clue lines grouped by what they are about (ingredients, candle, card...), each group under its label; words for
      the word bank are dotted and can be collected here, as anywhere */
   const groups=[];R.lines.forEach(l=>{if(typeof l==='string')l={k:'',t:l};const g=groups[groups.length-1];
     if(g&&g.k===l.k)g.t.push(l.t);else groups.push({k:l.k,t:[l.t]})});
   const rows=groups.map(g=>`<section class="ph-sec" data-k="${g.k}">${g.k&&CLUETAG[g.k]?`<h4 class="ph-lab">${CLUETAG[g.k]}</h4>`:''}${g.t.map(t=>`<p class="ph-line">${kw(t)}</p>`).join('')}</section>`).join('');
   const score=R.total?`<div class="ph-score"><b>${R.ok}</b>/${R.total} <small>ingredients</small></div>`:'';
-  return `<div class="ph-head"><div><b class="ph-name">${phoneTitle(R.name||'Test craft')}</b>${R.type?`<small class="muted">${esc(R.type)}</small>`:''}</div>
+  return `<div class="ph-head"><div><b class="ph-name">${phoneTitle(R.name||'Craft')}</b>${R.type?`<small class="muted">${esc(R.type)}</small>`:''}</div>
     <span class="ph-grade g-${R.grade}">${GRADE_NOTE[R.grade]||esc(R.grade)}</span></div>
     <div class="ph-card">${score}${rows}</div>`}
 /* a title breaks like the Recipe Book's: a short word (the, a, of...) never ends a line ("Another Orbit Around / the Sun") */

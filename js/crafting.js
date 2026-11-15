@@ -44,7 +44,7 @@ function ingLine(sw){const g=`The one from ${shelfOf(sw.got)}`,k=sw.kw;
   if(sw.kind==='lacks')return `${g}: it brings ${k}, but nothing in the mix brings ${sw.lacks[0]}. The right one would.`;
   if(sw.kind==='notes')return `${g}: it brings ${k}, but also ${sw.off}. The right one brings ${sw.wantP} instead.`;
   return `${g} isn\u2019t right. Picture the right one: ${ITEM[sw.want]?.look||'something else'}.`}
-/* level: how many test crafts of this recipe have already gone wrong. The first time the clues only say which shelves are
+/* level: how many crafts of this recipe have already gone wrong. The first time the clues only say which shelves are
    short or over (2 more from Herbs & flowers); from the second, each missing one is pictured and each wrong one explained. */
 function evaluate(r,test,level=1){
   const used=[...new Set(S.altar)],need=recipeNeeds(r,used,currentVisit()?.born);

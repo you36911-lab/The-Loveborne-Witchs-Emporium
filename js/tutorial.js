@@ -11,7 +11,7 @@ const vkey=v=>v.day+'-'+v.hour+'-'+v.who;
 const FIRST_ORDER=vkey(X.visits.find(v=>v.kind!=='advice'));
 const HESTER_DAY1='1-Twilight-Hester';
 const NURSE='1-Nightfall-A night-shift nurse';
-/* a test craft made while Hester teaches does not count toward the five (its candle still goes out, and lights again after) */
+/* a wrong craft made while Hester teaches does not count toward the five (its candle still goes out, and lights again after) */
 /* the bookmark made in the bookmark lesson (the newest), which its last step takes out again */
 let bmKey='';const bmRibbon=()=>bmKey&&seen(`#books .pg .ribbon[data-bm="${bmKey}"]`)?`#books .pg .ribbon[data-bm="${bmKey}"]`:'';
 const keepBm=()=>{const m=S.marks||[];if(!bmKey&&m.length)bmKey=m[m.length-1].key};
@@ -45,7 +45,7 @@ function seen(sel){for(const el of document.querySelectorAll(sel)){const r=el.ge
 /* Hester's notes: short rules in her own hand, in the order they are given (the notebook tapes them in this order) */
 const HESTER_NOTES={
   aura:{title:'The crystal ball',lines:['The crystal ball shows what they don’t say. [pink|Pink]: longing, affection; [pinkstrong|bright pink], embarrassment. [red|Red]: anger, passion, urgency. [grey|Grey]: sadness, grief, tiredness. [blue|Pale blue]: worry. [gold|Gold]: pride, joy. [yellow|Yellow]: nerves, curiosity. [green|Murky green]: envy. [purple|Purple]: a stirring of intuition. A [darkknot|dark knot]: shame, something hidden. [white|Sparkling white]: hope, a fresh start.','Watch it, dear. People rarely ask for what they need.']},
-  tests:{title:'Test crafts',lines:['A test shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong test puts out a black candle. Five out, and the street smells it.']},
+  tests:{title:'Getting it wrong',lines:['If it isn’t right, the phone shows what’s missing, shelf by shelf. Try the same one again and it tells you more.','But every wrong one puts out a black candle. Five out, and the street smells it.']},
   themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']}};
 
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
@@ -126,25 +126,26 @@ const LESSONS=[
     {glow:'#shopApp .rv-ps',say:'A P.S. at the bottom. What they let slip tends to matter, sometimes for the very next order.',wait:8000,allow:['#shopApp .sh-list']},
     {say:'Every review comes in as they leave. My rating is the average of their stars.',done:()=>!isOpen('pc'),allow:[{self:'#pc'},'#shopApp .sh-list']},
     {glow:'#bellBtn',say:'Ready for whoever’s next. The bell calls them in.',done:()=>!!bellWait||!!S.queue,allow:[]}]},
-  /* Hester teaches test crafts herself (her tutorial line in story.js), then the steps follow it */
+  /* Hester teaches trying and getting it wrong herself (her tutorial line in story.js), then the steps follow it */
   {id:'hester',at:HESTER_DAY1,when:()=>atCounter(HESTER_DAY1),until:()=>S.seen[HESTER_DAY1],
-    /* the test crafts made while she teaches are free: the black candles they put out light again when she has gone */
+    /* the crafts made while she teaches are free: the black candles they put out light again when she has gone */
     start:()=>{S.tutFails0=S.failTests||0},
     end:()=>{const was=S.tutFails0;delete S.tutFails0;if(was==null||(S.failTests||0)<=was)return '';S.failTests=was;save();renderCandles();return 'The black candles have lit themselves again. Her lesson was on the house.'},steps:[
     {say:'',done:()=>spokenFor(1500),allow:['#counter .balloon']},
-    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Test it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
+    {glow:'#bookStack [data-openbook="Recipe Book"]',say:'Try it first, she said. Her rune is in the Recipe Book; she wrote most of it in her email.',done:()=>bookOpen('Recipe Book'),allow:[]},
     /* to her rune by the index: the teal tab first if the book is open elsewhere, then on through the index to the runes */
     {glow:()=>seen(RAVENS)?RAVENS:onIndex()?'#turnNext':'#turnFirst',
       say:()=>seen(RAVENS)?'The Language of Ravens.':onIndex()?'Runes come further on in the index.':'The index first. The tab at the edge goes back to it.',
       done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[]},
-    {glow:'#books .pg [data-booktest="111"]',say:'The little bottle tests what’s written.',done:()=>(S.testLog||[]).length>0,allow:[]},
-    {glow:'#phoneBtn',say:'The phone. That’s where a test tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
+    {glow:'#books .pg [data-layout="111"]',say:'The little bell lays out what’s written.',done:()=>(S.testLog||[]).length>0||(S.altar.length>0&&view==='altar'),allow:[]},
+    {glow:'#craftBell',say:'And the silver bell makes it, right or not.',done:()=>(S.testLog||[]).length>0,allow:[]},
+    {glow:'#phoneBtn',say:'The phone. That’s where it tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
     /* the result on the phone, part by part; then it closes at a click outside it */
     {glow:'#phoneApp .ph-grade',say:'How it came out, at the top.',wait:4000,allow:['#phoneApp']},
     {glow:()=>seen('#phoneApp .ph-score')?'#phoneApp .ph-score':'',say:'How many of the ingredients were right…',wait:4500,allow:['#phoneApp']},
     {glow:'#phoneApp .ph-sec[data-k]:not([data-k=""])',say:'…and what’s off, under each heading: the ingredients, the candle, the card.',wait:6500,allow:['#phoneApp']},
-    /* what came through: only the recipe's themes, and only from what is right (her first test: intuition and
-       transformation, not yet truth). Skipped if the test brought none. */
+    /* what came through: only the recipe's themes, and only from what is right (her first try: intuition and
+       transformation, not yet truth). Skipped if it brought none. */
     {glow:()=>seen(CAME)?CAME:'',say:()=>seen(CAME)?'What came through is only from what’s right. A theme it wants that isn’t there yet, I’m still missing.':'',
       done:()=>!seen(CAME),wait:7500,allow:['#phoneApp']},
     {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
@@ -160,8 +161,8 @@ const LESSONS=[
     /* and back again: a tap on it, on the table, puts it back in its cupboard */
     {glow:()=>crystalOut()?`#altarView .ontable[data-item="${crystalOut()}"]`:'',say:'And back it goes, if I change my mind.',done:()=>!crystalOut(),allow:['#shelfOpen',CRYSTALS,'#altarView .ontable']},
     {say:'Handy, when I already know what I want. The book’s little bell does the same from what’s written.',wait:6000,allow:['#shelfOpen',CRYSTALS]},
-    /* until it is made (with the silver bell, or by a perfect test of her rune) */
-    {say:'Fill in what’s missing, test again, and ring the silver bell when it’s right.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
+    /* until it is made just right */
+    {say:'Fill in what’s missing, lay it out again, and ring the silver bell.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
     {glow:'#spellBtn',say:'Made. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
     {glow:'#madeBtn',say:'Hand it over.',done:()=>S.seen[HESTER_DAY1],allow:[]}]},
   {id:'nurse',at:NURSE,when:()=>atCounter(NURSE),until:()=>S.seen[NURSE],steps:[{say:'On my own this time.',wait:5000},

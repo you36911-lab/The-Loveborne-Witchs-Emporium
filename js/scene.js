@@ -155,7 +155,7 @@ function afterLeaving(){clearTimeout(leaveT);leaveT=setTimeout(()=>{if(S.queue||
 /* The till shows today's receipts on their own, laid over the shop; a click anywhere puts them away. */
 function openReceipts(){if(!S.pend.length){toast('No receipts yet today.');return}
   const m=$('#receiptsView');m.innerHTML=`<div class="receipts">${S.pend.map(receiptHTML).join('')}</div>`;m.classList.add('open')}
-/* Failed tests are five black candles on a candelabra on the altar, right of the card: each test craft that isn't
+/* Failed crafts are five black candles on a candelabra on the altar, right of the card: each craft that isn't
    perfect puts one out; when all five are out it costs a star and they are lit again. The fifth going out shows the
    candelabra dark for a moment (ASSETS.testCandles[0]) before all five light again. Each one going out is heard. */
 let candlesFails=null,candlesDark=0;
@@ -175,7 +175,7 @@ function renderCandles(){const f=S.failTests||0,lit=5-f%5,box=$('#testCandles'),
   if(candlesFails!==null&&f>candlesFails&&f%5===0){clearTimeout(candlesDark);put(0);candlesDark=setTimeout(()=>{candlesDark=0;put(5-(S.failTests||0)%5)},1600)}
   else if(!candlesDark)put(lit);
   candlesFails=f;
-  box.setAttribute('aria-label',`Test crafts: ${lit} of 5 candles lit`)}
+  box.setAttribute('aria-label',`Black candles: ${lit} of 5 lit`)}
 /* the recipe the customer at the counter has asked for, while their order is open; otherwise null */
 function orderRecipe(){const q=currentVisitor();return q&&q.type==='new'&&S.activeNow===q.key?D.recipes[visitByKey(q.key).rid]:null}
 /* There is no top bar: the date is on the computer's taskbar and the rating in its Shop app. */
@@ -246,7 +246,7 @@ function resultHTML(){const R=S.result;return `<div class="g">${R.test?'Test cra
 function knownRecipes(){return Object.values(D.recipes)}
 function renderAltar(){
   const orderR=orderRecipe();
-  /* what is being made is chosen in the Recipe Book (the little bell on its page lays it out, or the bottle tests it); nothing on the table names it */
+  /* what is being made is chosen in the Recipe Book (the little bell on its page lays it out); nothing on the table names it */
   /* what is laid out stands on the table; tap a thing to put it back */
   /* five or more stand in two rows: the smaller things in front, the bigger ones a step further back on the table (higher,
      a little smaller, a little darker), so seven big things still fit between the phone and the bell */
@@ -267,7 +267,7 @@ function renderAltar(){
   /* the card lies flat on the table; with no card, an outline shows where it goes (clicking it opens the tarot cupboard) */
   $('#tarotSlot').innerHTML=S.tarot?`<button class="ontable laid" data-tarot="${esc(S.tarot)}" aria-label="${esc(S.tarot)}"><span class="cardbed">${ASSETS.tarot[S.tarot]?`<img src="${ASSETS.tarot[S.tarot]}" alt="">`:`<span class="nm">${esc(S.tarot)}</span>`}</span></button>`
     :'<button class="ontable laid" data-shelf="Tarot" aria-label="Choose a tarot card"><span class="cardbed empty"></span></button>';
-  $('#craftBell').classList.toggle('ready',!!(orderR&&S.altar.length&&S.target));
+  $('#craftBell').classList.toggle('ready',!!(S.altar.length&&S.target));
   const res=$('#result');
   if(S.result&&!S.result.test){res.hidden=false;res.innerHTML=resultHTML()}else res.hidden=true;  /* test crafts go to the phone */
 }
