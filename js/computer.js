@@ -60,7 +60,8 @@ $('#desk').addEventListener('dblclick',e=>{const bar=e.target.closest('.pcbar');
 let reviewDay=0;  /* the day My Shop shows; 0 is every day */
 /* ---------- reviews ---------- */
 /* Every receipt becomes a review as it is rung up (record in visitors.js). A customer who got just what they needed writes their own (review in
-   story.js) and adds, as a P.S., what they let slip at the counter (the hint). Everyone else writes a line that fits their stars. */
+   story.js) and adds, as a P.S., what they let slip at the counter (the hint). Everyone else writes a line that fits their stars;
+   a customer who left empty-handed lets nothing slip (no P.S.). */
 const REVIEW_LINES={
   Good:['Nearly perfect. Not quite what I needed, but close.','Lovely little shop. It worked, mostly.','Good, just not quite right. I would come back.'],
   Clumsy:['It did something. Not the thing I asked for.','Friendly witch, but the spell went a bit sideways.','Interesting results. Not good ones.'],
@@ -70,7 +71,7 @@ const SPOILED={who:'A neighbour',text:'The whole street smelled of burnt herbs a
 function pickOf(list,seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;return list[h%list.length]}
 function postReviews(list){list.forEach(x=>{const v=x.key&&visitByKey(x.key),best=x.g==='Perfect'&&v,spoiled=x.who==='Spoiled test batches';
   S.reviews.push({day:S.day,hour:x.hour,who:spoiled?SPOILED.who:x.who,g:x.g,item:x.item,
-    text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:v&&v.hint?v.hint.text:''})})}
+    text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:v&&v.hint&&x.g!=='Missed'?v.hint.text:''})})}
 const unquote=t=>t.replace(/^["“]|["”]$/g,'');
 function reviewHTML(r){const bought=r.item==='No sale'?'Left without buying':r.item;
   return `<article class="rv"><header class="rv-head">${avatarHTML({name:r.who})}<div><b>${esc(r.who)}</b><small class="muted">Day ${r.day}, ${esc(r.hour)}</small></div>
