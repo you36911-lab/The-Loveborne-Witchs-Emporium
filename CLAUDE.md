@@ -39,6 +39,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/tutorial.js`: the tutorial (see `TUTORIAL_PLAN.md`): lessons taught once, as the shopkeeper's thoughts, a glow on the next thing to click, and Hester's handwritten notes.
 - `js/prototype.js`: prototype-only jump bar (week, day, hour, customer; "Roll back" puts the game data back too when jumping to an earlier hour, from snapshots kept at the start of each hour); off with `PROTOTYPE_TOOLS`.
 - `js/main.js`: starts the game.
+- `tools/customers-list.js`: writes CUSTOMERS.md (every walk-in, no answers; run with node after changing customers). New customers get an "about" line and, from week three on, an "ethnicity".
 
 Scripts are plain (no modules) and load in the order listed in `index.html`, so the game
 also runs by opening `index.html` directly, without a server. Images live in `assets/` (scene, characters, items, books); recorded sounds in `assets/sounds`.
