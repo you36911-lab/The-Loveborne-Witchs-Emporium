@@ -173,8 +173,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .crystal.glowing::after{opacity:.7}
 /* Grey has almost no colour of its own, so it covers the glass fully or the ball's purple shows through. */
 .scene .crystal.glowing[data-aura="grey"]::after{opacity:1}
-.scene .crystal.glowing[data-aura="pink"]::after{opacity:.85}  /* the soft pink is strawberry milk: light and bright, not dusty */
-.scene .crystal.glowing[data-aura="pink"] img{filter:var(--light) brightness(1.08) saturate(1.15) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
+.scene .crystal.glowing[data-aura="pink"]::after{opacity:.9}  /* the soft pink is candy floss: bright, sweet and clear, not dusty (and well apart from the strong pink) */
+.scene .crystal.glowing[data-aura="pink"] img{filter:var(--light) brightness(1.1) saturate(1.35) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 70%,transparent)) drop-shadow(0 0 10px color-mix(in srgb,var(--aura-glow) 30%,transparent))}
 /* Gold and yellow kept apart: gold is a deep, warm amber with a stronger glow; yellow a light lemon, the glass lifted. */
 .scene .crystal.glowing[data-aura="gold"]::after{opacity:.85}
 .scene .crystal.glowing[data-aura="gold"] img{filter:var(--light) brightness(.97) saturate(1.4) drop-shadow(0 0 5px color-mix(in srgb,var(--aura-glow) 80%,transparent)) drop-shadow(0 0 12px color-mix(in srgb,var(--aura-glow) 45%,transparent))}
