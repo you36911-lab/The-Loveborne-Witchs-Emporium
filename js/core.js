@@ -36,7 +36,7 @@ function keepBackup(why,raw){if(!PROTOTYPE_TOOLS)return;raw=raw||JSON.stringify(
   while(list.length){try{localStorage.setItem(BACKUP_KEY,JSON.stringify(list));return}catch(e){list.pop()}}}  /* storage full: the oldest go first */
 let rawLoad='';
 try{rawLoad=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'';S=JSON.parse(rawLoad?renameOld(rawLoad):null)||fresh()}
-catch(e){keepBackup('unreadable',rawLoad);S=fresh()}
+catch(e){keepBackup('unreadable',rawLoad);try{localStorage.setItem(KEY+'-unreadable',rawLoad)}catch(e2){}S=fresh()}  /* never lost: kept aside, untouched */
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
   delete S.orders;  /* orders taken for later belong to older builds */
@@ -50,10 +50,22 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
 sanitize();
 /* The game saves after everything the player does. The little save icon in the corner (#saveMark) shows only when
    something that matters is kept: a new hour or day, or a sale or an answer rung up. */
-let savedAt='',backedDay='';
-function save(){if(!S.gid)S.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,6);  /* which game this is */
+/* Saving is guarded: a tab that is out of date (the game was saved from another tab or window since) never saves over
+   it, and a save that cannot be written (the browser's storage full) first makes room by dropping the prototype's own
+   copies, and if it still fails, says so instead of failing silently. */
+let savedAt='',backedDay='',staleTab=false,saveWarned=0;
+addEventListener('storage',e=>{if(e.key!==KEY||staleTab)return;staleTab=true;
+  if(document.hidden)location.reload();  /* in the background: it just picks up the newer game */
+  else toast('This game was saved in another window. This one has stopped saving: reload it to carry on here.',{ms:15000})});
+document.addEventListener('visibilitychange',()=>{if(staleTab&&!document.hidden)location.reload()});
+function writeSave(){const t=JSON.stringify(S);
+  try{localStorage.setItem(KEY,t);return true}catch(e){}
+  for(const k of [SAVE_KEY+'-proto-snaps',BACKUP_KEY]){try{localStorage.removeItem(k);localStorage.setItem(KEY,t);return true}catch(e){}}
+  return false}
+function save(){if(staleTab)return;
+  if(!S.gid)S.gid=Date.now().toString(36)+Math.random().toString(36).slice(2,6);  /* which game this is */
   const dk=S.gid+'-'+S.day;if(PROTOTYPE_TOOLS&&dk!==backedDay){backedDay=dk;if(!backups().some(b=>b.why==='day'&&b.gid===S.gid&&b.day===S.day))keepBackup('day')}
-  try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
+  if(!writeSave()&&Date.now()-saveWarned>60000){saveWarned=Date.now();toast('The game could not be saved: this browser’s storage is full.',{ms:10000})}
   const mark=S.day+'-'+S.h+'-'+S.pend.length;if(savedAt&&mark!==savedAt)showSaved();savedAt=mark;
   if(S.day>profile().furthestDay)try{localStorage.setItem(PROFILE_KEY,JSON.stringify({...profile(),furthestDay:S.day}))}catch(e){}}
 function profile(){try{return {furthestDay:0,...JSON.parse(localStorage.getItem(PROFILE_KEY)||'{}')}}catch(e){return {furthestDay:0}}}

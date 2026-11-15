@@ -200,7 +200,12 @@ const LESSONS=[
 /* Prototype jumps: a lesson whose visit (at: its key, day-hour-who) comes before the place jumped to counts as done;
    one at or after it starts again. (close1's "2-Sunrise-" means it is over once Day 2 has begun.) */
 function guideSkipBefore(day,h){const g=guideState(),pos=k=>{const [d,hr]=k.split('-');return +d*4+HOURS.indexOf(hr)};
-  LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]})}
+  LESSONS.forEach(l=>{if(!l.at)return;if(pos(l.at)<day*4+h)g[l.id]='done';else delete g[l.id]});tapeDoneNotes()}
+/* Hester's notes from lessons that count as done without being played (a jump, a rebuilt or older save): taped into the
+   notebook all the same, in lesson order, so the notebook never lacks a note its lesson would have given. */
+function tapeDoneNotes(){const g=guideState(),n=S.guideNotes||(S.guideNotes={});let added=false;
+  LESSONS.forEach(l=>{if(g[l.id]!=='done')return;(l.steps||[]).forEach(st=>{const k=st&&st.note;if(k&&HESTER_NOTES[k]&&!n[k]){(S.notePage||(S.notePage={}))[k]=notePageNow();n[k]=true;added=true}})});
+  if(added)save()}
 /* the notebook steps: once the player has looked at the slip (the pointer over it), or written something, the star has
    done its job and goes */
 let slipSeen=0;$('#books').addEventListener('pointerover',e=>{if(!slipSeen&&e.target.closest('.hslip'))slipSeen=Date.now()});  /* when it was first looked at */
@@ -335,4 +340,5 @@ function closeNote(){const m=$('#hNote');if(!m.classList.contains('open'))return
 $('#hNote').addEventListener('click',e=>{if(e.target.id==='hNote')closeNote()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isOpen('hNote')){closeNote();e.stopImmediatePropagation()}},true);
 
+tapeDoneNotes();  /* a save whose lessons are done but whose notes were never given */
 follow();  /* the star and the lock follow every frame (started last, once everything above is defined) */

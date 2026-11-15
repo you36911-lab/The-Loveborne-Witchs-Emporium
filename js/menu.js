@@ -146,7 +146,7 @@ const BK_WHY={day:'start of the day','new game':'before a new game','roll back':
 function bkWhen(t){const d=new Date(t);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
 function putBack(raw){let o;try{o=JSON.parse(raw)}catch(e){o=null}
   if(!o||typeof o.day!=='number'){toast('That is not a saved game.');return}
-  keepBackup('restore');S=o;sanitize();S.ui=null;save();if(typeof fillProto==='function')fillProto();  /* the jump bar shows the day put back */
+  keepBackup('restore');S=o;sanitize();S.ui=null;save();if(typeof fillProto==='function')fillProto();if(typeof tapeDoneNotes==='function')tapeDoneNotes();  /* the jump bar shows the day put back */
   titleFromGame=false;$('#gameMenu').classList.remove('open');showTitle()}
 function openBackups(){const list=backups();
   $('#bkList').innerHTML=list.length?list.map((b,i)=>`<li><span>Day ${b.day} · ${HOURS[b.h]||''}<small>${esc(bkWhen(b.at))} · ${esc(BK_WHY[b.why]||b.why)}</small></span><button data-bk="${i}">Put back</button></li>`).join('')
