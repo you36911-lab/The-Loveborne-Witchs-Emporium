@@ -15,7 +15,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `ingredient_asset_tracker.xlsx`: data and planning sheets (ingredients, Ingredient Feel,
   Advice, Walk-in Plan, Learning Check, art asset status).
 - The game itself (open `index.html` in a browser). It carries the full game data, but
-  customers and dialogue exist for week one only, so play stops after `LAST_PLAYABLE_DAY`.
+  customers and dialogue exist for weeks one and two only, so play stops after `LAST_PLAYABLE_DAY`.
   Keep its data in sync with the spellbook and tracker.
 
 ## Code layout

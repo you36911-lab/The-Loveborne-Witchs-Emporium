@@ -1,7 +1,7 @@
 # Week two (Days 8–14): draft
 
-A draft for the designer to read and change. Nothing here is in the game yet; once it is agreed, it goes into
-`js/data/story.js` and `LAST_PLAYABLE_DAY` becomes 14.
+In the game since 2026-11-15 (`js/data/story.js`, `LAST_PLAYABLE_DAY` 14), to be played and changed. Changes go into
+story.js; this page is the plan.
 
 Where it comes from:
 - **Regulars**: the design document's Visit Schedule (Dottie Day 9, Edmund Day 10, Rosalind Day 10, Noor Day 12, Hester Day 12).

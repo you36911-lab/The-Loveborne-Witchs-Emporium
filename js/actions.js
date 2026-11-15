@@ -182,14 +182,14 @@ function receiptHTML(x,i=0){
 /* closing: the day's receipts and how the rating moved since the shop opened (the reviews came in during the day) */
 function endDay(){const reviews=S.pend.splice(0),after=rating(),before=S.openRating!=null?S.openRating:after;  /* the first day had no rating to move from */
   const body=$('#dayEndBody');
-  const last=S.day>=LAST_PLAYABLE_DAY;
+  const last=S.day>=LAST_PLAYABLE_DAY,weekEnd=last||S.day%7===0,WEEKS_SAID=['first','second','third','fourth'];  /* a week's last day shows how it has gone so far */
   /* a paper card, like the shop's other papers: the day, the title, the day's receipts in a row, the rating as it moved */
   const T=today(),d=after-before,move=Math.abs(d)<.05?'':`<span class="de-move ${d>0?'up':'down'}">${d>0?'\u25b2':'\u25bc'} ${Math.abs(d).toFixed(1)}</span>`;
   body.innerHTML=`<p class="de-day">Day ${S.day} \u00b7 ${esc(T.weekday)}${T.sabbat?' \u00b7 '+esc(T.sabbat):''}</p>
-  <h2>${last?'End of the first week':'The shop closes for the night'}</h2>
+  <h2>${weekEnd?`End of the ${WEEKS_SAID[Math.ceil(S.day/7)-1]||'last'} week`:'The shop closes for the night'}</h2>
   ${reviews.length?`<div class="receipts">${reviews.map(receiptHTML).join('')}</div>`:'<p class="de-none">No sales today.</p>'}
   <div class="de-rating" aria-label="Rating ${after.toFixed(1)} of 5"><span class="de-stars">${stars(Math.round(after))}</span><b>${after.toFixed(1)}</b>${move}</div>
-  ${last?summaryHTML():''}
+  ${weekEnd?summaryHTML():''}
   <button class="main" id="dayGo">${last?'Start over':'Sleep until morning'}</button>`;
   $('#dayEnd').classList.add('open');fitDayEnd();requestAnimationFrame(fitDayEnd);
   if(reviews.length)playReceiptPrint(reviews.length);  /* the till prints the day's receipts as the card comes up (sound.js) */
@@ -214,7 +214,7 @@ function openNextDay(){$('#dayEnd').classList.remove('open');
 function summaryHTML(){const s=S.stats,locked=Object.keys(D.recipes).filter(id=>recipeLocked(id)).length;
   const given=s.perfect+s.good+s.clumsy+s.failed,spoiled=S.reviews.filter(r=>r.who===SPOILED.who).length;
   const tile=(n,label,of)=>`<div class="ws-tile"><b>${n}${of?`<small> / ${of}</small>`:''}</b><span>${label}</span></div>`;
-  return `<section class="weeksum"><h3>Your week</h3>
+  return `<section class="weeksum"><h3>So far</h3>
     <div class="ws-grid">${tile(given,'spells given')}${tile(s.advice,'advice given')}${tile(s.missed,'sent away empty-handed')}
       ${tile(spoiled,'spoiled batches')}${tile(locked,'recipes solved',Object.keys(D.recipes).length)}${tile(S.bank.length,'words collected')}</div>
     ${S.tales.length?`<p class="ws-note">${S.tales.length===1?'One story':S.tales.length+' stories'} still to hear. They\u2019ll come up next week.</p>`:''}</section>`}

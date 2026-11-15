@@ -12,7 +12,7 @@ const TUTORIAL_LAST_DAY = 2;
 const OLD_SAVE_KEYS = ['altar-shop-proto-v9'];
 
 /* Customers and dialogue exist for week one so far. Raise this as more days are written. */
-const LAST_PLAYABLE_DAY = 7;
+const LAST_PLAYABLE_DAY = 14;
 
 /* Prototype controls under the title bar: jump to any week, day, hour or customer. Set to false to hide them. */
 const PROTOTYPE_TOOLS = true;
