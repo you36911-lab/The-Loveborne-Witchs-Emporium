@@ -36,5 +36,5 @@ function dueReport(busy){const now=S.day*4+S.h;return (S.reports||[]).find(r=>r.
 function someoneDue(){const busy=slotVisitors().length;return !!(busy||dueReport(busy))}
 function pullTales(v){const own=S.tales.filter(t=>t.who===v.who),gossip=S.tales.find(t=>!t.regular&&t.who!==v.who);
   const out=[...own.map(t=>({own:true,...t})),...(gossip?[{own:false,...gossip}]:[])];S.tales=S.tales.filter(t=>!out.some(o=>o.who===t.who&&o.text===t.text));return out}
-function talesHTML(q){return (q.tales||[]).map(t=>`<p class="tale">${t.own?'<b>About last time:</b> ':`<b>News of ${esc(t.who.replace(/^(A|An|Two) /,m=>m.toLowerCase()))}${t.what?` and ${esc(t.what)}`:''}:</b> `}${kw(t.text)}</p>`).join('')}
+function talesHTML(q){return (q.tales||[]).map(t=>`<p class="tale">${t.own?'<b>About last time:</b> ':`<b>News of ${esc(t.who.replace(/^(A|An|Two) /,m=>m.toLowerCase()))}${t.what?` and ${esc(t.what)}`:''}:</b> `}${kw(bare(t.text))}</p>`).join('')}
 function rating(){return S.hist.length?S.hist.reduce((a,b)=>a+b,0)/S.hist.length:3}

@@ -306,21 +306,21 @@ function typeBalloon(){const b=$('#counter .balloon');if(!b||matchMedia('(prefer
 function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#counter');el.hidden=false;el.classList.remove('plain');
   /* News about earlier customers comes first, on its own, so it is never read as part of this customer's order. */
   if(q&&q.type==='report'){const r=S.reports.find(r=>r.at===q.at&&r.who===q.who);
-    el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(r.text))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
+    el.innerHTML=`${balloon({cue:`back to tell you how ${r.what||'it'} went`},kw(bare(r.text)))}<div class="row"><button class="main" id="reportBtn">Thank you for telling me</button></div>`;return}
   if(q&&(q.tales||[]).length&&!q.newsDone){const v=visitByKey(q.key);
     el.innerHTML=`${balloon({cue:'before anything else, they pass on some news'},talesHTML(q))}<div class="row"><button class="main" id="newsBtn">And what can I do for you?</button></div>`;return}
-  if(!q){if(S.parting){el.innerHTML=balloon({},`<p>${kw(S.parting.text)}</p>`);return}
+  if(!q){if(S.parting){el.innerHTML=balloon({},`<p>${kw(bare(S.parting.text))}</p>`);return}
     if(S.result&&!S.result.test){el.classList.add('plain');el.innerHTML=resultHTML()}else{el.hidden=true;el.innerHTML=''}return}
   const v=visitByKey(q.key);
   if(v.kind==='advice'){
     /* The answer is typed. The counter is redrawn on clicks, so what was typed (and the focus) is kept in adviceDraft. */
     const focused=document.activeElement&&document.activeElement.id==='adviceIn';
     if(adviceDraft.key!==q.key)adviceDraft={key:q.key,text:'',hi:-1};
-    el.innerHTML=`${balloon(v,`<p>“${q.push?esc(q.push.text):esc(v.line)+' '+esc(v.question)}”</p>`)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
+    el.innerHTML=`${balloon(v,`<p>${q.push?esc(bare(q.push.text)):esc(bare(v.line))+' '+esc(bare(v.question))}</p>`)}<div class="row after-words"><div class="askwrap"><input id="adviceIn" type="text" autocomplete="off" spellcheck="false" placeholder="Type a name…" aria-label="Your answer" aria-autocomplete="list" aria-controls="adviceList"><div class="suggest" id="adviceList" role="listbox" hidden></div></div><button class="main" id="adviceBtn">Answer</button></div>`;
     const inp=$('#adviceIn');inp.value=adviceDraft.text;fillSuggest();if(focused){inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length)}return}
   /* Every order can be made while the customer waits. */
   S.activeNow=q.key;
-  el.innerHTML=`${balloon(v,`<p>“${esc(v.line)}”</p>${v.tutLine&&!S.tutOff?`<p>“${esc(v.tutLine)}”</p>`:''}`)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
+  el.innerHTML=`${balloon(v,`<p>${esc(bare(v.line))}</p>${v.tutLine&&!S.tutOff?`<p>${esc(bare(v.tutLine))}</p>`:''}`)}${S.made?'':`<div class="row after-words"><button class="main" id="cantBtn">I don’t know how to make this</button></div>`}`}
 /* What was made at the altar stands on the counter until it is given; it goes if its customer does. */
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made&&!(S.spell&&S.spell.give)?S.made:null;b.hidden=!m;if(!m)return;  /* the parcel waits on the counter only once the spell has been brought up from the altar */
