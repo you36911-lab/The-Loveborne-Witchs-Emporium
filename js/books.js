@@ -60,7 +60,7 @@ function showEntryDone(e){const it=ITEM[e.k],pic=ASSETS.items[e.k];
     (pic?`<img class="in-pic" src="${pic}" alt="">`:it.look?`<p class="in-look">${esc(it.look)}</p>`:'')+
     (it.line?`<p class="in-line">${esc(it.line)}</p>`:'')+`<p class="in-done">✦ Complete</p>`;
   $('#ingNote').classList.add('open')}
-/* A recipe just solved (every blank written, from the book or by a spell made just right): its page comes up the same way,
+/* A recipe just solved (made just right at the altar): its page comes up the same way,
    with the spell's picture as the Recipe Book prints it (only its outline until it has been made just right), what it is
    for, and everything that goes into it. */
 function showRecipeDone(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=seen?ASSETS.spells[id]:ASSETS.spellOutlines[id];
@@ -296,8 +296,9 @@ function placeIndex(){const bl=$('#books .wblank.open'),w=$('#books .windex');if
 /* short words that never end a line in a recipe title (see recipeHTML) */
 const SMALL_WORDS=new Set(['a','an','the','of','to','in','on','at','for','and','by','with','from','your','my']);
 function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',when:[]})}
-function recipeLocked(id){const r=D.recipes[id],n=S.notes[id];if(!n)return false;const same=(a,b)=>[...a].sort().join('|')===[...b].sort().join('|');
-  return same(n.ing.filter(Boolean),r.ing)&&n.candle===(r.candle||'')&&n.tarot===(r.tarot||'')&&same(n.when.filter(Boolean),r.conds.map(condName))}
+/* A recipe is solved only once it has been made just right (S.spellArt): what is written in the book, right or not, gives
+   nothing away until it is made. */
+function recipeLocked(id){return !!(S.spellArt||{})[id]}
 function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
   /* a written-in value: in handwriting, tap to rub it out (once the recipe is solved it stays) */
   const written=(v,rm)=>lk?`<span class="chip hand on">${esc(v)}</span>`:`<button class="chip hand" ${rm}>${esc(v)} \u00D7</button>`;
@@ -344,7 +345,7 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.choose&&b.dataset.choose.startsWith('kw|')){const[,k,i]=b.dataset.choose.split('|');pickOpen='';fillBlank(k,+i,b.dataset.val);return}
   if(b.dataset.choose){const[row,id,i]=b.dataset.choose.split('|'),v=b.dataset.val,n=noteOf(id);
     if(row==='ing')n.ing[+i]=v;else if(row==='when')n.when[+i]=v;else if(row==='candle')n.candle=v;else if(row==='tarot')n.tarot=v;
-    pickOpen='';if(recipeLocked(id))setTimeout(()=>showRecipeDone(id),350);save();renderBooks();return}
+    pickOpen='';save();renderBooks();return}
   if(b.dataset.rmCandle){noteOf(b.dataset.rmCandle).candle='';save();renderBooks();return}
   if(b.dataset.rmTarot){noteOf(b.dataset.rmTarot).tarot='';save();renderBooks();return}
   /* Recipe Book shortcut: put what the player has written for a recipe onto the altar (the silver bell there makes it). */
@@ -383,7 +384,6 @@ $('#books').addEventListener('change',e=>{const t=e.target;
   if(t.dataset.setCandle!==undefined)noteOf(t.dataset.setCandle).candle=t.value;
   if(t.dataset.setTarot!==undefined)noteOf(t.dataset.setTarot).tarot=t.value;
   const id=(t.dataset.addIng||'').split('|')[0]||(t.dataset.addWhen||'').split('|')[0]||t.dataset.setCandle||t.dataset.setTarot;
-  if(id&&recipeLocked(id))setTimeout(()=>showRecipeDone(id),350)
   save();renderBooks()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(pickOpen){pickOpen='';renderBooks();return}$('#books').classList.remove('open');render()}
   /* the arrow keys turn the pages, unless a box or list has the keyboard */

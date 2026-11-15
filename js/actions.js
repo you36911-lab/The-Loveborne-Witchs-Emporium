@@ -119,9 +119,9 @@ function judge(r){
   if(ev.grade==='Perfect'){
     /* Made just right, however it was laid out: its illustration in the Recipe Book unlocks and the recipe is written into
        the book, so the player is never left guessing; once the crafting has settled, its page comes up (books.js). */
-    (S.spellArt||(S.spellArt={}))[r.id]=true;
-    const n=noteOf(r.id),was=recipeLocked(r.id);n.ing=[...r.ing];n.candle=r.candle||'';n.tarot=r.tarot||'';n.when=r.conds.map(condName);
-    const wrote=!was&&recipeLocked(r.id);if(wrote)setTimeout(()=>showRecipeDone(r.id),1600);
+    const was=recipeLocked(r.id);(S.spellArt||(S.spellArt={}))[r.id]=true;
+    const n=noteOf(r.id);n.ing=[...r.ing];n.candle=r.candle||'';n.tarot=r.tarot||'';n.when=r.conds.map(condName);
+    const wrote=!was;if(wrote)setTimeout(()=>showRecipeDone(r.id),1600);
     /* given only if it is what the waiting customer came in for */
     const give=!!(o&&q&&String(o.id)===String(r.id));
     ev.lines.unshift({k:'done',t:give?'Nothing is off. This is the recipe, ready to give.':o?'Nothing is off. It is made just right, but it isn’t what they came in for.':'Nothing is off. This is the recipe.'});
