@@ -3,6 +3,7 @@
 /* "The customer's birthstone" is not one stone: it is the crystal for the month the customer was born in, picked from
    the Crystals cupboard. A visit gives its customer's month as born:'March'; without one, any birthstone will do. */
 const BIRTHSTONE="Birthstone (customer's)";
+const itemLabel=n=>n===BIRTHSTONE?'Birthstone':n;  /* how a name is shown in the books (the data, and saves, keep the full name) */
 const BIRTHSTONES={January:'Garnet',February:'Amethyst',March:'Aquamarine',April:'Clear quartz',May:'Jade',June:'Pearl',
   July:'Carnelian',August:'Peridot',September:'Lapis lazuli',October:'Moonstone',November:'Citrine',December:'Amazonite'};
 /* What a recipe needs, with the birthstone turned into this customer's stone. */

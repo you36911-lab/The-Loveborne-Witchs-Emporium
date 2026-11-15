@@ -84,7 +84,7 @@ function entryHTML(e){
     return `<span class="kwpick"><button class="blank ${f[i]?'filled':''} ${open?'open':''}" data-entry="${esc(e.sk)}" data-i="${i}" aria-label="${f[i]?'Filled blank: tap to rub it out':'Blank: choose a word'}" aria-expanded="${open}">${f[i]?esc(f[i])+' ×':' '}</button></span>`};
   /* (the note, e.g. "Base for Cookies", is left out when the item's own line already says it) */
   const slots=(e.always?e.props:dispOrder(e)).map(p=>sh.includes(p)?`<span class="ekw">${kw(p)}</span>`:blank(h.indexOf(p))).join(' · ');
-  return `<div class="entry ${lk?'locked':''}"><b>${esc(e.k)}</b>${slots}${e.note&&!(ITEM[e.k]?.line||'').includes(e.note)?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
+  return `<div class="entry ${lk?'locked':''}"><b>${esc(itemLabel(e.k))}</b>${slots}${e.note&&!(ITEM[e.k]?.line||'').includes(e.note)?`<span class="muted" style="margin-left:auto;font-size:13px">${esc(e.note)}</span>`:''}${e.sk.startsWith('item:')&&ITEM[e.k]?.line?`<span class="bookline">${esc(ITEM[e.k].line)}</span>`:''}${(()=>{/* the picture where there is one; otherwise a short description stands in for it */
     const pic=e.sk.startsWith('item:')?ASSETS.items[e.k]:e.sk.startsWith('tarot:')?ASSETS.tarot[e.k]:'';
     if(e.k===BIRTHSTONE)return `<span class="bookline months">${Object.entries(BIRTHSTONES).map(([m,s])=>`<span>${m}</span><b>${esc(s)}</b>`).join('')}</span>`;
     if(pic)return `<img class="entrypic ${e.sk.startsWith('tarot:')?'card':''}" src="${pic}" alt="">`;
@@ -287,7 +287,7 @@ const KINDOPTS={'Weekday':D.days.map(d=>d[0]),
    (names only: the keywords are for the player to look up in the books). */
 let pickOpen='';
 function wblank(key,label){return `<button class="wblank ${pickOpen===key?'open':''}" data-pick="${key}" aria-label="${esc(label)}: choose" aria-expanded="${pickOpen===key}"><span>${esc(label)}</span><i></i></button>`}
-function windex(key,opts){return `<div class="windex" role="listbox">${opts.map(o=>`<button data-choose="${key}" data-val="${esc(o)}" role="option"><span>${esc(o)}</span></button>`).join('')}</div>`}
+function windex(key,opts){return `<div class="windex" role="listbox">${opts.map(o=>`<button data-choose="${key}" data-val="${esc(o)}" role="option"><span>${esc(itemLabel(o))}</span></button>`).join('')}</div>`}
 /* The open index sits right under the blank that was tapped (above it, if the page has no room below). */
 function placeIndex(){const bl=$('#books .wblank.open'),w=$('#books .windex');if(!bl||!w)return;const g=w.parentElement.getBoundingClientRect(),r=bl.getBoundingClientRect(),
   pg=bl.closest('.pg,.leaf')?.getBoundingClientRect()||g,ww=w.offsetWidth,wh=w.offsetHeight;
@@ -301,7 +301,7 @@ function noteOf(id){return S.notes[id]||(S.notes[id]={ing:[],candle:'',tarot:'',
 function recipeLocked(id){return !!(S.spellArt||{})[id]}
 function recipeHTML(r){const n=noteOf(r.id);const lk=recipeLocked(r.id);const N=r.ing.length,M=r.conds.length;
   /* a written-in value: in handwriting, tap to rub it out (once the recipe is solved it stays) */
-  const written=(v,rm)=>lk?`<span class="chip hand on">${esc(v)}</span>`:`<button class="chip hand" ${rm}>${esc(v)} \u00D7</button>`;
+  const written=(v,rm)=>lk?`<span class="chip hand on">${esc(itemLabel(v))}</span>`:`<button class="chip hand" ${rm}>${esc(itemLabel(v))} \u00D7</button>`;
   /* the open index, if it belongs to this row: [key, options, keyword namespace] */
   const open=pickOpen.split('|'),openFor=row=>open[0]===row&&open[1]===String(r.id);
   let ingList='',ccList='',whenList='';
