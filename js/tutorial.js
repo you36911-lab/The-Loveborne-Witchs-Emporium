@@ -49,7 +49,7 @@ const HESTER_NOTES={
   themes:{title:'What goes in',lines:['Every recipe says what it is for. Each thing in it carries one of those, and the books say what each thing carries.','A herb for healing, a stone for courage. Match them up, dear, and the recipe all but writes itself.']}};
 
 /* The lessons, in the order they are taught. when: it may start; until: it is over (marked done); steps run in order.
-   ensure: run while the step is current, to put back what it needs. A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
+   skip: when it gives true, the step is passed over. ensure: run while the step is current, to put back what it needs. A step: glow (where the star goes: a selector, or a function giving one), say (the thought), done (when it is passed),
    wait (ms: done after this long), note (one of Hester's notes, shown when the step is reached, done when it is closed),
    allow (while it waits, only the star's thing and these can be clicked or even hovered: a selector (that and all inside
    it), or {self: selector} (that element alone, e.g. a popup's backdrop, whose click closes it);
@@ -62,6 +62,9 @@ const THEMES='#books .pg .recipe .wvals.plain';  /* a recipe's themes, on its pa
 const CAME='#phoneApp .ph-sec[data-k="came"]';  /* a test's "Came through" on the phone */
 const CRYSTALS='#cubbies [data-shelf="Crystals"]';  /* the crystal cupboard's door, in the workroom */
 const crystalOut=()=>(D.items.find(i=>i.c==='Crystals'&&S.altar.includes(i.n))||{}).n||'';  /* a crystal on the table, if any */
+/* Hester's rune: tried (made, right or wrong: a wrong one is on the phone), and made just right (ready to give; then the
+   lessons about the phone and the cupboards wait for another time: the first wrong craft teaches the candles) */
+const runeTried=()=>!!S.made||(S.testLog||[]).some(t=>t.name===D.recipes[111].name),runeRight=()=>!!S.made;
 const LESSONS=[
   {id:'open',at:'1-Sunrise-',when:()=>S.day===1&&S.h===0&&afterDawn(),until:()=>S.h>0||!!S.queue,steps:[
     {glow:()=>!$('#mailFx').hidden?'#mailRead':'#pcBtn',say:'The computer’s chiming. Post, before I’ve even opened.',done:()=>isOpen('pc'),allow:[],
@@ -136,31 +139,31 @@ const LESSONS=[
     /* to her rune by the index: the teal tab first if the book is open elsewhere, then on through the index to the runes */
     {glow:()=>seen(RAVENS)?RAVENS:onIndex()?'#turnNext':'#turnFirst',
       say:()=>seen(RAVENS)?'The Language of Ravens.':onIndex()?'Runes come further on in the index.':'The index first. The tab at the edge goes back to it.',
-      done:()=>pageOf()==='recipe:111'||(S.testLog||[]).length>0,allow:[]},
-    {glow:'#books .pg [data-layout="111"]',say:'The little bell lays out what’s written.',done:()=>(S.testLog||[]).length>0||(S.altar.length>0&&view==='altar'),allow:[]},
-    {glow:'#craftBell',say:'And the silver bell makes it, right or not.',done:()=>(S.testLog||[]).length>0,allow:[]},
-    {glow:'#phoneBtn',say:'The phone. That’s where it tells me how it went.',done:()=>isOpen('phoneView'),allow:[]},
+      done:()=>pageOf()==='recipe:111'||runeTried(),allow:[]},
+    {glow:'#books .pg [data-layout="111"]',say:'The little bell lays out what’s written.',done:()=>runeTried()||(S.altar.length>0&&view==='altar'),allow:[]},
+    {glow:'#craftBell',say:'And the silver bell makes it, right or not.',done:runeTried,allow:[]},
+    {skip:runeRight,glow:'#phoneBtn',say:'The phone. That’s where it tells me what’s off.',done:()=>isOpen('phoneView'),allow:[]},
     /* the result on the phone, part by part; then it closes at a click outside it */
-    {glow:'#phoneApp .ph-grade',say:'How it came out, at the top.',wait:4000,allow:['#phoneApp']},
-    {glow:()=>seen('#phoneApp .ph-score')?'#phoneApp .ph-score':'',say:'How many of the ingredients were right…',wait:4500,allow:['#phoneApp']},
-    {glow:'#phoneApp .ph-sec[data-k]:not([data-k=""])',say:'…and what’s off, under each heading: the ingredients, the candle, the card.',wait:6500,allow:['#phoneApp']},
+    {skip:runeRight,glow:'#phoneApp .ph-grade',say:'How it came out, at the top.',wait:4000,allow:['#phoneApp']},
+    {skip:runeRight,glow:()=>seen('#phoneApp .ph-score')?'#phoneApp .ph-score':'',say:'How many of the ingredients were right…',wait:4500,allow:['#phoneApp']},
+    {skip:runeRight,glow:'#phoneApp .ph-sec[data-k]:not([data-k=""])',say:'…and what’s off, under each heading: the ingredients, the candle, the card.',wait:6500,allow:['#phoneApp']},
     /* what came through: only the recipe's themes, and only from what is right (her first try: intuition and
        transformation, not yet truth). Skipped if it brought none. */
-    {glow:()=>seen(CAME)?CAME:'',say:()=>seen(CAME)?'What came through is only from what’s right. A theme it wants that isn’t there yet, I’m still missing.':'',
+    {skip:runeRight,glow:()=>seen(CAME)?CAME:'',say:()=>seen(CAME)?'What came through is only from what’s right. A theme it wants that isn’t there yet, I’m still missing.':'',
       done:()=>!seen(CAME),wait:7500,allow:['#phoneApp']},
-    {say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
-    {note:'tests'},
-    {say:'That one goes in my notebook too.',wait:3500},
+    {skip:runeRight,say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
+    {skip:runeRight,note:'tests'},
+    {skip:runeRight,say:'That one goes in my notebook too.',wait:3500},
     /* the cupboards, shown as another way (not the way): one opened, looked through, something laid on the table by hand */
-    {ensure:()=>{if(view!=='altar')setView('altar')},glow:CRYSTALS,
+    {skip:runeRight,ensure:()=>{if(view!=='altar')setView('altar')},glow:CRYSTALS,
       say:'Everything she kept is in these cupboards too, if I’d rather pick things out myself.',done:()=>openShelf==='Crystals',allow:[]},
     /* (if the cupboard shuts meanwhile, the star goes back to its door) */
-    {glow:()=>openShelf==='Crystals'?'#shelfOpen':CRYSTALS,say:'More in here than fits at once.',
+    {skip:runeRight,glow:()=>openShelf==='Crystals'?'#shelfOpen':CRYSTALS,say:'More in here than fits at once.',
       done:()=>{const i=openShelf==='Crystals'&&$('#shelfOpen .cabinside');return !!i&&(i.scrollTop>20||i.scrollHeight<=i.clientHeight+2)},allow:['#shelfOpen',CRYSTALS]},
-    {glow:()=>openShelf==='Crystals'?'':CRYSTALS,say:'Anything I take out goes on the table.',done:()=>!!crystalOut(),allow:['#shelfOpen',CRYSTALS]},
+    {skip:runeRight,glow:()=>openShelf==='Crystals'?'':CRYSTALS,say:'Anything I take out goes on the table.',done:()=>!!crystalOut(),allow:['#shelfOpen',CRYSTALS]},
     /* and back again: a tap on it, on the table, puts it back in its cupboard */
-    {glow:()=>crystalOut()?`#altarView .ontable[data-item="${crystalOut()}"]`:'',say:'And back it goes, if I change my mind.',done:()=>!crystalOut(),allow:['#shelfOpen',CRYSTALS,'#altarView .ontable']},
-    {say:'Handy, when I already know what I want. The book’s little bell does the same from what’s written.',wait:6000,allow:['#shelfOpen',CRYSTALS]},
+    {skip:runeRight,glow:()=>crystalOut()?`#altarView .ontable[data-item="${crystalOut()}"]`:'',say:'And back it goes, if I change my mind.',done:()=>!crystalOut(),allow:['#shelfOpen',CRYSTALS,'#altarView .ontable']},
+    {skip:runeRight,say:'Handy, when I already know what I want. The book’s little bell does the same from what’s written.',wait:6000,allow:['#shelfOpen',CRYSTALS]},
     /* until it is made just right */
     {say:'Fill in what’s missing, lay it out again, and ring the silver bell.',done:()=>!!(S.spell&&S.spell.give)||!!S.made},
     {glow:'#spellBtn',say:'Made. Up to the counter with it.',done:()=>!!S.made&&view==='shop'&&!S.spell,allow:[]},
@@ -237,7 +240,7 @@ function guideTick(){const b=tutorialBusy();if(b!==wasBusy){wasBusy=b;renderScen
     let i=g[L.id],st=L.steps[i];const key=L.id+':'+i;
     if(!st){finish(L);L=current();continue}  /* never stall on a step that is not there (an older save, a hole) */
     if(guideNow!==key){guideNow=key;guideStepAt=Date.now();spokeAt=0}
-    const passed=st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(tapStep(st)?tapAt>guideStepAt+TAP_MIN_MS:(st.wait&&Date.now()-guideStepAt>=st.wait));
+    const passed=(st.skip&&st.skip())||(st.note?(S.guideNotes||{})[st.note]:(st.done&&st.done())||(tapStep(st)?tapAt>guideStepAt+TAP_MIN_MS:(st.wait&&Date.now()-guideStepAt>=st.wait)));  /* skip: a step not needed now counts as passed */
     if(passed){g[L.id]=i+1;save();if(g[L.id]>=L.steps.length){finish(L);L=current()}continue}
     if(st.ensure)st.ensure();  /* a step can put back what it needs on screen (after a reload, say) */
     if(postFirst()){show(null);return}

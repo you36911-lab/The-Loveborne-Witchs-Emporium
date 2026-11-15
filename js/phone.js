@@ -1,4 +1,4 @@
-/* The phone on the altar (right of the candle stand). Every craft's result comes to it: the phone chimes with a
+/* The phone on the altar (right of the candle stand). A craft that isn't right comes to it, with its clues: the phone chimes with a
    notification sound and shows a badge; clicking it opens the phone, drawn as a real phone (bezel, notch, status bar), on
    its Crafting app, whose title bar is like the computer's apps. The last result stays on it (S.lastTest). */
 const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed'};
@@ -6,7 +6,7 @@ const GRADE_NOTE={Perfect:'Perfect',Good:'Nearly',Clumsy:'Clumsy',Failed:'Failed
 let phoneAt=0;
 const phoneLog=()=>S.testLog&&S.testLog.length?S.testLog:S.lastTest?[S.lastTest]:[];
 function phoneHTML(){const R=phoneLog()[phoneAt];
-  if(!R)return `<p class="ph-empty muted">Nothing made yet.<br>Lay a recipe out on the altar and ring the silver bell: how it came out comes here.</p>`;
+  if(!R)return `<p class="ph-empty muted">Nothing here yet.<br>When something made at the altar isn’t right, what’s off comes here.</p>`;
   /* the clue lines grouped by what they are about (ingredients, candle, card...), each group under its label; words for
      the word bank are dotted and can be collected here, as anywhere */
   const groups=[];R.lines.forEach(l=>{if(typeof l==='string')l={k:'',t:l};const g=groups[groups.length-1];

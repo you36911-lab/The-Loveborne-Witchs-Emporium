@@ -96,15 +96,16 @@ document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),ins
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
 let plainAtClick=false;document.addEventListener('click',()=>{plainAtClick=$('#counter').classList.contains('plain')},true);
 /* Making a spell: the silver bell on the altar makes what is laid out (from the Recipe Book's little bell, or brought from
-   the cupboards by hand), with or without a customer waiting. It is crafted (craftAnim), and only then judged; the result
-   always comes to the phone (a sound and a badge; the phone shows it when clicked).
+   the cupboards by hand), with or without a customer waiting. It is crafted (craftAnim), and only then judged.
+   A spell that is not right comes to the phone with its clues (a sound and a badge; the phone shows it when clicked); one
+   made just right needs no word: it stands there.
    - Made just right: the finished spell stands on the altar (S.spell) and its recipe is written into the Recipe Book. If it
      is what the customer at the counter came in for, clicking it takes it up to the counter, where it is given; otherwise
      clicking it clears it away.
    - Not right: a black candle goes out and what was laid out stays on the table, to change and try again. Only a spell
      made just right can be given. */
 function doCraft(){const r=D.recipes[S.target];if(!r||!S.altar.length){bellBusy=false;return}
-  render();craftAnim(()=>{bellBusy=false;const before=S.failTests||0;judge(r);phoneNotify((S.failTests||0)>before?1100:300)})}  /* judged as the finished spell comes down */
+  render();craftAnim(()=>{bellBusy=false;if(judge(r)!=='Perfect')phoneNotify(1100)})}  /* judged as the finished spell comes down */
 /* the finished spell takes the place of what was laid out */
 function makeSpell(r,give){S.spell={rid:r.id,name:r.name,type:r.type,give};S.altar=[];S.candle='';S.tarot=''}
 function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');else render()}
@@ -124,14 +125,13 @@ function judge(r){
     const wrote=!was;if(wrote)setTimeout(()=>showRecipeDone(r.id),1600);
     /* given only if it is what the waiting customer came in for */
     const give=!!(o&&q&&String(o.id)===String(r.id));
-    ev.lines.unshift({k:'done',t:give?'Nothing is off. This is the recipe, ready to give.':o?'Nothing is off. It is made just right, but it isn’t what they came in for.':'Nothing is off. This is the recipe.'});
-    if(wrote)ev.lines.push({k:'done',t:'You write it into the Recipe Book.'});
+    if(o&&!give)setTimeout(()=>toast('Made just right… but it isn’t what they came in for.',{thought:true}),wrote?300:1600);
     if(give)S.made={for:visitorId(q),rid:r.id,name:r.name,type:r.type,ev};
-    S.result=null;makeSpell(r,give)}
-  else{/* not right: a black candle goes out; what was laid out stays, to change */
-    tries[r.id]=(tries[r.id]||0)+1;spoilCandle();if(o&&q)q.fails=(q.fails||0)+1}
+    S.result=null;makeSpell(r,give);render();return ev.grade}
+  /* not right: a black candle goes out; what was laid out stays, to change */
+  tries[r.id]=(tries[r.id]||0)+1;spoilCandle();if(o&&q)q.fails=(q.fails||0)+1;
   S.lastTest={grade:ev.grade,lines:ev.lines,name:r.name,type:r.type,ok:ev.ok,total:ev.total};S.testLog=[S.lastTest,...(S.testLog||[])].slice(0,10);  /* the result goes to the phone (phone.js) */
-  render()}
+  render();return ev.grade}
 /* The silver bell on the altar makes what is laid out (see doCraft). If it can't be made yet, the bell gives a little shake
    and says why. */
 let bellBusy=false;
