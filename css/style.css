@@ -136,6 +136,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 @media (prefers-reduced-motion: reduce){.scene .bg,.daycard,.scene .customer{transition:none}}
 /* Prototype jump bar (PROTOTYPE_TOOLS in config.js). */
 .proto[hidden]{display:none}
+.protoroll{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;cursor:pointer}
 .scene .obj{position:absolute;display:block;padding:0;border:0;background:none;cursor:pointer;box-shadow:none;transform-origin:50% 100%;transition:transform .15s,filter .15s;filter:drop-shadow(0 6px 4px rgba(60,20,30,.35))}
 .scene .obj img{display:block;width:100%;height:auto}
 .scene button.obj:hover,.scene button.obj:focus-visible{transform:translateY(-1.5%) scale(1.03);filter:drop-shadow(0 0 6px #ffd6f0) drop-shadow(0 0 14px #ffd6f0) drop-shadow(0 6px 4px rgba(60,20,30,.35));outline:none}
