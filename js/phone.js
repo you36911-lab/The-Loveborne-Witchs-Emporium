@@ -29,6 +29,6 @@ function phoneNotify(wait){setTimeout(()=>{S.phoneNew=(S.phoneNew||0)+1;save();r
 $('#phoneBtn').addEventListener('click',openPhone);
 
 $('#phoneIco').src=ASSETS.iconPhoneApp;
-$('#phoneView').addEventListener('click',e=>{if(e.target.id==='phoneView'){closePhone();return}  /* outside the phone closes it, like every popup */
+$('#phoneView').addEventListener('click',e=>{if(e.target.id==='phoneView'){if(String(getSelection()).trim())return;closePhone();return}  /* outside the phone closes it, like every popup (not when a drag selecting its text ends out there) */
   if(e.target.closest('#phoneHist')){phoneAt=(phoneAt+1)%phoneLog().length;$('#phoneApp').innerHTML=phoneHTML();$('#phoneApp').scrollTop=0;renderPhoneHist()}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#phoneView').classList.contains('open'))closePhone()});
