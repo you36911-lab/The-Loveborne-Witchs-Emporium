@@ -21,6 +21,7 @@ const PROTOTYPE_TOOLS = true;
 const CUSTOMER_BRIGHTER = {
   'An accountant before the office party': 1.2,
   'A woman who hasn’t spoken to her sister': 1.2,
+  'Noor Haddad': 1.1,
 };
 const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has seven ingredients) */
 
