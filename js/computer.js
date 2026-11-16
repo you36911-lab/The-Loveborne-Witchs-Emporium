@@ -74,7 +74,8 @@ function postReviews(list){list.forEach(x=>{const v=x.key&&visitByKey(x.key),bes
     text:best?v.review:spoiled?SPOILED.text:pickOf(REVIEW_LINES[x.g]||REVIEW_LINES.Good,x.who+S.day),hint:v&&v.hint&&x.g!=='Missed'?v.hint.text:''})})}
 const unquote=t=>t.replace(/^["“]|["”]$/g,'');
 function reviewHTML(r){const bought=r.item==='No sale'?'Left without buying':r.item;
-  return `<article class="rv"><header class="rv-head">${avatarHTML({name:r.who})}<div><b>${esc(r.who)}</b><small class="muted">Day ${r.day}, ${esc(r.hour)}</small></div>
+  const who=(X.names||{})[r.who]||r.who;  /* a walk-in by their own name, as on the receipt */
+  return `<article class="rv"><header class="rv-head">${avatarHTML({name:who})}<div><b>${esc(who)}</b><small class="muted">Day ${r.day}, ${esc(r.hour)}</small></div>
     <span class="rv-stars" aria-label="${SCORE[r.g]} of 5 stars">${stars(SCORE[r.g])}</span></header>
     ${bought?`<p class="rv-item">${esc(bought)}</p>`:''}${r.text?`<p>${kw(r.text)}</p>`:''}${r.hint?`<p class="rv-ps">P.S. ${kw(unquote(r.hint))}</p>`:''}</article>`}
 /* My Shop: the shop's name and logo, the rating and the days on the left, that day's reviews (or every day's, newest first) on the right. */
