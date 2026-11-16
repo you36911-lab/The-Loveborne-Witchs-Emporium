@@ -15,9 +15,19 @@ function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes
 function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
   /* What the rest of the mix already brings, so a clue never calls a theme missing when another ingredient supplies it. */
   const mix=new Set([...(used||[]).flatMap(u=>ITEM[u]?.props||[]),...(S.candle===r.candle?D.colours[r.candle]||[]:[]),...(S.tarot===r.tarot?D.tarot[r.tarot]||[]:[])]);
-  wrong.forEach(w=>{const wp=ITEM[w]?.props||[];let best=null,bn=0;
-    left.forEach(m=>{const n=(ITEM[m]?.props||[]).filter(p=>wp.includes(p)).length;if(n>bn){bn=n;best=m}});
-    if(!best)return;left.splice(left.indexOf(best),1);
+  /* Pair each wrong one with the missing one it stands in for. A wrong one is matched on its own shelf first (a wrong herb
+     for a missing herb); it only stands in for a missing one from another shelf when neither has anything left on its own
+     shelf to pair with. Otherwise a wrong herb could take a missing thread's place, and the herb still missing and the
+     thread that is wrong would each get a line of their own: three lines for two mistakes. */
+  const shared=(w,m)=>(ITEM[m]?.props||[]).filter(p=>(ITEM[w]?.props||[]).includes(p)).length;
+  const pairOf=new Map(),free=()=>wrong.filter(w=>!pairOf.has(w));
+  const pick=(w,ok)=>{let best=null,bn=0;left.forEach(m=>{if(!ok(m))return;const n=shared(w,m);if(n>bn){bn=n;best=m}});
+    if(best){left.splice(left.indexOf(best),1);pairOf.set(w,best)}};
+  wrong.forEach(w=>pick(w,m=>shelfOf(m)===shelfOf(w)));
+  free().forEach(w=>{if(left.some(m=>shelfOf(m)===shelfOf(w)))return;
+    pick(w,m=>!free().some(x=>x!==w&&shelfOf(x)===shelfOf(m)))});
+  wrong.forEach(w=>{const wp=ITEM[w]?.props||[],best=pairOf.get(w);
+    if(!best)return;
     const mp=ITEM[best].props,shared=mp.filter(p=>wp.includes(p));
     const kw=r.themes.find(t=>shared.includes(t))||shared[0];
     const a=ITEM[best],b=ITEM[w];let kind='same';
