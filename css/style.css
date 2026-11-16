@@ -850,7 +850,15 @@ button.small{font-size:12px;padding:2px 10px}
 .plates .ontable{position:relative}
 /* the finished spell, standing where the ingredients were: it rises into view as the crafting ends */
 .ontable.spellmade{animation:spellIn .7s cubic-bezier(.2,.8,.3,1) both}
-.ontable.spellmade img.nopic{filter:drop-shadow(0 0 .4cqw #FFE3F0) drop-shadow(0 0 1cqw rgba(244,173,207,.8))}
+/* the finished spell glows pink from behind as it does on the counter (the same three halos), a touch brighter than the
+   table (the altar has no hour light to brighten from, so less than the counter's 1.6) */
+.plates .ontable.spellmade img{filter:brightness(1.15) drop-shadow(0 0 .4cqw rgba(255,224,240,.95)) drop-shadow(0 0 1.4cqw rgba(244,173,207,.85)) drop-shadow(0 0 2.6cqw rgba(244,173,207,.5))}
+/* and, like the things on the counter, it answers the pointer: a little bigger and glowing stronger (it is the one thing on
+   the table that does: a click takes it up, or puts it aside) */
+.plates .ontable.spellmade{transition:scale .15s}
+.plates .ontable.spellmade img{transition:filter .15s}
+.plates .ontable.spellmade:is(:hover,:focus-visible){scale:1.04;outline:none}
+.plates .ontable.spellmade:is(:hover,:focus-visible) img{filter:brightness(1.25) drop-shadow(0 0 .5cqw #FFE3F0) drop-shadow(0 0 1.8cqw rgba(244,173,207,.95)) drop-shadow(0 0 3.4cqw rgba(244,173,207,.6))}
 @keyframes spellIn{from{opacity:0;transform:translateY(8%) scale(.7)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.ontable.spellmade{animation:none}}
 /* two rows (five or more things): the back row stands further back on the table */
