@@ -89,6 +89,8 @@ const SPELL_SIZE = {
   "Bath Salt":0.6,"Tea":0.55,"Hand Mirror":0.55,"Witch Salt":0.55,"Cookies":0.5,"Butter":0.45,"Balm":0.45,"Sachet":0.45,"Sigil":0.45,
   "Amulet":0.45,"Charm":0.45,"Talisman":0.45,"Soap":0.4,"Rune":0.35
 };
+/* On the altar every finished spell stands this much bigger than SPELL_SIZE (at most 1.05: the height of the table's space). */
+const SPELL_ALTAR_SCALE = 1.25;
 /* On the altar only, a kind can stand a little bigger than SPELL_SIZE says (the counter keeps SPELL_SIZE). */
 const SPELL_SIZE_ALTAR = {"Sachet":0.5};
 const ITEM_SIZE = {
