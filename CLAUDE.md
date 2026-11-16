@@ -14,6 +14,8 @@ the player finds the right recipe in the books and makes it at the altar.
   calendar, all 240 recipes). Source of truth for design.
 - `ingredient_asset_tracker.xlsx`: data and planning sheets (ingredients, Ingredient Feel,
   Advice, Walk-in Plan, Learning Check, art asset status).
+- Art: when a new picture has a shadow (cast or on the floor), ask the designer before putting it in; never import it
+  as is or remove the shadow without asking.
 - The game itself (open `index.html` in a browser). It carries the full game data, but
   customers and dialogue exist for weeks one and two only, so play stops after `LAST_PLAYABLE_DAY`.
   Keep its data in sync with the spellbook and tracker.
