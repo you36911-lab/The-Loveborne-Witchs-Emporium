@@ -215,7 +215,8 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .made .bow{position:absolute;left:50%;top:0;width:60%;height:34%;translate:-50% -78%}
 .made .bow::before,.made .bow::after{content:"";position:absolute;bottom:0;width:50%;height:100%;border:max(3px,.35vw) solid #E57FAE;border-radius:50% 50% 10% 50%}
 .made .bow::before{left:0;rotate:-20deg}.made .bow::after{right:0;rotate:20deg;border-radius:50% 50% 50% 10%}
-.made .tag{position:absolute;right:-28%;top:42%;max-width:85%;background:#FFF9EC;border:1px solid #CBB79B;border-radius:3px;padding:.15em .45em;rotate:8deg;
+/* the tag is at most two lines, whatever the spell's size: as wide as its name, up to 10.5em (the longest names, ~29 letters, break into two) */
+.made .tag{position:absolute;right:-28%;top:42%;width:max-content;max-width:10.5em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;text-wrap:balance;background:#FFF9EC;border:1px solid #CBB79B;border-radius:3px;padding:.15em .45em;rotate:8deg;
   font-family:'Caveat',cursive;font-size:clamp(11px,1vw,18px);line-height:1.05;color:#3A2A3A;box-shadow:0 2px 3px rgba(0,0,0,.25)}
 .scene .bell{left:68.4%;bottom:18.5%;width:4.8%;z-index:0}
 .scene .computer{left:72%;bottom:11.5%;width:27%;z-index:1}
