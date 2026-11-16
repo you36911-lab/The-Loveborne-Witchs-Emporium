@@ -53,7 +53,8 @@ const ITEM_KIND = {
   "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":5,"Flour":5,"Rice flour":5,"Sugar":4,"Garden soil":5,
   "Hearth ash":5,"Coin":5,"Owl feather":5,"Seashell":5,"White feather":5,"Brass button":6,"Bright buttons":6,"Gold button":6,
   "Heart-shaped button":6,"Iron filings":6,"Iron nail":6,"Iron pin":6,"Ash branch":7,"Ash wood":7,"Birch branch":7,"Birch wood":7,
-  "Blackthorn branch":7,"Hazel branch":7,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8
+  "Blackthorn branch":7,"Hazel branch":7,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8,
+  "Black ink":0,"Gold ink":0,"Plain ink":0,"Red ink":0,"Silver ink":0
 };
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
@@ -81,7 +82,9 @@ const REAL_SIZE = {
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
   "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
   "Selenite":0.5,"Pearl":0.36,"River stone":0.38,"Beetroot powder":0.55,"Apple":0.55,
-  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45
+  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass bead":0.45,
+  /* the ink bottles: small round flasks, about 8 cm */
+  "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4
 };
 /* How tall a finished spell stands on the altar, by its kind (1 = a 20 cm potion bottle): a wand is long, a rune stone small. */
 const SPELL_SIZE = {
@@ -110,7 +113,8 @@ const ITEM_SIZE = {
   /* the "symbols" pictures, sized to read easily in their cupboards */
   "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
   "Brass button":0.7,"Bright buttons":0.7,"Gold button":0.7,"Heart-shaped button":0.7,"Mismatched button":0.7,"Vintage button":0.7,
-  "Coin":0.7,"Glass bead":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small key":0.75
+  "Coin":0.7,"Glass bead":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small key":0.75,
+  "Black ink":0.6,"Gold ink":0.6,"Plain ink":0.6,"Red ink":0.6,"Silver ink":0.6
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
@@ -463,6 +467,12 @@ const ASSETS = {
     "Birch branch":        "assets/items/birch-branch.png",
     "Birch wood":          "assets/items/birch-wood.png",
     "Blackthorn branch":   "assets/items/blackthorn-branch.png",
+    /* inks (the designer's pictures, 2026-11-16) */
+    "Black ink":           "assets/items/black-ink.png",
+    "Gold ink":            "assets/items/gold-ink.png",
+    "Plain ink":           "assets/items/plain-ink.png",
+    "Red ink":             "assets/items/red-ink.png",
+    "Silver ink":          "assets/items/silver-ink.png",
     "Hazel branch":        "assets/items/hazel-branch.png",
     "Brass button":        "assets/items/brass-button.png",
     "Bright buttons":      "assets/items/bright-buttons.png",
