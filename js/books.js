@@ -25,8 +25,8 @@ function entryList(book){const L=[];const add=(k,props,note,always,ns='item')=>L
       add(c,D.colours[c],forms.length===1?'Candles only':'Comes as '+forms.join(', ').replace(/, ([^,]*)$/,' and $1'),false,'colour');L[L.length-1].cat='Colours'});
     /* everything else in these cupboards (the coloured threads, inks and paints are told under their colour above): the
        things with a meaning, and the bases (a compact for a Hand Mirror, clay for a Rune, paper and plain ink for anything),
-       grouped as their cupboards are, in the cupboards' order, each base saying what it is the base for (as in the Herbiary) */
-    const GC=['Buttons','Threads & ribbons','Wood & branches','Findings & tools','Inks & paints'];
+       grouped as their cupboards are, the groups in alphabetical order, each base saying what it is the base for (as in the Herbiary) */
+    const GC=['Buttons','Findings & tools','Inks & paints','Threads & ribbons','Wood & branches'];
     const colourForm=new Set(Object.keys(D.colours).flatMap(c=>[c+' thread',(c==='Purple'?'Violet':c)+' ink',c+' paint']));
     D.items.filter(i=>GC.includes(i.c)&&!colourForm.has(i.n)&&(i.props.length||i.base.length||i.anybase)).sort((a,b)=>GC.indexOf(a.c)-GC.indexOf(b.c)||a.n.localeCompare(b.n))
       .forEach(i=>{add(i.n,i.props,i.anybase?'A base for any spell type':i.base.length?'Base for '+i.base.join(', '):'',false);L[L.length-1].cat=i.c})}
