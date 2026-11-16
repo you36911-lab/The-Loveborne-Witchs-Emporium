@@ -202,9 +202,12 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
 /* what was made, between the till and the notebook: the spell's own picture (as on the altar) with its handwritten tag;
    a spell with no picture yet comes wrapped as a parcel with a pink ribbon */
-.made .madepic{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.made .madepic{position:absolute;left:50%;bottom:0;translate:-50% 0;height:100%;width:auto;max-width:none;filter:drop-shadow(0 .3vw .25vw rgba(60,10,40,.45))}
 .made .madepic[hidden],.made .parcel[hidden]{display:none}
-.scene .made{left:42.5%;bottom:13%;width:9%;aspect-ratio:1/1;z-index:4;animation:madein .5s ease-out}
+/* its size (--h, set in renderMade) is the spell's altar height (SPELL_SIZE) next to the book stack, as on the altar, a little bigger:
+   on the altar a spell stands h × 20.7% of the room high beside books 13.5% of the room wide; here the books are 15% wide, so
+   h × 12.8% of the scene's width, and 15% more. Centred where the parcel stood (47%). */
+.scene .made{--h:.61;left:calc(47% - var(--h) * 7.4%);bottom:13%;width:calc(var(--h) * 14.8%);aspect-ratio:1/1;z-index:4;animation:madein .5s ease-out}
 .scene .made[hidden]{display:none}
 @keyframes madein{from{opacity:0;transform:translateY(-12%)}}
 .made .parcel{position:absolute;left:10%;right:10%;top:28%;bottom:0;border-radius:6%;border:1px solid #8C6239;
