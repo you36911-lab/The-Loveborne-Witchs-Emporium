@@ -270,6 +270,7 @@ function renderBooks(){drawBooks();if(measureIndex())drawBooks()}  /* an index m
 function drawBooks(){
   const marks=S.marks||(S.marks=[]);
   $('#marks').innerHTML=marks.length?marks.map((m,i)=>{const w=markWords(m);return `<button class="mark" data-mark="${i}"><span class="mk-x" data-unmark="${i}" aria-label="Take out this bookmark" title="Take it out">×</span><span class="mk-t">${esc(m.title)}</span>${w.length?`<span class="mk-kw">${w.map(esc).join(' · ')}</span>`:''}</button>`}).join(''):'<span class="muted" style="font-size:13px">No bookmarks yet. Tap the ribbon at the top of a page to keep your place.</span>';
+  $('#marksClear').hidden=!marks.length;
   const bank=S.bank.filter(w=>!usedUp(w));if(selWord&&usedUp(selWord))selWord=null;
   /* only the words themselves; how the word bank works will be taught by the tutorial (to come) */
   $('#bank').innerHTML=(bank.length?bank.slice().sort().map(w=>`<button class="word ${selWord===w?'sel':''}" data-word="${esc(w)}">${esc(w)}</button>`).join(''):'');
@@ -360,6 +361,8 @@ $('#books').addEventListener('click',e=>{const b=e.target.closest('button');
   if(b.dataset.go){const pages=allPages(curBook);turnTo(pages.findIndex(p=>p.key===b.dataset.go));return}
   if(b.id==='turnFirst'||b.id==='turnLast'){turnTo(b.id==='turnFirst'?0:allPages(curBook).length-1);return}
   /* the small x on a bookmark takes it out (its page's ribbon does the same) */
+  /* "Clear all" beside the Bookmarks title takes every bookmark out at once */
+  if(b.id==='marksClear'){S.marks=[];save();renderBooks();return}
   const un=e.target.closest('[data-unmark]');if(un){S.marks.splice(+un.dataset.unmark,1);save();renderBooks();return}
   if(b.dataset.mark!==undefined){const m=S.marks[+b.dataset.mark];
     if(m.book!==curBook){S.page[m.book]=m.key;save();showBook(m.book)}else turnTo(allPages(curBook).findIndex(p=>p.key===m.key));return}
