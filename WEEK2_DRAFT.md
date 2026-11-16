@@ -165,7 +165,7 @@ Every new walk-in needs a picture (the regulars all have one).
 
 ### Noon · **Noor Haddad** (first visit) · #86 The Owl's Lantern (Tea) · Wednesday · studying late every night
 - **Aura**: yellow (over pale blue)
-- **Cue**: three highlighters behind one ear, a fourth in her mouth
+- **Cue**: a blazer a size too big for her; her thumb keeps counting along her fingertips, as if going over a list
 - **Line**: Hi. Noor. Noor Haddad, sorry. I'm at Stanbridge, first year. I read everything three times and none of it stays in. Is there a tea for remembering things? I'll drink anything. Honestly anything.
 - **Review**: Read a chapter once. Once! And it stayed. I'm framing the teabag.
 - **Hint** (design document): "My flatmate from Greywater puts a few drops of that dark, churning water, the sort you bottle in a thunderstorm, in everything when she's stuck for ideas. Says you can taste the thunder. Pure creativity." → **creativity** (Storm Water)
