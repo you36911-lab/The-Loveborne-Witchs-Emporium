@@ -152,8 +152,8 @@ const LESSONS=[
     {skip:runeRight,glow:()=>seen(CAME)?CAME:'',say:()=>seen(CAME)?'What came through is only from what’s right. A theme it wants that isn’t there yet, I’m still missing.':'',
       done:()=>!seen(CAME),wait:7500,allow:['#phoneApp']},
     {skip:runeRight,say:'',done:()=>!isOpen('phoneView'),allow:[{self:'#phoneView'},'#phoneApp']},
-    {skip:runeRight,note:'tests'},
-    {skip:runeRight,say:'That one goes in my notebook too.',wait:3500},
+    {note:'tests'},  /* given even when the rune came out right first time: it also tells how advice goes */
+    {say:'That one goes in my notebook too.',wait:3500},
     /* the cupboards, shown as another way (not the way): one opened, looked through, something laid on the table by hand */
     {skip:runeRight,ensure:()=>{if(view!=='altar')setView('altar')},glow:CRYSTALS,
       say:'Everything she kept is in these cupboards too, if I’d rather pick things out myself.',done:()=>openShelf==='Crystals',allow:[]},
