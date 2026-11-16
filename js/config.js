@@ -16,6 +16,12 @@ const LAST_PLAYABLE_DAY = 14;
 
 /* Prototype controls under the title bar: jump to any week, day, hour or customer. Set to false to hide them. */
 const PROTOTYPE_TOOLS = true;
+/* A customer shown brighter than the hour's light alone would leave them (1 is as lit; 1.2 is a fifth brighter), for
+   pictures that read too dark in play, as at Yule, whose light is about three quarters of Noon's. */
+const CUSTOMER_BRIGHTER = {
+  'An accountant before the office party': 1.2,
+  'A woman who hasn’t spoken to her sister': 1.2,
+};
 const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has seven ingredients) */
 
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */

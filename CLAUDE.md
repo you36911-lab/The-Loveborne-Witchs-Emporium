@@ -24,7 +24,7 @@ the player finds the right recipe in the books and makes it at the altar.
 
 - `index.html`: the page structure only.
 - `css/style.css`: all styling.
-- `js/config.js`: settings (save key, last playable day, dawn card timing) and every image path.
+- `js/config.js`: settings (save key, last playable day, dawn card timing, customers shown brighter than the light) and every image path.
 - `js/data/game-data.js`: items, recipes, calendar, books (generated from the design document).
 - `js/data/story.js`: customer visits, post letters, auras, starting stock.
 - `js/core.js`: save state, helpers, letters and post, calendar conditions.
