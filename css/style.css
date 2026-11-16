@@ -1276,7 +1276,7 @@ body.dawning::after,body.crafting::after{content:'';position:fixed;inset:0;z-ind
 
 /* The save icon: a small heart in a turning ring of light, bottom right, for a moment when the game has kept something
    that matters (see save() in core.js). */
-.savemark{position:fixed;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);width:28px;height:28px;z-index:61;pointer-events:none;opacity:0}
+.savemark{position:fixed;right:18px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);width:44px;height:44px;z-index:61;pointer-events:none;opacity:0}
 .savemark svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 1px 3px rgba(20,6,26,.6))}
 .savemark .sm-ring{fill:none;stroke:#F7B8D6;stroke-width:1.8;stroke-linecap:round;stroke-dasharray:44 16;transform-origin:12px 12px}
 .savemark .sm-heart{fill:#F7B8D6}
