@@ -2,7 +2,13 @@
    Turn it off with PROTOTYPE_TOOLS in config.js. Jumping keeps the rest of the save as it is, unless "Roll back" is ticked:
    then jumping back to an earlier hour puts the whole game back as it was then (see the snapshots below). */
 const WEEKS=Math.ceil(D.cal.length/7);
-const visitLabel=v=>`Day ${v.day} ${v.hour}: ${v.who}`;
+const visitLabel=v=>`${v.hour}: ${v.who}`;
+/* the customers of one week, grouped under their days (the week is picked in the menu before it) */
+function protoWho(w){const out=['<option value="">Customer (optional)</option>'];
+  for(let d=(w-1)*7+1;d<=Math.min(w*7,D.cal.length);d++){const vs=X.visits.map((v,i)=>[v,i]).filter(([v])=>v.day===d);if(!vs.length)continue;
+    vs.sort((a,b)=>HOURS.indexOf(a[0].hour)-HOURS.indexOf(b[0].hour));
+    out.push(`<optgroup label="Day ${d} · ${esc(D.cal[d-1].weekday)}">${vs.map(([v,i])=>`<option value="${i}">${esc(visitLabel(v))}</option>`).join('')}</optgroup>`)}
+  return out.join('')}
 function protoDays(w){const out=[];for(let d=(w-1)*7+1;d<=Math.min(w*7,D.cal.length);d++){const T=D.cal[d-1];
   out.push(`<option value="${d}">Day ${d} · ${esc(T.weekday)}${T.sabbat?' · '+esc(T.sabbat):''}${d>LAST_PLAYABLE_DAY?' (no customers yet)':''}</option>`)}return out.join('')}
 /* The menus start from where the game is now. */
@@ -10,7 +16,7 @@ function fillProto(){const w=Math.ceil(S.day/7);
   $('#protoWeek').innerHTML=Array.from({length:WEEKS},(_,i)=>`<option value="${i+1}">Week ${i+1}</option>`).join('');$('#protoWeek').value=w;
   $('#protoDay').innerHTML=protoDays(w);$('#protoDay').value=S.day;
   $('#protoHour').innerHTML=HOURS.map((h,i)=>`<option value="${i}">${h}</option>`).join('');$('#protoHour').value=S.h;
-  $('#protoWho').innerHTML='<option value="">Customer (optional)</option>'+X.visits.map((v,i)=>`<option value="${i}">${esc(visitLabel(v))}</option>`).join('')}
+  $('#protoWho').innerHTML=protoWho(w)}
 /* Snapshots for rolling back: the game as it stood at the start of each hour played (the first save in that hour), kept
    in this browser under their own key, for this game only (S.gid; a new game starts afresh). The last 60 hours are kept. */
 const SNAP_KEY=SAVE_KEY+'-proto-snaps',SNAP_MAX=60;
@@ -46,7 +52,7 @@ function jumpTo(day,h){clearTimeout(autoT);
   $('#dayEnd').classList.remove('open');dawnUntil=0;$('#dayCard').classList.remove('on');document.body.classList.remove('dawning');
   render();fillProto()}
 if(PROTOTYPE_TOOLS){$('#proto').hidden=false;fillProto();
-  $('#protoWeek').onchange=e=>{$('#protoDay').innerHTML=protoDays(+e.target.value)};
+  $('#protoWeek').onchange=e=>{$('#protoDay').innerHTML=protoDays(+e.target.value);$('#protoWho').innerHTML=protoWho(+e.target.value)};
   $('#protoWho').onchange=e=>{const v=X.visits[e.target.value];if(!v)return;
     $('#protoWeek').value=Math.ceil(v.day/7);$('#protoDay').innerHTML=protoDays(Math.ceil(v.day/7));$('#protoDay').value=v.day;$('#protoHour').value=HOURS.indexOf(v.hour)};
   $('#protoGo').onclick=()=>jumpTo(+$('#protoDay').value,+$('#protoHour').value);
