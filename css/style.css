@@ -200,7 +200,10 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .till{left:26%;bottom:12.5%;width:15%;z-index:2}
 .scene .notebook{left:54%;bottom:11%;width:13.5%;z-index:3}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
-/* what was made, wrapped as a parcel with a pink ribbon and a handwritten tag, between the till and the notebook */
+/* what was made, between the till and the notebook: the spell's own picture (as on the altar) with its handwritten tag;
+   a spell with no picture yet comes wrapped as a parcel with a pink ribbon */
+.made .madepic{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:50% 100%}
+.made .madepic[hidden],.made .parcel[hidden]{display:none}
 .scene .made{left:42.5%;bottom:13%;width:9%;aspect-ratio:1/1;z-index:4;animation:madein .5s ease-out}
 .scene .made[hidden]{display:none}
 @keyframes madein{from{opacity:0;transform:translateY(-12%)}}
