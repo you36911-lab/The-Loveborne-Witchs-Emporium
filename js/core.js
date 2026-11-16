@@ -46,6 +46,10 @@ function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits
   /* hints used to be written in the notebook; they now come in the reviews on the computer, and the notebook is the player's own */
   if(!S.reviews)S.reviews=(S.hints||[]).map(h=>({day:h.day,hour:h.hour,who:h.who,g:'Perfect',item:'',text:'',hint:h.text}));
   delete S.hints;S.reviewsSeen=S.reviewsSeen||0;S.memo=S.memo||[];
+  /* reviews already received show their customer's hint (and, for a perfect one, review) as this build words it */
+  const byKey=Object.fromEntries(X.visits.map(v=>[vk(v),v]));
+  S.reviews.forEach(r=>{const v=byKey[r.day+'-'+r.hour+'-'+r.who];if(!v)return;
+    if(r.hint&&v.hint&&v.hint.text)r.hint=v.hint.text;if(r.g==='Perfect'&&v.review)r.text=v.review});
 }
 sanitize();
 /* The game saves after everything the player does. The little save icon in the corner (#saveMark) shows only when
