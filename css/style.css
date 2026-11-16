@@ -202,8 +202,14 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 /* The bell stands just left of the mouse and a little behind it, so the mouse overlaps it slightly. */
 /* what was made, between the till and the notebook: the spell's own picture (as on the altar) with its handwritten tag;
    a spell with no picture yet comes wrapped as a parcel with a pink ribbon */
-.made .madepic{position:absolute;left:50%;bottom:0;translate:-50% 0;height:100%;width:auto;max-width:none;filter:drop-shadow(0 .3vw .25vw rgba(60,10,40,.45))}
+/* what was made glows softly pink from behind and is a touch brighter than the counter round it (no tag: the picture says what it is) */
+.made .madepic,.made .parcel{filter:brightness(1.1) drop-shadow(0 0 .35vw rgba(255,214,236,.75)) drop-shadow(0 0 1.1vw rgba(244,173,207,.6))}
+.made .madepic{position:absolute;left:50%;bottom:0;translate:-50% 0;height:100%;width:auto;max-width:none}
 .made .madepic[hidden],.made .parcel[hidden]{display:none}
+/* and floats gently up and down, as things laid out on the altar do */
+.made .madepic,.made .parcel{animation:madefloat 3.4s ease-in-out infinite}
+@keyframes madefloat{50%{transform:translateY(-5%)}}
+@media (prefers-reduced-motion: reduce){.made .madepic,.made .parcel{animation:none}}
 /* its size (--h, set in renderMade) is the spell's altar height (SPELL_SIZE) next to the book stack, as on the altar, a little bigger:
    on the altar a spell stands h × 20.7% of the room high beside books 13.5% of the room wide; here the books are 15% wide, so
    h × 12.8% of the scene's width, and 15% more. Centred where the parcel stood (47%). */
@@ -215,9 +221,6 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .made .bow{position:absolute;left:50%;top:0;width:60%;height:34%;translate:-50% -78%}
 .made .bow::before,.made .bow::after{content:"";position:absolute;bottom:0;width:50%;height:100%;border:max(3px,.35vw) solid #E57FAE;border-radius:50% 50% 10% 50%}
 .made .bow::before{left:0;rotate:-20deg}.made .bow::after{right:0;rotate:20deg;border-radius:50% 50% 50% 10%}
-/* the tag is at most two lines, whatever the spell's size: as wide as its name, up to 10.5em (the longest names, ~29 letters, break into two) */
-.made .tag{position:absolute;right:-28%;top:42%;width:max-content;max-width:10.5em;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;text-wrap:balance;background:#FFF9EC;border:1px solid #CBB79B;border-radius:3px;padding:.15em .45em;rotate:8deg;
-  font-family:'Caveat',cursive;font-size:clamp(11px,1vw,18px);line-height:1.05;color:#3A2A3A;box-shadow:0 2px 3px rgba(0,0,0,.25)}
 .scene .bell{left:68.4%;bottom:18.5%;width:4.8%;z-index:0}
 .scene .computer{left:72%;bottom:11.5%;width:27%;z-index:1}
 .scene .pcbadge{position:absolute;right:3%;top:2%;font-size:clamp(11px,1.4vw,18px);min-width:1.6em;height:1.6em;line-height:1.6em;border-radius:1em}

@@ -325,7 +325,7 @@ function fillCounter(){const q=currentVisitor();renderMade(q);const el=$('#count
 function renderMade(q){if(S.made&&(!q||q.type!=='report'&&S.made.for!==visitorId(q)))S.made=null;
   const b=$('#madeBtn'),m=S.made&&!(S.spell&&S.spell.give)?S.made:null;b.hidden=!m;if(!m)return;  /* the parcel waits on the counter only once the spell has been brought up from the altar */
   const pic=ASSETS.spells[m.rid];$('#madePic').hidden=!pic;if(pic)$('#madePic').src=pic;$('#madeParcel').hidden=!!pic;b.style.setProperty('--h',pic?SPELL_SIZE[m.type]||.6:.61);  /* the spell itself, as on the altar; a parcel only for a spell with no picture yet */
-  $('#madeTag').textContent=m.name;b.ariaLabel=`Give them the ${m.type.toLowerCase()}`}
+  b.ariaLabel=`Give them the ${m.name} (${m.type.toLowerCase()})`}
 function sendAway(){const q=S.queue;if(!q||q.type!=='new')return;const v=visitByKey(q.key);S.seen[q.key]=true;S.stats.missed++;record('Missed',v.who,'No sale',q.key);S.activeNow=null;S.queue=null}
 function render(){if(Date.now()>=dawnUntil+MAIL_AFTER_DAWN_MS)checkMail();  /* post waits until the dawn card has gone, and a moment more */
   renderTop();renderScene();renderShelves();renderCounter();renderAltar();save();autoTick()}
