@@ -89,6 +89,8 @@ const SPELL_SIZE = {
   "Bath Salt":0.6,"Tea":0.55,"Hand Mirror":0.55,"Witch Salt":0.55,"Cookies":0.5,"Butter":0.45,"Balm":0.45,"Sachet":0.45,"Sigil":0.45,
   "Amulet":0.45,"Charm":0.45,"Talisman":0.45,"Soap":0.4,"Rune":0.35
 };
+/* On the altar only, a kind can stand a little bigger than SPELL_SIZE says (the counter keeps SPELL_SIZE). */
+const SPELL_SIZE_ALTAR = {"Sachet":0.5};
 const ITEM_SIZE = {
   "Almond oil":0.8,"Jojoba oil":0.85,"Olive oil":0.95,"Sunflower oil":0.95,"Butter":0.27,"Shea butter":0.45,
   "Beeswax":0.55,"Baking soda":0.6,"Black salt":0.7,"Brown sugar":0.6,"Chocolate chips":0.75,"Cocoa":0.7,"Coconut milk powder":0.6,
