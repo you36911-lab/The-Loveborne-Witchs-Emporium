@@ -29,9 +29,11 @@ function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
   wrong.forEach(w=>{const wp=ITEM[w]?.props||[],best=pairOf.get(w);
     if(!best)return;
     const mp=ITEM[best].props,shared=mp.filter(p=>wp.includes(p));
-    const kw=r.themes.find(t=>shared.includes(t))||shared[0];
+    const theme=r.themes.find(t=>shared.includes(t)),kw=theme||shared[0];
     const a=ITEM[best],b=ITEM[w];let kind='same';
-    if(a.t&&b.t&&a.t!==b.t)kind=a.t+'>'+b.t;else if(a.s&&b.s&&a.s!==b.s)kind=a.s==='Gentle'?'strong':'weak';
+    /* "the X is right, but…" only when X is one of the recipe's themes; a word the two merely happen to share (success,
+       in a recipe for confidence, passion and courage) is not "right", so that clue falls to the plainer lines below */
+    if(theme&&a.t&&b.t&&a.t!==b.t)kind=a.t+'>'+b.t;else if(theme&&a.s&&b.s&&a.s!==b.s)kind=a.s==='Gentle'?'strong':'weak';
     const lacks=r.themes.filter(t=>mp.includes(t)&&!mix.has(t));
     /* Otherwise point at the one wrong spot: an off note the wrong ingredient brings, and what the right one would bring instead. */
     const sh=shownOf({props:mp,sk:'item:'+best}),pick=a=>a.find(p=>sh.includes(p))||a[0];
