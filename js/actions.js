@@ -107,7 +107,8 @@ function doCraft(){const r=D.recipes[S.target];if(!r||!S.altar.length){bellBusy=
   render();craftAnim(()=>{bellBusy=false;if(judge(r)!=='Perfect')phoneNotify(1100)})}  /* judged as the finished spell comes down */
 /* the finished spell takes the place of what was laid out */
 function makeSpell(r,give){S.spell={rid:r.id,name:r.name,type:r.type,give};S.altar=[];S.candle='';S.tarot=''}
-function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');else render()}
+function takeSpell(){const s=S.spell;if(!s)return;S.spell=null;if(s.give&&S.made)setView('shop');
+  else{toast('Not what anyone’s waiting for. I’ll put it aside.',{thought:true});render()}}  /* not for whoever is at the counter: said, then cleared away */
 /* A black candle goes out (a spell that didn't come out right, or advice that missed): every fifth spoils a batch, a one-star review that night. */
 function spoilCandle(){S.failTests=(S.failTests||0)+1;if(S.failTests%5===0&&!(typeof tutorialTest==='function'&&tutorialTest())){record('Failed','Spoiled test batches','Five crafts gone wrong');toast('Five candles out. That will cost me a star tonight.')}}
 /* Black candles light again (a spell given: one; perfect advice: two) (never past the last five: a spoiled batch stays spoiled). */
