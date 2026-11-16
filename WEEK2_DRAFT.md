@@ -39,7 +39,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Noon · walk-in · #73 The Gentle No (Soap) · Saturday
 - **Who**: A woman who can't say no · receipt name **Harriet Osei**
 - **Aura**: dark knot (guilt)
-- **Cue**: phone face-down on the counter, buzzing; she doesn't turn it over
+- **Cue**: her phone buzzing in her hand, a coat over her arm; she doesn’t look at it
 - **Line**: My best friend borrows everything. My car, my weekends, my sofa. I love her, but I need to say no without feeling like a monster. Is there a soap? Something I can wash my hands with before I answer?
 - **Review**: Washed my hands, said no, and she said "oh, fair enough". Fair enough! Years of this!
 - **Hint**: "My gran put a sprig of those purple spikes in the last rinse. Said it washed the whole week out of the sheets. Cleansing, she called it." → **cleansing** (Lavender; for Dottie's soap tomorrow)
@@ -47,7 +47,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Twilight · advice · Spices · abundance · Space · Strong → **Cinnamon** (Clove also perfect)
 - **Who**: A man with a market-stall banner rolled under his arm · **Rafael Duarte**
 - **Aura**: yellow (nervous excitement)
-- **Cue**: the banner keeps unrolling; he keeps rolling it back up
+- **Cue**: a rolled-up banner under one arm, strapped shut, grinning as if it’s already hanging
 - **Line**: We've got a stall at the Yule market. First time ever.
 - **Question**: Which spice brings in plenty? For the whole stall, and properly.
 - **Review**: Sold out by noon on the first day. My wife says it was the biscuits. I say it was the cinnamon.
@@ -67,7 +67,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Noon · walk-in · #183 The Hand on the Wheel (Talisman) · Sunday · Noon
 - **Who**: A woman with new car keys · **Margaret Achterberg**
 - **Aura**: sparkling white (a fresh start)
-- **Cue**: turning a brand-new set of car keys over and over
+- **Cue**: turning a brand-new set of car keys over and over, her coat over one arm
 - **Line**: Fifteen years married and he did all the driving. Well, he's gone off with the woman from the garden centre, and I've bought a car. Something small and round to keep in my pocket. To remind me I'm the one steering now.
 - **Review**: Drove to the coast on my own. Parked badly. Didn't care.
 - **Hint**: "We shook something tiny and tinkling at the window every Yule dawn when I was a girl. For new beginnings, Mother said." → **beginnings** (Tiny bell; for The Sun's Little Promise tomorrow)
@@ -75,7 +75,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Twilight · walk-in · #180 The Little Victory Bell (Powder) · Twilight
 - **Who**: A teacher at the end of term · **Owen Pritchard**
 - **Aura**: gold
-- **Cue**: glitter in his hair, a paper crown in his coat pocket
+- **Cue**: glitter in his hair and all over his jacket, a child’s drawing in one hand
 - **Line**: Last day of term. Thirty nativity angels, one of them bit a shepherd. I did it, though. I'd like something to sprinkle when I get home, to say well done to myself. Is that silly?
 - **Review**: Sprinkled it on the doormat and felt like I'd won something. I had, really.
 - **Hint**: "The dinner lady stirs a pinch of thin red threads into the end-of-term rice. Turns it yellow as sunshine. Joy, she says, plain and simple." → **joy** (Saffron; for Celestial Spotlight on Day 16 and The Open Doorbell on Day 21. Was Nutmeg for comfort, which week one already teaches)
@@ -95,7 +95,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Sunrise · walk-in · #144 The Sun's Little Promise (Charm) · Yule · Sunrise
 - **Who**: An archivist who works underground · **Bartholomew Finch**
 - **Aura**: grey
-- **Cue**: pale as paper, squinting at the window
+- **Cue**: pale as paper, glasses slipping down his nose, squinting at the window
 - **Line**: I work in the county archive. In the basement. I haven't seen the sun since October. Someone said the light comes back from today. Is there a charm for that? Something I can hang by my desk?
 - **Review**: Hung it by the filing cabinets. The whole basement seems warmer. Possibly the boiler. I prefer the charm.
 - **Hint**: "The old archivist kept a sprig of the herb you roast lamb with over the strongroom door. For protection, he said. Nothing's gone missing since 1890." → **protection** (Rosemary; so Edmund's question this evening can be answered: the entry shows only cleansing)
@@ -103,7 +103,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Noon · walk-in · #136 The Wintering Star (Butter) · Yule
 - **Who**: A sheep farmer in a muddy wax jacket · **Gwen Llewellyn**
 - **Aura**: grey
-- **Cue**: smells of hay; yawns twice before speaking
+- **Cue**: muddy wellies, a flat cap in her hand; yawns twice before she speaks
 - **Line**: Lambing starts in spring and I've not stopped since harvest. I want to rest this winter, properly, like the hedgehogs. Something I can spread on my toast in the morning that says, slow down, Gwen.
 - **Review**: Slept till eight. Eight! The sheep were furious.
 - **Hint**: "My singing teacher chews a dark, woody stick before she goes on, sweet as a sweetshop. Not for the voice. For passion, she says, so they feel it at the back." → **passion** (Licorice root; for The Scarlet Entrance tomorrow)
@@ -130,7 +130,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Sunrise · walk-in · #129 Sunrise in a Teacup (Potion) · Sunrise
 - **Who**: A young man in a too-new suit · **Ishaan Mehta**
 - **Aura**: yellow
-- **Cue**: tie half done, a name badge still in its plastic
+- **Cue**: fiddling with a tie that won’t sit straight
 - **Line**: First day at a new job. I've been awake since four. I want to start properly, like it's a new morning and not just a Tuesday. Something to drink before I go?
 - **Review**: Drank it at the bus stop. Said good morning to everyone. They said it back!
 - **Hint**: "My aunt grates the green-yellow rind that makes Earl Grey taste like Earl Grey into her tea when she wants the world to go quiet. Calm in a cup." → **calm** (Bergamot; for The Solitude Sweetspot tomorrow)
@@ -138,7 +138,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Noon · walk-in · #50 The Scarlet Entrance (Oil) · Tuesday
 - **Who**: An accountant before the office party · **Fiona Galbraith**
 - **Aura**: red (anger)
-- **Cue**: jaw set, a party invitation folded very small
+- **Cue**: jaw set, a party invitation crumpled in her fist
 - **Line**: The office Yule party is tonight. Last year Gareth took credit for my whole report in front of the director, and I said nothing. Not this year. Something to put on my wrists before I walk in. I want them to notice.
 - **Review**: Walked in, said my piece, got a standing ovation from accounts. Gareth went home early.
 - **Hint**: "My first boss wrote the names of everyone who'd wronged her in the blackest ink she could find, then burned the page. Banishing, she called it. I'm starting to see the point." → **banishing** (Black ink; for The Closed Gate on Day 15. Was Orange peel for joy, which week one already teaches)
@@ -158,7 +158,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Sunrise · walk-in · #65 Words Like Honey (Tea) · Wednesday
 - **Who**: A woman who hasn't spoken to her sister in a year · **Anneliese Vogt**
 - **Aura**: grey
-- **Cue**: two teacups' worth of hesitation; checks the door twice
+- **Cue**: her keys in her hand; checks the door twice, as if someone might already be on the way
 - **Line**: My sister's coming for Yule. We haven't spoken since Dad's funeral. I want us to actually talk this time. A tea we can drink together? Something that makes the words come easier.
 - **Review**: We drank it in the kitchen and talked till two. About Dad, mostly. It was good.
 - **Hint**: "She splashes pale pink water on her face every morning, the sort that smells of a summer garden. For beauty, she says, and annoyingly it works." → **beauty** (Rosewater; for The Camera Loves You on Day 15 and Swanlight on Day 17)
@@ -173,7 +173,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Twilight · walk-in · #165 The Solitude Sweetspot (Tea) · Cold Moon (moved from Sunrise)
 - **Who**: A woman whose house is full of relatives · **Bridget Halloran**
 - **Aura**: red (urgency)
-- **Cue**: hiding behind the shelf as if someone might follow her in
+- **Cue**: a mug of tea she’s carried from home; keeps behind the shelf, as if someone might follow her in
 - **Line**: Fourteen relatives. One bathroom. I love them, I do. I just want one quiet hour in the shed with a cup of tea and nobody asking where the scissors are. A tea for that?
 - **Review**: One hour, one cup, one shed. Bliss. The scissors were in the drawer, Mum.
 - **Hint**: "My uncle stuffs his pillow with those pale green cones they brew beer with. Says it's the only rest he gets with us lot in the house." → **rest** (Hops; for The Offline Garden on Day 17)
@@ -190,7 +190,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Sunrise · walk-in · #214 The Main-Character Morning (Potion) · Sunrise
 - **Who**: A commuter in a grey coat · **Dev Kapoor**
 - **Aura**: grey
-- **Cue**: grey coat, grey scarf, grey umbrella
+- **Cue**: grey coat, grey scarf, grey umbrella, grey rucksack
 - **Line**: Same train, same desk, same sandwich. I want one morning that feels like the opening of a film. Something to drink, and then I walk out of here like I'm somebody.
 - **Review**: Wore the yellow scarf. Took the long way. A stranger said nice scarf. Film.
 - **Hint**: "My flatmate grates a knobbly root into everything before a big day, hot enough to make your eyes water. Courage, she calls it." → **courage** (Ginger; for Felix's tonic on Day 16)
@@ -198,7 +198,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Noon · walk-in · #233 The Casual Enchantment (Glamour) · any time
 - **Who**: A teenage bassist before his first gig · **Leo Marchetti**
 - **Aura**: murky green (comparison)
-- **Cue**: keeps glancing at his reflection in the shop window, then away
+- **Cue**: a bass case on his back; keeps glancing at his reflection in the shop window, then away
 - **Line**: First gig tonight. The other band all look so cool without trying. I try really hard and look like a geography teacher. Is there something to put on my face? Something that makes it look like I don't care?
 - **Review**: Didn't care. Visibly. Played fine. Someone asked for my number.
 - **Hint**: "The calligrapher at the market signs everything in shimmering gold, dipping her pen in a little pot. For success, she says." → **success** (Gold ink; for Ivy's sigil on Day 16)
@@ -218,7 +218,7 @@ Every new walk-in needs a picture (the regulars all have one).
 ### Sunrise · walk-in · #205 The Empty Frame (Water) · any time
 - **Who**: A woman turning thirty tomorrow · **Chloé Moreau**
 - **Aura**: murky green (comparison)
-- **Cue**: a list in her pocket, half of it crossed out in red
+- **Cue**: a list open on her phone, half of it crossed out
 - **Line**: I'm thirty tomorrow. I had a list. Married, house, a dog called Biscuit. I've got none of it, and everyone else has all of it. I want to let the list go. Something to wash it away with?
 - **Review**: Poured it over the list. Wrote a new one. First item: get a dog. Any name.
 - **Hint**: "My nan keeps a little spiral shell on her windowsill, from something that carried its house on its back. For patience, she says. It took her forty years to get that house." → **patience** (Snail shell; for The Slow-Blooming Rose on Day 16)

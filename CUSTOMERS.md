@@ -33,21 +33,21 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 
 | Day | Hour | Receipt name | Ethnicity | Visit | Story | Feeling | Look and manner (cue) | Picture |
 |---|---|---|---|---|---|---|---|---|
-| 8 | Noon | Harriet Osei |  | Order | A woman whose best friend borrows everything and who can’t say no | shame, guilt, something hidden | her phone face-down on the counter, buzzing; she doesn’t turn it over | ✅ |
-| 8 | Twilight | Rafael Duarte |  | Advice | A man running a Yule market stall for the first time | nervous excitement, curiosity | a banner rolled under his arm; it keeps unrolling, and he keeps rolling it back up | ✅ |
-| 9 | Noon | Margaret Achterberg |  | Order | A woman whose husband left her after fifteen years, and who has just bought her own car | hope, relief, a fresh start | turning a brand-new set of car keys over and over | ✅ |
-| 9 | Twilight | Owen Pritchard |  | Order | A primary teacher who has just survived the last day of term | pride, joy, celebration | glitter in his hair, a paper crown sticking out of his coat pocket | ✅ |
-| 9 | Nightfall | Teresa Okonjo |  | Advice | A hospital cleaner who has made her first friend at work in years | longing, affection, wanting to be loved | a hospital cleaner’s tabard under her coat, a lanyard tucked away | ✅ |
-| 10 | Sunrise | Bartholomew Finch |  | Order | An archivist in a basement who hasn’t seen daylight since October | sadness, grief, tiredness | pale as paper, squinting at the window | ✅ |
-| 10 | Noon | Gwen Llewellyn |  | Order | A sheep farmer who hasn’t stopped since harvest | sadness, grief, tiredness | smells of hay; yawns twice before she speaks | ✅ |
-| 11 | Sunrise | Ishaan Mehta |  | Order | A young man on the first day of a new job | nervous excitement, curiosity | tie half done, a name badge still in its plastic | ✅ |
-| 11 | Noon | Fiona Galbraith |  | Order | An accountant whose colleague took credit for her work last year, before the office party | anger, passion, urgency | jaw set, a party invitation folded very small | ✅ |
-| 11 | Twilight | Callum Reid |  | Advice | A best man who freezes whenever he has to speak | anxiety, worry | shuffling a stack of index cards that are already out of order | ✅ |
-| 12 | Sunrise | Anneliese Vogt |  | Order | A woman who hasn’t spoken to her sister since their dad’s funeral | sadness, grief, tiredness | checks the door twice, as if someone might already be on the way | ✅ |
-| 12 | Twilight | Bridget Halloran |  | Order | A woman with fourteen relatives staying for Yule | anger, passion, urgency | keeps behind the shelf, as if someone might follow her in | ✅ |
-| 13 | Sunrise | Dev Kapoor |  | Order | A commuter tired of the same grey routine | sadness, grief, tiredness | grey coat, grey scarf, grey umbrella | ✅ |
-| 13 | Noon | Leo Marchetti |  | Order | A teenage bassist before his first gig, sure everyone else is cooler | envy, insecurity, comparison | keeps glancing at his reflection in the shop window, then away | ✅ |
+| 8 | Noon | Harriet Osei |  | Order | A woman whose best friend borrows everything and who can’t say no | shame, guilt, something hidden | her phone buzzing in her hand, a coat over her arm; she doesn’t look at it | ✅ |
+| 8 | Twilight | Rafael Duarte |  | Advice | A man running a Yule market stall for the first time | nervous excitement, curiosity | a rolled-up banner under one arm, strapped shut, grinning as if it’s already hanging | ✅ |
+| 9 | Noon | Margaret Achterberg |  | Order | A woman whose husband left her after fifteen years, and who has just bought her own car | hope, relief, a fresh start | turning a brand-new set of car keys over and over, her coat over one arm | ✅ |
+| 9 | Twilight | Owen Pritchard |  | Order | A primary teacher who has just survived the last day of term | pride, joy, celebration | glitter in his hair and all over his jacket, a child’s drawing in one hand | ✅ |
+| 9 | Nightfall | Teresa Okonjo |  | Advice | A hospital cleaner who has made her first friend at work in years | longing, affection, wanting to be loved | still in her hospital cleaner’s tabard, her badge on its lanyard | ✅ |
+| 10 | Sunrise | Bartholomew Finch |  | Order | An archivist in a basement who hasn’t seen daylight since October | sadness, grief, tiredness | pale as paper, glasses slipping down his nose, squinting at the window | ✅ |
+| 10 | Noon | Gwen Llewellyn |  | Order | A sheep farmer who hasn’t stopped since harvest | sadness, grief, tiredness | muddy wellies, a flat cap in her hand; yawns twice before she speaks | ✅ |
+| 11 | Sunrise | Ishaan Mehta |  | Order | A young man on the first day of a new job | nervous excitement, curiosity | fiddling with a tie that won’t sit straight | ✅ |
+| 11 | Noon | Fiona Galbraith |  | Order | An accountant whose colleague took credit for her work last year, before the office party | anger, passion, urgency | jaw set, a party invitation crumpled in her fist | ✅ |
+| 11 | Twilight | Callum Reid |  | Advice | A best man who freezes whenever he has to speak | anxiety, worry | a rose in his buttonhole, shuffling a stack of cards that are already out of order | ✅ |
+| 12 | Sunrise | Anneliese Vogt |  | Order | A woman who hasn’t spoken to her sister since their dad’s funeral | sadness, grief, tiredness | her keys in her hand; checks the door twice, as if someone might already be on the way | ✅ |
+| 12 | Twilight | Bridget Halloran |  | Order | A woman with fourteen relatives staying for Yule | anger, passion, urgency | a mug of tea she’s carried from home; keeps behind the shelf, as if someone might follow her in | ✅ |
+| 13 | Sunrise | Dev Kapoor |  | Order | A commuter tired of the same grey routine | sadness, grief, tiredness | grey coat, grey scarf, grey umbrella, grey rucksack | ✅ |
+| 13 | Noon | Leo Marchetti |  | Order | A teenage bassist before his first gig, sure everyone else is cooler | envy, insecurity, comparison | a bass case on his back; keeps glancing at his reflection in the shop window, then away | ✅ |
 | 13 | Nightfall | Tomasz & Ewa Nowak |  | Advice | A couple waiting for the adoption agency to call | anxiety, worry | a phone each in their hands; both keep checking them | ✅ |
-| 14 | Sunrise | Chloé Moreau |  | Order | A woman turning thirty with none of her life list done | envy, insecurity, comparison | a list in her pocket, half of it crossed out in red | ✅ |
+| 14 | Sunrise | Chloé Moreau |  | Order | A woman turning thirty with none of her life list done | envy, insecurity, comparison | a list open on her phone, half of it crossed out | ✅ |
 | 14 | Noon | Samuel Dela Cruz |  | Order | An expectant father whose baby is due any moment | anxiety, worry | a hospital bag over one shoulder and a car seat in the other hand, just in case | ✅ |
-| 14 | Nightfall | Niamh Byrne |  | Advice | A barmaid with a cold coming on before a double shift | sadness, grief, tiredness | sniffing, a bar towel still over her shoulder | ✅ |
+| 14 | Nightfall | Niamh Byrne |  | Advice | A barmaid with a cold coming on before a double shift | sadness, grief, tiredness | a tissue to her nose, a bar towel still over her shoulder | ✅ |
