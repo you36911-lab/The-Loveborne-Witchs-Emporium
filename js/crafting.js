@@ -40,7 +40,7 @@ function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
     const off=wp.filter(p=>!r.themes.includes(p)&&!mp.includes(p))[0],wantP=pick(mp.filter(p=>!wp.includes(p)&&!mix.has(p)));
     /* the same goes for 'it brings …' clues: only about a theme the recipe wants; otherwise the plain clue, with the right one pictured */
     if(theme&&kind==='same'&&lacks.length)kind='lacks';else if(theme&&kind==='same'&&off&&wantP)kind='notes';
-    out.push({want:best,got:w,kw,kind,lacks,off,wantP})});
+    out.push({want:best,got:w,kw,kind,lacks,off,wantP,themes:r.themes})});
   return out}
 const CARDFEEL={"The Fool": "a first step taken lightly, with a grin and no fear of falling", "The Magician": "a mind fixed on one thing, hands that make, and making it work", "The High Priestess": "knowing without being told, seeing what is real, and the pictures that come at night", "The Empress": "lovely things, plenty of them, and being kind to yourself", "The Emperor": "a line drawn, a wall that keeps you safe, and feet set firmly on the ground", "The Hierophant": "old lessons remembered, people bound together, and what is real", "The Lovers": "two hearts drawn close and in tune", "The Chariot": "nerve, a win, and the open road", "Strength": "quiet nerve, self-belief, and a steady breath", "The Hermit": "a still mind that knows what is real without being told", "Wheel of Fortune": "chance, a turn of change, and a door swinging open", "Justice": "an honest answer and a line that holds", "The Hanged Man": "letting go, waiting it out, and coming back changed", "Death": "something finished, a deep change, and letting it go", "Temperance": "things in equal measure, mending, and a steady breath", "The Devil": "heat in the blood and a pull you can’t resist", "The Tower": "a sudden change, everything falling away, and seeing what is real", "The Star": "awe, mending, and being gentle with yourself", "The Moon": "night pictures, knowing without being told, and slow change", "The Sun": "gladness, a win, and self-belief", "Judgement": "mending, letting go, and starting over", "The World": "a win, a story finished, and everyone joined together"};
 const CARDLOOK={'The Fool':'a traveller at the edge of a cliff','The Magician':'a figure with one hand raised to the sky','The High Priestess':'a veiled woman seated between two pillars','The Empress':'a woman resting in a field of wheat','The Emperor':'a stern figure on a stone throne','The Hierophant':'a teacher raising a blessing over two listeners','The Lovers':'two figures beneath an angel','The Chariot':'a rider drawn by two beasts','Strength':'a woman gently closing a lion\u2019s jaws','The Hermit':'a lone figure holding a lantern','Wheel of Fortune':'a great turning wheel','Justice':'a figure holding scales and a sword','The Hanged Man':'a man hanging calmly upside down','Death':'a rider on a pale horse','Temperance':'an angel pouring water between two cups','The Devil':'two figures chained beneath a horned shape','The Tower':'a tower struck by lightning','The Star':'a woman pouring water under a bright star','The Moon':'a moon above a path between two towers','The Sun':'a child on a horse under a blazing sun','Judgement':'an angel sounding a trumpet over rising figures','The World':'a dancer inside a wreath'};
@@ -57,9 +57,17 @@ function ingLine(sw){const g=`The one from ${shelfOf(sw.got)}`,k=sw.kw;
   if(sw.kind==='weak')return `${g}: the ${k} is right, but it is too gentle. This needs a stronger one.`;
   if(sw.kind==='lacks')return `${g}: it brings ${k}, but nothing in the mix brings ${sw.lacks[0]}. The right one would.`;
   if(sw.kind==='notes')return `${g}: it brings ${k}, but also ${sw.off}. The right one brings ${sw.wantP} instead.`;
-  return `${g} isn\u2019t right. Picture the right one: ${ITEM[sw.want]?.look||'something else'}.`}
+  const off=sw.off||(ITEM[sw.got]?.props||[]).find(p=>!sw.themes.includes(p));
+  return `${g} isn\u2019t right${off?`: it adds ${off}, which this doesn\u2019t want`:''}.`}
+/* What a wrong or missing one gets after its line: on the second wrong try of a recipe, what the right one is like (what it
+   works on, and how strongly); from the third, a picture of it. */
+const natureOf=n=>{const i=ITEM[n]||{};return [i.t&&AIM[i.t]?`works on ${AIM[i.t]}`:'',i.s?`is ${i.s.toLowerCase()}`:''].filter(Boolean).join(' and ')};
+function rightHint(n,level,missing){const look=ITEM[n]?.look,nat=natureOf(n);
+  if(level>=2&&look)return missing?` Picture it: ${look}.`:` Picture the right one: ${look}.`;
+  return nat?(missing?` One that ${nat}.`:` The right one ${nat}.`):''}
 /* level: how many crafts of this recipe have already gone wrong. The first time the clues only say which shelves are
-   short or over (2 more from Herbs & flowers); from the second, each missing one is pictured and each wrong one explained. */
+   short or over (2 more from Herbs & flowers); the second, each wrong one is explained and what the right one is like (what
+   it works on, how strongly) is told; from the third, the right one is pictured instead. */
 function evaluate(r,test,level=1){
   const used=[...new Set(S.altar)],need=recipeNeeds(r,used,currentVisit()?.born);
   const missing=need.filter(x=>!used.includes(x)),wrong=used.filter(x=>!need.includes(x));
@@ -93,15 +101,15 @@ function evaluate(r,test,level=1){
     by(over,shelfOf).forEach(([sh,n])=>L('ing',`${n===1?'One':n} from ${sh} ${n===1?'doesn’t':'don’t'} belong.`))}
   else if(ingProbs){
     /* from the third test of a recipe, a wrong one that is close (shares a theme) is also pictured, so the clues keep moving on */
-    swaps.forEach(sw=>{const pic=level>=2&&sw.kind!=='same'&&ITEM[sw.want]?.look?` Picture the right one: ${ITEM[sw.want].look}.`:'';L('ing',ingLine(sw)+pic);if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
+    swaps.forEach(sw=>{const pic=sw.kind==='same'?rightHint(sw.want,level):level>=2&&ITEM[sw.want]?.look?` Picture the right one: ${ITEM[sw.want].look}.`:'';L('ing',ingLine(sw)+pic);if(sw.kind==='notes')gained.push(sw.off,sw.wantP)});
     loneWrong.forEach(w=>{const props=(ITEM[w]?.props||[]).filter(p=>!r.themes.includes(p));
       const m=inPlace.get(w);
-      if(m){const pic=ITEM[m]?.look?` Picture the right one: ${ITEM[m].look}.`:'';
+      if(m){const pic=rightHint(m,level);
         if(props.length){L('ing',`The one from ${shelfOf(w)} isn\u2019t right: it adds ${props[0]}, which this doesn\u2019t want.${pic}`);gained.push(props[0])}
         else L('ing',`The one from ${shelfOf(w)} isn\u2019t right.${pic}`);return}
       if(props.length){L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong: it adds ${props[0]}, which this doesn\u2019t want.`);gained.push(props[0])}
       else L('ing',`Something from ${shelfOf(w)} doesn\u2019t belong here.`)});
-    loneMissing.filter(m=>![...inPlace.values()].includes(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',ITEM[m]?.look?`One more is needed from ${shelfOf(m)}. Picture it: ${ITEM[m].look}.`:`One more is needed from ${shelfOf(m)}.`))}
+    loneMissing.filter(m=>![...inPlace.values()].includes(m)).forEach(m=>isStone(m)?L('ing','It needs their birthstone: the stone of the month they were born in.'):L('ing',`One more is needed from ${shelfOf(m)}.${rightHint(m,level,true)}`))}
   /* from the second test on, a candle clue names a theme the right flame brings: one the recipe wants, and one the candle
      laid out lacks if there is one (the Grimoire's Colours tell which colours carry it) */
   /* Only a theme the Grimoire already shows for that colour (printed there, or written in by the player) helps; otherwise
