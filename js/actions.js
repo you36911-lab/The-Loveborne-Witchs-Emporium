@@ -83,13 +83,18 @@ function adviceAnswer(v){const t=normName(adviceDraft.text);
   c.addEventListener('focusin',e=>{if(e.target.id==='adviceIn')fillSuggest()});
   c.addEventListener('focusout',e=>{if(e.target.id==='adviceIn'){const l=$('#adviceList');if(l)l.hidden=true}})}
 /* Every popup closes when you click outside it, but for the closing card and a new email's card. The path is taken as the click began, since a click inside a popup can redraw it. */
-document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id);
-  if(t.id==='info')$('#info').classList.remove('open');
-  if(t.id==='pc')closePC();
-  /* a book closes at a click anywhere outside it, except on a control or on what the bookmarks and word bank columns hold (their titles, their text, the gaps between their words) */
-  if(inside('books')&&!path.some(n=>n.matches?.('.tome, button, input, select, textarea, a, .markside>*, .bank>*'))){$('#books').classList.remove('open');render()}
+/* Where the press began: a press that starts on a button or inside a popup and is let go outside it (a slip of the mouse)
+   counts as a click on what both have in common, so it must not close the popup. */
+let downPath=[];document.addEventListener('pointerdown',e=>{downPath=e.composedPath()},true);
+document.addEventListener('click',e=>{const t=e.target,path=e.composedPath(),inside=id=>path.some(n=>n.id===id),
+    began=downPath.length?downPath:path,downAt=began[0];
+  if(t.id==='info'&&downAt===t)$('#info').classList.remove('open');
+  if(t.id==='pc'&&downAt===t)closePC();
+  /* a book closes at a click anywhere outside it, except on a control or on what the bookmarks and word bank columns hold (their titles, their text, the gaps between their words); the press has to begin outside them too */
+  const KEEP='.tome, button, input, select, textarea, a, .markside>*, .bank>*';
+  if(inside('books')&&!path.some(n=>n.matches?.(KEEP))&&!began.some(n=>n.matches?.(KEEP))){$('#books').classList.remove('open');render()}
   /* (not the closing card nor a new email's card: they stay until their own buttons are used) */
-  if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')){openShelf='';renderShelves()}
+  if(openShelf&&!inside('shelfOpen')&&!t.closest('[data-shelf]')&&!began.some(n=>n.id==='shelfOpen')){openShelf='';renderShelves()}
   /* a result read at the counter (nobody there) */
   if(plainAtClick&&!inside('counter')&&!t.closest('.modal')){S.result=null;render()}});
 /* whether that result was already showing before this click (so the click that brings it up does not close it) */
