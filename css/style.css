@@ -582,8 +582,11 @@ button.small{font-size:12px;padding:2px 10px}
 /* once open, a far-off viewpoint, so a page lifting as it turns barely grows past the book (the cover swings with the nearer one) */
 .tome.opened{perspective:10000px}
 .spread{position:absolute;inset:0;width:100%;height:100%;display:block;filter:drop-shadow(0 10px 18px rgba(30,10,40,.45));
-  clip-path:inset(0 0 0 50%);opacity:0;transition:opacity .3s}
-.tome.open .spread{opacity:1}
+  clip-path:inset(0 0 0 calc(50% + 2.5cqw));opacity:0;transition:opacity .3s}
+/* While the cover is still in front, the pages start a little right of the spine: a cover's edge at the hinge can be
+   see-through (the fur covers' tips), and the paper showed through it as a thin light line. Once the cover is past
+   upright (about halfway through its swing) the pages reach the spine. */
+.tome.open .spread{opacity:1;clip-path:inset(0 0 0 50%);transition:opacity .3s,clip-path .2s .5s}
 .tome.opened .spread{clip-path:none}
 /* the cover: the right half of the spread, hinged at the spine */
 .cover{position:absolute;left:50%;top:0;width:50%;height:100%;padding:0;border:0;border-radius:0;background:none;box-shadow:none;
@@ -627,7 +630,7 @@ button.small{font-size:12px;padding:2px 10px}
 .leaf.fwd .strip:not(.root){left:100%}
 .leaf.bwd .strip{transform-origin:right center}
 .leaf.bwd .strip:not(.root){right:100%}
-.sface{position:absolute;inset:0 -0.5px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper-c,#F6F3E6)}
+.sface{position:absolute;inset:0 -1px;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--paper-c,#F6F3E6)}
 .sface.back{transform:rotateY(180deg)}
 /* a turning page has the paper's own shape: a touch shorter towards the spine, where the binding pulls it in, rounded outer
    corners, and stopping just short of the spine so the stitched binding line stays in view. Each strip shows its slice of the shape (mask 1200% wide = STRIPS in books.js; position set per strip there). */

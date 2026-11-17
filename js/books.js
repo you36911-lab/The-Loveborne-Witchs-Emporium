@@ -218,9 +218,9 @@ function leafHTML(fwd,frontHTML,backHTML){
   const fs=fwd?'right':'left',bs=fwd?'left':'right';let h='';
   for(let k=STRIPS-1;k>=0;k--){
     const fo=fwd?k:STRIPS-1-k,bo=fwd?STRIPS-1-k:k;
-    /* --mx places the page-shape mask and edge line on this slice. A face is 1px wider than its strip (inset:0 -.5px, so no seams),
+    /* --mx places the page-shape mask and edge line on this slice. A face is 2px wider than its strip (inset:0 -1px, so no light seams flash between strips as they bend),
        so the copy is laid out at exactly the page's width, or its lines would wrap differently and jump when the turn ends. */
-    const fm=`style="--mx:${fo/(STRIPS-1)*100}%"`,bm=`style="--mx:${bo/(STRIPS-1)*100}%"`,cp=o=>`left:calc(${-o} * (100% - 1px) + .5px);width:calc(${STRIPS} * (100% - 1px))`;
+    const fm=`style="--mx:${fo/(STRIPS-1)*100}%"`,bm=`style="--mx:${bo/(STRIPS-1)*100}%"`,cp=o=>`left:calc(${-o} * (100% - 2px) + 1px);width:calc(${STRIPS} * (100% - 2px))`;
     h=`<div class="strip${k?'':' root'}"><div class="sface front p${fs[0]}" ${fm}><div class="pcopy ${fs}" style="${cp(fo)}">${frontHTML}</div><i class="shade"></i></div>`+
       `<div class="sface back p${bs[0]}" ${bm}><div class="pcopy ${bs}" style="${cp(bo)}">${backHTML}</div><i class="shade"></i></div>${h}</div>`}
   return h}
