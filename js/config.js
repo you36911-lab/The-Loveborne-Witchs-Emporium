@@ -21,6 +21,13 @@ const PROTOTYPE_TOOLS = true;
    one festival and hour ('Name|Festival|Hour'), for someone who reads too dark only there. */
 const CUSTOMER_BRIGHTER = {
   'Hester|Yule|Nightfall': 1.4,  /* Yule's night light is about half of Noon's, and she stands beside the candles */
+  'Rosalind Larkin|Yule|Nightfall': 1.4,
+  'Hester|Samhain|Twilight': 1.2,  /* her picture is dark already (black dress) */
+  'A night-shift nurse|Samhain|Nightfall': 1.25,  /* Samhain's night light is about three fifths of Noon's */
+  'Edmund Thorne|Samhain|Nightfall': 1.25,
+  'A learner driver|Samhain|Nightfall': 1.2,  /* a lighter picture, so a little less */
+  'An exhausted bookshop owner|Samhain|Sunrise': 1.15,
+  'A father with a pushchair|Samhain|Sunrise': 1.15,
   'An accountant before the office party': 1.2,
   'A woman who hasn’t spoken to her sister': 1.2,
   'Noor Haddad': 1.1,
