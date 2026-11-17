@@ -79,7 +79,7 @@ const ITEM_KIND = {
   "Black ink":0,"Gold ink":0,"Plain ink":0,"Red ink":0,"Silver ink":0,"Violet ink":0,"Gold paint":0,"Red paint":0,
   /* the thread cones */
   "Black thread":3,"Blue thread":3,"Gold thread":3,"Green thread":3,"Grey thread":3,"Orange thread":3,"Pink thread":3,"Purple thread":3,"Rainbow thread":3,"Red thread":3,"Silver thread":3,"White thread":3,"Yellow thread":3,
-  "Spool of thread":3,"Star-shaped buttons":6,"Square buttons":6,"Muslin":5,"Patchwork scraps":5
+  "Spool of thread":3,"Star-shaped buttons":6,"Square buttons":6,"Muslin":5,"Patchwork scraps":5,"Locket":6
 };
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
@@ -112,7 +112,7 @@ const REAL_SIZE = {
   "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4,"Violet ink":0.4,"Gold paint":0.4,"Red paint":0.4,
   /* the thread cones: about 10 cm */
   "Black thread":0.5,"Blue thread":0.5,"Gold thread":0.5,"Green thread":0.5,"Grey thread":0.5,"Orange thread":0.5,"Pink thread":0.5,"Purple thread":0.5,"Rainbow thread":0.5,"Red thread":0.5,"Silver thread":0.5,"White thread":0.5,"Yellow thread":0.5,
-  "Spool of thread":0.35,"Muslin":0.6,"Patchwork scraps":0.6
+  "Spool of thread":0.35,"Muslin":0.6,"Patchwork scraps":0.6,"Locket":0.55
 };
 /* How tall a finished spell stands on the altar, by its kind (1 = a 20 cm potion bottle): a wand is long, a rune stone small. */
 const SPELL_SIZE = {
@@ -146,7 +146,7 @@ const ITEM_SIZE = {
   /* the thread cones, as big as the inks */
   "Black thread":0.6,"Blue thread":0.6,"Gold thread":0.6,"Green thread":0.6,"Grey thread":0.6,"Orange thread":0.6,"Pink thread":0.6,"Purple thread":0.6,"Rainbow thread":0.6,"Red thread":0.6,"Silver thread":0.6,"White thread":0.6,"Yellow thread":0.6,
   /* the packets: button cards as big as Bright buttons, the cloth bags a little bigger; the spool shorter than the cones */
-  "Spool of thread":0.5,"Star-shaped buttons":0.7,"Square buttons":0.7,"Muslin":0.75,"Patchwork scraps":0.75
+  "Spool of thread":0.5,"Star-shaped buttons":0.7,"Square buttons":0.7,"Muslin":0.75,"Patchwork scraps":0.75,"Locket":0.7
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
@@ -528,6 +528,7 @@ const ASSETS = {
     "Square buttons":     "assets/items/square-buttons.png",
     "Muslin":             "assets/items/muslin.png",
     "Patchwork scraps":   "assets/items/patchwork-scraps.png",
+    "Locket":             "assets/items/locket.png",
     "Hazel branch":        "assets/items/hazel-branch.png",
     "Brass buttons":        "assets/items/brass-buttons.png",
     "Bright buttons":      "assets/items/bright-buttons.png",
