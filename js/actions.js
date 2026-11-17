@@ -218,6 +218,9 @@ addEventListener('resize',fitDayEnd);
    day's dawn (S.held): the title says so, and Continue carries on from there once a later build has that day's customers. */
 function openNextDay(){$('#dayEnd').classList.remove('open');
   S.day++;S.h=0;S.altar=[];S.candle='';S.tarot='';S.openRating=rating();S.ui=null;
+  /* a new day lights all five black candles again: the count goes up to the next five (its own remainder is what is out),
+     quietly, without the sound and the dark candelabra of a fifth going out */
+  S.failTests=Math.ceil((S.failTests||0)/5)*5;candlesFails=S.failTests;
   if(S.day>LAST_PLAYABLE_DAY){S.held=true;save();showTitle();return}
   showDawn()}
 /* The week at a glance: six tiles, each a big number over a short label (the shop's side, then what was learned). */
