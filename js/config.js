@@ -68,17 +68,17 @@ const ITEM_KIND = {
   "Lemon peel":2,"Lime peel":2,"Orange":2,"Orange peel":2,"Peach":2,"Pomegranate seeds":2,"Rose hips":2,"Allspice":2,
   "Bergamot":2,"Black pepper":2,"Cardamom":2,"Nutmeg":2,"Poppy seeds":2,"Cinnamon stick":2,"Chocolate chips":2,"Gold sprinkles":2,
   "Honey":2,"Pink salt":2,"Pink sprinkles":2,"Rainbow sprinkles":2,"Rose clay":2,"Sea salt":2,"Gold mica":2,"Silver mica":2,
-  "Silver glitter":2,"Pink glitter":2,"Biodegradable glitter":2,"Bee pollen":2,"Honeycomb":2,"Snail shell":2,"Acorn":2,"Mismatched button":2,"Vintage button":1,"Small key":2,
+  "Silver glitter":2,"Pink glitter":2,"Biodegradable glitter":2,"Bee pollen":2,"Honeycomb":2,"Snail shell":2,"Acorn":2,"Mismatched buttons":2,"Vintage buttons":1,"Small key":2,
   "Beeswax":2,"Angelica root":3,"Garden sage":3,"Lavender":3,"Lemon balm":3,"Lilac":3,"Lotus":3,"Peppermint":3,
   "Snowdrop":3,"Juniper":3,"Willow bark":3,"Sweet pea":3,"Black tea":3,"Shea butter":3,"Amber resin":3,"Copal":3,
   "Sandalwood":3,"Cocoa":3,"Coconut milk powder":3,"Oats":3,"Milk powder":3,"Peacock feather":3,"Dove feather":3,"Raisins":4,
   "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":5,"Flour":5,"Rice flour":5,"Sugar":4,"Garden soil":5,
-  "Hearth ash":5,"Coin":5,"Owl feather":5,"Seashell":5,"White feather":5,"Brass button":6,"Bright buttons":6,"Gold button":6,
-  "Heart-shaped button":6,"Iron filings":6,"Iron nail":6,"Iron pin":6,"Ash branch":7,"Ash wood":7,"Birch branch":7,"Birch wood":7,
+  "Hearth ash":5,"Coin":5,"Owl feather":5,"Seashell":5,"White feather":5,"Brass buttons":6,"Bright buttons":6,"Gold buttons":6,
+  "Heart-shaped buttons":6,"Iron filings":6,"Iron nail":6,"Iron pin":6,"Ash branch":7,"Ash wood":7,"Birch branch":7,"Birch wood":7,
   "Blackthorn branch":7,"Hazel branch":7,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8,
   "Black ink":0,"Gold ink":0,"Plain ink":0,"Red ink":0,"Silver ink":0,"Violet ink":0,"Gold paint":0,"Red paint":0,
   /* the thread cones */
-  "Black thread":3,"Blue thread":3,"Gold thread":3,"Green thread":3,"Grey thread":3,"Orange thread":3,"Pink thread":3,"Purple thread":3,"Rainbow threads":3,"Red thread":3,"Silver thread":3,"White thread":3,"Yellow thread":3
+  "Black thread":3,"Blue thread":3,"Gold thread":3,"Green thread":3,"Grey thread":3,"Orange thread":3,"Pink thread":3,"Purple thread":3,"Rainbow thread":3,"Red thread":3,"Silver thread":3,"White thread":3,"Yellow thread":3
 };
 /* Image files. Paths are relative to index.html. */
 /* How tall each ingredient stands, as a share of a big potion bottle (1 = about 20cm), so a sugar packet is not as big
@@ -110,7 +110,7 @@ const REAL_SIZE = {
   /* the ink bottles: small round flasks, about 8 cm */
   "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4,"Violet ink":0.4,"Gold paint":0.4,"Red paint":0.4,
   /* the thread cones: about 10 cm */
-  "Black thread":0.5,"Blue thread":0.5,"Gold thread":0.5,"Green thread":0.5,"Grey thread":0.5,"Orange thread":0.5,"Pink thread":0.5,"Purple thread":0.5,"Rainbow threads":0.5,"Red thread":0.5,"Silver thread":0.5,"White thread":0.5,"Yellow thread":0.5
+  "Black thread":0.5,"Blue thread":0.5,"Gold thread":0.5,"Green thread":0.5,"Grey thread":0.5,"Orange thread":0.5,"Pink thread":0.5,"Purple thread":0.5,"Rainbow thread":0.5,"Red thread":0.5,"Silver thread":0.5,"White thread":0.5,"Yellow thread":0.5
 };
 /* How tall a finished spell stands on the altar, by its kind (1 = a 20 cm potion bottle): a wand is long, a rune stone small. */
 const SPELL_SIZE = {
@@ -138,11 +138,11 @@ const ITEM_SIZE = {
   "Sunstone":0.61,"Malachite":0.59,"Obsidian":0.59,
   /* the "symbols" pictures, sized to read easily in their cupboards */
   "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
-  "Brass button":0.7,"Bright buttons":0.7,"Gold button":0.7,"Heart-shaped button":0.7,"Mismatched button":0.7,"Vintage button":0.7,
+  "Brass buttons":0.7,"Bright buttons":0.7,"Gold buttons":0.7,"Heart-shaped buttons":0.7,"Mismatched buttons":0.7,"Vintage buttons":0.7,
   "Coin":0.7,"Glass bead":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small key":0.75,
   "Black ink":0.6,"Gold ink":0.6,"Plain ink":0.6,"Red ink":0.6,"Silver ink":0.6,"Violet ink":0.6,"Gold paint":0.6,"Red paint":0.6,
   /* the thread cones, as big as the inks */
-  "Black thread":0.6,"Blue thread":0.6,"Gold thread":0.6,"Green thread":0.6,"Grey thread":0.6,"Orange thread":0.6,"Pink thread":0.6,"Purple thread":0.6,"Rainbow threads":0.6,"Red thread":0.6,"Silver thread":0.6,"White thread":0.6,"Yellow thread":0.6
+  "Black thread":0.6,"Blue thread":0.6,"Gold thread":0.6,"Green thread":0.6,"Grey thread":0.6,"Orange thread":0.6,"Pink thread":0.6,"Purple thread":0.6,"Rainbow thread":0.6,"Red thread":0.6,"Silver thread":0.6,"White thread":0.6,"Yellow thread":0.6
 };
 const SHELF_CATEGORIES = ['Base waters', 'Oils, butters & waxes'];
 const ASSETS = {
@@ -513,18 +513,18 @@ const ASSETS = {
     "Orange thread":      "assets/items/orange-thread.png",
     "Pink thread":        "assets/items/pink-thread.png",
     "Purple thread":      "assets/items/purple-thread.png",
-    "Rainbow threads":    "assets/items/rainbow-threads.png",
+    "Rainbow thread":    "assets/items/rainbow-thread.png",
     "Red thread":         "assets/items/red-thread.png",
     "Silver thread":      "assets/items/silver-thread.png",
     "White thread":       "assets/items/white-thread.png",
     "Yellow thread":      "assets/items/yellow-thread.png",
     "Hazel branch":        "assets/items/hazel-branch.png",
-    "Brass button":        "assets/items/brass-button.png",
+    "Brass buttons":        "assets/items/brass-buttons.png",
     "Bright buttons":      "assets/items/bright-buttons.png",
-    "Gold button":         "assets/items/gold-button.png",
-    "Heart-shaped button": "assets/items/heart-shaped-button.png",
-    "Mismatched button":   "assets/items/mismatched-button.png",
-    "Vintage button":      "assets/items/vintage-button.png",
+    "Gold buttons":         "assets/items/gold-buttons.png",
+    "Heart-shaped buttons": "assets/items/heart-shaped-buttons.png",
+    "Mismatched buttons":   "assets/items/mismatched-buttons.png",
+    "Vintage buttons":      "assets/items/vintage-buttons.png",
     "Coin":                "assets/items/coin.png",
     "Glass bead":          "assets/items/glass-bead.png",
     "Iron filings":        "assets/items/iron-filings.png",

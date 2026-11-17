@@ -22,8 +22,11 @@ let S;
 const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getItem(k))}catch(e){return false}};
 /* Load the save; an older prototype save is picked up once and carried over. */
 /* Things renamed or merged since: an older save's notes and altar are renamed as they load ("Ink" is now "Plain ink";
-   the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc). */
-const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc'};
+   the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc;
+   the buttons are all plural now, and the rainbow threads one Rainbow thread like the other threads). */
+const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc',
+  'Brass button':'Brass buttons','Gold button':'Gold buttons','Heart-shaped button':'Heart-shaped buttons','Mismatched button':'Mismatched buttons',
+  'Square button':'Square buttons','Star-shaped button':'Star-shaped buttons','Vintage button':'Vintage buttons','Rainbow threads':'Rainbow thread'};
 const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
 /* Prototype only (PROTOTYPE_TOOLS; the real game keeps a single save): backups of the game, kept in this browser beside the save (the menu's Backups puts one back, or saves the game to a file):
    one at the start of each day, and one just before anything replaces the game (a new game, Restart, a roll back, putting
