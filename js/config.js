@@ -17,8 +17,10 @@ const LAST_PLAYABLE_DAY = 14;
 /* Prototype controls under the title bar: jump to any week, day, hour or customer. Set to false to hide them. */
 const PROTOTYPE_TOOLS = true;
 /* A customer shown brighter than the hour's light alone would leave them (1 is as lit; 1.2 is a fifth brighter), for
-   pictures that read too dark in play, as at Yule, whose light is about three quarters of Noon's. */
+   pictures that read too dark in play, as at Yule, whose light is about three quarters of Noon's. A key can also name
+   one festival and hour ('Name|Festival|Hour'), for someone who reads too dark only there. */
 const CUSTOMER_BRIGHTER = {
+  'Hester|Yule|Nightfall': 1.4,  /* Yule's night light is about half of Noon's, and she stands beside the candles */
   'An accountant before the office party': 1.2,
   'A woman who hasn’t spoken to her sister': 1.2,
   'Noor Haddad': 1.1,

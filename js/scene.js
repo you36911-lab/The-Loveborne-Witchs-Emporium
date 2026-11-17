@@ -143,7 +143,7 @@ function renderAura(){const cur=currentVisit(),a=cur&&X.auras[cur.aura],ball=$('
 let customerWas=null;  /* who stood at the counter at the last redraw: {id, parting}, or false for nobody */
 function renderCustomer(){const live=currentVisit(),cur=live||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src);
-  {const br=cur&&CUSTOMER_BRIGHTER[cur.pic||cur.who];img.style.filter=br?`var(--light) brightness(${br})`:''}
+  {const nm=cur&&(cur.pic||cur.who),br=cur&&(CUSTOMER_BRIGHTER[`${nm}|${today()?.sabbat}|${HOURS[S.h]}`]||CUSTOMER_BRIGHTER[nm]);img.style.filter=br?`var(--light) brightness(${br})`:''}
   const now=src?{id:(cur.pic||'')+'|'+cur.who,parting:!live}:false;
   if(now&&customerWas!==null&&(!customerWas||(live&&(customerWas.parting||customerWas.id!==now.id))))playDoorClose();
   customerWas=now;
