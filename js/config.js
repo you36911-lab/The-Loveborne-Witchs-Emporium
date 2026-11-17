@@ -32,6 +32,12 @@ const CUSTOMER_BRIGHTER = {
   'A woman who hasn’t spoken to her sister': 1.2,
   'Noor Haddad': 1.1,
 };
+/* Customers whose speech balloon sits further right than usual, in % of the window's width: pictures much wider than
+   one person (a couple), whose right side reaches past where the balloon would start. */
+const BALLOON_RIGHT = {
+  'A couple holding hands': 5,
+  'A couple waiting on a phone call': 5,
+};
 const ALTAR_MAX = 7;  /* the most things the altar holds (the largest recipe has seven ingredients) */
 
 /* How long the dawn card ("Day 2, Sunday") stays before the morning light comes in, in ms. */

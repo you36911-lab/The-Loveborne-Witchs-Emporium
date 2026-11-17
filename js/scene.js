@@ -144,6 +144,7 @@ let customerWas=null;  /* who stood at the counter at the last redraw: {id, part
 function renderCustomer(){const live=currentVisit(),cur=live||S.parting,src=cur&&ASSETS.characters[cur.pic||cur.who],box=$('#customer'),img=box.querySelector('img');
   if(src&&img.getAttribute('src')!==src)img.src=src;box.classList.toggle('on',!!src);
   {const nm=cur&&(cur.pic||cur.who),br=cur&&(CUSTOMER_BRIGHTER[`${nm}|${today()?.sabbat}|${HOURS[S.h]}`]||CUSTOMER_BRIGHTER[nm]);img.style.filter=br?`var(--light) brightness(${br})`:''}
+  $('#counter').style.setProperty('--dlg-shift',((cur&&BALLOON_RIGHT[cur.pic||cur.who])||0)+'vw');
   const now=src?{id:(cur.pic||'')+'|'+cur.who,parting:!live}:false;
   if(now&&customerWas!==null&&(!customerWas||(live&&(customerWas.parting||customerWas.id!==now.id))))playDoorClose();
   customerWas=now;

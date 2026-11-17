@@ -457,7 +457,7 @@ button.small{font-size:12px;padding:2px 10px}
 .proto.folded .chev{rotate:180deg}
 /* What the customer says: a speech balloon just right of the customer's face, its tail pointing at them
    behind the counter. Above it, who they are and what they do; below it, the player's buttons and (once) a tutorial note. */
-.dialogue{position:absolute;top:13vh;left:calc(50% + 7.5vw);z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
+.dialogue{position:absolute;top:13vh;left:calc(50% + 7.5vw + var(--dlg-shift,0vw));z-index:7;width:min(420px,36vw);max-height:66vh;overflow:auto;padding:4px 4px 8px 32px}
 .dialogue[hidden]{display:none}
 /* someone new speaks: the balloon (and the buttons under it) float up and fade in, after the customer has appeared */
 .dialogue.enter{animation:balloonIn .8s ease-out var(--enter-delay,0s) both}
