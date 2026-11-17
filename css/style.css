@@ -208,6 +208,11 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .scene .made .madepic,.scene .made .parcel{filter:var(--light) brightness(1.6) drop-shadow(0 0 .4vw rgba(255,224,240,.95)) drop-shadow(0 0 1.4vw rgba(244,173,207,.85)) drop-shadow(0 0 2.6vw rgba(244,173,207,.5))}
 .scene .made .madepic{position:absolute;left:50%;bottom:0;translate:-50% 0;height:100%;width:auto;max-width:none}
 .made .madepic[hidden],.made .parcel[hidden]{display:none}
+/* hovered, as on the altar (.spellmade): a touch bigger and its own pink glow stronger, not the lift and outline of the other things on the counter */
+.scene .made{transition:scale .15s}
+.scene .made .madepic,.scene .made .parcel{transition:filter .15s}
+.scene button.obj.made:is(:hover,:focus-visible){transform:none;filter:drop-shadow(0 6px 4px rgba(60,20,30,.35));scale:1.04;outline:none}
+.scene .made:is(:hover,:focus-visible) :is(.madepic,.parcel){filter:var(--light) brightness(1.6) drop-shadow(0 0 .5vw #FFE3F0) drop-shadow(0 0 1.8vw rgba(244,173,207,.95)) drop-shadow(0 0 3.4vw rgba(244,173,207,.6))}
 /* and floats gently up and down, as things laid out on the altar do */
 .made .madepic,.made .parcel{animation:madefloat 3.4s ease-in-out infinite}
 @keyframes madefloat{50%{transform:translateY(-5%)}}
