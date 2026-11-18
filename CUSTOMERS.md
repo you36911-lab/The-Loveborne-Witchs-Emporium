@@ -4,7 +4,7 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 **No answers here**: what each one needs is left out, so the puzzles can still be played.
 **Feeling** is what they come in with (the crystal ball shows it as their aura). **Ethnicity** is recorded for customers written from week three on. **Picture** ✅ = in the game, — = still to draw.
 
-**36 walk-ins, 0 still without a picture.**
+**50 walk-ins, 14 still without a picture.**
 
 ## Week one
 
@@ -51,3 +51,22 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 | 14 | Sunrise | Chloé Moreau |  | Order | A woman turning thirty with none of her life list done | envy, insecurity, comparison | a list open on her phone, half of it crossed out | ✅ |
 | 14 | Noon | Samuel Dela Cruz |  | Order | An expectant father whose baby is due any moment | anxiety, worry | a hospital bag over one shoulder and a car seat in the other hand, just in case | ✅ |
 | 14 | Nightfall | Niamh Byrne |  | Advice | A barmaid with a cold coming on before a double shift | sadness, grief, tiredness | a tissue to her nose, a bar towel still over her shoulder | ✅ |
+
+## Week three
+
+| Day | Hour | Receipt name | Ethnicity | Visit | Story | Feeling | Look and manner (cue) | Picture |
+|---|---|---|---|---|---|---|---|---|
+| 15 | Sunrise | Ji-woo Han | Korean | Order | An amateur stargazer whose late father taught her the sky; tonight is the first clear night in weeks | an intuitive or spiritual stirring | a telescope case on her back, fingerless gloves, a star chart folded into her pocket | — |
+| 15 | Twilight | Nasrin Rahimi | Iranian | Order | A bride-to-be who hates every photo of herself, with the photographer waiting outside for golden hour | nervous excitement, curiosity | her hair in rollers under a silk scarf, a garment bag over one arm | — |
+| 15 | Nightfall | Idir Aït Lahcen | Moroccan (Amazigh) | Order | A man whose older brother moves in "for a week" every winter and stays till spring | anger, passion, urgency | his phone buzzing face down on the counter; he doesn’t turn it over | — |
+| 16 | Noon | Marcus Lindqvist | Swedish and Jamaican | Order | A drag queen whose first solo number is at today's brunch, and whose nerve has gone | pride, joy, celebration | one false eyelash on; the other waits in a little box in his palm | — |
+| 16 | Nightfall | Tesfaye Bekele | Ethiopian | Order | A retired engineer learning the cello who wants to be good at it by next week | anxiety, worry | a cello case taller than he is, bow rosin in his pocket | — |
+| 17 | Sunrise | Mei Ling Tan | Malaysian Chinese | Order | A social media manager who hasn't switched off in a year and can't remember how | sadness, grief, tiredness | two phones, both buzzing; she silences one, then the other | — |
+| 17 | Noon | Oksana Kovalenko | Ukrainian | Order | An understudy auditioning for the swan in Swan Lake this afternoon | anxiety, worry | hair scraped into a bun, pointe-shoe ribbons trailing out of her bag | — |
+| 18 | Noon | Diego Ramírez | Mexican | Order | A man starting night shifts at the town museum tonight, alone, on the full moon | anxiety, worry | a torch clipped to his belt, a uniform still creased from the packet | — |
+| 18 | Twilight | Farida Haidari | Afghan | Advice | A community nurse whose car broke down on the moor at the last full moon, driving the same road tonight | anxiety, worry | car keys in one hand, a torch in the other | — |
+| 19 | Sunrise | Hana Novák | Czech | Order | A potter who quit her office job and opens her own studio this morning | hope, relief, a fresh start | dried clay up both forearms, a shop key on a big red ribbon | — |
+| 20 | Sunrise | Yusuf Abdi | Somali | Order | A close-up magician whose name goes into the hat for the spring festival's last stage slot today | nervous excitement, curiosity | a deck of cards he never stops shuffling | — |
+| 20 | Noon | Eleni Papadakis | Greek | Order | A grandmother whose eight-year-old grandson has decided magic is for babies | sadness, grief, tiredness | a child’s drawing of a dragon folded in her handbag, one corner showing | — |
+| 21 | Twilight | Keisha Ramsaran | Trinidadian (Indo-Caribbean) | Order | A woman who moved in last month, knows no one, and is baking her way round the street on Saturday | nervous excitement, curiosity | an oven glove still on one hand | — |
+| 21 | Nightfall | Lior Ben-David | Israeli | Order | A woman going to a masked ball where nobody will know her, and she wants to be unforgettable anyway | an intuitive or spiritual stirring | a black lace mask pushed up on her head | — |

@@ -1,7 +1,7 @@
 # Week three (Days 15–21): draft
 
-A plan for the designer to read before it goes into the game (`js/data/story.js`, then `LAST_PLAYABLE_DAY` 21).
-Written the same way as week two.
+In the game since 2026-11-18 (`js/data/story.js`, `LAST_PLAYABLE_DAY` 21), to be played and changed. Changes go into
+story.js; this page is the plan. Written the same way as week two.
 
 Where it comes from:
 - **Regulars**: the design document's Visit Schedule (13 visits: Dottie twice, Felix twice, Noor twice, Ivy, Rosalind,
