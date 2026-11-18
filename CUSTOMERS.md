@@ -56,7 +56,7 @@ Every walk-in and advice visitor in the game, in order (written by `node tools/c
 
 | Day | Hour | Receipt name | Ethnicity | Visit | Story | Feeling | Look and manner (cue) | Picture |
 |---|---|---|---|---|---|---|---|---|
-| 15 | Sunrise | Ji-woo Han | Korean | Order | An amateur stargazer whose late father taught her the sky; tonight is the first clear night in weeks | an intuitive or spiritual stirring | a telescope case on her back, fingerless gloves, a star chart folded into her pocket | — |
+| 15 | Sunrise | Oyunaa Batbayar | Mongolian | Order | An amateur stargazer whose late father taught her the sky; tonight is the first clear night in weeks | an intuitive or spiritual stirring | a telescope case on her back, fingerless gloves, a star chart folded into her pocket | — |
 | 15 | Twilight | Nasrin Rahimi | Iranian | Order | A bride-to-be who hates every photo of herself, with the photographer waiting outside for golden hour | nervous excitement, curiosity | her hair in rollers under a silk scarf, a garment bag over one arm | — |
 | 15 | Nightfall | Idir Aït Lahcen | Moroccan (Amazigh) | Order | A man whose older brother moves in "for a week" every winter and stays till spring | anger, passion, urgency | his phone buzzing face down on the counter; he doesn’t turn it over | — |
 | 16 | Noon | Marcus Lindqvist | Swedish and Jamaican | Order | A drag queen whose first solo number is at today's brunch, and whose nerve has gone | pride, joy, celebration | one false eyelash on; the other waits in a little box in his palm | — |

@@ -43,7 +43,7 @@ Where it comes from:
 ## Day 15 · Saturday (January) · clear starry night
 
 ### Sunrise · walk-in · #109 The Quiet Between Stars (Incense) · clear starry night (moved from Nightfall)
-- **Who**: A woman with a telescope case · receipt name **Ji-woo Han** · ethnicity: Korean
+- **Who**: A woman with a telescope case · receipt name **Oyunaa Batbayar** · ethnicity: Mongolian
 - **About**: An amateur stargazer whose late father taught her the sky; tonight is the first clear night in weeks
 - **Aura**: purple (a stirring of intuition)
 - **Cue**: a telescope case on her back, fingerless gloves, a star chart folded into her pocket
