@@ -129,6 +129,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 
 Waiting on the designer's art:
 - **Spell pictures**: 39 of 240 (recipes 1 to 39). The rest show the outline and a question mark.
+- **Upscale smudge check: to finish** (2026-11-18): Real-ESRGAN x4plus leaves dark vertical smudges in some pictures on this GPU. 23 are fixed; about 170 small patches still to look at, black tea, and the backgrounds (.jpg) and tarot cards not checked yet. It keeps the graphics card busy for about an hour, so it is done when the computer is free. New pictures are checked as they come in (upscale-safe.ps1).
 - **Birch branch picture: to be redrawn** (the designer, 2026-11-18): the one in the game now is to be replaced, like the ash and rowan branches were that day.
 - **Ingredient pictures**: 51 of 257 items have none yet (all the threads, ribbons and pouches, the woods and branches, the inks, buttons, and small objects such as the locket, quill, wax seal, tiny bell). Some existing cut-outs keep a faint outline; background-removed PNGs with the same names will replace them.
 
