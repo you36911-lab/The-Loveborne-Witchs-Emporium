@@ -71,7 +71,7 @@ Where it comes from:
 - **Hint**: "My fiancé's grandmother hangs a little old key on a ribbon by her front door. Protection, she says, the old way. Nobody's ever broken in. Nobody would dare." → **protection** (Small keys; for The Closed Gate tonight)
 
 ### Nightfall · walk-in · #18 The Closed Gate (Sigil) · Saturday · Nightfall
-- **Who**: A man whose brother keeps turning up · **Idir Aït Lahcen** · ethnicity: Moroccan (Amazigh)
+- **Who**: A man whose brother keeps turning up · **Mimoun Azzouzi** · ethnicity: Northern Moroccan Amazigh (Riffian)
 - **About**: A man whose older brother moves in "for a week" every winter and stays till spring
 - **Aura**: red (anger)
 - **Cue**: his phone buzzing face down on the counter; he doesn't turn it over
