@@ -229,8 +229,7 @@ function summaryHTML(){const s=S.stats,locked=Object.keys(D.recipes).filter(id=>
   const tile=(n,label,of)=>`<div class="ws-tile"><b>${n}${of?`<small> / ${of}</small>`:''}</b><span>${label}</span></div>`;
   return `<section class="weeksum"><h3>So far</h3>
     <div class="ws-grid">${tile(given,'spells given')}${tile(s.advice,'advice given')}${tile(s.missed,'sent away empty-handed')}
-      ${tile(spoiled,'spoiled batches')}${tile(locked,'recipes solved',Object.keys(D.recipes).length)}${tile(S.bank.length,'words collected')}</div>
-    ${S.tales.length?`<p class="ws-note">${S.tales.length===1?'One story':S.tales.length+' stories'} still to hear. They\u2019ll come up next week.</p>`:''}</section>`}
+      ${tile(spoiled,'spoiled batches')}${tile(locked,'recipes solved',Object.keys(D.recipes).length)}${tile(S.bank.length,'words collected')}</div></section>`}
 /* Escape closes an open shelf in the workroom, or the receipts. */
 /* A button clicked with the mouse lets go of the keyboard focus, so a key pressed later (Space while reading, say) does
    not press it again, nor light it up as if the pointer were on it. Pressed from the keyboard (detail 0), it keeps it. */

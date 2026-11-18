@@ -100,8 +100,13 @@ separate test crafts; the silver bell makes everything, and only a spell made ju
 | 5 | the silver bell, once it is right | *Fill in what's missing, lay it out again, and ring the silver bell.* | it is made and given |
 
 **Hester's note: getting it wrong**
-> If it isn't right, the phone shows what's missing, shelf by shelf. Try again and it tells you more. But each wrong
-> one puts out a black candle; five out, and the street complains. — H.
+> If it isn't right, the phone shows what's missing, shelf by shelf. Try the same one again and it tells you more.
+> But every wrong one puts out a black candle. Five out, and the whole street smells it, and says so. A spell made right
+> and handed over lights one again; advice that's just right, two.
+> Advice: one thing from the shelf they ask about, for what they need, working on the body, the heart or the home, and as
+> strong as they want it. Often more than one will do.
+> Name something that isn't for it at all and they'll ask again, and a candle goes out. Half right, and they take it and
+> go, so look properly first.
 
 If her first try is right, the candle part is taught later, the first time a test is not (see "When it first happens").
 
