@@ -106,7 +106,7 @@ const REAL_SIZE = {
   "Honey":0.45,"Gold sprinkles":0.4,"Pink sprinkles":0.45,"Rainbow sprinkles":0.45,"Gold mica":0.4,"Silver mica":0.4,
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
   "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
-  "Selenite":0.5,"Pearl":0.36,"River stone":0.38,"Beetroot powder":0.55,"Apple":0.55,
+  "Selenite":0.5,"Pearl":0.36,"River stone":0.46,"Beetroot powder":0.55,"Apple":0.55,
   "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small keys":0.6,"Coin":0.45,"Glass beads":0.45,"Silver beads":0.45,"Clamshell compact":0.35,"Glass vial":0.4,"Wooden dice":0.4,"Clay":0.45,"Sealing wax":0.45,"Tiny bells":0.45,"Paper":0.5,
   /* the ink bottles: small round flasks, about 8 cm */
   "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4,"Violet ink":0.4,"Gold paint":0.4,"Red paint":0.4,
@@ -135,7 +135,7 @@ const ITEM_SIZE = {
   "Saffron":0.5,"Vanilla":0.55,"Apple":0.65,"Raisins":0.6,"Beetroot powder":0.75,"Copal":0.65,"Frankincense":0.65,
   "Patchouli":0.55,"Sandalwood":0.55,"Peacock feather":0.8,"Seashell":0.75,"Owl feather":0.75,
   "White feather":0.75,"Nest twig":0.6,"Shed cat whisker":0.6,"Shed snake skin":0.65,"Moth wing dust":0.65,
-  "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.38,"River stone":0.45,"Selenite":0.63,"Clear quartz":0.61,
+  "Bee pollen":0.65,"Swan down":0.65,"Pearl":0.38,"River stone":0.55,"Selenite":0.63,"Clear quartz":0.61,
   "Black tourmaline":0.61,"Smoky quartz":0.61,"Rose quartz":0.61,"Hematite":0.59,"Rhodonite":0.59,"Pyrite":0.59,
   "Sunstone":0.61,"Malachite":0.59,"Obsidian":0.59,
   /* the "symbols" pictures, sized to read easily in their cupboards */
