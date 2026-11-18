@@ -21,7 +21,7 @@ const R1=visitByKey(FIRST_ORDER).rid;  /* the first order's recipe, which the tu
 /* the first of its ingredient blanks still empty (-1 when all are written) */
 const firstBlank=()=>{const n=noteOf(R1);return D.recipes[R1].ing.findIndex((_,i)=>!n.ing[i])};
 /* why an ingredient fits a recipe: the one theme it brings. Each ingredient brings its own, none twice: the themes are
-   shared out among the ingredients (Chamomile comfort, Blue thread calm, Small key opportunity). */
+   shared out among the ingredients (Chamomile comfort, Blue thread calm, Small keys opportunity). */
 function themeShare(rid){const r=D.recipes[rid],ings=r.ing.filter(i=>ITEM[i]);let best={},most=-1;
   /* every way of sharing them out; the one that gives the most ingredients a theme wins (a base may bring none) */
   const go=(k,cur,n)=>{if(k===ings.length){if(n>most){most=n;best={...cur}}return}

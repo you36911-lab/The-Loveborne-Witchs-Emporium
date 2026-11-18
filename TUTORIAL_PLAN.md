@@ -6,7 +6,7 @@ and a replay (a new game after one that got past Day 2) has no tutorial. Saving 
 Changes after the designer's playtest (2026-11-11):
 - Emails: H.'s three oldest first, then the apothecary's; the email that is open can always be read and its words tapped. The word bank is taught in her second email (her first no longer has the aura P.S.).
 - The star is bigger, with a breathing golden halo.
-- First order: a step on the recipe's themes ("Everything that goes in carries one of those"); each ingredient is given one theme of its own (Chamomile comfort, Blue thread calm, Small key opportunity).
+- First order: a step on the recipe's themes ("Everything that goes in carries one of those"); each ingredient is given one theme of its own (Chamomile comfort, Blue thread calm, Small keys opportunity).
 - After the first sale (lesson sale1): the till and its receipt, then her review on My Shop and its P.S. (reviews now come in as customers leave). The Day 2 reviews lesson is gone.
 - Hester's test: the result on the phone is shown part by part (the grade, the ingredients right, what is off under each heading).
 - The nurse: once her recipe is open, its themes and how they lead to the ingredients, then Hester's note "What goes in".

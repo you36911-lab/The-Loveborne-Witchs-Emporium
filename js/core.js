@@ -24,13 +24,13 @@ const hasSave=()=>{try{return [KEY,...OLD_SAVE_KEYS].some(k=>localStorage.getIte
 /* Things renamed or merged since: an older save's notes and altar are renamed as they load ("Ink" is now "Plain ink";
    the dark-glass compact, the black satin pouch and the copper disc were merged into the Clamshell compact, the Fabric pouch and the Wooden disc;
    the buttons are all plural now, and the rainbow threads one Rainbow thread like the other threads;
-   Fennel seed, Paintbrush bristle, Glass bead, Silver bead, Wooden die and Tiny bell are plural now;
+   Fennel seed, Paintbrush bristle, Glass bead, Silver bead, Wooden die, Tiny bell and Small key are plural now;
    the Wax seal is Sealing wax). */
 const RENAMED={'Ink':'Plain ink','Clamshell compact (dark glass)':'Clamshell compact','Satin pouch (black)':'Fabric pouch','Copper disc':'Wooden disc',
   'Brass button':'Brass buttons','Gold button':'Gold buttons','Heart-shaped button':'Heart-shaped buttons','Mismatched button':'Mismatched buttons',
   'Square button':'Square buttons','Star-shaped button':'Star-shaped buttons','Vintage button':'Vintage buttons','Rainbow threads':'Rainbow thread',
   'Fennel seed':'Fennel seeds','Paintbrush bristle':'Paintbrush bristles',
-  'Glass bead':'Glass beads','Silver bead':'Silver beads','Wooden die':'Wooden dice','Tiny bell':'Tiny bells','Wax seal':'Sealing wax'};
+  'Glass bead':'Glass beads','Silver bead':'Silver beads','Wooden die':'Wooden dice','Tiny bell':'Tiny bells','Wax seal':'Sealing wax','Small key':'Small keys'};
 const renameOld=raw=>Object.entries(RENAMED).reduce((t,[a,b])=>t.split(JSON.stringify(a)).join(JSON.stringify(b)).split(JSON.stringify('item:'+a)).join(JSON.stringify('item:'+b)),raw);
 /* Prototype only (PROTOTYPE_TOOLS; the real game keeps a single save): backups of the game, kept in this browser beside the save (the menu's Backups puts one back, or saves the game to a file):
    one at the start of each day, and one just before anything replaces the game (a new game, Restart, a roll back, putting

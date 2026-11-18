@@ -68,7 +68,7 @@ const ITEM_KIND = {
   "Lemon peel":2,"Lime peel":2,"Orange":2,"Orange peel":2,"Peach":2,"Pomegranate seeds":2,"Rose hips":2,"Allspice":2,
   "Bergamot":2,"Black pepper":2,"Cardamom":2,"Nutmeg":2,"Poppy seeds":2,"Cinnamon stick":2,"Chocolate chips":2,"Gold sprinkles":2,
   "Honey":2,"Pink salt":2,"Pink sprinkles":2,"Rainbow sprinkles":2,"Rose clay":2,"Sea salt":2,"Gold mica":2,"Silver mica":2,
-  "Silver glitter":2,"Pink glitter":2,"Biodegradable glitter":2,"Bee pollen":2,"Honeycomb":2,"Snail shell":2,"Acorn":2,"Mismatched buttons":2,"Vintage buttons":1,"Small key":2,
+  "Silver glitter":2,"Pink glitter":2,"Biodegradable glitter":2,"Bee pollen":2,"Honeycomb":2,"Snail shell":2,"Acorn":2,"Mismatched buttons":2,"Vintage buttons":1,"Small keys":2,
   "Beeswax":2,"Angelica root":3,"Garden sage":3,"Lavender":3,"Lemon balm":3,"Lilac":3,"Lotus":3,"Peppermint":3,
   "Snowdrop":3,"Juniper":3,"Willow bark":3,"Sweet pea":3,"Black tea":3,"Shea butter":3,"Amber resin":3,"Copal":3,
   "Sandalwood":3,"Cocoa":3,"Coconut milk powder":3,"Oats":3,"Milk powder":3,"Peacock feather":3,"Dove feather":3,"Raisins":4,
@@ -107,7 +107,7 @@ const REAL_SIZE = {
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
   "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
   "Selenite":0.5,"Pearl":0.36,"River stone":0.38,"Beetroot powder":0.55,"Apple":0.55,
-  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small key":0.6,"Coin":0.45,"Glass beads":0.45,"Silver beads":0.45,"Clamshell compact":0.35,"Glass vial":0.4,"Wooden dice":0.4,"Clay":0.45,"Sealing wax":0.45,"Tiny bells":0.45,
+  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small keys":0.6,"Coin":0.45,"Glass beads":0.45,"Silver beads":0.45,"Clamshell compact":0.35,"Glass vial":0.4,"Wooden dice":0.4,"Clay":0.45,"Sealing wax":0.45,"Tiny bells":0.45,
   /* the ink bottles: small round flasks, about 8 cm */
   "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4,"Violet ink":0.4,"Gold paint":0.4,"Red paint":0.4,
   /* the thread cones: about 10 cm */
@@ -141,7 +141,7 @@ const ITEM_SIZE = {
   /* the "symbols" pictures, sized to read easily in their cupboards */
   "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
   "Brass buttons":0.7,"Bright buttons":0.7,"Gold buttons":0.7,"Heart-shaped buttons":0.7,"Mismatched buttons":0.7,"Vintage buttons":0.7,
-  "Coin":0.7,"Glass beads":0.7,"Silver beads":0.7,"Clamshell compact":0.7,"Glass vial":0.6,"Wooden dice":0.7,"Clay":0.7,"Sealing wax":0.7,"Tiny bells":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small key":0.75,
+  "Coin":0.7,"Glass beads":0.7,"Silver beads":0.7,"Clamshell compact":0.7,"Glass vial":0.6,"Wooden dice":0.7,"Clay":0.7,"Sealing wax":0.7,"Tiny bells":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small keys":0.75,
   "Black ink":0.6,"Gold ink":0.6,"Plain ink":0.6,"Red ink":0.6,"Silver ink":0.6,"Violet ink":0.6,"Gold paint":0.6,"Red paint":0.6,
   /* the thread cones, as big as the inks */
   "Black thread":0.6,"Blue thread":0.6,"Gold thread":0.6,"Green thread":0.6,"Grey thread":0.6,"Orange thread":0.6,"Pink thread":0.6,"Purple thread":0.6,"Rainbow thread":0.6,"Red thread":0.6,"Silver thread":0.6,"White thread":0.6,"Yellow thread":0.6,
@@ -553,7 +553,7 @@ const ASSETS = {
     "Iron filings":        "assets/items/iron-filings.png",
     "Iron nail":           "assets/items/iron-nail.png",
     "Iron pin":            "assets/items/iron-pin.png",
-    "Small key":           "assets/items/small-key.png",
+    "Small keys":           "assets/items/small-keys.png",
     /* fruits */
     "Beetroot powder":      "assets/items/beetroot-powder.png",
     /* spices */
