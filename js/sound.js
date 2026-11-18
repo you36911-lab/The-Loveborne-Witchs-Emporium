@@ -30,7 +30,8 @@ function playCandleOut(){sfx('candleOut',.3,1800)}
 function playPhone(){sfx('phoneNotify',.5)}
 /* Crafting on the altar (with the silver bell): "Magic Spell" (Soumages), chosen by the designer. */
 function playCraft(){sfx('craft',.6,0,.3)}  /* its first 0.35s is quiet */
-/* A cupboard door in the workroom swinging open, and shut: "Cabinet Door Open" and "Cabinet Door Close" (freesound_community). */
+/* A cupboard door in the workroom swinging open, and shut: "Cabinet Door Open" and "Cabinet Door Close" (freesound_community).
+   The downloads had the sound in the left channel only, so they are kept as mono WAV (the left channel), heard in both ears. */
 function playCabinetOpen(){sfx('cabinetOpen',.5,0,.52)}  /* the recordings start with a pause (0.58s, 0.8s): skip it, so the sound comes with the door */
 function playCabinetClose(){sfx('cabinetClose',.5,0,.74)}
 /* A button on the title screen: a clear little ding, "Ding" (freesound_community). The recording rings on for 2.7s;
