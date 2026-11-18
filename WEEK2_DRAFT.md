@@ -235,7 +235,7 @@ Every new walk-in needs a picture (the regulars all have one).
 - **Who**: A barmaid with a cold coming on · **Niamh Byrne**
 - **Aura**: grey
 - **Line**: Double shift tomorrow, Yule week, and I can feel a cold coming.
-- **Question**: A strong root to get me going? I can't afford to be ill.
+- **Question**: A strong spice to get me going? I can't afford to be ill.
 - **Review**: Worked both shifts. Sneezed once. Into the ice bucket, sorry everyone.
 - **Hint**: "The landlord keeps a green stone with a faint sparkle in it behind the bar. For luck, he says. Never been robbed." → **luck** (Green aventurine; for Cloverkiss on Day 20)
 - **Reactions**: target "My nose cleared. My head didn't." · strong "I worked both shifts and cleaned the cellar. At three in the morning." · weak "I lasted till nine."
