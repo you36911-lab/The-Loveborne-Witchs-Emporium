@@ -144,7 +144,7 @@ $('#gmYes').onclick=()=>{closeMenu();newState();showDawn()};  /* a new game open
    then opens the title, so Continue starts from the game put back. A file is the same save, kept wherever you like. */
 const BK_WHY={day:'start of the day','new game':'before a new game','roll back':'before a roll back',restore:'before a backup was put back',unreadable:'a save that would not load'};
 function bkWhen(t){const d=new Date(t);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+', '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
-function putBack(raw){let o;try{o=JSON.parse(raw)}catch(e){o=null}
+function putBack(raw){let o;try{o=JSON.parse(renameOld(raw))}catch(e){o=null}
   if(!o||typeof o.day!=='number'){toast('That is not a saved game.');return}
   keepBackup('restore');S=o;sanitize();S.ui=null;save();if(typeof fillProto==='function')fillProto();if(typeof tapeDoneNotes==='function')tapeDoneNotes();  /* the jump bar shows the day put back */
   titleFromGame=false;$('#gameMenu').classList.remove('open');showTitle()}

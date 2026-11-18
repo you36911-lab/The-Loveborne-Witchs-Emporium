@@ -32,7 +32,7 @@ if(PROTOTYPE_TOOLS){const save0=save;
    the snapshots after it are dropped, as that future is gone. The tutorial setting stays as it is. */
 function rollBack(day,h){keepBackup('roll back');const o=snaps(),k=hourNo(day,h),tutOff=S.tutOff,gid=S.gid;
   const best=Object.keys(o.at).map(Number).filter(x=>x<=k).sort((a,b)=>b-a)[0];
-  if(best!==undefined)S=JSON.parse(o.at[best]);else{S=fresh();S.gid=gid}
+  if(best!==undefined)S=JSON.parse(renameOld(o.at[best]));else{S=fresh();S.gid=gid}
   S.tutOff=tutOff;sanitize();
   Object.keys(o.at).map(Number).filter(x=>x>k).forEach(x=>delete o.at[x]);putSnaps(o);
   ['#books','#pc','#phoneView','#receiptsView','#ingNote'].forEach(s=>$(s)?.classList.remove('open'));
