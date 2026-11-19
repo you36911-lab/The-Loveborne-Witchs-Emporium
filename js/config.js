@@ -75,7 +75,7 @@ const ITEM_KIND = {
   "Vanilla":4,"Baking soda":4,"Brown sugar":4,"Epsom salt":5,"Flour":5,"Rice flour":5,"Sugar":4,"Garden soil":5,
   "Hearth ash":5,"Coin":5,"Owl feather":5,"Seashell":5,"White feather":5,"Brass buttons":6,"Bright buttons":6,"Gold buttons":6,
   "Heart-shaped buttons":6,"Iron filings":6,"Iron nail":6,"Iron pin":6,"Ash branch":7,"Ash wood":7,"Birch branch":7,"Birch wood":7,
-  "Blackthorn branch":7,"Hazel branch":7,"Rowan branch":7,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8,
+  "Blackthorn branch":7,"Hazel branch":7,"Oak wood":7,"Rowan branch":7,"Twig":7,"Willow branch":7,"Willow wood":7,"Wooden disc":8,"Autumn leaf":7,"Butter":8,"Soap base":8,"Soap base (charcoal)":8,
   "Black ink":0,"Gold ink":0,"Plain ink":0,"Red ink":0,"Silver ink":0,"Violet ink":0,"Gold paint":0,"Red paint":0,
   /* the thread cones */
   "Black thread":3,"Blue thread":3,"Gold thread":3,"Green thread":3,"Grey thread":3,"Orange thread":3,"Pink thread":3,"Purple thread":3,"Rainbow thread":3,"Red thread":3,"Silver thread":3,"White thread":3,"Yellow thread":3,
@@ -107,7 +107,10 @@ const REAL_SIZE = {
   "Silver glitter":0.4,"Pink glitter":0.4,"Biodegradable glitter":0.4,"Rose clay":0.45,"Eggshell":0.45,"Hearth ash":0.45,
   "Soap base":0.28,"Soap base (charcoal)":0.28,"Saffron":0.38,"Sandalwood":0.45,"Peacock feather":0.75,"Seashell":0.55,
   "Selenite":0.5,"Pearl":0.36,"River stone":0.46,"Beetroot powder":0.55,"Apple":0.55,
-  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Small keys":0.6,"Coin":0.45,"Glass beads":0.45,"Silver beads":0.45,"Clamshell compact":0.35,"Glass vial":0.4,"Wooden dice":0.4,"Clay":0.45,"Sealing wax":0.45,"Tiny bells":0.45,"Paper":0.5,"Quills":0.55,"Teacup charms":0.5,"Paintbrush bristles":0.45,
+  "Acorn":0.55,"Ash wood":0.8,"Birch wood":0.8,"Willow wood":0.8,"Oak wood":0.6,"Wooden disc":0.5,
+  /* branches, by how long each really is (a 20 cm bottle = 1): willow the longest and bendiest, ash and birch long and straight,
+     hazel a little shorter, rowan and blackthorn short leafy or thorny sprigs, the twig a little thing; all stand upright */
+  "Willow branch":1,"Ash branch":0.95,"Birch branch":0.95,"Hazel branch":0.9,"Rowan branch":0.85,"Blackthorn branch":0.85,"Twig":0.55,"Small keys":0.6,"Coin":0.45,"Glass beads":0.45,"Silver beads":0.45,"Clamshell compact":0.35,"Glass vial":0.4,"Wooden dice":0.4,"Clay":0.45,"Sealing wax":0.45,"Tiny bells":0.45,"Paper":0.5,"Quills":0.55,"Teacup charms":0.5,"Paintbrush bristles":0.45,
   /* the ink bottles: small round flasks, about 8 cm */
   "Black ink":0.4,"Gold ink":0.4,"Plain ink":0.4,"Red ink":0.4,"Silver ink":0.4,"Violet ink":0.4,"Gold paint":0.4,"Red paint":0.4,
   /* the thread cones: about 10 cm */
@@ -139,7 +142,7 @@ const ITEM_SIZE = {
   "Black tourmaline":0.61,"Smoky quartz":0.61,"Rose quartz":0.61,"Hematite":0.59,"Rhodonite":0.59,"Pyrite":0.59,
   "Sunstone":0.61,"Malachite":0.59,"Obsidian":0.59,
   /* the "symbols" pictures, sized to read easily in their cupboards */
-  "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Rowan branch":0.95,"Ash wood":0.8,"Birch wood":0.8,
+  "Acorn":0.7,"Ash branch":0.95,"Birch branch":0.95,"Blackthorn branch":0.9,"Hazel branch":0.95,"Rowan branch":0.95,"Willow branch":1,"Twig":0.7,"Ash wood":0.8,"Birch wood":0.8,"Willow wood":0.8,"Oak wood":0.7,"Wooden disc":0.6,
   "Brass buttons":0.7,"Bright buttons":0.7,"Gold buttons":0.7,"Heart-shaped buttons":0.7,"Mismatched buttons":0.7,"Vintage buttons":0.7,
   "Coin":0.7,"Glass beads":0.7,"Silver beads":0.7,"Clamshell compact":0.7,"Glass vial":0.6,"Wooden dice":0.7,"Clay":0.7,"Sealing wax":0.7,"Tiny bells":0.7,"Paper":0.75,"Quills":0.75,"Teacup charms":0.75,"Paintbrush bristles":0.7,"Iron filings":0.7,"Iron nail":0.7,"Iron pin":0.7,"Small keys":0.75,
   "Black ink":0.6,"Gold ink":0.6,"Plain ink":0.6,"Red ink":0.6,"Silver ink":0.6,"Violet ink":0.6,"Gold paint":0.6,"Red paint":0.6,
@@ -547,6 +550,11 @@ const ASSETS = {
     "Paintbrush bristles": "assets/items/paintbrush-bristles.png",
     "Hazel branch":        "assets/items/hazel-branch.png",
     "Rowan branch":        "assets/items/rowan-branch.png",
+    "Oak wood":            "assets/items/oak-wood.png",
+    "Twig":                "assets/items/twig.png",
+    "Willow branch":       "assets/items/willow-branch.png",
+    "Willow wood":         "assets/items/willow-wood.png",
+    "Wooden disc":         "assets/items/wooden-disc.png",
     "Brass buttons":        "assets/items/brass-buttons.png",
     "Bright buttons":      "assets/items/bright-buttons.png",
     "Gold buttons":         "assets/items/gold-buttons.png",

@@ -130,7 +130,7 @@ The design document says a Glamour becomes "a cosmetic, mist or perfume". Each o
 Waiting on the designer's art:
 - **Spell pictures**: 39 of 240 (recipes 1 to 39). The rest show the outline and a question mark.
 - **Upscale smudge check: to finish** (2026-11-18): Real-ESRGAN x4plus leaves dark vertical smudges in some pictures on this GPU. 23 are fixed; about 170 small patches still to look at, black tea, and the backgrounds (.jpg) and tarot cards not checked yet. It keeps the graphics card busy for about an hour, so it is done when the computer is free. New pictures are checked as they come in (upscale-safe.ps1).
-- **Birch branch picture: to be redrawn** (the designer, 2026-11-18): the one in the game now is to be replaced, like the ash and rowan branches were that day.
+- **Wood & branches pictures** (2026-11-19): the redrawn Birch, Blackthorn, Hazel and Rowan branches and the new Willow branch, Twig, Oak wood, Willow wood and Wooden disc are in. Every branch stands upright (turned after upscaling where it was drawn lying or leaning), as the Ash branch does; Oak wood stays a pile of logs lying down. On the altar the branches go by real length: willow 1 (longest), ash and birch 0.95, hazel 0.9, rowan and blackthorn 0.85 (short sprigs), twig 0.55; Oak wood 0.6 (wide), Wooden disc 0.5.
 - **Ingredient pictures**: 51 of 257 items have none yet (all the threads, ribbons and pouches, the woods and branches, the inks, buttons, and small objects such as the locket, quill, wax seal, tiny bell). Some existing cut-outs keep a faint outline; background-removed PNGs with the same names will replace them.
 
 Decided, to build:
