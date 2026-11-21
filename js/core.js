@@ -44,7 +44,7 @@ function keepBackup(why,raw){if(!PROTOTYPE_TOOLS)return;raw=raw||JSON.stringify(
 let rawLoad='';
 try{rawLoad=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'';S=JSON.parse(rawLoad?renameOld(rawLoad):null)||fresh()}
 catch(e){keepBackup('unreadable',rawLoad);try{localStorage.setItem(KEY+'-unreadable',rawLoad)}catch(e2){}S=fresh()}  /* never lost: kept aside, untouched */
-const BASE_ADDED=[3,13,23,45,55,57,61,77,102,104,106,115,124,135,143,149,153,158,171,176,180,191,193,198,215,217,219,240];
+const BASE_ADDED=[3,13,23,29,45,55,57,61,63,77,102,104,106,115,124,135,143,149,153,158,171,176,180,191,193,198,215,217,219,240];
 /* These had Spring water put in front for a while (2026-11-21) and are back as they were: a save that moved its notes
    along for them moves them back. */
 const BASE_TAKEN_BACK=[1,26,31,36,56,64,66,69,91,101,107,110,116,125,129,145,151,162,174,184,199,205,206,214,223,236,239];
