@@ -44,9 +44,15 @@ function keepBackup(why,raw){if(!PROTOTYPE_TOOLS)return;raw=raw||JSON.stringify(
 let rawLoad='';
 try{rawLoad=localStorage.getItem(KEY)||OLD_SAVE_KEYS.map(k=>localStorage.getItem(k)).find(Boolean)||'';S=JSON.parse(rawLoad?renameOld(rawLoad):null)||fresh()}
 catch(e){keepBackup('unreadable',rawLoad);try{localStorage.setItem(KEY+'-unreadable',rawLoad)}catch(e2){}S=fresh()}  /* never lost: kept aside, untouched */
+const BASE_ADDED=[1,3,13,23,26,31,36,45,55,56,57,61,64,66,69,77,91,101,102,104,106,107,110,115,116,124,125,129,135,143,145,149,151,153,158,162,171,174,176,180,184,191,193,198,199,205,206,214,215,217,219,223,236,239,240];
 /* Drop anything a save points at that this build no longer has (customers, recipes). */
 function sanitize(){const vk=v=>v.day+'-'+v.hour+'-'+v.who,keys=new Set(X.visits.map(vk));
   delete S.orders;  /* orders taken for later belong to older builds */
+  /* These recipes were given their base material as a new first ingredient (2026-11-21): what the player has written
+     in their Recipe Book ingredients moves along one place, so each word stays with its ingredient. Done once per recipe. */
+  S.baseAdded=S.baseAdded||[];
+  BASE_ADDED.forEach(id=>{if(S.baseAdded.includes(id))return;const n=(S.notes||{})[id];
+    if(n&&Array.isArray(n.ing)&&n.ing.length)n.ing.unshift('');S.baseAdded.push(id)});
   if(S.queue&&(S.queue.type==='new'?!keys.has(S.queue.key):S.queue.type!=='report'))S.queue=null;
   if(S.activeNow&&!keys.has(S.activeNow))S.activeNow=null;
   if(S.target&&!D.recipes[S.target])S.target='';
