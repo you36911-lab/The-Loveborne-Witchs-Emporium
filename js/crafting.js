@@ -10,9 +10,6 @@ const BIRTHSTONES={January:'Garnet',February:'Amethyst',March:'Aquamarine',April
 function recipeNeeds(r,used,born){if(!r.ing.includes(BIRTHSTONE))return r.ing;
   const stones=Object.values(BIRTHSTONES),stone=BIRTHSTONES[born]||used.find(x=>stones.includes(x))||BIRTHSTONE;
   return r.ing.map(x=>x===BIRTHSTONE?stone:x)}
-/* A base carries none of the recipe's themes, except where the method says its base keeps its meaning (a Rune's wood or
-   stone: what it is carved into still counts). */
-function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes(type)&&!(D.methods[type]?.keep&&i.props.length))}
 /* A swap is a wrong ingredient that shares a property with a missing one. It counts as one problem. */
 function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
   /* What the rest of the mix already brings, so a clue never calls a theme missing when another ingredient supplies it. */
@@ -130,7 +127,7 @@ function evaluate(r,test,level=1){
   if(unmet.length){const[t,g]=condClue(unmet[0],r.themes);L('when',t);if(test)gained.push(...g)}
   const grade=probs===0?'Perfect':probs===1?'Good':probs<=3?'Clumsy':'Failed';
   if(test){const came=new Set();
-    need.filter(x=>used.includes(x)&&!isBaseFor(x,r.type)).forEach(x=>(ITEM[x]?.props||[]).forEach(p=>r.themes.includes(p)&&came.add(p)));
+    need.filter(x=>used.includes(x)).forEach(x=>(ITEM[x]?.props||[]).forEach(p=>r.themes.includes(p)&&came.add(p)));
     if(r.candle&&S.candle===r.candle)(D.colours[r.candle]||[]).forEach(p=>r.themes.includes(p)&&came.add(p));
     if(r.tarot&&S.tarot===r.tarot)(D.tarot[r.tarot]||[]).forEach(p=>r.themes.includes(p)&&came.add(p));
     swaps.forEach(s=>r.themes.includes(s.kw)&&came.add(s.kw));

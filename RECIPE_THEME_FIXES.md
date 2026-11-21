@@ -1,7 +1,7 @@
 # Recipe theme fixes (2026-11-11)
 
 Rule (from the designer): every theme of a recipe is carried by its own ingredient. No ingredient carries two of a
-recipe's themes for it, and bases (butter, flour, sugar in cookies, shea butter in a balm…) carry none. A recipe has two or three
+recipe's themes for it. (There is no rule about bases since 2026-11-21: a base with meanings carries them.) A recipe has two or three
 themes. Fixes change the recipe, not the ingredients' keywords (an ingredient's keywords reach every recipe, book entry,
 letter and advice that uses it).
 
