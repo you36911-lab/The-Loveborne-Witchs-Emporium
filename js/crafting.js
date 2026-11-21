@@ -10,7 +10,9 @@ const BIRTHSTONES={January:'Garnet',February:'Amethyst',March:'Aquamarine',April
 function recipeNeeds(r,used,born){if(!r.ing.includes(BIRTHSTONE))return r.ing;
   const stones=Object.values(BIRTHSTONES),stone=BIRTHSTONES[born]||used.find(x=>stones.includes(x))||BIRTHSTONE;
   return r.ing.map(x=>x===BIRTHSTONE?stone:x)}
-function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes(type))}
+/* A base carries none of the recipe's themes, except where the method says its base keeps its meaning (a Rune's wood or
+   stone: what it is carved into still counts). */
+function isBaseFor(n,type){const i=ITEM[n];return i&&(i.anybase||i.base.includes(type)&&!(D.methods[type]?.keep&&i.props.length))}
 /* A swap is a wrong ingredient that shares a property with a missing one. It counts as one problem. */
 function findSwaps(r,missing,wrong,used){const left=[...missing],out=[];
   /* What the rest of the mix already brings, so a clue never calls a theme missing when another ingredient supplies it. */
