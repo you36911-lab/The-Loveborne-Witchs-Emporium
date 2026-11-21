@@ -150,6 +150,8 @@ Done: the save icon; the auras follow the design document; the closing thought a
 
 ## Open items
 
+- **Paper and plain ink need a hint** (2026-11-21): they have no keyword, so where a recipe uses them outside a Sigil the books cannot lead to them: #29 The Unbroken Quill (Day 33), #35 The Open Invitation (Day 41), #63 Constellation Calling (Day 54), #147 Stardust Permission Slip (Day 56), #230 The Sticker Spell (Day 59), #187 The Unseated Guest (Day 67). Give each a hint when its week is written (a letter, an email or the customer's own words); noted in the Walk-in Plan.
+
 - **Handwriting ink**: every handwritten thing in the game uses Hester's ink, #3A2A3A (a warm near-black): her notes, the words written into the Recipe Book's blanks and its tick, the notebook's pages, the parcel's tag. (Her notes' titles are plum, #7A2E5E.)
 - **Coming back where you left off**: leaving the page (closing, reloading) or going back to the title keeps what was open in the save (S.ui): the counter or the workroom, the computer with its apps and the email being read, a book and its page, the phone, an open cupboard, the receipts, the end-of-day card. Continue puts it all back (and the tutorial carries on from there; a new email left unread brings its card back). A game where no post has come yet opens at dawn again.
 - Moonpost lists newest first, so H.'s three emails stand oldest at the bottom (On the Moon, then On the Week, then A Few to Begin With above it). In the tutorial, Read it now opens the inbox; H.'s emails are read first, oldest (bottom) first, the word bank taught in the first one (joy, in its P.S.), then the apothecary's.
