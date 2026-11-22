@@ -189,8 +189,8 @@ const ASSETS = {
   candleStand: 'assets/candles/candle-stand.png',  /* always on the altar; the chosen candle stands in its cup */
   /* a picture of each finished spell, by recipe number (the designer is drawing them): it stands on the altar once
      crafted. Until a spell has one, the shop's bottle stands in, with the spell's name under it. */
-  spells: Object.fromEntries(Array.from({length:65},(_,i)=>i+1).map(n=>[n,'assets/spells/'+n+'.png'])),  /* the designer's pictures so far (recipes 1 to 65) */
-  spellOutlines: Object.fromEntries(Array.from({length:65},(_,i)=>i+1).map(n=>[n,'assets/spells/outline/'+n+'.png'])),  /* the locked look of each: its shape in paper, edged with a sepia ink line (made from the picture, 4px line) */
+  spells: Object.fromEntries(Array.from({length:82},(_,i)=>i+1).map(n=>[n,'assets/spells/'+n+'.png'])),  /* the designer's pictures so far (recipes 1 to 82) */
+  spellOutlines: Object.fromEntries(Array.from({length:82},(_,i)=>i+1).map(n=>[n,'assets/spells/outline/'+n+'.png'])),  /* the locked look of each: its shape in paper, edged with a sepia ink line (made from the picture, 4px line) */
   altarPhone: 'assets/scene/altar-phone.png',  /* the phone lying on the altar right of the candle stand: every craft's result comes to it (phone2, the designer's picture, cut out) */
   altarBell: 'assets/scene/altar-bell.png',  /* the silver bell on the altar: ringing it makes what is laid out (the designer's picture, cut out) */
   testCandles: [0,1,2,3,4,5].map(n=>'assets/candles/test-candles-'+n+'.png'),  /* the black candelabra right of the card; picture n has n candles lit */
