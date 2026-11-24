@@ -128,22 +128,21 @@ function allPages(book){if(book===DIARY)return diaryPages();
   if(book==='Recipe Book'){const pad=idx.length%2?[{key:'index:pad',index:true,html:()=>''}]:[];
     return [...idx,...pad,...entries.flatMap(e=>[e,{key:'art:'+e.key.slice(7),plain:true,html:()=>spellArtHTML(e.key.slice(7))}])]}
   return [...idx,...entries]}
-/* The question mark sits in the middle of the outline, not of the frame. The outline is drawn at the top of its box (88% of
-   the frame each way, which is 3:4 like the frame) and as big as fits: a tall one fills the box's height, so its middle is
-   44% down; a wide one fills its width, so its middle is 33% ÷ (width/height) down. Across, it is always centred. */
-/* Each outline's shape is remembered once known, so a page drawn again (every page turn, and the turning strips' copies)
-   puts the mark in its place at once instead of starting at 44% and jumping when the picture loads; until it is known the
-   mark stays hidden. All outlines are measured when the game starts. */
+/* The question mark sits on the middle of the shape itself (OUTLINE_MARKS, measured by tools/outline-marks.py), not of
+   the frame. The outline is drawn at the top of its box (6% in from each side, 88% of the frame each way, which is 3:4
+   like the frame) and as big as fits: a tall one fills the box's height and is centred across, a wide one fills its width.
+   An outline not yet measured falls back to the middle of its picture, found when it loads (hidden until then). */
 const qTops={};
-const qTop=r=>(r<=.75?44:33/r)+'%';
-function centreQ(img){const r=img.naturalWidth/img.naturalHeight,q=img.nextElementSibling;if(!r)return;
-  qTops[img.getAttribute('src')]=qTop(r);if(q){q.style.top=qTops[img.getAttribute('src')];q.style.visibility=''}}
-Object.values(ASSETS.spellOutlines||{}).forEach(src=>{if(!src)return;const i=new Image();i.onload=()=>{if(i.naturalHeight)qTops[src]=qTop(i.naturalWidth/i.naturalHeight)};i.src=src});
+function qPos(r,fx,fy){const w=r<=.75?88*r/.75:88,h=r<=.75?88:88*.75/r;return 'left:'+(6+(88-w)/2+fx*w)+'%;top:'+fy*h+'%'}
+function centreQ(img){const id=img.dataset.id,r=img.naturalWidth/img.naturalHeight,q=img.nextElementSibling;
+  if(!r||(typeof OUTLINE_MARKS!=='undefined'&&OUTLINE_MARKS[id]))return;
+  qTops[id]=qPos(r,.5,.5);if(q){q.style.cssText=qTops[id];q.style.visibility=''}}
+function qStyle(id){const m=typeof OUTLINE_MARKS!=='undefined'&&OUTLINE_MARKS[id];return m?qPos(...m):qTops[id]||'visibility:hidden'}
 /* A spell's illustration: only its outline until the spell has been made perfectly (however it was laid out), then the
    picture itself. No caption. */
 function spellArtHTML(id){const r=D.recipes[id],seen=(S.spellArt||{})[id],pic=ASSETS.spells[id];
   /* locked: only the picture's outline, drawn on the page, with a question mark (an empty dashed frame until the picture exists) */
-  if(!seen){const ol=ASSETS.spellOutlines[id];return `<div class="artpage locked"><div class="artframe${ol?' outlined':''}">${ol?`<img src="${ol}" alt="" onload="centreQ(this)">`:''}<span class="artq"${ol?` style="${qTops[ol]?'top:'+qTops[ol]:'visibility:hidden'}"`:''}>?</span></div></div>`}
+  if(!seen){const ol=ASSETS.spellOutlines[id];return `<div class="artpage locked"><div class="artframe${ol?' outlined':''}">${ol?`<img src="${ol}" alt="" data-id="${id}" onload="centreQ(this)">`:''}<span class="artq"${ol?` style="${qStyle(id)}"`:''}>?</span></div></div>`}
   return `<div class="artpage"><div class="artframe${pic?' shown':''}">${pic?`<img src="${pic}" alt="${esc(r.name)}">`:'<span class="artsoon">✦</span>'}</div></div>`}
 /* The notebook's pages: the player writes on them (S.memo, one text per page). Each page is a box that sits on the ruled
    lines; the first page has the title on its top line. There is always a blank spread after the last page written on. */

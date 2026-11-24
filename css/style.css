@@ -332,7 +332,7 @@ summary{cursor:pointer;font-weight:600;padding:3px 0}
 .artframe.outlined,.artframe.shown,.artpage.locked .artframe.outlined{position:relative;border:0;background:none;box-shadow:none}
 /* the picture itself sits in the same box as its outline, so solving a recipe never changes its size (a tall picture used to grow to its full height) */
 .artframe.outlined img,.artframe.shown img{position:absolute;inset:0 6% 12%;width:88%;height:88%;object-fit:contain;object-position:top}  /* its top level with the facing page's first line */
-.artframe.outlined .artq{position:absolute;left:50%;top:44%;translate:-50% -50%}  /* on the outline's middle (centreQ in books.js) */
+.artframe.outlined .artq{position:absolute;left:50%;top:44%;translate:-50% -50%}  /* on the shape's middle (qPos in books.js) */
 .artsoon{font-size:3em;color:#E070AE;opacity:.6}
 .recipe .wrow{display:grid;grid-template-columns:5.4em 1fr;align-items:baseline;column-gap:.4em}
 .recipe .wpair{display:inline-flex;align-items:baseline;gap:.5em;white-space:nowrap}

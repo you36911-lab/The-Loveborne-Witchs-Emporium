@@ -27,6 +27,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/config.js`: settings (save key, last playable day, dawn card timing, customers shown brighter than the light) and every image path.
 - `js/data/game-data.js`: items, recipes, calendar, books (generated from the design document).
 - `js/data/story.js`: customer visits, post letters, auras, starting stock.
+- `js/data/outline-marks.js`: where the Recipe Book's question mark sits on each spell outline (written by `tools/outline-marks.py`).
 - `js/core.js`: save state, helpers, letters and post, calendar conditions.
 - `js/crafting.js`: comparing the altar with a recipe; clue lines.
 - `js/sound.js`: sounds, all recordings in `assets/sounds` (Pixabay, Pixabay Content License): the shop bell, the altar's desk bell, the computer's notification, the till (clicked with receipts in it), the receipt printer at closing, the door as a customer comes in, a test-craft candle going out, the phone, crafting, the cupboard doors, the title screen's buttons (a ding), clicks on the computer's screen (a mouse click).
@@ -42,6 +43,7 @@ the player finds the right recipe in the books and makes it at the altar.
 - `js/prototype.js`: prototype-only jump bar (week, day, hour, customer; "Roll back" puts the game data back too when jumping to an earlier hour, from snapshots kept at the start of each hour); off with `PROTOTYPE_TOOLS`.
 - `js/main.js`: starts the game.
 - `tools/customers-list.js`: writes CUSTOMERS.md (every walk-in, no answers; run with node after changing customers). New customers get an "about" line and, from week three on, an "ethnicity".
+- `tools/outline-marks.py`: writes js/data/outline-marks.js (run with python after adding or changing a picture in `assets/spells/outline`).
 
 Scripts are plain (no modules) and load in the order listed in `index.html`, so the game
 also runs by opening `index.html` directly, without a server. Images live in `assets/` (scene, characters, items, books); recorded sounds in `assets/sounds`.
